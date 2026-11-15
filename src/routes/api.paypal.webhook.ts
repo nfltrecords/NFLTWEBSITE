@@ -76,7 +76,7 @@ async function handleWebhook(request: Request): Promise<Response> {
       transmissionSignature: requiredHeader(request, "paypal-transmission-sig"),
       certUrl,
       authAlgorithm: requiredHeader(request, "paypal-auth-algo"),
-      webhookEvent: event,
+      webhookEventRaw: rawBody,
     });
   } catch (error) {
     console.error("PayPal webhook verification error", error);
