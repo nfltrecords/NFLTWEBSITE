@@ -1,0 +1,23 @@
+# PayPal Checkout integration — private implementation notes
+
+Status: server adapter prepared; checkout remains disabled.
+
+## Required Cloudflare Worker secrets
+- `PAYPAL_CLIENT_ID`
+- `PAYPAL_CLIENT_SECRET`
+- `PAYPAL_MODE` = `sandbox` for testing, then `live` only after end-to-end approval
+- `PAYPAL_WEBHOOK_ID` after registering the production webhook URL
+
+Never put the client secret in browser code, Git, chat, or a public environment variable.
+
+## Safety gates still required before enabling checkout
+1. Persist a pending order server-side before redirecting to PayPal; never trust a browser-supplied price.
+2. Populate the UPC-to-track-count map only from verified catalogue evidence; current map is empty, so catalogue prices are intentionally withheld.
+3. Confirm per-release seller, rights, territory and MP3/WAV master availability.
+4. Implement idempotent capture and persist PayPal order/capture IDs and final state.
+5. Verify webhook signatures with PayPal and fulfill only on `PAYMENT.CAPTURE.COMPLETED`; never fulfill on approval or pending status.
+6. Test sandbox create, approve, capture, duplicate webhook, denied payment, refund/reversal, and failure paths.
+7. Add database migration and restricted RLS/service-role operations for orders before exposing checkout UI.
+
+## Current behaviour
+This adapter has no UI entry point and does not enable payments. It fails closed when PayPal credentials are absent. Sandbox is the default; live mode must be deliberately configured.
