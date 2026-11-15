@@ -130,7 +130,11 @@ async function handleWebhook(request: Request): Promise<Response> {
       `shop_orders?paypal_order_id=eq.${encodeURIComponent(paypalOrderId)}&select=id,amount_cents,status,paypal_capture_id&limit=1`,
     );
     const order = orders[0];
-    if (!order) return new Response("Order not found", { status: 202 });
+    if (!order) {
+      // A verified capture can arrive before the order row is visible. Return a retryable
+      // server error so PayPal redelivers instead of acknowledging an unprocessed payment.
+      return new Response("Order not found yet; retry delivery", { status: 503 });
+    }
     if (Math.round(amount * 100) !== order.amount_cents) {
       return new Response("Capture amount mismatch", { status: 400 });
     }
