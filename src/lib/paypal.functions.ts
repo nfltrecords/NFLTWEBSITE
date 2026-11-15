@@ -141,11 +141,11 @@ export const confirmPayPalCheckout = createServerFn({ method: "POST" })
       return { ok: false as const, reason: "payment_not_confirmed" as const };
     }
 
-    await databaseRequest<unknown>(
+    const updated = await databaseRequest<Array<{ id: string }>>(
       `shop_orders?id=eq.${data.orderId}&status=eq.pending&paypal_order_id=eq.${data.paypalOrderId}`,
       {
         method: "PATCH",
-        headers: { Prefer: "return=minimal" },
+        headers: { Prefer: "return=representation" },
         body: JSON.stringify({
           status: "paid",
           paypal_capture_id: capture.id,
@@ -154,5 +154,16 @@ export const confirmPayPalCheckout = createServerFn({ method: "POST" })
         }),
       },
     );
-    return { ok: true as const, alreadyPaid: false as const };
+
+    if (updated.length) return { ok: true as const, alreadyPaid: false as const };
+
+    // A webhook may have won the race and committed the same capture first.
+    // Confirm the persisted state rather than reporting success on an empty PATCH.
+    const latest = await databaseRequest<Array<{ status: string; paypal_capture_id: string | null }>>(
+      `shop_orders?id=eq.${data.orderId}&select=status,paypal_capture_id&limit=1`,
+    );
+    if (latest[0]?.status === "paid" && latest[0]?.paypal_capture_id === capture.id) {
+      return { ok: true as const, alreadyPaid: true as const };
+    }
+    return { ok: false as const, reason: "order_state_conflict" as const };
   });
