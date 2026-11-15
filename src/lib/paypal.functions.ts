@@ -5,7 +5,7 @@ import { releasePriceCents } from "@/lib/commerce";
 import { createPayPalOrder, capturePayPalOrder } from "@/lib/paypal.server";
 
 const startCheckoutSchema = z.object({
-  upc: z.string().regex(/^\\d{12,14}$/),
+  upc: z.string().regex(/^\d{12,14}$/),
   email: z.string().trim().email().max(255),
 }).strict();
 
@@ -28,7 +28,7 @@ function databaseConfig() {
   const url = process.env["SUPABASE_URL"];
   const key = process.env["SUPABASE_SERVICE_ROLE_KEY"];
   if (!url || !key) throw new Error("Private order storage is not configured.");
-  return { url: url.replace(/\\/$/, ""), key };
+  return { url: url.replace(/\/$/, ""), key };
 }
 
 async function databaseRequest<T>(path: string, init: RequestInit = {}): Promise<T> {
