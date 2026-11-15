@@ -1,5 +1,3 @@
-import "server-only";
-
 type PayPalEnvironment = "sandbox" | "live";
 
 type PayPalToken = {
@@ -153,7 +151,12 @@ export async function verifyPayPalWebhook(input: {
     {
       method: "POST",
       body: JSON.stringify({
-        ...input,
+        transmission_id: input.transmissionId,
+        transmission_time: input.transmissionTime,
+        transmission_sig: input.transmissionSignature,
+        cert_url: input.certUrl,
+        auth_algo: input.authAlgorithm,
+        webhook_event: input.webhookEvent,
         webhook_id: webhookId,
       }),
     },
