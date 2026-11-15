@@ -17,6 +17,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
     ["shop", english ? "Shop" : "Boutique"],
     ["licensing", english ? "Music licensing" : "Licences musicales"],
     ["catalogue", english ? "Catalogue" : "Catalogue"],
+    ["previews", english ? "Audio previews" : "Extraits audio"],
     ["artists", english ? "Artists" : "Artistes"],
     ["about", english ? "The label" : "Le label"],
     ["services", "Services"],
@@ -52,7 +53,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
         >
           {nav.map(([p, l]) => (
             <Link
-              to={publicPages[p][locale]}
+              to={p === "previews" ? "/previews" : publicPages[p][locale]}
               search={p === "licensing" ? { release: undefined, intent: undefined } : {}}
               key={p}
               activeProps={{ className: "text-primary" }}
@@ -114,7 +115,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
           {nav.map(([p, l], i) => (
             <Link
               key={p}
-              to={publicPages[p][locale]}
+              to={p === "previews" ? "/previews" : publicPages[p][locale]}
               search={p === "licensing" ? { release: undefined, intent: undefined } : {}}
               onClick={() => setOpen(false)}
             >
