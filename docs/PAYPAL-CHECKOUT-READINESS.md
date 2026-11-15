@@ -17,7 +17,10 @@ Never put the client secret in browser code, Git, chat, or a public environment 
 4. Implement idempotent capture and persist PayPal order/capture IDs and final state.
 5. Verify webhook signatures with PayPal and fulfill only on `PAYMENT.CAPTURE.COMPLETED`; never fulfill on approval or pending status.
 6. Test sandbox create, approve, capture, duplicate webhook, denied payment, refund/reversal, and failure paths.
-7. Add database migration and restricted RLS/service-role operations for orders before exposing checkout UI.
+7. Apply `drizzle/migrations/0002_create_private_shop_orders.sql` to the connected Supabase database, then add restricted service-role order operations before exposing checkout UI.
+
+## Database foundation committed
+`drizzle/migrations/0002_create_private_shop_orders.sql` defines a private `shop_orders` ledger and an idempotency ledger for verified PayPal webhook events. RLS is enabled, and `anon` / `authenticated` receive no table privileges; only `service_role` is granted access. The migration is committed but has **not** been applied to the live Lovable/Supabase database.
 
 ## Current behaviour
 This adapter has no UI entry point and does not enable payments. It fails closed when PayPal credentials are absent. Sandbox is the default; live mode must be deliberately configured.
