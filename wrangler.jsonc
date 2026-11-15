@@ -1,0 +1,7 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "nflt-records",
+  "main": "@tanstack/react-start/server-entry",
+  "compatibility_date": "2026-11-15",
+  "observability": { "enabled": true }
+}

@@ -1,0 +1,20 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1793284097316,
+      "tag": "0000_create_contact_messages",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1794641275961,
+      "tag": "0001_create_licensing_inquiries",
+      "breakpoints": true
+    }
+  ]
+}
