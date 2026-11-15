@@ -142,7 +142,7 @@ export async function verifyPayPalWebhook(input: {
   transmissionSignature: string;
   certUrl: string;
   authAlgorithm: string;
-  webhookEvent: unknown;
+  webhookEventRaw: string;
 }): Promise<boolean> {
   const webhookId = process.env["PAYPAL_WEBHOOK_ID"];
   if (!webhookId) throw new Error("PAYPAL_WEBHOOK_ID is required before webhook verification.");
@@ -150,15 +150,16 @@ export async function verifyPayPalWebhook(input: {
     "/v1/notifications/verify-webhook-signature",
     {
       method: "POST",
-      body: JSON.stringify({
+      // Keep the original event JSON bytes intact inside the verification request.
+      // Re-stringifying a parsed event can change whitespace/escaping and invalidate verification.
+      body: `${JSON.stringify({
         transmission_id: input.transmissionId,
         transmission_time: input.transmissionTime,
         transmission_sig: input.transmissionSignature,
         cert_url: input.certUrl,
         auth_algo: input.authAlgorithm,
-        webhook_event: input.webhookEvent,
         webhook_id: webhookId,
-      }),
+      }).slice(0, -1)},"webhook_event":${input.webhookEventRaw}}`,
     },
   );
   return result.verification_status === "SUCCESS";
