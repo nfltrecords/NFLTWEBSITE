@@ -51,7 +51,7 @@ export function PreviewLibrary({ locale = "fr" }: { locale?: Locale }) {
         <div className="space-y-6">
           {previewFiles.map((src) => {
             const filename = src.split("/").pop() ?? src;
-            const title = filename.replace(/_PREVIEW_30S\\.mp3$/i, "").replaceAll("_", " ");
+            const title = filename.replace(/_PREVIEW_30S\.mp3$/i, "").replaceAll("_", " ");
             return <article key={src} className="border-b border-border pb-5"><h2 className="font-display text-lg mb-3 break-words">{title}</h2><audio className="w-full" controls preload="none" src={src}>{locale === "fr" ? "Votre navigateur ne prend pas en charge la lecture audio." : "Your browser does not support audio playback."}</audio></article>;
           })}
         </div>
