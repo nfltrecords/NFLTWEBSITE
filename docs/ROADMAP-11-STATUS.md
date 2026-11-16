@@ -19,7 +19,7 @@
 ## Validation technique en cours
 
 - Le contrôle statique du sitemap de `main` a trouvé 60 URL uniques correspondant exactement aux 12 groupes de pages FR/EN et aux 18 fiches UPC, avec 180 liens hreflang ; `robots.txt` déclare le sitemap.
-- Le workflow GitHub `Verify source` associé à la dernière version de cette branche a démarré, mais l'étape d'installation des dépendances était encore en cours lors de la dernière consultation. Aucun résultat de tests/lint/build n'est disponible pour cette révision.
+- Le workflow GitHub `Verify source` lancé sur le commit précédent `1ad59a0` est encore en cours à l'étape d'installation des dépendances ; les commits ajoutés ensuite à cette branche n'ont pas encore de résultat de validation confirmé. Aucun résultat de tests/lint/build n'est donc disponible pour le HEAD actuel.
 - Le commentaire Cloudflare de prévisualisation sur la PR documentaire précédente signalait un build échoué. Aucun déploiement de production n'a été lancé.
 - La PR n°2 est une proposition de changement non fusionnée. Ne pas la fusionner avant réussite des contrôles requis et revue des changements de code.
 
