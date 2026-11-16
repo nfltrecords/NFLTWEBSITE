@@ -53,7 +53,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
         >
           {nav.map(([p, l]) => (
             <Link
-              to={p === "previews" ? "/previews" : publicPages[p][locale]}
+              to={p === "previews" ? (english ? "/en/previews" : "/previews") : publicPages[p][locale]}
               search={p === "licensing" ? { release: undefined, intent: undefined } : {}}
               key={p}
               activeProps={{ className: "text-primary" }}
