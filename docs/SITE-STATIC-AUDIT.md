@@ -42,6 +42,10 @@ Ces éléments signifient que l'indépendance technique vis-à-vis de Lovable n'
 - À l'inverse, le `roadmap.md` et le rapport propriétaire du 14 novembre enregistrent plusieurs validations antérieures de tests, lint et compilation automatique réussis. Ces validations sont des résultats historiques consignés dans le dépôt, pas une nouvelle exécution faite pendant cet audit.
 - Pour la PR documentaire n°2, le commentaire automatique Cloudflare indique que la prévisualisation Worker a échoué sur le commit `4a3f7d1`. Aucun URL de prévisualisation n'a été fourni. Le run GitHub Actions associé au dernier commit de cette PR était encore « in progress » lors de la dernière consultation. Aucun déploiement de production n'a été déclenché.
 
+## Contrôle statique du sitemap
+
+Une comparaison automatisée du sitemap de `main` avec les 12 groupes de pages publiques FR/EN et les 18 fiches UPC a trouvé exactement 60 URL attendues, 60 URL uniques, aucune URL manquante ou inattendue, et 180 liens hreflang. `robots.txt` autorise l'exploration et déclare le sitemap `https://nflt-records.com/sitemap.xml`. Ce contrôle vérifie le contenu versionné, pas l'indexation réelle par Google/Bing ni la réponse HTTP en production.
+
 ## Limites et prochaine validation
 
 Cet audit ne certifie pas l'affichage réel actuel sur mobile, les liens externes, les formulaires en production, les données Supabase, les DNS, le référencement effectivement indexé ni le résultat du dernier run CI. La validation technique finale doit reposer sur un run complet réussi et une prévisualisation accessible, sans toucher au DNS, à la messagerie, au checkout ou à la production.
