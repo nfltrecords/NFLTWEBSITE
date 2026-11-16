@@ -9,6 +9,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const english = pathname === "/en" || pathname.startsWith("/en/");
   const locale = english ? "en" : "fr";
+  const isPreviewPage = pathname === "/previews" || pathname === "/en/previews";
   const current = [...Object.values(publicPages), ...Object.values(legalPages)].find(
     (p) => p.fr === pathname || p.en === pathname,
   );
@@ -64,6 +65,11 @@ export function SiteLayout({ children }: { children: ReactNode }) {
           ))}
         </nav>
         <div className="header-actions">
+          {isPreviewPage && (
+            <Link to={english ? "/previews" : "/en/previews"} hrefLang={english ? "fr" : "en"} aria-label={english ? "Version française" : "English version"}>
+              {english ? "FR" : "EN"}
+            </Link>
+          )}
           {current && (
             <Link
               to={english ? current.fr : current.en}
