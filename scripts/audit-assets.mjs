@@ -2,7 +2,7 @@ import { readFileSync, readdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 
 const catalogue = readFileSync('src/lib/catalogue.ts', 'utf8');
-const upcs = [...catalogue.matchAll(/upc: "(\d+)"/g)].map((m) => m[1]);
+const upcs = [...catalogue.matchAll(/upc: "(\\d+)"/g)].map((m) => m[1]);
 const coverDir = 'public/assets/covers';
 const previewDir = 'public/assets/previews';
 const missing = upcs.filter((upc) => !existsSync(join(coverDir, `cover-${upc}.jpg`)));
@@ -19,7 +19,10 @@ console.log(JSON.stringify({
   catalogueReleases: upcs.length,
   coverFiles: covers.length,
   missingCoverUPCs: missing,
-  previewMP3Files: previews.length,\n  listedPreviewMP3Files: listedPreviews.length,\n  missingPreviews,\n  unlistedPreviews,
+  previewMP3Files: previews.length,
+  listedPreviewMP3Files: listedPreviews.length,
+  missingPreviews,
+  unlistedPreviews,
   routeFiles: routeFiles.length,
   testFiles: testFiles.length,
 }, null, 2));
