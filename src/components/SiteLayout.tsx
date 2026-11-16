@@ -9,6 +9,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const english = pathname === "/en" || pathname.startsWith("/en/");
   const locale = english ? "en" : "fr";
+  const isPreviewPage = pathname === "/previews" || pathname === "/en/previews";
   const current = [...Object.values(publicPages), ...Object.values(legalPages)].find(
     (p) => p.fr === pathname || p.en === pathname,
   );
@@ -17,6 +18,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
     ["shop", english ? "Shop" : "Boutique"],
     ["licensing", english ? "Music licensing" : "Licences musicales"],
     ["catalogue", english ? "Catalogue" : "Catalogue"],
+    ["previews", english ? "Audio previews" : "Extraits audio"],
     ["artists", english ? "Artists" : "Artistes"],
     ["about", english ? "The label" : "Le label"],
     ["services", "Services"],
@@ -52,7 +54,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
         >
           {nav.map(([p, l]) => (
             <Link
-              to={publicPages[p][locale]}
+              to={p === "previews" ? (english ? "/en/previews" : "/previews") : publicPages[p][locale]}
               search={p === "licensing" ? { release: undefined, intent: undefined } : {}}
               key={p}
               activeProps={{ className: "text-primary" }}
@@ -63,6 +65,11 @@ export function SiteLayout({ children }: { children: ReactNode }) {
           ))}
         </nav>
         <div className="header-actions">
+          {isPreviewPage && (
+            <Link to={english ? "/previews" : "/en/previews"} hrefLang={english ? "fr" : "en"} aria-label={english ? "Version française" : "English version"}>
+              {english ? "FR" : "EN"}
+            </Link>
+          )}
           {current && (
             <Link
               to={english ? current.fr : current.en}
@@ -114,7 +121,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
           {nav.map(([p, l], i) => (
             <Link
               key={p}
-              to={publicPages[p][locale]}
+              to={p === "previews" ? (english ? "/en/previews" : "/previews") : publicPages[p][locale]}
               search={p === "licensing" ? { release: undefined, intent: undefined } : {}}
               onClick={() => setOpen(false)}
             >

@@ -34,6 +34,8 @@ describe("App routing", () => {
     "/a-propos",
     "/contact",
     "/messages",
+    "/previews",
+    "/en/previews",
     "/en",
     "/en/services",
     "/en/artists",
