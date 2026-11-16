@@ -115,7 +115,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
           {nav.map(([p, l], i) => (
             <Link
               key={p}
-              to={p === "previews" ? "/previews" : publicPages[p][locale]}
+              to={p === "previews" ? (english ? "/en/previews" : "/previews") : publicPages[p][locale]}
               search={p === "licensing" ? { release: undefined, intent: undefined } : {}}
               onClick={() => setOpen(false)}
             >
