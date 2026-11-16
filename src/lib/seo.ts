@@ -52,6 +52,7 @@ export const publicPages = {
   about: { fr: "/a-propos", en: "/en/about" },
   contact: { fr: "/contact", en: "/en/contact" },
   catalogue: { fr: "/catalogue", en: "/en/catalogue" },
+  previews: { fr: "/previews", en: "/en/previews" },
   artist: { fr: "/nflt", en: "/en/nflt" },
   press: { fr: "/presse", en: "/en/press" },
   application: { fr: "/application", en: "/en/application" },
@@ -170,6 +171,16 @@ const descriptions: Record<PublicPage, Record<Locale, [string, string]>> = {
     en: [
       "Contact & music projects — NFLT RECORDS",
       "Contact NFLT RECORDS for music projects, collaborations and press enquiries through the label’s existing contact form.",
+    ],
+  },
+  previews: {
+    fr: [
+      "Extraits audio — NFLT RECORDS",
+      "Écoutez les extraits audio disponibles du catalogue NFLT RECORDS.",
+    ],
+    en: [
+      "Audio previews — NFLT RECORDS",
+      "Listen to available audio previews from the NFLT RECORDS catalogue.",
     ],
   },
   catalogue: {
