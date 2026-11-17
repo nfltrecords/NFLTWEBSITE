@@ -77,3 +77,21 @@ Sources officielles : https://www.soundexchange.com/register/ ; https://www.soun
 | SoundExchange | Royalties statutaires US non-interactives | Barème statutaire, pas une commission sync de plateforme | Éligibilité distincte performer / propriétaire master | Vérifier les ISRC et comptes, service complémentaire |
 
 Aucun compte n'a été créé, aucun master envoyé, aucun mandat accepté, aucun Content ID modifié et aucune revendication de royalties déposée.
+
+
+## Mise à jour des conditions publiques — 17 novembre 2026
+
+Vérification complémentaire des pages officielles :
+
+- **Tracksynk :** le paiement artiste passe obligatoirement par Stripe Express ; la France est dans la liste des pays acceptés. Le versement par défaut est annoncé quotidien, avec une réserve glissante de 7 jours pour les nouveaux comptes. La plateforme annonce 75 % du prix de piste à l'artiste, tandis qu'elle conserve 25 % et les 5 % de frais de service facturés à l'acheteur. Les licences IndieSynk et StudioSynk ont des périmètres différents ; StudioSynk est limité à deux ans et ne couvre pas la diffusion TV linéaire. Les conditions complètes par niveau restent déterminantes.
+- **SoundHex :** la page officielle consultée annonce une adhésion gratuite, non exclusive et révocable, 100 % de propriété conservée par l'artiste et 70 % des frais de synchronisation reversés à l'artiste. Ces annonces commerciales ne remplacent pas le contrat : base de calcul, frais, calendrier de paiement, portée du mandat et compatibilité Content ID restent à obtenir par écrit.
+- **SoundExchange :** en plus de son activité américaine, l'organisme annonce collecter des royalties de droits voisins à l'international via des accords avec des sociétés partenaires couvrant 93 % du marché mondial des droits voisins. Il faut être membre et compléter un mandat international. Cela concerne les royalties de droits voisins, pas les licences sync commerciales. L'éligibilité performer et propriétaire du master doit être examinée séparément.
+
+**Soundscape :** je conserve les réserves contractuelles déjà inscrites dans l'analyse précédente. Je n'ai pas obtenu dans cette vérification une nouvelle confirmation indépendante des conditions contractuelles actuelles ; ne pas considérer les chiffres historiques de ce document comme revalidés.
+
+Sources officielles complémentaires :
+- https://www.tracksynk.com/help/publishing/getting-paid
+- https://www.tracksynk.com/help/licensing/sync-licensing
+- https://www.tracksynk.com/help/about/legal
+- https://soundhex.com/
+- https://www.soundexchange.com/international-partners/
