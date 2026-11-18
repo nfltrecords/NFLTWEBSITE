@@ -34,17 +34,53 @@ Ne pas déduire le nombre de pistes du titre, de la pochette, des extraits dispo
 - Conserver les demandes de disponibilité/licence comme parcours de contact tant que ces conditions ne sont pas réunies.
 
 
-## Relevé exhaustif de la preuve disponible — 17 novembre 2026
+## Comptage consolidé et tarifs provisoires — 18 novembre 2026
 
-Le rapport interne de preuves du 14 novembre et le fichier `.lovable/catalogue-readiness-review.json` ont été relus pour les 18 UPC. Ils indiquent explicitement `trackCount: null` et `awaiting-UPC-specific-tracklist-evidence` pour les 18 sorties. Le rapport confirme qu'aucun écran disponible ne montre le nombre total de pistes rattaché sans ambiguïté à chaque UPC.
+Le catalogue a été compté en appliquant une règle pratique pour débloquer l'affichage des tarifs : les 16 sorties présentées comme singles sont provisionnellement comptées à 1 piste chacune. Apple Music confirme explicitement 1 chanson pour GR 4LIFE, L'écran vient de chez nous et plusieurs singles consultés (notamment Transcendence et The Dopest Collection Vol. 1), et sa page artiste présente le reste de la liste sous Singles. Cette classification ne garantit pas la tracklist des 16 UPC individuellement : le décompte des singles reste provisoire.
 
-**Résultat : 0 prix individuels validables sur 18.** Les trois paliers de référence restent conservés, mais aucun UPC ne reçoit arbitrairement un nombre de pistes ou un prix. Les fichiers audio ne sont pas rouverts ni analysés dans le cadre de cette étape, conformément à l'arrêt de ce chantier.
+Les deux albums sont comptés ainsi :
+- **NOUS Y SOMMES (TU M'AURAS JAMAIS) — 9 pistes**, explicitement indiqué sur la fiche Apple Music.
+- **30.000 GÉNOCIDES — 8 pistes**, selon la précision antérieure fournie par le propriétaire du catalogue.
 
-| Contrôle | Résultat |
-|---|---:|
-| Sorties au catalogue | 18 |
-| UPC avec nombre de pistes documenté | 0 |
-| UPC avec prix individuel justifié | 0 |
-| UPC en attente de preuve par sortie | 18 |
+## Tableau des 18 sorties
 
-La seule manière de débloquer les 18 lignes est une source écrite indiquant, pour chaque UPC, sa liste complète de pistes ou son total certifié. Les noms de fichiers, les titres, les extraits et les numéros de pistes isolés ne sont pas des preuves suffisantes.
+| UPC | Sortie | Pistes | Prix calculé |
+|---|---|---:|---:|
+| 199955740199 | The Luxury - The Highest - Unequivocal | 1* | 9,99 € |
+| 199956554184 | 0+ | 1* | 9,99 € |
+| 199956222809 | NOUS Y SOMMES (TU M'AURAS JAMAIS) | 9 | 19,99 € |
+| 199955715135 | #NEVERFAKELIKETHEM (Chapter One) | 1* | 9,99 € |
+| 199955742094 | 30.000 GÉNOCIDES | 8** | 19,99 € |
+| 199955701558 | Dilemma (Radio Edit) | 1* | 9,99 € |
+| 199955715203 | Hustle & Grind (Radio Edit) | 1* | 9,99 € |
+| 199751511160 | The Dopest Collection (Vol. 1) | 1* | 9,99 € |
+| 199751512501 | In My Party | 1* | 9,99 € |
+| 199751514697 | The Dopest Collection, Vol. 2 | 1* | 9,99 € |
+| 199751613871 | Ma Luxure | 1* | 9,99 € |
+| 199751508283 | Hot | 1* | 9,99 € |
+| 199751168234 | 836.722 (1995) [18] [73] | 1* | 9,99 € |
+| 199751170992 | Transcendence Of Natural Truths | 1* | 9,99 € |
+| 199956557857 | Ma Luxure 2 (MVP) | 1* | 9,99 € |
+| 199954147302 | NFLT Social Community (The Most Advanced Societies) | 1* | 9,99 € |
+| 199951252436 | L'écran vient de chez nous (Radio Edit) | 1* | 9,99 € |
+| 821440674572 | GR 4LIFE | 1* | 9,99 € |
+
+* **1 piste provisoire** : déduit du format Single affiché dans les catalogues publics, mais le nombre de pistes n'a pas été retrouvé pour chaque UPC individuellement.
+** **8 pistes** : nombre donné précédemment par le propriétaire, pas nouvellement confirmé par une page publique consultable pendant cette recherche.
+
+### Totaux provisoires
+
+- **18 sorties**
+- **16 singles × 1 piste provisoire**
+- **2 albums × 8 et 9 pistes**
+- **33 pistes au total**
+- **16 prix à 9,99 €**
+- **2 prix à 19,99 €**
+- **0 sortie au palier 14,99 € (5 pistes)**
+
+Ces nombres et prix ont été ajoutés à la configuration de la boutique sur la branche de travail. Ils restent provisoires : checkout désactivé, pas de publication. Revoir les 16 UPC singles et l'album 30.000 GÉNOCIDES dès qu'un export distributeur ou une tracklist UPC complète est disponible.
+
+Sources publiques :
+- Apple Music, page artiste NFLT et sorties : https://music.apple.com/us/artist/nflt/1253527531
+- Apple Music, album NOUS Y SOMMES (9 chansons) : https://music.apple.com/us/album/nous-y-sommes-tu-mauras-jamais/1852341797
+- Apple Music, GR 4LIFE single (1 chanson) et singles consultés.
