@@ -1,14 +1,14 @@
 # NFLT RECORDS — suivi consolidé des 11 chantiers
 
-État de travail au 16 novembre 2026. Ce tableau sépare les éléments vérifiés dans le dépôt, les informations déclarées par le propriétaire et les opérations qui exigent un accès ou une autorisation. Il ne vaut pas validation de production.
+État de travail au 18 novembre 2026. Ce tableau sépare les éléments vérifiés dans le dépôt, les informations déclarées par le propriétaire et les opérations qui exigent un accès ou une autorisation. Il ne vaut pas validation de production.
 
 | N° | Chantier | État | Reste à faire / dépendance |
 |---:|---|---|---|
-| 1 | Sortie de Lovable / portage du site | En cours sur branche privée | Hooks de télémétrie Lovable retirés du composant racine et module supprimé sur `work/operations-readiness`; consignes de contribution neutralisées. Le dossier historique `.lovable/` est conservé car il contient des références de tests et des documents internes. Attendre tests/build, puis migrer ces références avant tout nettoyage final. |
+| 1 | Sortie de Lovable / portage du site | Préparation isolée, migration non validée | Hooks de télémétrie Lovable retirés du composant racine et module supprimé sur la branche de préparation. Le dossier `.lovable/` est encore présent car des tests/docs l'utilisent. Aucun build n'est confirmé, aucune déconnexion de compte Lovable ni migration de production effectuée. |
 | 2 | Audio / extraits | Suspendu à la demande du propriétaire | Aucun nouveau travail audio dans cette branche. |
 | 3 | Catalogue et petits problèmes du site | Audit statique effectué | 18 sorties, 18 clés de pochettes et 18 fichiers de couverture recensés ; deux associations d'illustration restent à confirmer selon le rapport de preuves. Contrôler le rendu en prévisualisation après rétablissement du build. |
-| 4 | Prix par sortie | Non finalisable à ce stade | Barème : 1 piste 9,99 €, 5 pistes 14,99 €, 6+ pistes 19,99 € ; 2–4 pistes non tarifées. Les nombres de pistes par UPC ne sont pas validés ; aucun prix individuel ni checkout. |
-| 5 | Tableau de bord d'administration | Conception documentée, bloquée | Le schéma versionné ne déclare que `contact_messages` et `licensing_inquiries`. Il faut accès au projet Supabase, à ses tables réelles, utilisateurs et politiques RLS avant de créer migrations et dashboard sécurisé. |
+| 4 | Prix par sortie | Chiffres compilés provisoirement dans la branche | 16 singles présumés 1 piste (9,99 € chacun) ; album 30.000 GÉNOCIDES (8 pistes, 19,99 €) ; NOUS Y SOMMES (9 pistes, 19,99 €). Total provisoire 33 pistes. Vérification UPC complète non réalisée : prix affichés en préversion seulement, checkout toujours désactivé. |
+| 5 | Tableau de bord d'administration | Socle SQL draft créé, aucune migration appliquée | Documentation de plan et fichier SQL draft pour organisations/personnes/relations/projets/services/roles/audit et RLS fermé par défaut. Aucun dashboard UI n'existe encore ; accès Supabase et audit du schéma/politiques réels requis avant migration. |
 | 6 | DNS LWS | Bloqué par l'accès au compte | Préserver les enregistrements mail connus ; aucun nameserver/MX/SPF/DKIM/DMARC modifié. Accès LWS et export complet de zone nécessaires. |
 | 7 | Messagerie et notifications | Partiellement documenté, bloqué | Les fonctions actuelles stockent les demandes dans Supabase ; elles n'envoient pas de notification. Vérifier la boîte LWS et effectuer des tests entrants/sortants ; choisir/configurer un fournisseur d'envoi si nécessaire. |
 | 8 | Boutique Payhip | Préparée, non activée | Payhip reste une option sans checkout connecté. Vérifier frais/conditions au compte, vendeur par transaction, droits, formats, prix, TVA, CGV et remboursements avant ouverture. PayPal préféré mais non connecté. |
@@ -19,7 +19,7 @@
 ## Validation technique en cours
 
 - Le contrôle statique du sitemap de `main` a trouvé 60 URL uniques correspondant exactement aux 12 groupes de pages FR/EN et aux 18 fiches UPC, avec 180 liens hreflang ; `robots.txt` déclare le sitemap.
-- Le workflow GitHub `Verify source` lancé sur le commit précédent `1ad59a0` est encore en cours à l'étape d'installation des dépendances ; les commits ajoutés ensuite à cette branche n'ont pas encore de résultat de validation confirmé. Aucun résultat de tests/lint/build n'est donc disponible pour le HEAD actuel.
+- Les statuts CI visibles pour le HEAD actuel ne fournissent aucun résultat de test confirmé. L'environnement de cette session ne peut pas joindre GitHub pour cloner et exécuter le build local. Tests, lint et build restent à valider
 - Le commentaire Cloudflare de prévisualisation sur la PR documentaire précédente signalait un build échoué. Aucun déploiement de production n'a été lancé.
 - La PR n°2 est une proposition de changement non fusionnée. Ne pas la fusionner avant réussite des contrôles requis et revue des changements de code.
 
