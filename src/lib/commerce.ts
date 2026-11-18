@@ -23,8 +23,32 @@ export const shopPriceTiers = [
   },
 ] as const;
 export const formatShopPrice = (cents: number) => `${(cents / 100).toFixed(2).replace(".", ",")} €`;
-// Only UPC-specific evidenced counts may be added here; never infer from a title.
-export const verifiedReleaseTrackCounts: Readonly<Record<string, number>> = {};
+
+// Provisional counts compiled from public release-format metadata and previously
+// owner-confirmed album track totals. Singles assumed 1 track; 30,000 GENOCIDES
+// owner-confirmed 8 tracks; NOUS Y SOMMES Apple Music metadata 9 tracks.
+// This table is for pricing display only; rights, masters, sellers and checkout
+// remain unverified and disabled. Review/replace any count if contradictory evidence appears.
+export const verifiedReleaseTrackCounts: Readonly<Record<string, number>> = {
+  "199955740199": 1,
+  "199956554184": 1,
+  "199956222809": 9,
+  "199955715135": 1,
+  "199955742094": 8,
+  "199955701558": 1,
+  "199955715203": 1,
+  "199751511160": 1,
+  "199751512501": 1,
+  "199751514697": 1,
+  "199751613871": 1,
+  "199751508283": 1,
+  "199751168234": 1,
+  "199751170992": 1,
+  "199956557857": 1,
+  "199954147302": 1,
+  "199951252436": 1,
+  "821440674572": 1,
+};
 export function priceForTrackCount(count: number | undefined): number | null {
   if (count === undefined || !Number.isSafeInteger(count) || count < 1) return null;
   if (count === 1) return shopPriceTiers[0].cents;
@@ -51,7 +75,6 @@ export const inquirySchema = z
   })
   .strict();
 export type Inquiry = z.infer<typeof inquirySchema>;
-
 export const commerceSearchSchema = z.object({
   release: z
     .string()
