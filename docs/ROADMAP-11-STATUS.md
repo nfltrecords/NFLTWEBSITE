@@ -19,7 +19,7 @@
 ## Validation technique en cours
 
 - Le contrôle statique du sitemap de `main` a trouvé 60 URL uniques correspondant exactement aux 12 groupes de pages FR/EN et aux 18 fiches UPC, avec 180 liens hreflang ; `robots.txt` déclare le sitemap.
-- Les statuts CI visibles pour le HEAD actuel ne fournissent aucun résultat de test confirmé. L'environnement de cette session ne peut pas joindre GitHub pour cloner et exécuter le build local. Tests, lint et build restent à valider
+- Le run GitHub Actions « NFLT safe verification » #44252730599 (commit `67ab74c109c8f9a991a6d74f26797aa3ea9dd513`) est terminé avec succès : tests et build sans déploiement. Le lint est exécuté en mode non bloquant (`continue-on-error: true`) ; son succès n'est donc pas garanti par le statut global. Le run « Verify source » #44252730510 avait échoué au lint (tests réussis, build sauté).
 - Le commentaire Cloudflare de prévisualisation sur la PR documentaire précédente signalait un build échoué. Aucun déploiement de production n'a été lancé.
 - La PR n°2 est une proposition de changement non fusionnée. Ne pas la fusionner avant réussite des contrôles requis et revue des changements de code.
 
