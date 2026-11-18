@@ -18,6 +18,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - name: Upgrade npm for Node 22 compatibility
+        run: npm install --global npm@11.21.2
       - name: Install dependencies
         run: npm install --no-audit --no-fund
       - name: Apply Prettier formatting
