@@ -1,0 +1,33 @@
+name: NFLT safe verification
+on:
+  push:
+    branches:
+      - work/operations-readiness
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify-safe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref || github.ref }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Upgrade npm for Node 22 compatibility
+        run: npm install --global npm@11.21.2
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Run tests
+        run: npm test
+      - name: Build (no deployment)
+        run: npm run build
+      - name: Lint (non-blocking while formatting backlog is resolved)
+        run: npm run lint
+        continue-on-error: true
