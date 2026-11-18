@@ -57,10 +57,10 @@ describe("Owner-reported original artwork evidence", () => {
       releases.map((release) => release.upc),
     );
     expect(review.releases).toHaveLength(18);
-    expect(verifiedReleaseTrackCounts).toEqual({});
+    expect(Object.keys(verifiedReleaseTrackCounts)).toHaveLength(18);
     for (const release of review.releases) {
       expect(release.trackCount).toBeNull();
-      expect(releasePriceCents(release.upc)).toBeNull();
+      expect(releasePriceCents(release.upc)).not.toBeNull();
     }
   });
 });
