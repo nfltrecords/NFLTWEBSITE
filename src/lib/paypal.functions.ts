@@ -4,15 +4,19 @@ import { releases } from "@/lib/catalogue";
 import { releasePriceCents } from "@/lib/commerce";
 import { createPayPalOrder, capturePayPalOrder } from "@/lib/paypal.server";
 
-const startCheckoutSchema = z.object({
-  upc: z.string().regex(/^\d{12,14}$/),
-  email: z.string().trim().email().max(255),
-}).strict();
+const startCheckoutSchema = z
+  .object({
+    upc: z.string().regex(/^\d{12,14}$/),
+    email: z.string().trim().email().max(255),
+  })
+  .strict();
 
-const captureCheckoutSchema = z.object({
-  orderId: z.string().uuid(),
-  paypalOrderId: z.string().regex(/^[A-Z0-9]{8,40}$/),
-}).strict();
+const captureCheckoutSchema = z
+  .object({
+    orderId: z.string().uuid(),
+    paypalOrderId: z.string().regex(/^[A-Z0-9]{8,40}$/),
+  })
+  .strict();
 
 type StoredOrder = {
   id: string;
@@ -65,7 +69,10 @@ export const startPayPalCheckout = createServerFn({ method: "POST" })
 
     const siteUrl = process.env["SITE_URL"] ?? "https://nflt-records.com";
     const base = new URL(siteUrl);
-    if (base.protocol !== "https:" || (base.hostname !== "nflt-records.com" && !base.hostname.endsWith(".nflt-records.com"))) {
+    if (
+      base.protocol !== "https:" ||
+      (base.hostname !== "nflt-records.com" && !base.hostname.endsWith(".nflt-records.com"))
+    ) {
       throw new Error("SITE_URL must be the official NFLT RECORDS HTTPS domain.");
     }
 
@@ -92,8 +99,11 @@ export const startPayPalCheckout = createServerFn({ method: "POST" })
         returnUrl: new URL(`/commande/confirmation?order=${orderId}`, base).toString(),
         cancelUrl: new URL(`/commande/annulee?order=${orderId}`, base).toString(),
       });
-      const approvalUrl = paypal.links?.find((link) => link.rel === "approve" || link.rel === "payer-action")?.href;
-      if (!paypal.id || !approvalUrl) throw new Error("PayPal did not return a valid approval link.");
+      const approvalUrl = paypal.links?.find(
+        (link) => link.rel === "approve" || link.rel === "payer-action",
+      )?.href;
+      if (!paypal.id || !approvalUrl)
+        throw new Error("PayPal did not return a valid approval link.");
 
       await databaseRequest<unknown>(`shop_orders?id=eq.${orderId}`, {
         method: "PATCH",
@@ -159,9 +169,9 @@ export const confirmPayPalCheckout = createServerFn({ method: "POST" })
 
     // A webhook may have won the race and committed the same capture first.
     // Confirm the persisted state rather than reporting success on an empty PATCH.
-    const latest = await databaseRequest<Array<{ status: string; paypal_capture_id: string | null }>>(
-      `shop_orders?id=eq.${data.orderId}&select=status,paypal_capture_id&limit=1`,
-    );
+    const latest = await databaseRequest<
+      Array<{ status: string; paypal_capture_id: string | null }>
+    >(`shop_orders?id=eq.${data.orderId}&select=status,paypal_capture_id&limit=1`);
     if (latest[0]?.status === "paid" && latest[0]?.paypal_capture_id === capture.id) {
       return { ok: true as const, alreadyPaid: true as const };
     }

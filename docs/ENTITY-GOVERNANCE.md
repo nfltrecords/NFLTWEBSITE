@@ -15,6 +15,7 @@ NFLT RECORDS INC autorise NFLT RECORDS FRANCE à vendre des téléchargements nu
 ## Règles à appliquer dans les futurs outils
 
 Chaque client, devis, contrat, commande, facture, paiement, licence et prestation devra préciser :
+
 - l'entité contractante et l'entité facturante ;
 - le territoire concerné ;
 - le catalogue, UPC et masters concernés ;

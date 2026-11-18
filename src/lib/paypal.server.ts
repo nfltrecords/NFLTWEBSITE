@@ -19,7 +19,11 @@ export type PayPalOrder = {
     custom_id?: string;
     amount?: { currency_code?: string; value?: string };
     payments?: {
-      captures?: Array<{ id: string; status: string; amount?: { currency_code?: string; value?: string } }>;
+      captures?: Array<{
+        id: string;
+        status: string;
+        amount?: { currency_code?: string; value?: string };
+      }>;
     };
   }>;
 };
@@ -30,7 +34,9 @@ function paypalConfig() {
   const mode = process.env["PAYPAL_MODE"] ?? "sandbox";
 
   if (!clientId || !clientSecret) {
-    throw new Error("PayPal is not configured: PAYPAL_CLIENT_ID and PAYPAL_CLIENT_SECRET are required.");
+    throw new Error(
+      "PayPal is not configured: PAYPAL_CLIENT_ID and PAYPAL_CLIENT_SECRET are required.",
+    );
   }
   if (mode !== "sandbox" && mode !== "live") {
     throw new Error("PAYPAL_MODE must be sandbox or live.");
@@ -40,7 +46,8 @@ function paypalConfig() {
   return {
     clientId,
     clientSecret,
-    baseUrl: environment === "live" ? "https://api-m.paypal.com" : "https://api-m.sandbox.paypal.com",
+    baseUrl:
+      environment === "live" ? "https://api-m.paypal.com" : "https://api-m.sandbox.paypal.com",
   };
 }
 
@@ -93,7 +100,10 @@ export async function createPayPalOrder(input: {
   }
   for (const candidate of [input.returnUrl, input.cancelUrl]) {
     const url = new URL(candidate);
-    if (url.protocol !== "https:" || url.hostname !== "nflt-records.com" && !url.hostname.endsWith(".nflt-records.com")) {
+    if (
+      url.protocol !== "https:" ||
+      (url.hostname !== "nflt-records.com" && !url.hostname.endsWith(".nflt-records.com"))
+    ) {
       throw new Error("Checkout return URLs must use the official NFLT RECORDS HTTPS domain.");
     }
   }
@@ -103,13 +113,15 @@ export async function createPayPalOrder(input: {
     headers: { "PayPal-Request-Id": input.reference },
     body: JSON.stringify({
       intent: "CAPTURE",
-      purchase_units: [{
-        custom_id: input.reference,
-        amount: {
-          currency_code: input.currency,
-          value: (input.amountCents / 100).toFixed(2),
+      purchase_units: [
+        {
+          custom_id: input.reference,
+          amount: {
+            currency_code: input.currency,
+            value: (input.amountCents / 100).toFixed(2),
+          },
         },
-      }],
+      ],
       payment_source: {
         paypal: {
           experience_context: {

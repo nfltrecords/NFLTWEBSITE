@@ -84,9 +84,23 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: "/nflt-records-favicon.ico?v=20261114-2", type: "image/x-icon", sizes: "16x16 32x32 48x48 64x64 128x128 256x256" },
-      { rel: "icon", href: "/nflt-records-favicon.png?v=20261114-2", type: "image/png", sizes: "64x64" },
-      { rel: "apple-touch-icon", href: "/nflt-records-apple-touch-icon.png?v=20261114-2", sizes: "180x180" },
+      {
+        rel: "icon",
+        href: "/nflt-records-favicon.ico?v=20261114-2",
+        type: "image/x-icon",
+        sizes: "16x16 32x32 48x48 64x64 128x128 256x256",
+      },
+      {
+        rel: "icon",
+        href: "/nflt-records-favicon.png?v=20261114-2",
+        type: "image/png",
+        sizes: "64x64",
+      },
+      {
+        rel: "apple-touch-icon",
+        href: "/nflt-records-apple-touch-icon.png?v=20261114-2",
+        sizes: "180x180",
+      },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       {
         rel: "stylesheet",

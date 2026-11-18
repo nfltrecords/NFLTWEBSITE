@@ -8,7 +8,10 @@ export const Route = createFileRoute("/messages")({
   head: () => ({
     meta: [
       { title: "Espace NFLT — Messages reçus" },
-      { name: "description", content: "Espace privé NFLT Records : messages reçus via le formulaire de contact." },
+      {
+        name: "description",
+        content: "Espace privé NFLT Records : messages reçus via le formulaire de contact.",
+      },
       { name: "robots", content: "noindex" },
     ],
   }),
@@ -51,7 +54,9 @@ function MessagesPage() {
       <section className="mx-auto max-w-2xl px-5 pb-20">
         {messages === null ? (
           <form onSubmit={load} className="space-y-4">
-            <p className="text-muted-foreground">Entrez votre code pour consulter les messages du formulaire de contact.</p>
+            <p className="text-muted-foreground">
+              Entrez votre code pour consulter les messages du formulaire de contact.
+            </p>
             <input
               type="password"
               value={code}

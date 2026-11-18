@@ -5,6 +5,7 @@ Recherche documentaire effectuée le 16 novembre 2026 sur les pages officielles 
 ## Tracksynk — marketplace de licences de synchronisation
 
 **Informations publiées par la plateforme :**
+
 - Pas d'abonnement ni de minimum mensuel ; inscription de titres soumise à sélection/validation du roster.
 - Modèle annoncé non exclusif ; le titulaire conserve ses droits et peut distribuer/licencier ailleurs.
 - L'artiste fixe le prix par piste et par niveau de licence.
@@ -13,6 +14,7 @@ Recherche documentaire effectuée le 16 novembre 2026 sur les pages officielles 
 - Les licences standard sont limitées par usage/projet ; les utilisations personnalisées ne lient l'artiste qu'après approbation des conditions spécifiques.
 
 **À vérifier avant d'envoyer NFLT :**
+
 - texte complet des conditions vendeur de chaque tier, notamment CustomSynk et exclusivité optionnelle ;
 - répartition de droits entre master et composition, co-auteurs, éditeurs et ayants droit ;
 - éventuel Content ID/distributeur et procédure de résolution des claims ;
@@ -23,11 +25,13 @@ Sources officielles : https://www.tracksynk.com/help/publishing/pricing ; https:
 ## SoundHex — synchronisation et Content ID
 
 **Informations publiées par la plateforme :**
+
 - La page publique annonce un service gratuit à l'inscription, sans engagement, non exclusif et révocable ; l'artiste conserve 100 % de la propriété de sa musique.
 - Part annoncée pour les licences de synchronisation : 70 % des frais de licence versés à l'artiste.
 - La plateforme annonce également un service YouTube Content ID, avec versements mensuels et protection/monétisation ; elle indique que Content ID est inclus sans frais supplémentaires lorsque la musique est distribuée via SoundHex.
 
 **Éléments qui ne sont pas suffisamment documentés sur la page publique consultée :**
+
 - définition exacte de la base de calcul du 70 % (brut, net, déductions, frais tiers) ;
 - entité contractante, seuils et calendrier de paiement, minimum de versement, devise et frais bancaires ;
 - portée précise du mandat, territoires, sous-licences, droits master/composition, garanties, indemnisation et retrait ;
@@ -57,6 +61,7 @@ SoundExchange est un organisme américain désigné pour collecter et distribuer
 Ce service n'est pas un catalogue de licences de synchronisation pour films, publicités ou jeux et ne remplace pas une société de gestion collective des droits d'auteur/composition. Il peut être pertinent pour vérifier les enregistrements NFLT et les royalties américaines non interactives éventuellement dues, en distinguant clairement artiste-interprète et propriétaire de l'enregistrement.
 
 **À vérifier pour NFLT :**
+
 - qui détient réellement les droits de chaque master et qui est l'artiste-interprète éligible ;
 - ISRC exacts et correspondance des enregistrements ;
 - éventuelles inscriptions/mandats déjà existants, afin d'éviter doublons ou revendications concurrentes ;
@@ -69,15 +74,14 @@ Sources officielles : https://www.soundexchange.com/register/ ; https://www.soun
 
 ## Conclusion opérationnelle
 
-| Plateforme | Usage principal | Part annoncée à l'artiste | Engagement/limite à retenir | Statut recommandé |
-|---|---|---:|---|---|
-| Tracksynk | Marketplace sync | 75 % du prix piste ; frais acheteur 5 % en plus | Stripe Express ; roster validé ; licences tierisées | Candidat prioritaire à examiner |
-| SoundHex | Sync + YouTube Content ID | 70 % des frais sync | Contrat détaillé et compatibilité Content ID à obtenir | Candidat, sans activer Content ID |
-| Soundscape | Représentation sync ; bibliothèque client par abonnement | 50 % des revenus de placement annoncés | FAQ artiste : contrat de 3 ans ; options exclusives/non exclusives | Ne pas soumettre avant lecture du contrat |
-| SoundExchange | Royalties statutaires US non-interactives | Barème statutaire, pas une commission sync de plateforme | Éligibilité distincte performer / propriétaire master | Vérifier les ISRC et comptes, service complémentaire |
+| Plateforme    | Usage principal                                          |                                Part annoncée à l'artiste | Engagement/limite à retenir                                        | Statut recommandé                                    |
+| ------------- | -------------------------------------------------------- | -------------------------------------------------------: | ------------------------------------------------------------------ | ---------------------------------------------------- |
+| Tracksynk     | Marketplace sync                                         |          75 % du prix piste ; frais acheteur 5 % en plus | Stripe Express ; roster validé ; licences tierisées                | Candidat prioritaire à examiner                      |
+| SoundHex      | Sync + YouTube Content ID                                |                                      70 % des frais sync | Contrat détaillé et compatibilité Content ID à obtenir             | Candidat, sans activer Content ID                    |
+| Soundscape    | Représentation sync ; bibliothèque client par abonnement |                   50 % des revenus de placement annoncés | FAQ artiste : contrat de 3 ans ; options exclusives/non exclusives | Ne pas soumettre avant lecture du contrat            |
+| SoundExchange | Royalties statutaires US non-interactives                | Barème statutaire, pas une commission sync de plateforme | Éligibilité distincte performer / propriétaire master              | Vérifier les ISRC et comptes, service complémentaire |
 
 Aucun compte n'a été créé, aucun master envoyé, aucun mandat accepté, aucun Content ID modifié et aucune revendication de royalties déposée.
-
 
 ## Mise à jour des conditions publiques — 17 novembre 2026
 
@@ -90,6 +94,7 @@ Vérification complémentaire des pages officielles :
 **Soundscape :** je conserve les réserves contractuelles déjà inscrites dans l'analyse précédente. Je n'ai pas obtenu dans cette vérification une nouvelle confirmation indépendante des conditions contractuelles actuelles ; ne pas considérer les chiffres historiques de ce document comme revalidés.
 
 Sources officielles complémentaires :
+
 - https://www.tracksynk.com/help/publishing/getting-paid
 - https://www.tracksynk.com/help/licensing/sync-licensing
 - https://www.tracksynk.com/help/about/legal

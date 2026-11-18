@@ -17,7 +17,9 @@ describe("Owner-confirmed application and locations", () => {
   });
   it("preserves the confirmed package identifier and its official store destination", () => {
     expect(mobileApplication.packageId).toBe("com.appswiz.nfltrecordshfegh");
-    expect(new URL(mobileApplication.googlePlayUrl).searchParams.get("id")).toBe(mobileApplication.packageId);
+    expect(new URL(mobileApplication.googlePlayUrl).searchParams.get("id")).toBe(
+      mobileApplication.packageId,
+    );
   });
   it("rejects invalid or non-Google Play store destinations", () => {
     for (const value of [

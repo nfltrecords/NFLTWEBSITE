@@ -4,12 +4,12 @@
 
 Les informations d'audit communiquées pour le domaine `nflt-records.com` indiquent les enregistrements suivants :
 
-| Nom | Type | Cible / valeur connue | Rôle |
-|---|---|---|---|
-| `@` | A | `185.158.133.1` | Ancienne destination web relevée lors de l'audit |
-| `www` | CNAME | `nflt-records.com` | Alias web |
-| `@` | MX | `mail.nflt-records.com` | Réception e-mail |
-| `mail` | A | `213.255.195.52` | Serveur de messagerie LWS |
+| Nom    | Type  | Cible / valeur connue   | Rôle                                             |
+| ------ | ----- | ----------------------- | ------------------------------------------------ |
+| `@`    | A     | `185.158.133.1`         | Ancienne destination web relevée lors de l'audit |
+| `www`  | CNAME | `nflt-records.com`      | Alias web                                        |
+| `@`    | MX    | `mail.nflt-records.com` | Réception e-mail                                 |
+| `mail` | A     | `213.255.195.52`        | Serveur de messagerie LWS                        |
 
 Ces valeurs sont un relevé antérieur, pas une interrogation DNS en direct à la date de ce document. Les valeurs MX et mail doivent être préservées tant que la messagerie LWS est utilisée.
 
