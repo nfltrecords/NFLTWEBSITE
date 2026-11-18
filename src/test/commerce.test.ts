@@ -34,7 +34,7 @@ describe("Commerce inquiry rules", () => {
     expect(releases.every((release) => verifiedReleaseTrackCounts[release.upc] !== undefined)).toBe(true);
     expect(releasePriceCents("199956222809")).toBe(1999);
     expect(releasePriceCents("199955742094")).toBe(1999);
-    for (const release of releases.filter((r) => !["199956222809", "199955742094"].includes(r.upc)) {
+    for (const release of releases.filter((r) => !["199956222809", "199955742094"].includes(r.upc))) {
       expect(verifiedReleaseTrackCounts[release.upc]).toBe(1);
       expect(releasePriceCents(release.upc)).toBe(999);
     }
