@@ -7,6 +7,7 @@ import {
   formatShopPrice,
   priceForTrackCount,
   releasePriceCents,
+  verifiedReleaseTrackCounts,
 } from "@/lib/commerce";
 import { releases } from "@/lib/catalogue";
 import commerceConfig from "../../.lovable/commerce-config.json";
@@ -39,8 +40,15 @@ describe("Commerce inquiry rules", () => {
     for (const count of [undefined, 0, -1, 1.5, NaN, Infinity])
       expect(priceForTrackCount(count)).toBeNull();
   });
-  it.each(releases)("withholds price for unaudited UPC $upc", (release) => {
-    expect(releasePriceCents(release.upc)).toBeNull();
+  it("has provisional track counts for every catalog UPC and applies the price tiers", () => {
+    expect(Object.keys(verifiedReleaseTrackCounts)).toHaveLength(18);
+    expect(releases.every((release) => verifiedReleaseTrackCounts[release.upc] !== undefined)).toBe(true);
+    expect(releasePriceCents("199956222809")).toBe(1999); // 9-track album
+    expect(releasePriceCents("199955742094")).toBe(1999); // 8-track album
+    for (const release of releases.filter((r) => !["199956222809", "199955742094"].includes(r.upc)) {
+      expect(verifiedReleaseTrackCounts[release.upc]).toBe(1);
+      expect(releasePriceCents(release.upc)).toBe(999);
+    }
   });
   it("records the exact owner-provided French company identifiers privately", () => {
     const { vat, ...france } = commerceConfig.companyRecords.france;
