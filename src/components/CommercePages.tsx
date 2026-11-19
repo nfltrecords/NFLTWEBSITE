@@ -92,9 +92,25 @@ export function ShopPage({ locale }: { locale: Locale }) {
                 </ul>
                 <div className="mt-5 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-5">
                   <div><p className="text-sm text-muted-foreground">{text(locale, "Total indicatif", "Indicative total")}</p><p className="text-3xl text-primary tabular-nums">{formatShopPrice(cartTotalCents)}</p></div>
-                  <Button type="button" className="editorial-action" disabled>{text(locale, "Paiement bientôt disponible", "Checkout coming soon")}<ArrowUpRight size={16} /></Button>
+                  <Button asChild className="editorial-action">
+                    <a
+                      href={"https://www.paypal.me/mohamedjarry/" + (cartTotalCents / 100).toFixed(2) + "EUR"}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={text(locale, "Payer le total du panier sur PayPal", "Pay the cart total on PayPal")}
+                    >
+                      {text(locale, "Payer avec PayPal", "Pay with PayPal")}
+                      <ArrowUpRight size={16} />
+                    </a>
+                  </Button>
                 </div>
-                <p className="body-copy mt-4 text-sm">{text(locale, "Le panier fonctionne, mais le paiement en ligne reste désactivé. Les prix sont indicatifs ; le vendeur, les droits, les fichiers à livrer, les taxes et les conditions de vente doivent être validés avant toute commande. Aucune somme ne sera débitée.", "The cart works, but online checkout remains disabled. Prices are indicative; the seller, rights, deliverable files, taxes and sale terms must be confirmed before any order. No payment will be taken.")}</p>
+                <p className="body-copy mt-4 text-sm">
+                  {text(
+                    locale,
+                    "Le paiement s’ouvre sur PayPal.Me avec le montant total indicatif du panier. Le lien ne transmet pas le détail des articles et le site ne reçoit pas de confirmation automatique du paiement. Vérifiez le montant et indiquez les titres achetés dans la note PayPal. Les prix, droits, livraison et conditions restent à confirmer ; aucun téléchargement automatique n’est déclenché.",
+                    "Payment opens on PayPal.Me with the indicative cart total. The link does not transmit item details and this site does not receive automatic payment confirmation. Check the amount and list the purchased releases in the PayPal note. Prices, rights, shipping and terms still require confirmation; no automatic download is triggered.",
+                  )}
+                </p>
               </>
             )}
           </section>
