@@ -1,7 +1,7 @@
 name: Verify source
 on:
   push:
-    branches: [main]
+    branches: [main, work/operations-readiness]
   pull_request:
     branches: [main]
   workflow_dispatch:
