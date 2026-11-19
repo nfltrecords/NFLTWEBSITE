@@ -46,12 +46,11 @@ function ReleaseRow({
   index: number;
   showPrice?: boolean;
 }) {
+  const cart = useCart();
+  const quantity = cart.items[release.upc] ?? 0;
+  const canAdd = releasePriceCentsForButton(release.upc) !== null && quantity < 20;
   return (
-    <Link
-      to={locale === "fr" ? "/catalogue/$upc" : "/en/catalogue/$upc"}
-      params={{ upc: release.upc }}
-      className="release-row group"
-    >
+    <div className={`release-row group${showPrice ? " release-row--commerce" : ""}`}>
       <span className="release-index">{String(index + 1).padStart(2, "0")}</span>
       <img
         className="release-cover"
@@ -61,14 +60,39 @@ function ReleaseRow({
         width={64}
         height={64}
       />
-      <div>
+      <Link
+        to={locale === "fr" ? "/catalogue/$upc" : "/en/catalogue/$upc"}
+        params={{ upc: release.upc }}
+        className="release-row-main"
+      >
         <span className="release-artist">NFLT</span>
         <h3 className="release-title">{release.title}</h3>
         {showPrice ? <ReleasePrice upc={release.upc} /> : null}
-      </div>
+      </Link>
       <span className="release-upc">UPC {release.upc}</span>
-      <ArrowUpRight className="text-primary transition-transform group-hover:translate-x-1" />
-    </Link>
+      {showPrice ? (
+        <Button
+          type="button"
+          size="sm"
+          className="release-row-add"
+          disabled={!canAdd}
+          onClick={() => cart.add(release.upc)}
+          aria-label={t(locale, `Ajouter ${release.title} au panier`, `Add ${release.title} to cart`)}
+        >
+          <ShoppingBag size={15} />
+          {t(locale, "Ajouter", "Add")}
+          {quantity > 0 ? ` · ${quantity}` : ""}
+        </Button>
+      ) : (
+        <Link
+          to={locale === "fr" ? "/catalogue/$upc" : "/en/catalogue/$upc"}
+          params={{ upc: release.upc }}
+          aria-label={t(locale, `Voir ${release.title}`, `View ${release.title}`)}
+        >
+          <ArrowUpRight className="text-primary transition-transform group-hover:translate-x-1" />
+        </Link>
+      )}
+    </div>
   );
 }
 export function HomePage({ locale = "fr" }: { locale?: Locale }) {
