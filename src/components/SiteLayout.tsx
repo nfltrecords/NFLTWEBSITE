@@ -63,8 +63,17 @@ export function SiteLayout({ children }: { children: ReactNode }) {
               {l}
             </Link>
           ))}
-          <Link to={publicPages.shop[locale]} hash="panier" className="inline-flex items-center gap-2" aria-label={english ? `Cart, ${cartCount} items` : `Panier, ${cartCount} article(s)`}>
-            <ShoppingBag size={18} /> {english ? "Cart" : "Panier"} <span className="text-primary">({cartCount})</span>
+          <Link
+            to={publicPages.shop[locale]}
+            hash="panier"
+            className="inline-flex items-center gap-2"
+            aria-label={
+              english ? `Cart, ${cartCount} items` : `Panier, ${cartCount} article(s)`
+            }
+          >
+            <ShoppingBag size={18} />{" "}
+            {english ? "Cart" : "Panier"}{" "}
+            <span className="text-primary">({cartCount})</span>
           </Link>
         </nav>
         <div className="header-actions">
