@@ -14,7 +14,7 @@ Never put the client secret in browser code, Git, chat, or a public environment 
 ## Safety gates still required before enabling checkout
 
 1. Persist a pending order server-side before redirecting to PayPal; never trust a browser-supplied price.
-2. Populate the UPC-to-track-count map only from verified catalogue evidence; current map is empty, so catalogue prices are intentionally withheld.
+2. Re-verify every UPC-to-track-count mapping against primary catalogue evidence; the current map contains provisional counts and must not be treated as checkout authorization.
 3. Confirm per-release seller, rights, territory and MP3/WAV master availability.
 4. Implement idempotent capture and persist PayPal order/capture IDs and final state.
 5. Verify webhook signatures with PayPal and fulfill only on `PAYMENT.CAPTURE.COMPLETED`; never fulfill on approval or pending status.
@@ -23,7 +23,7 @@ Never put the client secret in browser code, Git, chat, or a public environment 
 
 ## Server checkout functions committed
 
-`src/lib/paypal.functions.ts` now contains server functions to create a pending order using a server-derived UPC price, request PayPal approval, and confirm/capture only against the matching stored order. It verifies the returned capture status, EUR currency and exact amount before marking an order paid. These functions are not yet connected to the shop UI and have not been build-tested or exercised against PayPal Sandbox. The current UPC track-count map is empty, so order creation correctly returns `price_not_verified` for every catalogue release.
+`src/lib/paypal.functions.ts` contains server functions to create a pending order using a server-derived UPC price, request PayPal approval, and confirm/capture only against the matching stored order. It verifies the returned capture status, EUR currency and exact amount before marking an order paid. These functions are not connected to the shop UI and have not been exercised against PayPal Sandbox. The UPC track-count map now contains provisional values for all 18 releases; these values still require primary evidence review. A separate two-part fail-closed activation gate now requires both `checkoutEnabled: true` in the private commerce configuration and `PAYPAL_CHECKOUT_ENABLED=true` in the server environment. The recorded configuration remains `false`, so neither starting checkout nor browser confirmation can proceed, even if the environment flag is accidentally set.
 
 ## Database foundation committed
 
@@ -31,7 +31,7 @@ Never put the client secret in browser code, Git, chat, or a public environment 
 
 ## Current behaviour
 
-This adapter has no UI entry point and does not enable payments. It fails closed when PayPal credentials are absent. Sandbox is the default; live mode must be deliberately configured.
+This adapter has no UI entry point and does not enable payments. It fails closed unless both the private approval record and the explicit server-side activation flag are enabled; the approval record remains false. It also fails closed when PayPal credentials are absent. Sandbox is the default; live mode must be deliberately configured.
 
 ## Raw-body webhook verification correction
 
