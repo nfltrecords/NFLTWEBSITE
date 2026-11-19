@@ -8,7 +8,7 @@
 | 2 | Audio / extraits | En attente | Aucun travail audio ou publication de masters dans cette étape. |
 | 3 | Catalogue et pochettes | Partiellement vérifié | 18 sorties sont recensées. Certaines associations UPC/pochette et les preuves de dimensions originales doivent être confirmées avant remplacement définitif. |
 | 4 | Prix par sortie | Provisoire | Barème de référence : 9,99 € pour 1 piste, 14,99 € pour 5 pistes, 19,99 € pour 6 pistes ou plus. Les décomptes UPC individuels ne sont pas tous confirmés ; aucun checkout. |
-| 5 | Tableau de bord | Conception uniquement | Un SQL de fondation est un brouillon non appliqué. Aucun écran d'administration général n'est construit. L'accès Supabase et l'audit des politiques réelles sont requis. |
+| 5 | Tableau de bord | Conception et sécurité préparées | SQL de fondation non appliqué ; matrice d'accès et plan de tests RLS documentés. Aucun écran connecté ni compte admin n'existe. Accès au projet Supabase et tests sur environnement de développement requis. |
 | 6 | DNS | Non traité | Accès registrar absent. Ne pas modifier nameservers, MX, SPF, DKIM ou DMARC. |
 | 7 | Messagerie et notifications | Non validé | Les fonctions de formulaire enregistrent des demandes ; aucun envoi d'e-mail n'est garanti. Vérifier les boîtes et tester la livraison avec accès au fournisseur. |
 | 8 | Boutique | Panier partagé intégré, paiement non activé | Le panier est partagé entre les pages boutique et fiches catalogue, son compteur est visible dans les navigations desktop et mobile, et le navigateur conserve la sélection. Ajout, quantités, suppression et total indicatif sont disponibles. Le lien PayPal.Me a été retiré et le bouton de paiement est désactivé. Aucun checkout, paiement, stock/CD physique, livraison ou téléchargement sécurisé n'est configuré. Valider vendeur par transaction, frais, taxes, droits, fichiers et conditions avant ouverture. |
@@ -30,6 +30,13 @@
 - La Preview Cloudflare utilise `npm run build` puis `npx wrangler preview`. La production est préservée ; aucun déploiement dans `main` n'a été effectué.
 - Ces contrôles valident la compilation et les tests du code de la branche, pas les intégrations externes, le contenu réel de Supabase, le DNS, la messagerie, les paiements, le référencement indexé ou le fonctionnement en production.
 - La PR de préparation reste non fusionnée. Aucun déploiement de production n'a été lancé.
+
+## Tableau de bord — évolution du 20 novembre 2026
+
+- Matrice d'accès proposée : `docs/ADMIN-DASHBOARD-ACCESS-MATRIX.md`.
+- Plan de tests RLS manuel réservé à un projet Supabase de développement : `docs/sql/admin-dashboard-rls-test-plan.sql`.
+- Le SQL actuel ne donne des droits qu'aux rôles `owner` et `admin`. Les rôles `operations`, `sales` et `read_only` sont déclarés mais sans politiques spécifiques ; ils ne doivent pas être attribués tant que les politiques et tests correspondants ne sont pas implémentés.
+- Aucun compte, aucune donnée, aucun rôle et aucune migration Supabase n'ont été créés. Pas de dashboard connecté ou de fausse connexion simulée.
 
 ## Dépendances externes
 
