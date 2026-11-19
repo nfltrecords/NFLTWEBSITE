@@ -48,7 +48,7 @@ export const submitContactMessage = createServerFn({ method: "POST" })
 export const listContactMessages = createServerFn({ method: "POST" })
   .inputValidator((input: { code: string }) => ({ code: String(input?.code ?? "") }))
   .handler(async ({ data }) => {
-    const norm = (s: string) => s.normalize("NFC").trim().toLowerCase();
+    const norm = (s: string) => s.normalize("NFC").trim();
     const expected = process.env["ADMIN_MESSAGES_CODE"];
     if (!adminMessagesAreEnabled() || !expected || norm(data.code) !== norm(expected))
       return { ok: false as const };
