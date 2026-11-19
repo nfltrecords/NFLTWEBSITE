@@ -77,7 +77,11 @@ function ReleaseRow({
           className="release-row-add"
           disabled={!canAdd}
           onClick={() => cart.add(release.upc)}
-          aria-label={t(locale, `Ajouter ${release.title} au panier`, `Add ${release.title} to cart`)}
+          aria-label={t(
+            locale,
+            `Ajouter ${release.title} au panier`,
+            `Add ${release.title} to cart`,
+          )}
         >
           <ShoppingBag size={15} />
           {t(locale, "Ajouter", "Add")}
@@ -342,10 +346,27 @@ export function ReleasePage({ release, locale = "fr" }: { release: Release; loca
             </dl>
             <ReleasePrice upc={release.upc} />
             <div className="mt-6">
-              <Button type="button" className="editorial-action" onClick={() => cart.add(release.upc)} disabled={quantity >= 20 || releasePriceCentsForButton(release.upc) === null}>
-                <ShoppingBag size={16} /> {t(locale, "Ajouter au panier", "Add to cart")}{quantity > 0 ? ` · ${quantity}` : ""}
+              <Button
+                type="button"
+                className="editorial-action"
+                onClick={() => cart.add(release.upc)}
+                disabled={
+                  quantity >= 20 || releasePriceCentsForButton(release.upc) === null
+                }
+              >
+                <ShoppingBag size={16} />{" "}
+                {t(locale, "Ajouter au panier", "Add to cart")}
+                {quantity > 0 ? ` · ${quantity}` : ""}
               </Button>
-              {quantity > 0 ? <p className="body-copy mt-2">{t(locale, `${quantity} article(s) dans votre panier.`, `${quantity} item(s) in your cart.`)}</p> : null}
+              {quantity > 0 ? (
+                <p className="body-copy mt-2">
+                  {t(
+                    locale,
+                    `${quantity} article(s) dans votre panier.`,
+                    `${quantity} item(s) in your cart.`,
+                  )}
+                </p>
+              ) : null}
             </div>
             <div className="flex flex-wrap gap-4 mt-8">
               <Button asChild variant="outline" className="editorial-action">
