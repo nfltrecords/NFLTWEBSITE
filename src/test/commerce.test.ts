@@ -10,6 +10,7 @@ import {
   verifiedReleaseTrackCounts,
 } from "@/lib/commerce";
 import { releases } from "@/lib/catalogue";
+import { payPalCheckoutIsEnabled } from "@/lib/paypal.functions";
 import commerceConfig from "../../.lovable/commerce-config.json";
 const input = {
   name: "Test",
@@ -24,6 +25,12 @@ const input = {
   locale: "fr",
 };
 describe("Commerce inquiry rules", () => {
+  it("keeps PayPal checkout closed unless an explicit server-side activation flag is true", () => {
+    expect(payPalCheckoutIsEnabled(undefined)).toBe(false);
+    expect(payPalCheckoutIsEnabled("false")).toBe(false);
+    expect(payPalCheckoutIsEnabled("TRUE")).toBe(false);
+    expect(payPalCheckoutIsEnabled("true")).toBe(true);
+  });
   it("prices exactly one actual track at 999 cents", () => {
     expect(priceForTrackCount(1)).toBe(999);
   });
