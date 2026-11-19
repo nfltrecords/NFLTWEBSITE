@@ -17,7 +17,6 @@ const text = (locale: Locale, fr: string, en: string) => (locale === "fr" ? fr :
 
 export function ShopPage({ locale }: { locale: Locale }) {
   const [query, setQuery] = useState("");
-  const [cart, setCart] = useState<Record<string, number>>({});
   const sharedCart = useCart();
   const items = filterReleases("all", query);
   const cartItems = releases.filter((release) => (sharedCart.items[release.upc] ?? 0) > 0);
