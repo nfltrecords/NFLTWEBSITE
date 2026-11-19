@@ -92,23 +92,15 @@ export function ShopPage({ locale }: { locale: Locale }) {
                 </ul>
                 <div className="mt-5 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-5">
                   <div><p className="text-sm text-muted-foreground">{text(locale, "Total indicatif", "Indicative total")}</p><p className="text-3xl text-primary tabular-nums">{formatShopPrice(cartTotalCents)}</p></div>
-                  <Button asChild className="editorial-action">
-                    <a
-                      href={"https://www.paypal.me/mohamedjarry/" + (cartTotalCents / 100).toFixed(2) + "EUR"}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={text(locale, "Payer le total du panier sur PayPal", "Pay the cart total on PayPal")}
-                    >
-                      {text(locale, "Payer avec PayPal", "Pay with PayPal")}
-                      <ArrowUpRight size={16} />
-                    </a>
+                  <Button type="button" className="editorial-action" disabled>
+                    {text(locale, "Paiement bientôt disponible", "Checkout coming soon")}
                   </Button>
                 </div>
                 <p className="body-copy mt-4 text-sm">
                   {text(
                     locale,
-                    "Le paiement s’ouvre sur PayPal.Me avec le montant total indicatif du panier. Le lien ne transmet pas le détail des articles et le site ne reçoit pas de confirmation automatique du paiement. Vérifiez le montant et indiquez les titres achetés dans la note PayPal. Les prix, droits, livraison et conditions restent à confirmer ; aucun téléchargement automatique n’est déclenché.",
-                    "Payment opens on PayPal.Me with the indicative cart total. The link does not transmit item details and this site does not receive automatic payment confirmation. Check the amount and list the purchased releases in the PayPal note. Prices, rights, shipping and terms still require confirmation; no automatic download is triggered.",
+                    "Le paiement en ligne est temporairement désactivé. Le panier sert uniquement à préparer votre sélection ; aucune commande ni aucun paiement ne sont acceptés pour le moment. Les prix, droits, vendeur, livraison et conditions doivent être validés avant l’ouverture des ventes.",
+                    "Online checkout is temporarily disabled. The cart is only for preparing your selection; orders and payments are not accepted at this time. Prices, rights, seller, delivery and terms must be validated before sales open.",
                   )}
                 </p>
               </>
