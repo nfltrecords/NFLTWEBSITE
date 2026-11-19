@@ -1,25 +1,25 @@
 # NFLT RECORDS — suivi consolidé des 11 chantiers
 
-État de préparation au 19 novembre 2026. Ce tableau distingue les modifications du dépôt des opérations externes non réalisées. Il ne constitue pas une validation de production.
+État de préparation au 19 novembre 2026 (mise à jour après correction boutique et Preview Cloudflare). Ce tableau distingue les modifications du dépôt des opérations externes non réalisées. Il ne constitue pas une validation de production.
 
 | N° | Chantier | État | Dépendance / prochaine étape |
 |---:|---|---|---|
-| 1 | Sortie de Lovable / portage du site | Préparation isolée | Les hooks de télémétrie du composant racine ont été retirés dans la branche. Le dossier de travail historique subsiste. Le build Cloudflare de la branche a réussi avec une commande de déploiement neutralisée. Aucun transfert de compte, migration de production ou déploiement n'a été effectué. |
+| 1 | Sortie de Lovable / portage du site | Préparation isolée | Les hooks de télémétrie du composant racine ont été retirés dans la branche. Le dossier de travail historique subsiste. Le build Cloudflare Workers Preview de la branche a réussi avec `npx wrangler preview`. La production reste inchangée. Aucun transfert de compte, migration de production ou déploiement n'a été effectué. |
 | 2 | Audio / extraits | En attente | Aucun travail audio ou publication de masters dans cette étape. |
 | 3 | Catalogue et pochettes | Partiellement vérifié | 18 sorties sont recensées. Certaines associations UPC/pochette et les preuves de dimensions originales doivent être confirmées avant remplacement définitif. |
 | 4 | Prix par sortie | Provisoire | Barème de référence : 9,99 € pour 1 piste, 14,99 € pour 5 pistes, 19,99 € pour 6 pistes ou plus. Les décomptes UPC individuels ne sont pas tous confirmés ; aucun checkout. |
 | 5 | Tableau de bord | Conception uniquement | Un SQL de fondation est un brouillon non appliqué. Aucun écran d'administration général n'est construit. L'accès Supabase et l'audit des politiques réelles sont requis. |
 | 6 | DNS | Non traité | Accès registrar absent. Ne pas modifier nameservers, MX, SPF, DKIM ou DMARC. |
 | 7 | Messagerie et notifications | Non validé | Les fonctions de formulaire enregistrent des demandes ; aucun envoi d'e-mail n'est garanti. Vérifier les boîtes et tester la livraison avec accès au fournisseur. |
-| 8 | Boutique | Panier intégré, paiement non activé | La page boutique présente les 18 sorties, les prix indicatifs, un panier interactif (ajout, quantité, retrait, total). Aucun checkout ni paiement actif ; aucun stock/CD physique, livraison ou téléchargement sécurisé configuré. Valider vendeur par transaction, frais, taxes, droits, fichiers et conditions avant ouverture. |
+| 8 | Boutique | Panier intégré, paiement non activé | La page boutique présente les 18 sorties et un panier interactif. Le lien PayPal.Me a été retiré et le bouton de paiement est désactivé. Aucun checkout, paiement, stock/CD physique, livraison ou téléchargement sécurisé n'est configuré. Valider vendeur par transaction, frais, taxes, droits, fichiers et conditions avant ouverture. |
 | 9 | Licences et royalties | Recherche documentaire | Aucun mandat ni dépôt de masters effectué. Vérifier contrats, droits master/composition, exclusivité, Content ID, territoires et paiements avant toute inscription. |
 | 10 | Radio NFLT RECORDS NYC RADIO | Préparation seulement | Aucun flux, serveur AzuraCast ou service cloud n'est validé ici. Aucun serveur ou coût supplémentaire créé. |
 | 11 | Structure et gestion des entités | Règles à confirmer par opération | Le propriétaire a précisé que NFLT RECORDS FRANCE concerne les achats de CD physiques en France. Ne pas lui attribuer par défaut les ventes numériques, licences ou autres territoires. Le vendeur et les droits doivent être définis pour chaque opération. |
 
 ## Boutique — évolution du 19 novembre 2026\n\n- La page boutique dispose désormais d’un panier côté navigateur : ajout des sorties, augmentation/réduction des quantités, suppression et calcul du total indicatif.\n- Le bouton PayPal.Me est actif et transmet le total indicatif dans l’URL. Le paiement est effectué sur PayPal ; le site ne vérifie pas le règlement et ne crée pas de commande confirmée.\n- Les prix et le nombre de pistes restent indicatifs tant que les tracklists UPC et les éléments commerciaux ne sont pas confirmés.\n\n## Contrôles techniques de la branche
 
-- Le dernier commit de préparation a passé les workflows GitHub Actions NFLT safe verification et Verify source : tests, build sans déploiement et lint ont terminé avec succès.
-- Un build Cloudflare de la branche a précédemment réussi ; la commande de déploiement propre à cette branche est neutralisée afin d'éviter une publication accidentelle.
+- Le commit `a9784a8` a passé les workflows GitHub Actions NFLT safe verification et Verify source : tests, build sans déploiement et lint ont terminé avec succès. Le commit `d3ca8b6` a ensuite été publié sur Cloudflare Workers Preview ; build terminé avec `build_outcome: success` le 19 novembre 2026.
+- La Preview Cloudflare utilise `npm run build` puis `npx wrangler preview`. La production est préservée ; aucun déploiement dans `main` n'a été effectué.
 - Ces contrôles valident la compilation et les tests du code de la branche, pas les intégrations externes, le contenu réel de Supabase, le DNS, la messagerie, les paiements, le référencement indexé ou le fonctionnement en production.
 - La PR de préparation reste non fusionnée. Aucun déploiement de production n'a été lancé.
 
