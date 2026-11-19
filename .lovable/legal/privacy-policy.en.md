@@ -62,7 +62,7 @@ The only documented retention periods in this audit concern Lovable audience mea
 
 Depending on processing and its legal basis, individuals have rights including access, rectification, erasure, restriction, objection and, where its conditions are met, portability. Where processing relies on consent, it may be withdrawn without affecting the lawfulness of earlier processing. Applicable legal limits and exceptions must be considered.
 
-The proposed rights contact is nfltrecords@nflt-records.com; its ability to receive and handle requests must be confirmed. Proportionate identity evidence may be requested where reasonable doubts exist, without excessive systematic collection. The process must meet GDPR time limits (normally one month, with a reasoned extension of two months where permitted), without claiming it is already operational. A complaint may be submitted to the CNIL and, depending on circumstances, the competent supervisory authority.
+The proposed rights contact is [coordonnées à confirmer avant publication]; its ability to receive and handle requests must be confirmed. Proportionate identity evidence may be requested where reasonable doubts exist, without excessive systematic collection. The process must meet GDPR time limits (normally one month, with a reasoned extension of two months where permitted), without claiming it is already operational. A complaint may be submitted to the CNIL and, depending on circumstances, the competent supervisory authority.
 
 ## 11. Security and document changes
 
