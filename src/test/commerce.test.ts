@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier -- test assertions intentionally kept compact. */
 import { describe, expect, it } from "vitest";
 import {
   commerceSearchSchema,
