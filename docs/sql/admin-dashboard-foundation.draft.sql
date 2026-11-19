@@ -5,21 +5,6 @@
 -- scoped, uses fully-qualified names, and reads the protected role table to avoid
 -- duplicating authorization in JWT metadata.
 
-create or replace function public.nflt_is_admin()
-returns boolean
-language sql
-stable
-security definer
-set search_path = ''
-as $
-  select exists (
-    select 1
-    from public.nflt_user_roles
-    where user_id = (select auth.uid())
-      and role in ('owner', 'admin')
-  );
-$;
-
 create table if not exists public.nflt_organizations (
   id uuid primary key default gen_random_uuid(),
   legal_name text not null check (char_length(trim(legal_name)) between 1 and 200),
@@ -110,6 +95,21 @@ create table if not exists public.nflt_audit_events (
   after_data jsonb,
   created_at timestamptz not null default now()
 );
+
+create or replace function public.nflt_is_admin()
+returns boolean
+language sql
+stable
+security definer
+set search_path = ''
+as $function$
+  select exists (
+    select 1
+    from public.nflt_user_roles
+    where user_id = (select auth.uid())
+      and role in ('owner', 'admin')
+  );
+$function$;
 
 create index if not exists nflt_relationships_status_idx on public.nflt_relationships(status);
 create index if not exists nflt_projects_status_idx on public.nflt_projects(status);
