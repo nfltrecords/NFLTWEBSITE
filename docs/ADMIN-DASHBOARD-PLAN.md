@@ -37,6 +37,10 @@ Le futur espace d'administration doit séparer les modules suivants :
 
 Ce sont des propositions de conception, pas des tables existantes. Un premier SQL de fondation est maintenant préparé dans `docs/sql/admin-dashboard-foundation.draft.sql` : organisations, personnes, relations prospects/clients, projets, prestations, rôles et journal d'audit. Il inclut une politique RLS fermée par défaut et une fonction `SECURITY DEFINER` limitée qui vérifie les rôles `owner`/`admin` dans `nflt_user_roles`. Les attributions de rôles doivent être faites uniquement par un outil serveur de confiance utilisant `service_role` ; les utilisateurs authentifiés ne peuvent pas s'attribuer de rôle. **C'est un brouillon non appliqué**, pas une migration active.
 
+## Matrice d'accès et tests RLS
+
+Une matrice métier proposée et un plan de tests RLS manuels sont disponibles dans `docs/ADMIN-DASHBOARD-ACCESS-MATRIX.md` et `docs/sql/admin-dashboard-rls-test-plan.sql`. Ils distinguent les droits visés du SQL actuel : le SQL de fondation ne donne des accès qu'aux rôles `owner` et `admin`. Les rôles `operations`, `sales` et `read_only` sont définis mais n'ont pas encore de politiques dédiées ; ils ne doivent pas être provisionnés avant implémentation et tests. Les tests sont prévus pour un projet Supabase de développement jetable, jamais pour la production.
+
 ## Règles de sécurité et de gouvernance
 
 - Authentification nominative et rôles explicites ; le code partagé actuel de `/messages` ne doit pas devenir le mécanisme d'authentification du dashboard.
