@@ -11,12 +11,12 @@
 | 5 | Tableau de bord | Conception uniquement | Un SQL de fondation est un brouillon non appliqué. Aucun écran d'administration général n'est construit. L'accès Supabase et l'audit des politiques réelles sont requis. |
 | 6 | DNS | Non traité | Accès registrar absent. Ne pas modifier nameservers, MX, SPF, DKIM ou DMARC. |
 | 7 | Messagerie et notifications | Non validé | Les fonctions de formulaire enregistrent des demandes ; aucun envoi d'e-mail n'est garanti. Vérifier les boîtes et tester la livraison avec accès au fournisseur. |
-| 8 | Boutique | Préparée, non activée | Payhip reste une piste de mise en œuvre. Aucun compte connecté ni checkout actif. Vérifier le vendeur par transaction, frais, taxes, droits, prix et conditions avant ouverture. |
+| 8 | Boutique | Panier intégré, paiement non activé | La page boutique présente les 18 sorties, les prix indicatifs, un panier interactif (ajout, quantité, retrait, total). Aucun checkout ni paiement actif ; aucun stock/CD physique, livraison ou téléchargement sécurisé configuré. Valider vendeur par transaction, frais, taxes, droits, fichiers et conditions avant ouverture. |
 | 9 | Licences et royalties | Recherche documentaire | Aucun mandat ni dépôt de masters effectué. Vérifier contrats, droits master/composition, exclusivité, Content ID, territoires et paiements avant toute inscription. |
 | 10 | Radio NFLT RECORDS NYC RADIO | Préparation seulement | Aucun flux, serveur AzuraCast ou service cloud n'est validé ici. Aucun serveur ou coût supplémentaire créé. |
 | 11 | Structure et gestion des entités | Règles à confirmer par opération | Le propriétaire a précisé que NFLT RECORDS FRANCE concerne les achats de CD physiques en France. Ne pas lui attribuer par défaut les ventes numériques, licences ou autres territoires. Le vendeur et les droits doivent être définis pour chaque opération. |
 
-## Contrôles techniques de la branche
+## Boutique — évolution du 19 novembre 2026\n\n- La page boutique dispose désormais d’un panier côté navigateur : ajout des sorties, augmentation/réduction des quantités, suppression et calcul du total indicatif.\n- Le bouton de paiement reste volontairement désactivé ; le panier ne crée aucune commande et ne débite aucun client.\n- Les prix et le nombre de pistes restent indicatifs tant que les tracklists UPC et les éléments commerciaux ne sont pas confirmés.\n\n## Contrôles techniques de la branche
 
 - Le dernier commit de préparation a passé les workflows GitHub Actions NFLT safe verification et Verify source : tests, build sans déploiement et lint ont terminé avec succès.
 - Un build Cloudflare de la branche a précédemment réussi ; la commande de déploiement propre à cette branche est neutralisée afin d'éviter une publication accidentelle.
