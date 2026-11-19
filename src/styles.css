@@ -1057,6 +1057,14 @@ a:focus-visible {
     gap: 14px;
     padding: 24px 0;
   }
+  .release-row--commerce {
+    grid-template-columns: 24px 48px minmax(0, 1fr) auto;
+    gap: 10px;
+  }
+  .release-row-add {
+    padding-inline: 9px;
+    font-size: 10px;
+  }
   .release-cover {
     width: 48px;
     height: 48px;
