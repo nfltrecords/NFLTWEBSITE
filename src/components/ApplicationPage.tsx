@@ -33,8 +33,8 @@ export function ApplicationBlock({
           <h2 className="statement">NFLT RECORDS</h2>
           <p className="body-copy mt-8">
             {fr
-              ? "L’application officielle NFLT RECORDS est disponible sur Google Play."
-              : "The official NFLT RECORDS app is available on Google Play."}
+              ? "L’application NFLT RECORDS est en cours de réorganisation. Le téléchargement sera annoncé après sa republication officielle."
+              : "The NFLT RECORDS app is being reorganised. Download details will be announced after its official republication."}
           </p>
           <div className="mt-10 border-y border-border py-8">
             <p className="eyebrow mb-4">GOOGLE PLAY</p>
