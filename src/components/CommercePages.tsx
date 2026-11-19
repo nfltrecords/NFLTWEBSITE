@@ -37,8 +37,8 @@ export function ShopPage({ locale }: { locale: Locale }) {
             <p className="body-copy">
               {text(
                 locale,
-                "La musique de NFLT. Les 18 sorties du catalogue, publiées via NFLT Records. Contactez le label pour une demande de disponibilité.",
-                "The music of NFLT. All 18 catalogue releases, published via NFLT Records. Contact the label for availability.",
+                "Parcourez les 18 sorties du catalogue NFLT et ajoutez vos sélections au panier. Les prix affichés sont indicatifs ; le paiement en ligne sera ouvert après validation des ventes et des livraisons.",
+                "Browse all 18 NFLT catalogue releases and add your selections to the cart. Displayed prices are indicative; online checkout will open after sales and delivery validation.",
               )}
             </p>
             <div className="flex flex-wrap gap-4">
@@ -119,8 +119,8 @@ export function ShopPage({ locale }: { locale: Locale }) {
             <p className="body-copy mt-6">
               {text(
                 locale,
-                "Tarifs indicatifs, calculés à partir de nombres de pistes encore à confirmer pour chaque sortie. La boutique reste non transactionnelle : aucune commande, aucun paiement ni téléchargement sur le site.",
-                "Indicative prices based on track counts that still require confirmation for each release. The shop remains non-transactional: no orders, payments or downloads are available on the site.",
+                "Tarifs indicatifs, calculés à partir de nombres de pistes qui restent à confirmer pour chaque sortie. Le panier permet de préparer une sélection, mais aucune commande ni aucun paiement n’est encore accepté. Les CD physiques, stocks et livraisons ne sont pas encore configurés.",
+                "Indicative prices based on track counts that still require confirmation for each release. The cart lets you prepare a selection, but orders and payments are not yet accepted. Physical CDs, inventory and shipping are not configured.",
               )}
             </p>
           </section>
