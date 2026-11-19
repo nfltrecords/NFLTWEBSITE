@@ -69,8 +69,8 @@ export function ShopPage({ locale }: { locale: Locale }) {
             <p className="body-copy mt-6">
               {text(
                 locale,
-                "Tarifs selon le nombre de pistes confirmé. La boutique reste non transactionnelle : aucune commande, aucun paiement ni téléchargement sur le site.",
-                "Price tiers depend on confirmed track counts. The shop remains non-transactional: no orders, payments or downloads are available on the site.",
+                "Tarifs indicatifs, calculés à partir de nombres de pistes encore à confirmer pour chaque sortie. La boutique reste non transactionnelle : aucune commande, aucun paiement ni téléchargement sur le site.",
+                "Indicative prices based on track counts that still require confirmation for each release. The shop remains non-transactional: no orders, payments or downloads are available on the site.",
               )}
             </p>
           </section>
