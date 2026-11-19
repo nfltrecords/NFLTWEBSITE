@@ -9,8 +9,8 @@ Audit statique du code de la branche `main`, complété par la lecture des journ
 - Le rapport interne propriétaire daté du 14 novembre documente 18 JPG originaux accessibles dans l'archive média, dont 16 associations titre/pochette/UPC vérifiées par captures, et deux associations qui nécessitent encore une preuve complémentaire. Le même rapport indique que les fichiers originaux mesurés dans l'archive font 1536 × 1536 px, malgré certains noms de fichiers contenant « 3000x3000 ».
 - La boutique affiche les 18 sorties, leurs pochettes et leurs UPC, et permet de rechercher un titre.
 - Chaque sortie propose une demande de disponibilité ; les demandes de licence/disponibilité utilisent un formulaire distinct.
-- Le composant `ReleasePrice` n'affiche rien si aucun prix n'est vérifié. Comme `verifiedReleaseTrackCounts` est vide, aucun prix individualisé ne peut actuellement être confirmé par le code.
-- Les trois prix de référence sont 9,99 € (1 piste), 14,99 € (5 pistes) et 19,99 € (6 pistes ou plus). Les formats 2 à 4 pistes ne sont pas tarifés par le code. Le site ne permet pas actuellement de commander, payer ou télécharger.
+- Le composant `ReleasePrice` affiche les prix calculés à partir de `verifiedReleaseTrackCounts`, qui contient désormais 18 valeurs provisoires (16 singles supposés à 1 piste, NOUS Y SOMMES à 9 pistes, 30.000 GÉNOCIDES à 8 pistes). Ces nombres ne sont pas tous vérifiés UPC par UPC et ne constituent pas une validation de vente. Checkout reste fermé par un verrou serveur à double condition : approbation privée `checkoutEnabled` et variable `PAYPAL_CHECKOUT_ENABLED=true`.
+- Les trois prix de référence sont 9,99 € (1 piste), 14,99 € (5 pistes) et 19,99 € (6 pistes ou plus). Les formats 2 à 4 pistes ne sont pas tarifés par le code. Le site ne permet pas actuellement de commander, payer ou télécharger. Les fonctions serveur PayPal refusent également de démarrer ou confirmer un paiement tant que les deux conditions d'activation ne sont pas réunies.
 
 ## SEO constaté
 
