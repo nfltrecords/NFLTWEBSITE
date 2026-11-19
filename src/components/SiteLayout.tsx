@@ -1,11 +1,13 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useState, type ReactNode } from "react";
-import { ArrowUpRight, Menu, X } from "lucide-react";
+import { ArrowUpRight, Menu, ShoppingBag, X } from "lucide-react";
+import { useCart } from "@/lib/cart-store";
 import { Button } from "@/components/ui/button";
 import { publicPages, legalPages } from "@/lib/seo";
 import { goldLogoUrl } from "@/lib/covers";
 export function SiteLayout({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
+  const { count: cartCount } = useCart();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const english = pathname === "/en" || pathname.startsWith("/en/");
   const locale = english ? "en" : "fr";
@@ -61,6 +63,9 @@ export function SiteLayout({ children }: { children: ReactNode }) {
               {l}
             </Link>
           ))}
+          <Link to={publicPages.shop[locale]} hash="panier" className="inline-flex items-center gap-2" aria-label={english ? `Cart, ${cartCount} items` : `Panier, ${cartCount} article(s)`}>
+            <ShoppingBag size={18} /> {english ? "Cart" : "Panier"} <span className="text-primary">({cartCount})</span>
+          </Link>
         </nav>
         <div className="header-actions">
           {current && (
@@ -123,6 +128,11 @@ export function SiteLayout({ children }: { children: ReactNode }) {
               <ArrowUpRight />
             </Link>
           ))}
+          <Link to={publicPages.shop[locale]} hash="panier" onClick={() => setOpen(false)}>
+            <span>10</span>
+            {english ? "Cart" : "Panier"} <span className="text-primary">({cartCount})</span>
+            <ShoppingBag />
+          </Link>
           <Link to={publicPages.contact[locale]} onClick={() => setOpen(false)}>
             Contact
             <ArrowUpRight />
