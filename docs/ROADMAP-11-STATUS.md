@@ -16,6 +16,11 @@
 | 10 | Radio NFLT RECORDS NYC RADIO | Préparation seulement | Aucun flux, serveur AzuraCast ou service cloud n'est validé ici. Aucun serveur ou coût supplémentaire créé. |
 | 11 | Structure et gestion des entités | Règles à confirmer par opération | Le propriétaire a précisé que NFLT RECORDS FRANCE concerne les achats de CD physiques en France. Ne pas lui attribuer par défaut les ventes numériques, licences ou autres territoires. Le vendeur et les droits doivent être définis pour chaque opération. |
 
+## Boutique — évolution du 20 novembre 2026
+
+- Dans la liste complète du catalogue, chaque sortie affiche désormais une action « Ajouter au panier » indépendante du lien vers sa fiche. Le compteur de quantité se met à jour et le bouton est désactivé au plafond de 20 articles ou lorsqu'aucun prix indicatif n'est disponible.
+- La mise en page de cette action a été adaptée au mobile.
+
 ## Boutique — évolution du 19 novembre 2026
 
 - Le panier est partagé côté navigateur entre la boutique et les fiches individuelles du catalogue ; le compteur est affiché dans les menus desktop et mobile.
