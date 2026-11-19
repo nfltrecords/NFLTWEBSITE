@@ -331,6 +331,19 @@ a:focus-visible {
   padding: 28px 0;
   transition: background 0.2s;
 }
+.release-row--commerce {
+  grid-template-columns: 40px 64px minmax(0, 1fr) 120px auto;
+}
+.release-row-main {
+  min-width: 0;
+  color: inherit;
+}
+.release-row-main:hover .release-title {
+  color: var(--primary);
+}
+.release-row-add {
+  white-space: nowrap;
+}
 .release-cover {
   width: 64px;
   height: 64px;
