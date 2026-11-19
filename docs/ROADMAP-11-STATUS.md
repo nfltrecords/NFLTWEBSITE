@@ -16,7 +16,14 @@
 | 10 | Radio NFLT RECORDS NYC RADIO | Préparation seulement | Aucun flux, serveur AzuraCast ou service cloud n'est validé ici. Aucun serveur ou coût supplémentaire créé. |
 | 11 | Structure et gestion des entités | Règles à confirmer par opération | Le propriétaire a précisé que NFLT RECORDS FRANCE concerne les achats de CD physiques en France. Ne pas lui attribuer par défaut les ventes numériques, licences ou autres territoires. Le vendeur et les droits doivent être définis pour chaque opération. |
 
-## Boutique — évolution du 19 novembre 2026\n\n- La page boutique dispose désormais d’un panier côté navigateur : ajout des sorties, augmentation/réduction des quantités, suppression et calcul du total indicatif.\n- Le bouton PayPal.Me est actif et transmet le total indicatif dans l’URL. Le paiement est effectué sur PayPal ; le site ne vérifie pas le règlement et ne crée pas de commande confirmée.\n- Les prix et le nombre de pistes restent indicatifs tant que les tracklists UPC et les éléments commerciaux ne sont pas confirmés.\n\n## Contrôles techniques de la branche
+## Boutique — évolution du 19 novembre 2026
+
+- La page boutique dispose d’un panier côté navigateur : ajout des sorties, augmentation/réduction des quantités, suppression et calcul du total indicatif.
+- Le lien PayPal.Me a été retiré du parcours panier ; le bouton de paiement est désactivé. Le site n'accepte aucune commande ni aucun paiement à ce stade.
+- Les prix et le nombre de pistes restent indicatifs tant que les tracklists UPC et les éléments commerciaux ne sont pas confirmés.
+- Payhip avec PayPal reste une piste pour les ventes numériques, sans compte connecté ni activation. Les CD physiques doivent avoir un parcours vendeur/livraison distinct.
+
+## Contrôles techniques de la branche
 
 - Le commit `a9784a8` a passé les workflows GitHub Actions NFLT safe verification et Verify source : tests, build sans déploiement et lint ont terminé avec succès. Le commit `d3ca8b6` a ensuite été publié sur Cloudflare Workers Preview ; build terminé avec `build_outcome: success` le 19 novembre 2026.
 - La Preview Cloudflare utilise `npm run build` puis `npx wrangler preview`. La production est préservée ; aucun déploiement dans `main` n'a été effectué.
