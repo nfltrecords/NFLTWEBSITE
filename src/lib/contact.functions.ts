@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { createClient } from "@supabase/supabase-js";
 import { z } from "zod";
 import type { Database } from "@/integrations/supabase/types";
+import { adminMessagesAreEnabled } from "@/lib/admin-messages-gate";
 
 const contactSchema = z.object({
   name: z.string().trim().min(1).max(100),
@@ -49,7 +50,8 @@ export const listContactMessages = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const norm = (s: string) => s.normalize("NFC").trim().toLowerCase();
     const expected = process.env["ADMIN_MESSAGES_CODE"];
-    if (!expected || norm(data.code) !== norm(expected)) return { ok: false as const };
+    if (!adminMessagesAreEnabled() || !expected || norm(data.code) !== norm(expected))
+      return { ok: false as const };
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: messages, error } = await supabaseAdmin
       .from("contact_messages")
