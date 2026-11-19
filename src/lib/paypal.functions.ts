@@ -18,6 +18,10 @@ const captureCheckoutSchema = z
   })
   .strict();
 
+export function payPalCheckoutIsEnabled(value = process.env["PAYPAL_CHECKOUT_ENABLED"]): boolean {
+  return value === "true";
+}
+
 type StoredOrder = {
   id: string;
   release_upc: string;
@@ -57,6 +61,10 @@ async function databaseRequest<T>(path: string, init: RequestInit = {}): Promise
 export const startPayPalCheckout = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => startCheckoutSchema.parse(input))
   .handler(async ({ data }) => {
+    if (!payPalCheckoutIsEnabled()) {
+      return { ok: false as const, reason: "checkout_disabled" as const };
+    }
+
     const release = releases.find((item) => item.upc === data.upc);
     if (!release) return { ok: false as const, reason: "release_unavailable" as const };
 
@@ -124,6 +132,10 @@ export const startPayPalCheckout = createServerFn({ method: "POST" })
 export const confirmPayPalCheckout = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => captureCheckoutSchema.parse(input))
   .handler(async ({ data }) => {
+    if (!payPalCheckoutIsEnabled()) {
+      return { ok: false as const, reason: "checkout_disabled" as const };
+    }
+
     const rows = await databaseRequest<StoredOrder[]>(
       `shop_orders?id=eq.${data.orderId}&select=id,release_upc,buyer_email,amount_cents,currency,status,paypal_order_id&limit=1`,
     );
