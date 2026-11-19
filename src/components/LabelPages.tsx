@@ -12,6 +12,9 @@ import { ApplicationBlock } from "@/components/ApplicationPage";
 import { implantations } from "@/lib/brand-content";
 import { RadioTeaser } from "@/components/RadioPage";
 import { ReleasePrice } from "@/components/ReleasePrice";
+import { useCart } from "@/lib/cart-store";
+import { releasePriceCents as releasePriceCentsForButton } from "@/lib/commerce";
+import { ShoppingBag } from "lucide-react";
 
 const t = (locale: Locale, fr: string, en: string) => (locale === "fr" ? fr : en);
 function Action({
@@ -280,6 +283,8 @@ export function CataloguePage({ locale = "fr" }: { locale?: Locale }) {
   );
 }
 export function ReleasePage({ release, locale = "fr" }: { release: Release; locale?: Locale }) {
+  const cart = useCart();
+  const quantity = cart.items[release.upc] ?? 0;
   return (
     <SiteLayout>
       <section className="editorial-section release-detail">
@@ -312,6 +317,12 @@ export function ReleasePage({ release, locale = "fr" }: { release: Release; loca
               ))}
             </dl>
             <ReleasePrice upc={release.upc} />
+            <div className="mt-6">
+              <Button type="button" className="editorial-action" onClick={() => cart.add(release.upc)} disabled={quantity >= 20 || releasePriceCentsForButton(release.upc) === null}>
+                <ShoppingBag size={16} /> {t(locale, "Ajouter au panier", "Add to cart")}{quantity > 0 ? ` · ${quantity}` : ""}
+              </Button>
+              {quantity > 0 ? <p className="body-copy mt-2">{t(locale, `${quantity} article(s) dans votre panier.`, `${quantity} item(s) in your cart.`)}</p> : null}
+            </div>
             <div className="flex flex-wrap gap-4 mt-8">
               <Button asChild variant="outline" className="editorial-action">
                 <Link
