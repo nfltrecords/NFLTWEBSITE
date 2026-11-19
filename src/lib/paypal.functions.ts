@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { releases } from "@/lib/catalogue";
 import { releasePriceCents } from "@/lib/commerce";
+import commerceConfig from "../../.lovable/commerce-config.json";
 import { createPayPalOrder, capturePayPalOrder } from "@/lib/paypal.server";
 
 const startCheckoutSchema = z
@@ -19,7 +20,7 @@ const captureCheckoutSchema = z
   .strict();
 
 export function payPalCheckoutIsEnabled(value = process.env["PAYPAL_CHECKOUT_ENABLED"]): boolean {
-  return value === "true";
+  return commerceConfig.checkoutEnabled === true && value === "true";
 }
 
 type StoredOrder = {
@@ -68,8 +69,8 @@ export const startPayPalCheckout = createServerFn({ method: "POST" })
     const release = releases.find((item) => item.upc === data.upc);
     if (!release) return { ok: false as const, reason: "release_unavailable" as const };
 
-    // Never accept an amount from the browser. Until UPC-specific track counts are verified,
-    // this returns null and checkout remains closed for that release.
+    // Never accept an amount from the browser. The release-specific price is server-derived,
+    // but the independent approval gate above must also be enabled before checkout can start.
     const amountCents = releasePriceCents(data.upc);
     if (amountCents === null) {
       return { ok: false as const, reason: "price_not_verified" as const };
