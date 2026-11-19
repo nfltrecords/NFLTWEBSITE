@@ -35,7 +35,7 @@ Le futur espace d'administration doit séparer les modules suivants :
 - `quotes`, `orders`, `order_items`, `payments`, `refunds`, `invoices` : commerce.
 - `documents`, `audit_events`, `user_roles` : documents, traçabilité et accès.
 
-Ce sont des propositions de conception, pas des tables existantes. Un premier SQL de fondation est maintenant préparé dans `docs/sql/admin-dashboard-foundation.draft.sql` : organisations, personnes, relations prospects/clients, projets, prestations, rôles et journal d'audit. Il inclut une politique RLS fermée par défaut et une vérification de rôle basée sur `auth.users.app_metadata.nflt_role`. **C'est un brouillon non appliqué**, pas une migration active.
+Ce sont des propositions de conception, pas des tables existantes. Un premier SQL de fondation est maintenant préparé dans `docs/sql/admin-dashboard-foundation.draft.sql` : organisations, personnes, relations prospects/clients, projets, prestations, rôles et journal d'audit. Il inclut une politique RLS fermée par défaut et une fonction `SECURITY DEFINER` limitée qui vérifie les rôles `owner`/`admin` dans `nflt_user_roles`. Les attributions de rôles doivent être faites uniquement par un outil serveur de confiance utilisant `service_role` ; les utilisateurs authentifiés ne peuvent pas s'attribuer de rôle. **C'est un brouillon non appliqué**, pas une migration active.
 
 ## Règles de sécurité et de gouvernance
 
@@ -58,7 +58,7 @@ Ce sont des propositions de conception, pas des tables existantes. Un premier SQ
 
 ## Avancement du point 5 — 17 novembre 2026
 
-- Le modèle de départ et le SQL RLS sont rédigés dans le dépôt.
+- Le modèle de départ et le SQL RLS sont rédigés dans le dépôt. La fonction d'autorisation a été alignée sur la table protégée `nflt_user_roles` : seuls `owner` et `admin` sont administrateurs ; l'attribution des rôles reste réservée à un processus serveur de confiance.
 - Les entités de projet sont obligatoires et peuvent rester `to_be_confirmed` : aucun vendeur ou titulaire de droits n'est attribué automatiquement.
 - Aucun écran d'administration n'est connecté à ces tables, aucune donnée client n'a été créée et aucune migration n'a été appliquée.
 - La prochaine étape technique est de vérifier le vrai projet Supabase, de confirmer Auth et les politiques existantes, puis de tester le SQL sur un projet de développement. Après validation, construire les écrans de lecture et d'édition avec rôles.
