@@ -1,17 +1,24 @@
 -- DRAFT ONLY — do not apply to production until the live Supabase schema,
 -- auth configuration, data-protection basis and RLS tests have been reviewed.
--- Admin authorization is provisioned only by trusted server/admin tooling via
--- auth.users.app_metadata.nflt_role = 'admin'. Never use user-editable user_metadata.
+-- Role assignments are written only by trusted service-role tooling. Authenticated
+-- users cannot grant themselves roles. The SECURITY DEFINER function is narrowly
+-- scoped, uses fully-qualified names, and reads the protected role table to avoid
+-- duplicating authorization in JWT metadata.
 
 create or replace function public.nflt_is_admin()
 returns boolean
 language sql
 stable
-security invoker
+security definer
 set search_path = ''
-as $$
-  select coalesce((auth.jwt() -> 'app_metadata' ->> 'nflt_role') = 'admin', false);
-$$;
+as $
+  select exists (
+    select 1
+    from public.nflt_user_roles
+    where user_id = (select auth.uid())
+      and role in ('owner', 'admin')
+  );
+$;
 
 create table if not exists public.nflt_organizations (
   id uuid primary key default gen_random_uuid(),
@@ -150,7 +157,10 @@ create policy nflt_audit_events_admin_read on public.nflt_audit_events
 create policy nflt_audit_events_admin_insert on public.nflt_audit_events
   for insert to authenticated with check (public.nflt_is_admin());
 
+revoke all on function public.nflt_is_admin() from public, anon;
+grant execute on function public.nflt_is_admin() to authenticated, service_role;
+
 comment on function public.nflt_is_admin() is
-  'Checks trusted app_metadata.nflt_role; never authorize from user_metadata.';
+  'Checks protected nflt_user_roles assignments for owner/admin. Role assignments must be provisioned by trusted service-role tooling.';
 comment on table public.nflt_projects is
   'Project entity assignment is mandatory; to_be_confirmed prevents implied seller/rights ownership.';
