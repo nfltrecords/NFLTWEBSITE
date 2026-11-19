@@ -28,6 +28,5 @@ jobs:
         run: npm test
       - name: Build (no deployment)
         run: npm run build
-      - name: Lint (non-blocking while formatting backlog is resolved)
+      - name: Lint
         run: npm run lint
-        continue-on-error: true
