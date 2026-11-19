@@ -8,8 +8,9 @@ Le schéma TypeScript Supabase actuellement versionné ne déclare que deux tabl
 
 - `contact_messages` : nom, e-mail, message, date de réception.
 - `licensing_inquiries` : coordonnées, organisation, type de demande, sortie UPC éventuelle, usage, territoire, durée, message, langue et date.
+- `shop_orders` et `paypal_webhook_events` : migration SQL versionnée dans le dépôt, mais absentes des types Supabase générés ; application réelle non vérifiée.
 
-La route privée `/messages` ne fait que consulter les messages du formulaire après saisie d'un code serveur. Elle n'est pas un tableau de bord général. Aucun modèle de commandes, clients, projets, contrats, factures, licences accordées ou catalogue de masters n'est actuellement défini dans ce schéma.
+La route privée `/messages` ne fait que consulter les messages du formulaire après saisie d'un code serveur. Elle n'est pas un tableau de bord général. Le dépôt contient également `drizzle/migrations/0002_create_private_shop_orders.sql`, qui propose les tables `shop_orders` et `paypal_webhook_events` avec accès réservé à `service_role`. Ces tables ne figurent pas dans les types Supabase générés actuellement. Leur application dans un projet Supabase réel n'est pas confirmée ; il ne faut donc pas les considérer comme existantes en production. Aucun modèle complet de clients, projets, contrats, factures, licences accordées ou catalogue de masters n'est actuellement défini dans les types générés.
 
 ## Périmètre cible
 
