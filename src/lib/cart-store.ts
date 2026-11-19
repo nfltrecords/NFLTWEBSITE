@@ -15,9 +15,12 @@ function loadCart() {
     const parsed: unknown = raw ? JSON.parse(raw) : {};
     if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
       cart = Object.fromEntries(
-        Object.entries(parsed).filter(
-          ([upc, quantity]) => /^\d{12}$/.test(upc) && Number.isInteger(quantity) && Number(quantity) > 0,
-        ).map(([upc, quantity]) => [upc, Math.min(Number(quantity), 20)]),
+        Object.entries(parsed)
+          .filter(
+            ([upc, quantity]) =>
+              /^\d{12}$/.test(upc) && Number.isInteger(quantity) && Number(quantity) > 0,
+          )
+          .map(([upc, quantity]) => [upc, Math.min(Number(quantity), 20)]),
       );
     }
   } catch {
