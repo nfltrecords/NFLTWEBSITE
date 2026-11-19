@@ -1,9 +1,8 @@
 -- DRAFT ONLY — do not apply to production until the live Supabase schema,
 -- auth configuration, data-protection basis and RLS tests have been reviewed.
 -- Role assignments are written only by trusted service-role tooling. Authenticated
--- users cannot grant themselves roles. The SECURITY DEFINER function is narrowly
--- scoped, uses fully-qualified names, and reads the protected role table to avoid
--- duplicating authorization in JWT metadata.
+-- users cannot grant themselves roles. The SECURITY DEFINER authorization function
+-- is defined after the role table and uses fully-qualified names.
 
 create table if not exists public.nflt_organizations (
   id uuid primary key default gen_random_uuid(),
