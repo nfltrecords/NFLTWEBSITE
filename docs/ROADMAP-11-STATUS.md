@@ -1,6 +1,6 @@
 # NFLT RECORDS — suivi consolidé des 11 chantiers
 
-État de préparation au 19 novembre 2026 (mise à jour après correction boutique et Preview Cloudflare). Ce tableau distingue les modifications du dépôt des opérations externes non réalisées. Il ne constitue pas une validation de production.
+État de préparation au 19 novembre 2026 (mise à jour après intégration du panier partagé et Preview Cloudflare). Ce tableau distingue les modifications du dépôt des opérations externes non réalisées. Il ne constitue pas une validation de production.
 
 | N° | Chantier | État | Dépendance / prochaine étape |
 |---:|---|---|---|
@@ -11,21 +11,22 @@
 | 5 | Tableau de bord | Conception uniquement | Un SQL de fondation est un brouillon non appliqué. Aucun écran d'administration général n'est construit. L'accès Supabase et l'audit des politiques réelles sont requis. |
 | 6 | DNS | Non traité | Accès registrar absent. Ne pas modifier nameservers, MX, SPF, DKIM ou DMARC. |
 | 7 | Messagerie et notifications | Non validé | Les fonctions de formulaire enregistrent des demandes ; aucun envoi d'e-mail n'est garanti. Vérifier les boîtes et tester la livraison avec accès au fournisseur. |
-| 8 | Boutique | Panier intégré, paiement non activé | La page boutique présente les 18 sorties et un panier interactif. Le lien PayPal.Me a été retiré et le bouton de paiement est désactivé. Aucun checkout, paiement, stock/CD physique, livraison ou téléchargement sécurisé n'est configuré. Valider vendeur par transaction, frais, taxes, droits, fichiers et conditions avant ouverture. |
+| 8 | Boutique | Panier partagé intégré, paiement non activé | Le panier est partagé entre les pages boutique et fiches catalogue, son compteur est visible dans les navigations desktop et mobile, et le navigateur conserve la sélection. Ajout, quantités, suppression et total indicatif sont disponibles. Le lien PayPal.Me a été retiré et le bouton de paiement est désactivé. Aucun checkout, paiement, stock/CD physique, livraison ou téléchargement sécurisé n'est configuré. Valider vendeur par transaction, frais, taxes, droits, fichiers et conditions avant ouverture. |
 | 9 | Licences et royalties | Recherche documentaire | Aucun mandat ni dépôt de masters effectué. Vérifier contrats, droits master/composition, exclusivité, Content ID, territoires et paiements avant toute inscription. |
 | 10 | Radio NFLT RECORDS NYC RADIO | Préparation seulement | Aucun flux, serveur AzuraCast ou service cloud n'est validé ici. Aucun serveur ou coût supplémentaire créé. |
 | 11 | Structure et gestion des entités | Règles à confirmer par opération | Le propriétaire a précisé que NFLT RECORDS FRANCE concerne les achats de CD physiques en France. Ne pas lui attribuer par défaut les ventes numériques, licences ou autres territoires. Le vendeur et les droits doivent être définis pour chaque opération. |
 
 ## Boutique — évolution du 19 novembre 2026
 
-- La page boutique dispose d’un panier côté navigateur : ajout des sorties, augmentation/réduction des quantités, suppression et calcul du total indicatif.
+- Le panier est partagé côté navigateur entre la boutique et les fiches individuelles du catalogue ; le compteur est affiché dans les menus desktop et mobile.
+- Les fiches catalogue et les cartes boutique permettent d’ajouter une sortie. La page panier permet d’augmenter/réduire les quantités, de vider le panier et de consulter le total indicatif. La sélection est conservée dans le stockage local du navigateur.
 - Le lien PayPal.Me a été retiré du parcours panier ; le bouton de paiement est désactivé. Le site n'accepte aucune commande ni aucun paiement à ce stade.
 - Les prix et le nombre de pistes restent indicatifs tant que les tracklists UPC et les éléments commerciaux ne sont pas confirmés.
 - Payhip avec PayPal reste une piste pour les ventes numériques, sans compte connecté ni activation. Les CD physiques doivent avoir un parcours vendeur/livraison distinct.
 
 ## Contrôles techniques de la branche
 
-- Le commit `a9784a8` a passé les workflows GitHub Actions NFLT safe verification et Verify source : tests, build sans déploiement et lint ont terminé avec succès. Le commit `d3ca8b6` a ensuite été publié sur Cloudflare Workers Preview ; build terminé avec `build_outcome: success` le 19 novembre 2026.
+- Le commit `a9784a8` a passé les workflows GitHub Actions NFLT safe verification et Verify source : tests, build sans déploiement et lint ont terminé avec succès. Le commit `3701ac8` intégrant le panier partagé a ensuite passé le build Cloudflare Workers Preview (`npm run build` puis `npx wrangler preview`), `build_outcome: success` le 19 novembre 2026.
 - La Preview Cloudflare utilise `npm run build` puis `npx wrangler preview`. La production est préservée ; aucun déploiement dans `main` n'a été effectué.
 - Ces contrôles valident la compilation et les tests du code de la branche, pas les intégrations externes, le contenu réel de Supabase, le DNS, la messagerie, les paiements, le référencement indexé ou le fonctionnement en production.
 - La PR de préparation reste non fusionnée. Aucun déploiement de production n'a été lancé.
