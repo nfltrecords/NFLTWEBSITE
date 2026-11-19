@@ -50,7 +50,11 @@ export const listContactMessages = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const norm = (s: string) => s.normalize("NFC").trim();
     const expected = process.env["ADMIN_MESSAGES_CODE"];
-    if (\n      !adminMessagesAreEnabled() ||\n      !expected ||\n      !(await matchesAdminMessagesCode(norm(data.code), norm(expected)))\n    )
+    if (
+      !adminMessagesAreEnabled() ||
+      !expected ||
+      !(await matchesAdminMessagesCode(norm(data.code), norm(expected)))
+    )
       return { ok: false as const };
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: messages, error } = await supabaseAdmin
