@@ -29,7 +29,7 @@ describe("Commerce inquiry rules", () => {
     expect(payPalCheckoutIsEnabled(undefined)).toBe(false);
     expect(payPalCheckoutIsEnabled("false")).toBe(false);
     expect(payPalCheckoutIsEnabled("TRUE")).toBe(false);
-    expect(payPalCheckoutIsEnabled("true")).toBe(true);
+    expect(payPalCheckoutIsEnabled("true")).toBe(false); // recorded approval remains false
   });
   it("prices exactly one actual track at 999 cents", () => {
     expect(priceForTrackCount(1)).toBe(999);
