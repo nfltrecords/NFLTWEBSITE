@@ -10,7 +10,7 @@ import {
   verifiedReleaseTrackCounts,
 } from "@/lib/commerce";
 import { releases } from "@/lib/catalogue";
-import { payPalCheckoutIsEnabled } from "@/lib/paypal.functions";
+import { payPalCheckoutIsEnabled } from "@/lib/paypal-checkout-gate";
 import commerceConfig from "../../.lovable/commerce-config.json";
 const input = {
   name: "Test",
