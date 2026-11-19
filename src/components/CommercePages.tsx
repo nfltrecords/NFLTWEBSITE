@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier -- JSX cart layout is intentionally kept compact. */
 import { Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
