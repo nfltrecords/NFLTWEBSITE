@@ -12,11 +12,13 @@ describe("Private legal preparation boundaries", () => {
     expect(prep.soleSellerAssumed).toBe(false);
     expect(prep.customersLimitedToFrance).toBe(false);
     expect(prep.brandIsContractingSeller).toBe(false);
-    expect(prep.potentialContractingEntities).toEqual([
+    expect(commerceConfig.sellerRoleClarification.physicalCDPurchases.associatedEntity).toBe(
       "SAS NFLT RECORDS FRANCE",
-      "NFLT RECORDS INC.",
-      "another relevant group entity",
-    ]);
+    );
+    expect(commerceConfig.sellerRoleClarification.digitalDownloadsAndLicensing.assignment).toBe(
+      "pending-per-transaction-rights-fulfillment-and-territory-review",
+    );
+    expect(prep.automaticSellerAssignment).toBe(false);
     expect(prep.franceDefaultForDigitalDownloads).toBe(false);
     expect(prep.franceDefaultForLicensing).toBe(false);
     expect(prep.franceDefaultForAllOnlinePurchases).toBe(false);
