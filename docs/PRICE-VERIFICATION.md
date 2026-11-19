@@ -12,9 +12,9 @@ Le code ne définit pas de prix pour les sorties de 2, 3 ou 4 pistes.
 
 ## État constaté
 
-Dans `src/lib/commerce.ts`, `verifiedReleaseTrackCounts` est vide. La fonction `releasePriceCents(upc)` renvoie donc `null` pour les sorties du catalogue. Le composant de prix ne peut pas afficher un prix individualisé tant que le nombre de pistes de chaque UPC n'est pas prouvé.
+Dans `src/lib/commerce.ts`, `verifiedReleaseTrackCounts` contient désormais des valeurs provisoires pour les 18 UPC. La fonction `releasePriceCents(upc)` calcule les prix correspondants, mais les 16 singles et l'album 30.000 GÉNOCIDES restent soumis à vérification documentaire UPC par UPC. Le calcul affiché n'est pas une preuve de droits, de fichiers disponibles ni une autorisation de vente.
 
-Le catalogue contient 18 sorties. Aucun nombre de pistes par UPC n'est actuellement validé dans ce fichier de configuration.
+Le catalogue contient 18 sorties. Les nombres de pistes ne sont pas tous individuellement validés dans ce fichier de configuration.
 
 ## Procédure de validation requise
 
@@ -80,7 +80,7 @@ Les deux albums sont comptés ainsi :
 - **2 prix à 19,99 €**
 - **0 sortie au palier 14,99 € (5 pistes)**
 
-Ces nombres et prix ont été ajoutés à la configuration de la boutique sur la branche de travail. Ils restent provisoires : checkout désactivé, pas de publication. Revoir les 16 UPC singles et l'album 30.000 GÉNOCIDES dès qu'un export distributeur ou une tracklist UPC complète est disponible.
+Ces nombres et prix sont configurés sur la branche de travail et affichés comme estimation provisoire. Checkout reste bloqué côté serveur : il faut simultanément `checkoutEnabled: true` dans `.lovable/commerce-config.json` et `PAYPAL_CHECKOUT_ENABLED=true` dans les variables serveur. La configuration d'approbation reste `false` et aucun feu vert d'activation n'a été donné. Aucun paiement n'est donc possible via les fonctions PayPal, même si la variable serveur est accidentellement définie. Revoir les 16 UPC singles et l'album 30.000 GÉNOCIDES dès qu'un export distributeur ou une tracklist UPC complète est disponible.
 
 Sources publiques :
 
