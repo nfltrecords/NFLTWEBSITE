@@ -1,6 +1,10 @@
-import commerceConfig from "../../.lovable/commerce-config.json";
+/**
+ * Checkout stays closed in source until the owner has completed rights, seller,
+ * file-delivery and legal checks and explicitly approves activation in a reviewed commit.
+ * The server environment flag alone can never activate checkout.
+ */
+export const checkoutActivationApproved = false;
 
-/** Require both the private approval record and an explicit server-side activation flag. */
 export function payPalCheckoutIsEnabled(value = process.env["PAYPAL_CHECKOUT_ENABLED"]): boolean {
-  return commerceConfig.checkoutEnabled === true && value === "true";
+  return checkoutActivationApproved && value === "true";
 }
