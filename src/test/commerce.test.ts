@@ -10,7 +10,7 @@ import {
   verifiedReleaseTrackCounts,
 } from "@/lib/commerce";
 import { releases } from "@/lib/catalogue";
-import { payPalCheckoutIsEnabled } from "@/lib/paypal-checkout-gate";
+import { checkoutActivationApproved, payPalCheckoutIsEnabled } from "@/lib/paypal-checkout-gate";
 import commerceConfig from "../../.lovable/commerce-config.json";
 const input = {
   name: "Test",
@@ -26,7 +26,7 @@ const input = {
 };
 describe("Commerce inquiry rules", () => {
   it("keeps PayPal checkout closed unless an explicit server-side activation flag is true", () => {
-    expect(payPalCheckoutIsEnabled(undefined)).toBe(false);
+    expect(checkoutActivationApproved).toBe(false);\n    expect(payPalCheckoutIsEnabled(undefined)).toBe(false);
     expect(payPalCheckoutIsEnabled("false")).toBe(false);
     expect(payPalCheckoutIsEnabled("TRUE")).toBe(false);
     expect(payPalCheckoutIsEnabled("true")).toBe(false); // recorded approval remains false
