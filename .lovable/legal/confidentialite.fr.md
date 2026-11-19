@@ -6,7 +6,7 @@
 
 Ce projet concerne le site NFLT RECORDS, ses formulaires de contact et de demandes de licences/disponibilité, ainsi que son exploitation technique. Il ne couvre pas comme existants des commandes, paiements ou téléchargements clients : ces services ne sont pas ouverts sur le site. Il ne décrit pas non plus les traitements propres à Spotify ou Google Play, accessibles par des liens externes.
 
-Contact communiqué : nfltrecords@nflt-records.com. SAS NFLT RECORDS FRANCE (SAS), SIREN 999268741, SIRET 99926874100017, siège Bureau 326 SOURCE, 78 AV DES CHAMPS ELYSEES, 75008 PARIS, est associée aux achats de CD physiques selon la clarification du propriétaire, sans être le vendeur par défaut des téléchargements numériques, des licences ou de tous les achats en ligne. Son rôle exact de responsable du traitement du site, et les rôles éventuels de NFLT RECORDS INC. ou d’autres entités, doivent être confirmés avant publication. Aucun DPO ni téléphone n’est annoncé.
+SAS NFLT RECORDS FRANCE est associée aux achats de CD physiques selon la clarification du propriétaire, sans être le vendeur par défaut des téléchargements numériques, des licences ou de tous les achats en ligne. Les mentions d'immatriculation et coordonnées doivent être confirmées avant publication. Son rôle exact de responsable du traitement du site, et les rôles éventuels de NFLT RECORDS INC. ou d’autres entités, doivent être confirmés avant publication. Aucun DPO ni téléphone n’est annoncé.
 
 ## 2. Informations transmises par les formulaires
 
