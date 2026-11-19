@@ -62,7 +62,7 @@ Les seules durées documentées dans cet audit sont celles de la mesure d’audi
 
 Selon le traitement et sa base légale, les personnes disposent notamment de droits d’accès, rectification, effacement, limitation, opposition et, lorsque ses conditions sont réunies, portabilité. Lorsqu’un traitement repose sur le consentement, celui-ci peut être retiré sans affecter la licéité des opérations antérieures. Les limites et exceptions légales applicables doivent être prises en compte.
 
-Le contact proposé pour exercer ces droits est nfltrecords@nflt-records.com ; sa capacité à recevoir et traiter ces demandes doit être confirmée. Une preuve d’identité proportionnée peut être demandée si des doutes raisonnables existent, sans collecte systématique excessive. Le processus doit respecter les délais RGPD (en principe un mois, prolongation motivée possible de deux mois dans les cas prévus), sans affirmer qu’il est déjà opérationnel. Une réclamation peut être adressée à la CNIL et, selon la situation, à l’autorité de contrôle compétente.
+Le contact proposé pour exercer ces droits est [coordonnées à confirmer avant publication] ; sa capacité à recevoir et traiter ces demandes doit être confirmée. Une preuve d’identité proportionnée peut être demandée si des doutes raisonnables existent, sans collecte systématique excessive. Le processus doit respecter les délais RGPD (en principe un mois, prolongation motivée possible de deux mois dans les cas prévus), sans affirmer qu’il est déjà opérationnel. Une réclamation peut être adressée à la CNIL et, selon la situation, à l’autorité de contrôle compétente.
 
 ## 11. Sécurité et modifications
 
