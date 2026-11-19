@@ -13,7 +13,7 @@ These terms are a preparatory framework for possible future physical CD and digi
 ## 2. Group, brand and contracting seller
 
 NFLT RECORDS identifies the brand and group, not a sufficient identification of the contracting party. The details below are a reference for known entities, not an allocation of all sales to a single company.
-SAS NFLT RECORDS FRANCE, a French société par actions simplifiée (SAS), SIREN 999268741, SIRET 99926874100017. Declared registered office: Bureau 326 SOURCE, 78 AV DES CHAMPS ELYSEES, 75008 PARIS. VAT number: FR89999268741. Supplied contact: nfltrecords@nflt-records.com.
+SAS NFLT RECORDS FRANCE. Registration details, registered office and VAT number must be verified and approved before publication. Supplied contact: [coordonnées à confirmer avant publication].
 
 NFLT RECORDS INC. is described by the owner as the parent company. Its legal particulars must be verified before publication. For physical CD purchases, SAS NFLT RECORDS FRANCE is the associated entity under the owner’s clarification, subject to confirming the exact contracting seller, fulfillment arrangement and applicable territory; this clarification does not limit CD customers to France. For digital products and downloads, NFLT RECORDS INC. or another relevant group entity may be the contracting party depending on the transaction; SAS NFLT RECORDS FRANCE is not the default seller for digital downloads, licensing or all online purchases. Brand, site language or customer country alone cannot identify the seller. Before any commitment, each product/order must specify the exact contracting entity, its validated registration and address details, contact, applicable tax treatment and total price, terms and version, governing law after review, and mandatory protections for the consumer concerned. The offer, durable confirmation, invoicing and fulfillment must identify the same seller; there must be no implicit change of contracting party. This draft assigns no seller to any UPC. Internal authorization between the companies is neither an automatic allocation nor a general representation of control over catalogue rights and masters.
 
@@ -57,7 +57,7 @@ Withdrawal arrangements for each product category, seller and territory remain s
 
 Mandatory consumer rights, including guarantees applicable to digital content and services, cannot be excluded by these terms. Before publication, required provisions concerning conformity, remedies, bringing content into conformity and other applicable guarantees must be drafted after checking the product and applicable law. No guarantee period or operational refund process is invented here.
 
-The supplied inquiry contact is nfltrecords@nflt-records.com. The actual support organization, required channels and complaint handling must be approved before sales open.
+The supplied inquiry contact is [coordonnées à confirmer avant publication]. The actual support organization, required channels and complaint handling must be approved before sales open.
 
 ## 9. Mediation, disputes and territories
 
