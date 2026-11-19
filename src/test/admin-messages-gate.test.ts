@@ -21,9 +21,9 @@ describe("private message access gate", () => {
 
 describe("private message access code comparison", () => {
   it("accepts the exact submitted code", async () => {
-    expect(await matchesAdminMessagesCode("CaseSensitive-Secret-123", "CaseSensitive-Secret-123")).toBe(true);
+    expect(await matchesAdminMessagesCode(\n        "CaseSensitive-Secret-123",\n        "CaseSensitive-Secret-123",\n      )).toBe(true);
   });
   it("rejects a different code including a case-only difference", async () => {
-    expect(await matchesAdminMessagesCode("CaseSensitive-Secret-123", "casesensitive-secret-123")).toBe(false);
+    expect(await matchesAdminMessagesCode(\n        "CaseSensitive-Secret-123",\n        "casesensitive-secret-123",\n      )).toBe(false);
   });
 });
