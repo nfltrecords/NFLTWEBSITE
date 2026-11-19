@@ -57,7 +57,7 @@ Les modalités de rétractation applicables à chaque catégorie de produit, ven
 
 Les droits impératifs du consommateur, dont les garanties applicables aux contenus et services numériques, ne peuvent être exclus par ces conditions. Avant publication, les mentions légales requises concernant la conformité, les recours, la mise en conformité et les autres garanties applicables devront être rédigées après vérification du produit et de la loi applicable. Aucun délai de garantie ou dispositif opérationnel de remboursement n’est inventé ici.
 
-Le contact communiqué pour les demandes est nfltrecords@nflt-records.com. L’organisation effective de l’assistance, les canaux requis et le traitement des réclamations devront être validés avant l’ouverture des ventes.
+Le contact communiqué pour les demandes est [coordonnées à confirmer avant publication]. L’organisation effective de l’assistance, les canaux requis et le traitement des réclamations devront être validés avant l’ouverture des ventes.
 
 ## 9. Médiation, litiges et territoires
 
