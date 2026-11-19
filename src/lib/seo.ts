@@ -115,11 +115,11 @@ const descriptions: Record<PublicPage, Record<Locale, [string, string]>> = {
   application: {
     fr: [
       "Application mobile officielle — NFLT RECORDS",
-      "L’application officielle NFLT RECORDS est disponible sur Google Play.",
+      "L’application NFLT RECORDS est en cours de réorganisation ; sa republication officielle sera annoncée ultérieurement.",
     ],
     en: [
       "Official mobile application — NFLT RECORDS",
-      "The official NFLT RECORDS app is available on Google Play.",
+      "The NFLT RECORDS app is being reorganised; its official republication will be announced later.",
     ],
   },
   home: {
