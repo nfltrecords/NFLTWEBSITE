@@ -2,7 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { releases } from "@/lib/catalogue";
 import { releasePriceCents } from "@/lib/commerce";
-import commerceConfig from "../../.lovable/commerce-config.json";
+import { payPalCheckoutIsEnabled } from "@/lib/paypal-checkout-gate";
 import { createPayPalOrder, capturePayPalOrder } from "@/lib/paypal.server";
 
 const startCheckoutSchema = z
@@ -18,10 +18,6 @@ const captureCheckoutSchema = z
     paypalOrderId: z.string().regex(/^[A-Z0-9]{8,40}$/),
   })
   .strict();
-
-export function payPalCheckoutIsEnabled(value = process.env["PAYPAL_CHECKOUT_ENABLED"]): boolean {
-  return commerceConfig.checkoutEnabled === true && value === "true";
-}
 
 type StoredOrder = {
   id: string;
