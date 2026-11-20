@@ -5,7 +5,7 @@
 | N° | Chantier | État | Dépendance / prochaine étape |
 |---:|---|---|---|
 | 1 | Sortie de Lovable / portage du site | Préparation isolée | Les hooks de télémétrie du composant racine ont été retirés dans la branche. Le dossier de travail historique subsiste. Le build Cloudflare Workers Preview de la branche a réussi avec `npx wrangler preview`. La production reste inchangée. Aucun transfert de compte, migration de production ou déploiement n'a été effectué. |
-| 2 | Audio / extraits | En attente | Aucun travail audio ou publication de masters dans cette étape. |
+| 2 | Audio / extraits | Audit technique ajouté | 37 fichiers MP3 de préécoute sont présents dans le dépôt. Le script d'audit calcule désormais leurs empreintes SHA-256 et signale les doublons exacts ainsi que la plage de tailles ; le résultat doit être exécuté et examiné avant toute association titre/fichier. Aucun master n'est publié par cette vérification. |
 | 3 | Catalogue et pochettes | Partiellement vérifié | 18 sorties sont recensées. Certaines associations UPC/pochette et les preuves de dimensions originales doivent être confirmées avant remplacement définitif. |
 | 4 | Prix par sortie | Provisoire | Barème de référence : 9,99 € pour 1 piste, 14,99 € pour 5 pistes, 19,99 € pour 6 pistes ou plus. Les décomptes UPC individuels ne sont pas tous confirmés ; aucun checkout. |
 | 5 | Tableau de bord | Conception et sécurité préparées | SQL de fondation non appliqué ; matrice d'accès et plan de tests RLS documentés. Aucun écran connecté ni compte admin n'existe. Accès au projet Supabase et tests sur environnement de développement requis. |
@@ -15,6 +15,12 @@
 | 9 | Licences et royalties | Recherche documentaire | Aucun mandat ni dépôt de masters effectué. Vérifier contrats, droits master/composition, exclusivité, Content ID, territoires et paiements avant toute inscription. |
 | 10 | Radio NFLT RECORDS NYC RADIO | Préparation seulement | Aucun flux, serveur AzuraCast ou service cloud n'est validé ici. Aucun serveur ou coût supplémentaire créé. |
 | 11 | Structure et gestion des entités | Règles à confirmer par opération | Le propriétaire a précisé que NFLT RECORDS FRANCE concerne les achats de CD physiques en France. Ne pas lui attribuer par défaut les ventes numériques, licences ou autres territoires. Le vendeur et les droits doivent être définis pour chaque opération. |
+
+## Audio — contrôle des préécoutes du 20 novembre 2026
+
+- Le dépôt contient 37 fichiers MP3 dans `public/assets/previews` et 18 pochettes JPG correspondant aux 18 UPC du catalogue.
+- Le script `scripts/audit-assets.mjs` vérifie désormais les doublons binaires exacts des MP3 (SHA-256) et la plage de tailles des fichiers, en plus du contrôle de présence des pochettes.
+- Ces contrôles ne valident pas à eux seuls la durée réelle, la qualité sonore, le contenu du morceau ni la correspondance entre chaque extrait et sa sortie. Aucune association automatique ni publication de master n'est faite.
 
 ## Boutique — évolution du 20 novembre 2026
 
