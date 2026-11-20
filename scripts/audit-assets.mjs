@@ -11,6 +11,20 @@ const covers = readdirSync(coverDir).filter(
   (name) => name.startsWith("cover-") && name.endsWith(".jpg"),
 );
 const previews = readdirSync(previewDir).filter((name) => name.toLowerCase().endsWith(".mp3"));
+
+const previewHashes = new Map();
+for (const name of previews) {
+  const digest = createHash("sha256").update(readFileSync(join(previewDir, name))).digest("hex");
+  const names = previewHashes.get(digest) ?? [];
+  names.push(name);
+  previewHashes.set(digest, names);
+}
+const duplicatePreviewFiles = [...previewHashes.values()].filter((names) => names.length > 1);
+const previewSizes = previews.map((name) => readFileSync(join(previewDir, name)).byteLength);
+const previewSizeRangeBytes = previewSizes.length
+  ? { min: Math.min(...previewSizes), max: Math.max(...previewSizes) }
+  : { min: 0, max: 0 };
+
 const routeFiles = readdirSync("src/routes").filter((name) => name.endsWith(".tsx"));
 const testFiles = readdirSync("src/test").filter((name) => name.includes(".test."));
 
