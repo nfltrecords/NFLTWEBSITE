@@ -2,6 +2,7 @@ import { ArrowUpRight, Music2, Search } from "lucide-react";
 import { SiteLayout, PageHeader } from "@/components/SiteLayout";
 import { releases } from "@/lib/catalogue";
 import { publicPages, type Locale } from "@/lib/seo";
+import { releaseCovers } from "@/lib/covers";
 
 const services = [
   {
@@ -136,8 +137,14 @@ export function StreamingPage({ locale }: { locale: Locale }) {
                 rel="noopener noreferrer"
                 className="flex items-center justify-between gap-5 py-5 transition-colors hover:bg-card"
               >
-                <div className="flex min-w-0 items-center gap-5">
+                <div className="flex min-w-0 items-center gap-4">
                   <span className="text-xs text-muted-foreground">{String(index + 1).padStart(2, "0")}</span>
+                  <img
+                    src={releaseCovers[release.upc] ?? "/nflt-records-favicon.png"}
+                    alt={`Pochette de ${release.title}`}
+                    loading="lazy"
+                    className="h-16 w-16 shrink-0 rounded-sm border border-border object-cover"
+                  />
                   <div className="min-w-0">
                     <p className="font-medium">{release.title}</p>
                     <p className="mt-1 text-xs text-muted-foreground">UPC {release.upc}</p>
