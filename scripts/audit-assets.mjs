@@ -14,7 +14,9 @@ const previews = readdirSync(previewDir).filter((name) => name.toLowerCase().end
 
 const previewHashes = new Map();
 for (const name of previews) {
-  const digest = createHash("sha256").update(readFileSync(join(previewDir, name))).digest("hex");
+  const digest = createHash("sha256")
+    .update(readFileSync(join(previewDir, name)))
+    .digest("hex");
   const names = previewHashes.get(digest) ?? [];
   names.push(name);
   previewHashes.set(digest, names);
