@@ -53,6 +53,8 @@ describe("App routing", () => {
     "/en/shop",
     "/licences-musicales",
     "/en/music-licensing",
+    "/ecouter",
+    "/en/listen",
     "/catalogue/821440674572",
     "/en/catalogue/821440674572",
   ])("preserves a matching page at %s", (path) => {
