@@ -161,8 +161,11 @@ export function ShopPage({ locale }: { locale: Locale }) {
                   <ReleasePrice upc={release.upc} />
                   <p>UPC {release.upc}</p>
                 </div>
-                <Button type="button" className="editorial-action w-full" onClick={() => addToCart(release.upc)} disabled={(sharedCart.items[release.upc] ?? 0) >= 20 || releasePriceCents(release.upc) === null}>
-                  <ShoppingBag size={16} />{text(locale, "Ajouter au panier", "Add to cart")}{(sharedCart.items[release.upc] ?? 0) > 0 ? ` · ${sharedCart.items[release.upc]}` : ""}
+                <Button type="button" className="editorial-action w-full" onClick={() => addToCart(release.upc)} disabled={
+                  (sharedCart.items[release.upc] ?? 0) >= 20 || releasePriceCents(release.upc) === null
+                }>
+                  <ShoppingBag size={16} />{text(locale, "Ajouter au panier", "Add to cart")}
+                  {(sharedCart.items[release.upc] ?? 0) > 0 ? ` · ${sharedCart.items[release.upc]}` : ""}
                 </Button>
                 <Button asChild variant="outline" className="editorial-action shop-availability">
                   <Link
