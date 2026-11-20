@@ -12,6 +12,7 @@ import { ApplicationBlock } from "@/components/ApplicationPage";
 import { implantations } from "@/lib/brand-content";
 import { RadioTeaser } from "@/components/RadioPage";
 import { ReleasePrice } from "@/components/ReleasePrice";
+import { ReleasePreview } from "@/components/ReleasePreview";
 import { useCart } from "@/lib/cart-store";
 import { releasePriceCents as releasePriceCentsForButton } from "@/lib/commerce";
 import { ShoppingBag } from "lucide-react";
@@ -67,7 +68,8 @@ function ReleaseRow({
       >
         <span className="release-artist">NFLT</span>
         <h3 className="release-title">{release.title}</h3>
-        {showPrice ? <ReleasePrice upc={release.upc} locale={locale} /> : null}
+        {showPrice ? <ReleasePrice upc={release.upc} locale={locale} />
+            <ReleasePreview upc={release.upc} locale={locale} /> : null}
       </Link>
       <span className="release-upc">UPC {release.upc}</span>
       {showPrice ? (
