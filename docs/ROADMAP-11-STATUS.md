@@ -82,4 +82,4 @@ Les comptes Supabase, registrar/messagerie, PayPal/Payhip, Oracle Cloud et plate
 | 199955740199 | The Luxury - The Highest - Unequivocal | NFLTTHELUXURYTHEHIGHESTUNEQUIVOCAL_PREVIEW_30S.mp3 | Nom proche, association non confirmée |
 | 199751170992 | Transcendence Of Natural Truths | NFLTTRANSCENDANCEOFNATURALTRUTHSBEATNFLTRECORDS_PREVIEW_30S.mp3 | Nom proche, association non confirmée |
 
-Ces sept rapprochements sont des pistes de travail issues des noms de fichiers et des titres du catalogue, pas des validations. Ils ne sont pas ajoutés à `src/lib/previews.ts`. Les 11 autres fichiers sans piste fiable restent non attribués. Les 18 UPC restent la liste canonique du catalogue ; aucun UPC supplémentaire n'est créé.
+Ces sept rapprochements sont des pistes de travail issues des noms de fichiers et des titres du catalogue, pas des validations. Ils ne sont pas ajoutés à `src/lib/previews.ts`. Les 24 autres fichiers (37 au total moins 6 associations confirmées et 7 candidats) restent sans attribution fiable à ce stade. Les 18 UPC restent la liste canonique du catalogue ; aucun UPC supplémentaire n'est créé.
