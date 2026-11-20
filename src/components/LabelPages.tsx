@@ -350,11 +350,9 @@ export function ReleasePage({ release, locale = "fr" }: { release: Release; loca
                 type="button"
                 className="editorial-action"
                 onClick={() => cart.add(release.upc)}
-                disabled={
-                  quantity >= 20 || releasePriceCentsForButton(release.upc) === null
-                }
+                disabled={quantity >= 20 || releasePriceCentsForButton(release.upc) === null}
               >
-                <ShoppingBag size={16} />{" "}
+                <ShoppingBag size={16} />
                 {t(locale, "Ajouter au panier", "Add to cart")}
                 {quantity > 0 ? ` · ${quantity}` : ""}
               </Button>
