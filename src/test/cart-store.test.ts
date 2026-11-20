@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { normalizeCart } from "@/lib/cart-store";
 
 describe("cart eligibility", () => {
-  it("drops legacy cart entries whose release price is not confirmed", () => {
+  it("retains legacy cart entries for releases with indicative reference prices", () => {
     expect(
       normalizeCart({
         "199955715135": 2,
