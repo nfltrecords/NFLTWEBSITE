@@ -14,7 +14,7 @@ export function normalizeCart(value: unknown): CartState {
     Object.entries(value)
       .filter(
         ([upc, quantity]) =>
-          /^\\d{12}$/.test(upc) &&
+          /^\d{12}$/.test(upc) &&
           releasePriceCents(upc) !== null &&
           Number.isInteger(quantity) &&
           Number(quantity) > 0,
