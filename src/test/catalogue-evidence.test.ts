@@ -53,7 +53,9 @@ describe("Owner-reported original artwork evidence", () => {
     for (const upc of ["199955715135", "199955742094"]) {
       const release = review.releases.find((item) => item.upc === upc);
       expect(release?.ownerConfirmedArtwork?.integrated).toBe(false);
-      expect(release?.ownerConfirmedArtwork?.integrationStatus).toBe("pending-exact-original-binary-replacement");
+      expect(release?.ownerConfirmedArtwork?.integrationStatus).toBe(
+        "pending-exact-original-binary-replacement",
+      );
       expect(releaseCovers[upc]).toContain(`cover-${upc}.jpg`);
     }
     expect(Object.keys(releaseCovers)).toHaveLength(18);
@@ -68,13 +70,19 @@ describe("Owner-reported original artwork evidence", () => {
       "199955742094": 8,
     });
     for (const release of releases) {
-      if (release.upc === "199955715135") expect(verifiedReleaseTrackCounts[release.upc]).toBe(1);
-      else if (release.upc === "199955742094") expect(verifiedReleaseTrackCounts[release.upc]).toBe(8);
-      else expect(verifiedReleaseTrackCounts[release.upc]).toBeUndefined();
+      if (release.upc === "199955715135") {
+        expect(verifiedReleaseTrackCounts[release.upc]).toBe(1);
+      } else if (release.upc === "199955742094") {
+        expect(verifiedReleaseTrackCounts[release.upc]).toBe(8);
+      } else {
+        expect(verifiedReleaseTrackCounts[release.upc]).toBeUndefined();
+      }
     }
     expect(releasePriceCents("199955715135")).toBe(999);
     expect(releasePriceCents("199955742094")).toBe(1999);
-    for (const release of releases.filter((r) => !["199955715135", "199955742094"].includes(r.upc))) {
+    for (const release of releases.filter(
+      (r) => !["199955715135", "199955742094"].includes(r.upc),
+    )) {
       expect(releasePriceCents(release.upc)).toBeNull();
     }
   });
