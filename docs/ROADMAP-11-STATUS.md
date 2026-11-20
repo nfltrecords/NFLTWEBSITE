@@ -83,3 +83,44 @@ Les comptes Supabase, registrar/messagerie, PayPal/Payhip, Oracle Cloud et plate
 | 199751170992 | Transcendence Of Natural Truths | NFLTTRANSCENDANCEOFNATURALTRUTHSBEATNFLTRECORDS_PREVIEW_30S.mp3 | Nom proche, association non confirmée |
 
 Ces sept rapprochements sont des pistes de travail issues des noms de fichiers et des titres du catalogue, pas des validations. Ils ne sont pas ajoutés à `src/lib/previews.ts`. Les 24 autres fichiers (37 au total moins 6 associations confirmées et 7 candidats) restent sans attribution fiable à ce stade. Les 18 UPC restent la liste canonique du catalogue ; aucun UPC supplémentaire n'est créé.
+
+## Vérification des extraits par listes de pistes publiques — 20 novembre 2026
+
+Les pages publiques des plateformes confirment les listes de pistes des deux albums. Ce contrôle permet d'établir des correspondances de noms MP3 avec un UPC au niveau de la piste ; il ne prouve pas que le contenu sonore du fichier est le bon enregistrement ni que sa lecture HTTP fonctionne.
+
+### UPC 199955742094 — 30.000 GÉNOCIDES
+
+La fiche Amazon Music donne 8 titres : 30.000 GÉNOCIDES ; La vérité Te Nique ; Arrête Ou Tout Péte ; Extrêmement Grave ; Le Suivi ; Y'a Pas De Couille ici ; Tu Fous La Merde De Dingue ; Ça S'empire Pour Toi.
+
+Correspondances de noms MP3 avec les titres de la liste :
+- `30.000Genocides_PREVIEW_30S.mp3` → 30.000 GÉNOCIDES
+- `Laveritetenique_PREVIEW_30S.mp3` → La vérité Te Nique
+- `Arreteoutoutpete_PREVIEW_30S.mp3` → Arrête Ou Tout Péte
+- `ExtremementGrave_PREVIEW_30S.mp3` → Extrêmement Grave
+- `Lesuivi_PREVIEW_30S.mp3` → Le Suivi
+- `Yapasdecouilleici_PREVIEW_30S.mp3` → Y'a Pas De Couille ici
+- `Tufouslamerdededingue_PREVIEW_30S.mp3` → Tu Fous La Merde De Dingue
+- `Sasempirepourtoi_PREVIEW_30S.mp3` → Ça S'empire Pour Toi
+
+Statut : 8 correspondances de noms titre/fichier fortement concordantes avec la tracklist publique ; validation audio binaire et lecture en ligne encore requises. Source : https://music.amazon.com/albums/B0G1L112J4
+
+### UPC 199956222809 — NOUS Y SOMMES (TU M'AURAS JAMAIS)
+
+Qobuz et Apple Music confirment 9 pistes : THE DUNCES ; THE DUNCKES ; NOUS Y SOMMES ; ON TE LA FOUTU AU Q ; À MORT T'ES CHIENS ; PERSONNE SE MARRE ICI ; CA VA COMMENCER ; TU M'AURAS JAMAIS ; ÇA TUE PAS DU TOUT.
+
+Correspondances de noms MP3 identifiables :
+- `Dunckes_PREVIEW_30S.mp3` → THE DUNCKES (candidat fort ; orthographe à contrôler)
+- `Dunckes2_PREVIEW_30S.mp3` → THE DUNCES (candidat fort ; orthographe à contrôler)
+- `Nousysommes_PREVIEW_30S.mp3` → NOUS Y SOMMES
+- `ONTELAFOUTUAUQ_PREVIEW_30S.mp3` → ON TE LA FOUTU AU Q
+- `AMORTTESCHIENS_PREVIEW_30S.mp3` → À MORT T'ES CHIENS
+- `PERSONNESEMARREICI_PREVIEW_30S.mp3` → PERSONNE SE MARRE ICI
+- `CA_TUE_PAS_DU_TOUT_PREVIEW_30S.mp3` → ÇA TUE PAS DU TOUT
+
+Deux titres de la tracklist ne disposent pas encore d'un fichier clairement identifiable par nom : CA VA COMMENCER et TU M'AURAS JAMAIS. Ne pas leur attribuer arbitrairement `Calamite`, `NFLT` ou un autre fichier.
+
+Statut : 7 correspondances de noms plausibles, dont deux variantes THE DUNCES/THE DUNCKES à écouter/contrôler ; 2 titres sans fichier identifié. Sources : https://www.qobuz.com/lu-fr/album/nous-y-sommes-tu-mauras-jamais-nflt/jwb3qbbq16uga et https://music.apple.com/us/album/nous-y-sommes-tu-mauras-jamais/1852341797
+
+### Règle de mise en production
+
+Ces correspondances sont documentées au niveau piste/UPC mais ne sont pas ajoutées à `src/lib/previews.ts` : le composant actuel attend un seul extrait par UPC, alors que ces albums possèdent plusieurs pistes. Une évolution du lecteur multi-extraits par sortie devra être conçue et testée séparément avant publication. Les six associations déjà validées restent inchangées.
