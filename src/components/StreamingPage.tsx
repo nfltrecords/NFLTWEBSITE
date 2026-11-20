@@ -62,8 +62,7 @@ const copy = (locale: Locale) =>
         catalogueText:
           "Parcourez les 18 sorties officielles et retrouvez chaque titre sur votre plateforme préférée.",
         view: "Rechercher la sortie sur Apple Music",
-        note:
-          "Les liens de recherche ouvrent le catalogue du service ; ils ne garantissent pas qu'une page artiste ou chaque sortie soit disponible dans toutes les régions.",
+        note: "Les liens de recherche ouvrent le catalogue du service ; ils ne garantissent pas qu'une page artiste ou chaque sortie soit disponible dans toutes les régions.",
       }
     : {
         kicker: "NFLT RECORDS / LISTEN",
@@ -76,8 +75,7 @@ const copy = (locale: Locale) =>
         catalogueText:
           "Browse all 18 official releases and find each title on your preferred platform.",
         view: "Search this release on Apple Music",
-        note:
-          "Search links open each service's catalogue; they do not guarantee that an artist page or every release is available in all regions.",
+        note: "Search links open each service's catalogue; they do not guarantee that an artist page or every release is available in all regions.",
       };
 
 export function StreamingPage({ locale }: { locale: Locale }) {
@@ -138,7 +136,9 @@ export function StreamingPage({ locale }: { locale: Locale }) {
                 className="flex items-center justify-between gap-5 py-5 transition-colors hover:bg-card"
               >
                 <div className="flex min-w-0 items-center gap-4">
-                  <span className="text-xs text-muted-foreground">{String(index + 1).padStart(2, "0")}</span>
+                  <span className="text-xs text-muted-foreground">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
                   <img
                     src={releaseCovers[release.upc] ?? "/nflt-records-favicon.png"}
                     alt={`Pochette de ${release.title}`}
