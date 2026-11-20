@@ -19,6 +19,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
     ["shop", english ? "Shop" : "Boutique"],
     ["licensing", english ? "Music licensing" : "Licences musicales"],
     ["catalogue", english ? "Catalogue" : "Catalogue"],
+    ["streaming", english ? "Listen" : "Écouter"],
     ["artists", english ? "Artists" : "Artistes"],
     ["about", english ? "The label" : "Le label"],
     ["services", "Services"],
