@@ -158,7 +158,7 @@ export function ShopPage({ locale }: { locale: Locale }) {
                 <div className="shop-caption">
                   <span className="eyebrow">NFLT / NFLT RECORDS</span>
                   <h2>{release.title}</h2>
-                  <ReleasePrice upc={release.upc} />
+                  <ReleasePrice upc={release.upc} locale={locale} />
                   <p>UPC {release.upc}</p>
                 </div>
                 <Button type="button" className="editorial-action w-full" onClick={() => addToCart(release.upc)} disabled={
