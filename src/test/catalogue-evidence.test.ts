@@ -80,10 +80,11 @@ describe("Owner-reported original artwork evidence", () => {
     }
     expect(releasePriceCents("199955715135")).toBe(999);
     expect(releasePriceCents("199955742094")).toBe(1999);
+    expect(releasePriceCents("199956222809")).toBe(1999);
     for (const release of releases.filter(
-      (r) => !["199955715135", "199955742094"].includes(r.upc),
+      (r) => !["199955715135", "199955742094", "199956222809"].includes(r.upc),
     )) {
-      expect(releasePriceCents(release.upc)).toBeNull();
+      expect(releasePriceCents(release.upc)).toBe(999);
     }
   });
 });
