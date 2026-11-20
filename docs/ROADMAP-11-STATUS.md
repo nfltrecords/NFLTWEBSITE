@@ -5,7 +5,7 @@
 | N° | Chantier | État | Dépendance / prochaine étape |
 |---:|---|---|---|
 | 1 | Sortie de Lovable / portage du site | Préparation isolée | Les hooks de télémétrie du composant racine ont été retirés dans la branche. Le dossier de travail historique subsiste. Le build Cloudflare Workers Preview de la branche a réussi avec `npx wrangler preview`. La production reste inchangée. Aucun transfert de compte, migration de production ou déploiement n'a été effectué. |
-| 2 | Audio / extraits | Audit technique ajouté | 37 fichiers MP3 de préécoute sont présents dans le dépôt. Le script d'audit calcule désormais leurs empreintes SHA-256 et signale les doublons exacts ainsi que la plage de tailles ; le résultat doit être exécuté et examiné avant toute association titre/fichier. Aucun master n'est publié par cette vérification. |
+| 2 | Audio / extraits | Audit technique ajouté | 37 fichiers MP3 de préécoute sont présents. L'inventaire du dépôt confirme un doublon binaire exact et six associations UPC explicites ; 31 fichiers restent sans association validée. Les chemins publics et la lecture réelle sur le site restent à tester. |
 | 3 | Catalogue et pochettes | Partiellement vérifié | 18 sorties sont recensées. Certaines associations UPC/pochette et les preuves de dimensions originales doivent être confirmées avant remplacement définitif. |
 | 4 | Prix par sortie | Provisoire | Barème de référence : 9,99 € pour 1 piste, 14,99 € pour 5 pistes, 19,99 € pour 6 pistes ou plus. Les décomptes UPC individuels ne sont pas tous confirmés ; aucun checkout. |
 | 5 | Tableau de bord | Conception et sécurité préparées | SQL de fondation non appliqué ; matrice d'accès et plan de tests RLS documentés. Aucun écran connecté ni compte admin n'existe. Accès au projet Supabase et tests sur environnement de développement requis. |
@@ -20,7 +20,11 @@
 
 - Le dépôt contient 37 fichiers MP3 dans `public/assets/previews` et 18 pochettes JPG correspondant aux 18 UPC du catalogue.
 - Le script `scripts/audit-assets.mjs` vérifie désormais les doublons binaires exacts des MP3 (SHA-256) et la plage de tailles des fichiers, en plus du contrôle de présence des pochettes.
-- Ces contrôles ne valident pas à eux seuls la durée réelle, la qualité sonore, le contenu du morceau ni la correspondance entre chaque extrait et sa sortie. Aucune association automatique ni publication de master n'est faite.
+- Inventaire des 37 fichiers : 18 font 481 114 octets et 19 font 481 348 octets.
+- Un doublon binaire exact est confirmé par identité du blob Git : `CA_TUE_PAS_DU_TOUT_PREVIEW_30S.mp3` et `JAIPASBONQUELESGENSDUPAYSOULESGENSDUCOINSORGANISENTENTREEUXJEDETESTECAJAIHO3_PREVIEW_30S.mp3`. Ne pas supprimer automatiquement l'un des deux : confirmer d'abord le contenu attendu et l'usage éditorial.
+- `src/lib/previews.ts` ne référence que six fichiers avec association UPC explicitement confirmée. Les 31 autres fichiers restent volontairement non associés ; l'interface affiche un message de vérification pour ces sorties.
+- Les six chemins associés existent bien dans `public/assets/previews`. La vérification HTTP des fichiers sur le domaine public n'a pas pu être menée à terme depuis cette session ; la lecture réelle sur mobile et ordinateur n'est donc pas certifiée.
+- Les tailles et empreintes de dépôt ne prouvent ni la durée exacte, ni le contenu audio, ni la qualité sonore, ni l'association titre/fichier. Aucune association automatique, suppression de doublon ou publication de master n'est faite.
 
 ## Boutique — évolution du 20 novembre 2026
 
