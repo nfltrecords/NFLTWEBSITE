@@ -70,7 +70,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
             aria-label={english ? `Cart, ${cartCount} items` : `Panier, ${cartCount} article(s)`}
           >
             <ShoppingBag size={18} />
-            {english ? "Cart" : "Panier"} 
+            {english ? "Cart" : "Panier"}
             <span className="text-primary">({cartCount})</span>
           </Link>
         </nav>
