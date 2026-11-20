@@ -124,3 +124,12 @@ Statut : 7 correspondances de noms plausibles, dont deux variantes THE DUNCES/TH
 ### Règle de mise en production
 
 Ces correspondances sont documentées au niveau piste/UPC mais ne sont pas ajoutées à `src/lib/previews.ts` : le composant actuel attend un seul extrait par UPC, alors que ces albums possèdent plusieurs pistes. Une évolution du lecteur multi-extraits par sortie devra être conçue et testée séparément avant publication. Les six associations déjà validées restent inchangées.
+
+## Preuve DistroKid fournie en capture — UPC 821440674572
+
+Capture d'écran DistroKid « Release Details » fournie le 20 novembre 2026 :
+- DK UPC visible : `821440674572`.
+- Date d'upload visible : 7 février 2026.
+- La section « Streaming Services » affiche les logos des plateformes de diffusion.
+- Le titre de la sortie n'est pas visible dans la capture fournie ; cette capture seule ne permet donc pas de confirmer le nom de la sortie ni le statut de livraison effectif de chaque plateforme.
+- Dans l'inventaire catalogue antérieur, cet UPC est associé à `GR 4LIFE`. À confirmer sur l'en-tête de la fiche DistroKid ou sa page publique avant d'en faire une preuve titre/UPC définitive.
