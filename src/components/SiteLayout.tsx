@@ -67,12 +67,10 @@ export function SiteLayout({ children }: { children: ReactNode }) {
             to={publicPages.shop[locale]}
             hash="panier"
             className="inline-flex items-center gap-2"
-            aria-label={
-              english ? `Cart, ${cartCount} items` : `Panier, ${cartCount} article(s)`
-            }
+            aria-label={english ? `Cart, ${cartCount} items` : `Panier, ${cartCount} article(s)`}
           >
-            <ShoppingBag size={18} />{" "}
-            {english ? "Cart" : "Panier"}{" "}
+            <ShoppingBag size={18} />
+            {english ? "Cart" : "Panier"} 
             <span className="text-primary">({cartCount})</span>
           </Link>
         </nav>
