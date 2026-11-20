@@ -1,4 +1,5 @@
 import { readFileSync, readdirSync, existsSync } from "node:fs";
+import { createHash } from "node:crypto";
 import { join } from "node:path";
 
 const catalogue = readFileSync("src/lib/catalogue.ts", "utf8");
@@ -20,6 +21,8 @@ console.log(
       coverFiles: covers.length,
       missingCoverUPCs: missing,
       previewMP3Files: previews.length,
+      duplicatePreviewFiles,
+      previewSizeRangeBytes,
       routeFiles: routeFiles.length,
       testFiles: testFiles.length,
     },
