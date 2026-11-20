@@ -24,6 +24,8 @@ jobs:
         run: npm install --global npm@11.21.2
       - name: Install dependencies
         run: npm install --no-audit --no-fund
+      - name: Audit catalogue and preview assets
+        run: npm run audit:assets
       - name: Run tests
         run: npm test
       - name: Build (no deployment)
