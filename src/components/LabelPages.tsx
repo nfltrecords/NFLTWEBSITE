@@ -67,7 +67,7 @@ function ReleaseRow({
       >
         <span className="release-artist">NFLT</span>
         <h3 className="release-title">{release.title}</h3>
-        {showPrice ? <ReleasePrice upc={release.upc} /> : null}
+        {showPrice ? <ReleasePrice upc={release.upc} locale={locale} /> : null}
       </Link>
       <span className="release-upc">UPC {release.upc}</span>
       {showPrice ? (
@@ -344,7 +344,7 @@ export function ReleasePage({ release, locale = "fr" }: { release: Release; loca
                 </div>
               ))}
             </dl>
-            <ReleasePrice upc={release.upc} />
+            <ReleasePrice upc={release.upc} locale={locale} />
             <div className="mt-6">
               <Button
                 type="button"
