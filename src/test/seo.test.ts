@@ -16,6 +16,7 @@ describe("Public bilingual SEO rules", () => {
       "/radio",
       "/boutique",
       "/licences-musicales",
+      "/ecouter",
     ]);
     expect(
       pageHead("home").links.find((link) => "hrefLang" in link && link.hrefLang === "x-default")
@@ -27,7 +28,7 @@ describe("Public bilingual SEO rules", () => {
     expect(Object.values(publicPages).flatMap((page) => [page.fr, page.en])).not.toContain(
       "/messages",
     );
-    expect(Object.keys(publicPages)).toHaveLength(12);
+    expect(Object.keys(publicPages)).toHaveLength(13);
   });
 
   it("uses a self-canonical and reciprocal French and English alternatives", () => {
