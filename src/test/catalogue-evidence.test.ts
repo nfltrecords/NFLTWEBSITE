@@ -52,15 +52,24 @@ describe("Owner-reported original artwork evidence", () => {
     expect(releaseCovers["199955742094"]).toContain("cover-199955742094.jpg");
     expect(Object.keys(releaseCovers)).toHaveLength(18);
   });
-  it("retains exactly the 18 canonical UPCs without assigning count evidence from filenames", () => {
+  it("retains all 18 canonical UPCs but assigns track-count evidence only where confirmed", () => {
     expect(review.releases.map((release) => release.upc)).toEqual(
       releases.map((release) => release.upc),
     );
     expect(review.releases).toHaveLength(18);
-    expect(Object.keys(verifiedReleaseTrackCounts)).toHaveLength(18);
-    for (const release of review.releases) {
-      expect(release.trackCount).toBeNull();
-      expect(releasePriceCents(release.upc)).not.toBeNull();
+    expect(verifiedReleaseTrackCounts).toEqual({
+      "199955715135": 1,
+      "199955742094": 8,
+    });
+    for (const release of releases) {
+      if (release.upc === "199955715135") expect(verifiedReleaseTrackCounts[release.upc]).toBe(1);
+      else if (release.upc === "199955742094") expect(verifiedReleaseTrackCounts[release.upc]).toBe(8);
+      else expect(verifiedReleaseTrackCounts[release.upc]).toBeUndefined();
+    }
+    expect(releasePriceCents("199955715135")).toBe(999);
+    expect(releasePriceCents("199955742094")).toBe(1999);
+    for (const release of releases.filter((r) => !["199955715135", "199955742094"].includes(r.upc))) {
+      expect(releasePriceCents(release.upc)).toBeNull();
     }
   });
 });
