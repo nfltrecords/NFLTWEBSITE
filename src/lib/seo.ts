@@ -58,6 +58,7 @@ export const publicPages = {
   radio: { fr: "/radio", en: "/en/radio" },
   shop: { fr: "/boutique", en: "/en/shop" },
   licensing: { fr: "/licences-musicales", en: "/en/music-licensing" },
+  streaming: { fr: "/ecouter", en: "/en/listen" },
 } as const;
 export type PublicPage = keyof typeof publicPages;
 export const groupOrganization = {
