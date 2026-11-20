@@ -46,10 +46,16 @@ describe("Owner-reported original artwork evidence", () => {
       );
     }
   });
-  it("integrates the two owner-confirmed originals for their stated UPCs", () => {
-    expect(review.packageAudit.unverifiedUPCs).toEqual([]);
-    expect(releaseCovers["199955715135"]).toContain("cover-199955715135.jpg");
-    expect(releaseCovers["199955742094"]).toContain("cover-199955742094.jpg");
+  it("keeps two owner-confirmed originals pending until their exact binaries are integrated", () => {
+    expect(review.packageAudit.unverifiedUPCs).toEqual(["199955715135", "199955742094"]);
+    expect(review.packageAudit.ownerConfirmedIntegratedUPCs).toEqual([]);
+    expect(review.packageAudit.totalIntegratedCount).toBe(16);
+    for (const upc of ["199955715135", "199955742094"]) {
+      const release = review.releases.find((item) => item.upc === upc);
+      expect(release?.ownerConfirmedArtwork?.integrated).toBe(false);
+      expect(release?.ownerConfirmedArtwork?.integrationStatus).toBe("pending-exact-original-binary-replacement");
+      expect(releaseCovers[upc]).toContain(`cover-${upc}.jpg`);
+    }
     expect(Object.keys(releaseCovers)).toHaveLength(18);
   });
   it("retains all 18 canonical UPCs but assigns track-count evidence only where confirmed", () => {
