@@ -11,14 +11,20 @@
       "trackCountStatus": "awaiting-UPC-specific-tracklist-evidence",
       "publicPrice": null,
       "artworkFile": "07-the-luxury-the-highest-unequivocal.jpg",
-      "dimensions": [250, 250],
+      "dimensions": [
+        250,
+        250
+      ],
       "bytes": 19310,
       "hdOriginalStatus": "received-1536-square-screenshot-verified-integrated",
       "existingArtworkPreserved": false,
       "dimensionsMeaning": "existing legacy ZIP image; not the owner-reported HD source dimensions",
       "suppliedArtwork": {
         "originalFilename": "3000x3000-10608196--DB951BCB-559B-40BC-85BA12A7D650BEF8--0--443976--IMG0680.jpg",
-        "dimensions": [1536, 1536],
+        "dimensions": [
+          1536,
+          1536
+        ],
         "bytes": 141395,
         "sha256": "404c21b98a646431c3a31669da1d516ade005c7b1e52830fe670e8b996ba3105",
         "evidenceScreenshot": "Screenshot_20261114-143026_Chrome.jpg",
@@ -33,14 +39,20 @@
       "trackCountStatus": "awaiting-UPC-specific-tracklist-evidence",
       "publicPrice": null,
       "artworkFile": "10-0-plus.jpg",
-      "dimensions": [250, 250],
+      "dimensions": [
+        250,
+        250
+      ],
       "bytes": 12104,
       "hdOriginalStatus": "received-1536-square-screenshot-verified-integrated",
       "existingArtworkPreserved": false,
       "dimensionsMeaning": "existing legacy ZIP image; not the owner-reported HD source dimensions",
       "suppliedArtwork": {
         "originalFilename": "3000x3000-10608196--2AA7AF01-8F41-4E39-BB56A7C0E3B684A1--mod-1770485153.jpg",
-        "dimensions": [1536, 1536],
+        "dimensions": [
+          1536,
+          1536
+        ],
         "bytes": 60217,
         "sha256": "dac4613928340368abfc42d1362408cc1495599a2f7b3d1796292a97e8aadbb1",
         "evidenceScreenshot": "Screenshot_20261114-141840_Chrome.jpg",
@@ -55,14 +67,20 @@
       "trackCountStatus": "awaiting-UPC-specific-tracklist-evidence",
       "publicPrice": null,
       "artworkFile": "09-nous-y-sommes.jpg",
-      "dimensions": [250, 250],
+      "dimensions": [
+        250,
+        250
+      ],
       "bytes": 31504,
       "hdOriginalStatus": "received-1536-square-screenshot-verified-integrated",
       "existingArtworkPreserved": false,
       "dimensionsMeaning": "existing legacy ZIP image; not the owner-reported HD source dimensions",
       "suppliedArtwork": {
         "originalFilename": "3000x3000-10608196--82464C35-C27E-4C9E-B770F2D4F94C7230--0--1241491--IMG0070.jpg",
-        "dimensions": [1536, 1536],
+        "dimensions": [
+          1536,
+          1536
+        ],
         "bytes": 400131,
         "sha256": "a7c80e6d78aa466d19a3e5e86a8a308fc9797f9b2c69b558fc08ecf70eb8c03a",
         "evidenceScreenshot": "Screenshot_20261114-135730_Chrome.jpg",
@@ -77,14 +95,20 @@
       "trackCountStatus": "awaiting-UPC-specific-tracklist-evidence",
       "publicPrice": null,
       "artworkFile": "05-neverfake-chapter-one.jpg",
-      "dimensions": [250, 250],
+      "dimensions": [
+        250,
+        250
+      ],
       "bytes": 24229,
-      "hdOriginalStatus": "received-1920-square-owner-confirmed-integrated",
+      "hdOriginalStatus": "received-1920-square-owner-confirmed-pending-integration",
       "existingArtworkPreserved": false,
       "dimensionsMeaning": "existing legacy ZIP image; not the owner-reported HD source dimensions",
       "suppliedArtwork": {
         "originalFilename": "3000x3000-10608196--BB44980B-1E1A-47C6-A0E415360FCB51CC--0--262902--IMG2311.jpg",
-        "dimensions": [1536, 1536],
+        "dimensions": [
+          1536,
+          1536
+        ],
         "bytes": 245413,
         "sha256": "87fdb815b11f0057bc6e14864804678a4af2432e6d6e36fd1243d4ae72b2e9fe",
         "evidenceScreenshot": "not located in extracted screenshot set",
@@ -94,12 +118,16 @@
       },
       "ownerConfirmedArtwork": {
         "originalFilename": "3000x3000-10608196--BB44980B-1E1A-47C6-A0E415360FCB51CC--0--262902--IMG2311.jpg",
-        "dimensions": [1920, 1920],
+        "dimensions": [
+          1920,
+          1920
+        ],
         "bytes": 385134,
         "sha256": "9db9b748b9d5248eed12890eb2a579857d7805630d43a9737703ff242f4a3552",
         "evidence": "owner attached this file directly in the Lovable thread on 2026-11-14 and explicitly stated this UPC; cover title visually matches the canonical title",
         "mappingStatus": "owner-confirmed-UPC-and-visible-title-match",
-        "integrated": true
+        "integrated": false,
+        "integrationStatus": "pending-exact-original-binary-replacement"
       }
     },
     {
@@ -109,14 +137,20 @@
       "trackCountStatus": "awaiting-UPC-specific-tracklist-evidence",
       "publicPrice": null,
       "artworkFile": "08-30000-genocides.jpg",
-      "dimensions": [250, 250],
+      "dimensions": [
+        250,
+        250
+      ],
       "bytes": 20866,
-      "hdOriginalStatus": "received-1920-square-owner-confirmed-integrated",
+      "hdOriginalStatus": "received-1920-square-owner-confirmed-pending-integration",
       "existingArtworkPreserved": false,
       "dimensionsMeaning": "existing legacy ZIP image; not the owner-reported HD source dimensions",
       "suppliedArtwork": {
         "originalFilename": "3000x3000-10608196--FECC901C-D13F-46EF-A31A3746312C0B99--0--786111--IMG00060.jpg",
-        "dimensions": [1536, 1536],
+        "dimensions": [
+          1536,
+          1536
+        ],
         "bytes": 255585,
         "sha256": "cafb70b9e2d1d9e4a25e9c94eec02bfc066c18f7e1a0fa0369b458cf66ec22b4",
         "evidenceScreenshot": "Screenshot_20261114-141553_Spotify.jpg",
@@ -126,12 +160,16 @@
       },
       "ownerConfirmedArtwork": {
         "originalFilename": "3000x3000-10608196--FECC901C-D13F-46EF-A31A3746312C0B99--0--786111--IMG00060.jpg",
-        "dimensions": [1920, 1920],
+        "dimensions": [
+          1920,
+          1920
+        ],
         "bytes": 365803,
         "sha256": "c1dca0ee0633809e272791aa087a5405afe2b2eaa80a6cf0029c1484a2918ae5",
         "evidence": "owner attached this file directly in the Lovable thread on 2026-11-14 and explicitly stated this UPC; cover title visually matches the canonical title",
         "mappingStatus": "owner-confirmed-UPC-and-visible-title-match",
-        "integrated": true
+        "integrated": false,
+        "integrationStatus": "pending-exact-original-binary-replacement"
       }
     },
     {
@@ -141,14 +179,20 @@
       "trackCountStatus": "awaiting-UPC-specific-tracklist-evidence",
       "publicPrice": null,
       "artworkFile": "04-dilemma-radio-edit.jpg",
-      "dimensions": [250, 250],
+      "dimensions": [
+        250,
+        250
+      ],
       "bytes": 23888,
       "hdOriginalStatus": "received-1536-square-screenshot-verified-integrated",
       "existingArtworkPreserved": false,
       "dimensionsMeaning": "existing legacy ZIP image; not the owner-reported HD source dimensions",
       "suppliedArtwork": {
         "originalFilename": "3000x3000-10608196--B976ABE1-A36B-4D33-93DE1E9EC50495A8--0--4004023--DILEMMA.jpg",
-        "dimensions": [1536, 1536],
+        "dimensions": [
+          1536,
+          1536
+        ],
         "bytes": 223335,
         "sha256": "5ecb61966ab533d5d42de94b1f2593ce9fd7d9ab75a88e4bb13c3802f18849cd",
         "evidenceScreenshot": "Screenshot_20261114-132449_Chrome.jpg",
@@ -163,14 +207,20 @@
       "trackCountStatus": "awaiting-UPC-specific-tracklist-evidence",
       "publicPrice": null,
       "artworkFile": "06-hustle-grind-radio-edit.jpg",
-      "dimensions": [250, 250],
+      "dimensions": [
+        250,
+        250
+      ],
       "bytes": 21374,
       "hdOriginalStatus": "received-1536-square-screenshot-verified-integrated",
       "existingArtworkPreserved": false,
       "dimensionsMeaning": "existing legacy ZIP image; not the owner-reported HD source dimensions",
       "suppliedArtwork": {
         "originalFilename": "3000x3000-10608196--F2FC9F35-BEA4-4388-89DAFEB3BF2AC250--0--1586291--IMG0686.jpg",
-        "dimensions": [1536, 1536],
+        "dimensions": [
+          1536,
+          1536
+        ],
         "bytes": 174761,
         "sha256": "66aa2d9c7c769528c95b4f6ca2e4cf13819d891de82e24ee03a677e269558cb9",
         "evidenceScreenshot": "Screenshot_20261114-133340_Chrome.jpg",
@@ -185,14 +235,20 @@
       "trackCountStatus": "awaiting-UPC-specific-tracklist-evidence",
       "publicPrice": null,
       "artworkFile": "15-the-dopest-collection-vol-1.jpg",
-      "dimensions": [250, 250],
+      "dimensions": [
+        250,
+        250
+      ],
       "bytes": 32038,
       "hdOriginalStatus": "received-1536-square-screenshot-verified-integrated",
       "existingArtworkPreserved": false,
       "dimensionsMeaning": "existing legacy ZIP image; not the owner-reported HD source dimensions",
       "suppliedArtwork": {
         "originalFilename": "3000x3000-10608196--E6FA42FD-C39F-431C-9FD69B51B1AD1652--0--346776--IMG1927.jpg",
-        "dimensions": [1536, 1536],
+        "dimensions": [
+          1536,
+          1536
+        ],
         "bytes": 363567,
         "sha256": "7600dee2fbfa6bcf9efe6b32d68113f50520755438987b480c9513103687568b",
         "evidenceScreenshot": "Screenshot_20261114-142541_Chrome.jpg",
@@ -207,14 +263,20 @@
       "trackCountStatus": "awaiting-UPC-specific-tracklist-evidence",
       "publicPrice": null,
       "artworkFile": "16-in-my-party.jpg",
-      "dimensions": [250, 250],
+      "dimensions": [
+        250,
+        250
+      ],
       "bytes": 17322,
       "hdOriginalStatus": "received-1536-square-screenshot-verified-integrated",
       "existingArtworkPreserved": false,
       "dimensionsMeaning": "existing legacy ZIP image; not the owner-reported HD source dimensions",
       "suppliedArtwork": {
         "originalFilename": "3000x3000-10608196--4C2E4059-6BB0-4BE9-B2A630D47F0F6FF7--0--863974--Designsanstitre.jpg",
-        "dimensions": [1536, 1536],
+        "dimensions": [
+          1536,
+          1536
+        ],
         "bytes": 153746,
         "sha256": "9748d4a58e1791fd29daee8cdd79112495b4f23a1b137c04aa1c720be459f267",
         "evidenceScreenshot": "Screenshot_20261114-133605_Chrome.jpg",
@@ -229,14 +291,20 @@
       "trackCountStatus": "awaiting-UPC-specific-tracklist-evidence",
       "publicPrice": null,
       "artworkFile": "17-the-dopest-collection-vol-2.jpg",
-      "dimensions": [250, 250],
+      "dimensions": [
+        250,
+        250
+      ],
       "bytes": 37604,
       "hdOriginalStatus": "received-1536-square-screenshot-verified-integrated",
       "existingArtworkPreserved": false,
       "dimensionsMeaning": "existing legacy ZIP image; not the owner-reported HD source dimensions",
       "suppliedArtwork": {
         "originalFilename": "3000x3000-10608196--9C9793ED-40D8-4281-A2C6CC25D703EAF5--0--575107--IMG2122.jpg",
-        "dimensions": [1536, 1536],
+        "dimensions": [
+          1536,
+          1536
+        ],
         "bytes": 575440,
         "sha256": "8b7a7c539a12ab55594978c9f5bcfd51fb098941970c19d1adb34020ca43c11f",
         "evidenceScreenshot": "Screenshot_20261114-142731_Chrome.jpg",
@@ -251,14 +319,20 @@
       "trackCountStatus": "awaiting-UPC-specific-tracklist-evidence",
       "publicPrice": null,
       "artworkFile": "18-ma-luxure.jpg",
-      "dimensions": [250, 250],
+      "dimensions": [
+        250,
+        250
+      ],
       "bytes": 41121,
       "hdOriginalStatus": "received-1536-square-screenshot-verified-integrated",
       "existingArtworkPreserved": false,
       "dimensionsMeaning": "existing legacy ZIP image; not the owner-reported HD source dimensions",
       "suppliedArtwork": {
         "originalFilename": "3000x3000-10608196--33F44C2E-6C88-428E-B4319C53576B5B84--0--3262472--63CB8699E6DF4BBEB92D60B4A476A52C.jpg",
-        "dimensions": [1536, 1536],
+        "dimensions": [
+          1536,
+          1536
+        ],
         "bytes": 401390,
         "sha256": "ec25f090e355d42577ff560a8edfbed77aba15009f2c3f25475b480059f0e0af",
         "evidenceScreenshot": "Screenshot_20261114-134125_Chrome.jpg",
@@ -273,14 +347,20 @@
       "trackCountStatus": "awaiting-UPC-specific-tracklist-evidence",
       "publicPrice": null,
       "artworkFile": "14-hot.jpg",
-      "dimensions": [250, 250],
+      "dimensions": [
+        250,
+        250
+      ],
       "bytes": 33128,
       "hdOriginalStatus": "received-1536-square-screenshot-verified-integrated",
       "existingArtworkPreserved": false,
       "dimensionsMeaning": "existing legacy ZIP image; not the owner-reported HD source dimensions",
       "suppliedArtwork": {
         "originalFilename": "3000x3000-10608196--DD48975D-3B14-4617-B4A111977108EA79--0--571531--IMG2051.jpg",
-        "dimensions": [1536, 1536],
+        "dimensions": [
+          1536,
+          1536
+        ],
         "bytes": 434068,
         "sha256": "515044f6c942767354489d11a6cb2d2f4ca9f87ad865bddafec163a2bba9a401",
         "evidenceScreenshot": "Screenshot_20261114-133143_Chrome.jpg",
@@ -295,14 +375,20 @@
       "trackCountStatus": "awaiting-UPC-specific-tracklist-evidence",
       "publicPrice": null,
       "artworkFile": "12-836-722.jpg",
-      "dimensions": [250, 250],
+      "dimensions": [
+        250,
+        250
+      ],
       "bytes": 34187,
       "hdOriginalStatus": "received-1536-square-screenshot-verified-integrated",
       "existingArtworkPreserved": false,
       "dimensionsMeaning": "existing legacy ZIP image; not the owner-reported HD source dimensions",
       "suppliedArtwork": {
         "originalFilename": "3000x3000-10608196--AC135F1F-BA4F-4FA4-B598423F28B2C258--0--562337--IMG0152.jpg",
-        "dimensions": [1536, 1536],
+        "dimensions": [
+          1536,
+          1536
+        ],
         "bytes": 459698,
         "sha256": "2dd97b8c4515ff1c020545aa459e66420057b0affdeaadff66e8868b463a1fde",
         "evidenceScreenshot": "Screenshot_20261114-132119_Chrome.jpg",
@@ -317,14 +403,20 @@
       "trackCountStatus": "awaiting-UPC-specific-tracklist-evidence",
       "publicPrice": null,
       "artworkFile": "13-transcendence-natural-truths.jpg",
-      "dimensions": [250, 250],
+      "dimensions": [
+        250,
+        250
+      ],
       "bytes": 42065,
       "hdOriginalStatus": "received-1536-square-screenshot-verified-integrated",
       "existingArtworkPreserved": false,
       "dimensionsMeaning": "existing legacy ZIP image; not the owner-reported HD source dimensions",
       "suppliedArtwork": {
         "originalFilename": "3000x3000-10608196--9AF0F723-66F1-41D7-AE961A557B940854--0--590674--IMG1886.jpg",
-        "dimensions": [1536, 1536],
+        "dimensions": [
+          1536,
+          1536
+        ],
         "bytes": 538664,
         "sha256": "fdcd2bf4d2cdb2d633c4c6950acb130b01d542a8f22d32cc59deabd6a5df653a",
         "evidenceScreenshot": "Screenshot_20261114-143326_Chrome.jpg",
@@ -339,14 +431,20 @@
       "trackCountStatus": "awaiting-UPC-specific-tracklist-evidence",
       "publicPrice": null,
       "artworkFile": "11-ma-luxure-2-mvp.jpg",
-      "dimensions": [185, 185],
+      "dimensions": [
+        185,
+        185
+      ],
       "bytes": 16813,
       "hdOriginalStatus": "received-1536-square-screenshot-verified-integrated",
       "existingArtworkPreserved": false,
       "dimensionsMeaning": "existing legacy ZIP image; not the owner-reported HD source dimensions",
       "suppliedArtwork": {
         "originalFilename": "3000x3000-10608196--FC7EF43B-99F7-44B6-8AB2EB765C7E195E--0--2634604--BC73B6840CBD4B9995FC6E21D362DE76.jpg",
-        "dimensions": [1536, 1536],
+        "dimensions": [
+          1536,
+          1536
+        ],
         "bytes": 404233,
         "sha256": "e142d9b1d49979de51ea8c3b9be018b7e9681da8292c7be0c10150a266a86169",
         "evidenceScreenshot": "Screenshot_20261114-134403_Chrome.jpg",
@@ -361,14 +459,20 @@
       "trackCountStatus": "awaiting-UPC-specific-tracklist-evidence",
       "publicPrice": null,
       "artworkFile": "03-nflt-social-community.jpg",
-      "dimensions": [250, 250],
+      "dimensions": [
+        250,
+        250
+      ],
       "bytes": 36815,
       "hdOriginalStatus": "received-1536-square-screenshot-verified-integrated",
       "existingArtworkPreserved": false,
       "dimensionsMeaning": "existing legacy ZIP image; not the owner-reported HD source dimensions",
       "suppliedArtwork": {
         "originalFilename": "3000x3000-10608196--2C38D313-6B16-41ED-9E72DEDCB1CB0E66--0--3256552--IMG0207.jpg",
-        "dimensions": [1536, 1536],
+        "dimensions": [
+          1536,
+          1536
+        ],
         "bytes": 471257,
         "sha256": "4225a77ddd25eae5f6ef5a3587f421f551bed320fbef93ff94604c4a44597b62",
         "evidenceScreenshot": "Screenshot_20261114-134544_Chrome.jpg",
@@ -383,14 +487,20 @@
       "trackCountStatus": "awaiting-UPC-specific-tracklist-evidence",
       "publicPrice": null,
       "artworkFile": "02-lecran-vient-de-chez-nous.jpg",
-      "dimensions": [250, 250],
+      "dimensions": [
+        250,
+        250
+      ],
       "bytes": 16540,
       "hdOriginalStatus": "received-1536-square-screenshot-verified-integrated",
       "existingArtworkPreserved": false,
       "dimensionsMeaning": "existing legacy ZIP image; not the owner-reported HD source dimensions",
       "suppliedArtwork": {
         "originalFilename": "3000x3000-10608196--FD00DD1F-AC84-470A-8273199FC6CDC160--0--209648--LESONPOURRI.jpg",
-        "dimensions": [1536, 1536],
+        "dimensions": [
+          1536,
+          1536
+        ],
         "bytes": 134144,
         "sha256": "75d8aedee8b41cd209d00f068704fd1b639309fa15d701edb189ded862cc06ff",
         "evidenceScreenshot": "Screenshot_20261114-133817_Chrome.jpg",
@@ -405,14 +515,20 @@
       "trackCountStatus": "awaiting-UPC-specific-tracklist-evidence",
       "publicPrice": null,
       "artworkFile": "01-gr-4life.jpg",
-      "dimensions": [250, 250],
+      "dimensions": [
+        250,
+        250
+      ],
       "bytes": 21647,
       "hdOriginalStatus": "received-1536-square-screenshot-verified-integrated",
       "existingArtworkPreserved": false,
       "dimensionsMeaning": "existing legacy ZIP image; not the owner-reported HD source dimensions",
       "suppliedArtwork": {
         "originalFilename": "3000x3000-10608196--7969BEFE-F5E9-4A79-BA14BDFC5D81E044--0--1566452--GR4LIFE.jpg",
-        "dimensions": [1536, 1536],
+        "dimensions": [
+          1536,
+          1536
+        ],
         "bytes": 179237,
         "sha256": "3ec438cabf4fc554695d0a681ffa82826eca343b7046f26ca603a2aed1329b69",
         "evidenceScreenshot": "Screenshot_20261114-132815_Chrome.jpg",
@@ -423,13 +539,21 @@
   ],
   "ownerReportedOriginals": {
     "count": 18,
-    "dimensions": [3000, 3000],
+    "dimensions": [
+      3000,
+      3000
+    ],
     "format": "JPG",
     "locationAsReported": "owner ChatGPT conversation on 2026-11-14",
     "releaseScreenshotsReported": true,
     "projectAccessAudit": {
-      "mountedLocationsChecked": ["/mnt/user-uploads/", "/tmp/user-uploads/"],
-      "filesListed": ["NFLT-18-covers-and-mapping.zip"],
+      "mountedLocationsChecked": [
+        "/mnt/user-uploads/",
+        "/tmp/user-uploads/"
+      ],
+      "filesListed": [
+        "NFLT-18-covers-and-mapping.zip"
+      ],
       "result": "18 distinct original JPG binaries and 19 screenshots now readable; measured 1536x1536; 16 UPC associations verified, 2 pending; no complete UPC track counts proven"
     },
     "previouslyOmittedOriginal": {
@@ -445,13 +569,19 @@
     "originalCount": 18,
     "upcCopyCount": 18,
     "screenshotCount": 19,
-    "measuredDimensions": [1536, 1536],
+    "measuredDimensions": [
+      1536,
+      1536
+    ],
     "byteIdenticalOriginalCopies": true,
     "integratedCount": 16,
-    "unverifiedUPCs": [],
+    "unverifiedUPCs": [
+      "199955715135",
+      "199955742094"
+    ],
     "trackCountEvidence": "Vault file screens show track position, not complete release count; Spotify screen is partial and has no UPC; unscoped overlapping file lists do not establish release membership or count",
     "readmeDiscrepancy": "README mentions 36 audio files and audio-inventory.csv, but no audio entries are present in this ZIP",
-    "ownerConfirmedIntegratedUPCs": ["199955715135", "199955742094"],
-    "totalIntegratedCount": 18
+    "ownerConfirmedIntegratedUPCs": [],
+    "totalIntegratedCount": 16
   }
 }
