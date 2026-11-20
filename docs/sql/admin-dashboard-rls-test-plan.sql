@@ -22,7 +22,7 @@
 -- 2. ordinary authenticated user: no rows visible; writes rejected by RLS.
 -- 3. operations/sales/read_only: no rows visible; writes rejected by RLS.
 -- 4. admin: CRUD on organizations, people, relationships, projects, services,
---    project_services; SELECT on user_roles and audit_events; INSERT audit_events.
+--    project_services; SELECT on user_roles and audit_events; no audit-event writes.
 -- 5. admin cannot INSERT/UPDATE/DELETE nflt_user_roles using authenticated role.
 -- 6. non-admin cannot EXECUTE public.nflt_is_admin() only if explicitly revoked;
 --    current draft grants EXECUTE to authenticated, but the function returns false.
@@ -36,7 +36,7 @@
 -- Additional security review before approval:
 -- - Verify SECURITY DEFINER owner, search_path, function grants, and RLS bypass behavior.
 -- - Confirm no untrusted user can create/update/delete rows in nflt_user_roles.
--- - Confirm audit events cannot be forged to impersonate another actor.
+-- - Confirm audit events cannot be forged by authenticated users; only trusted server-side service_role tooling may insert them.
 -- - Confirm policies for storage buckets and object paths before storing documents/audio.
 -- - Confirm indexes for every foreign key and policy predicate.
 -- - Verify backups, retention, deletion, export and recovery procedures.
