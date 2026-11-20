@@ -60,7 +60,7 @@ const copy = (locale: Locale) =>
         catalogue: "Les 18 sorties du catalogue",
         catalogueText:
           "Parcourez les 18 sorties officielles et retrouvez chaque titre sur votre plateforme préférée.",
-        view: "Voir la fiche catalogue",
+        view: "Rechercher la sortie sur Apple Music",
         note:
           "Les liens de recherche ouvrent le catalogue du service ; ils ne garantissent pas qu'une page artiste ou chaque sortie soit disponible dans toutes les régions.",
       }
@@ -74,7 +74,7 @@ const copy = (locale: Locale) =>
         catalogue: "The 18 catalogue releases",
         catalogueText:
           "Browse all 18 official releases and find each title on your preferred platform.",
-        view: "View catalogue entry",
+        view: "Search this release on Apple Music",
         note:
           "Search links open each service's catalogue; they do not guarantee that an artist page or every release is available in all regions.",
       };
@@ -131,7 +131,7 @@ export function StreamingPage({ locale }: { locale: Locale }) {
             {releases.map((release, index) => (
               <a
                 key={release.upc}
-                href={`https://music.apple.com/us/artist/nflt/1253527531`}
+                href={`https://music.apple.com/us/search?term=${encodeURIComponent(release.title)}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-between gap-5 py-5 transition-colors hover:bg-card"
