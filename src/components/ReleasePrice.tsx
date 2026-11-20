@@ -11,7 +11,9 @@ export function ReleasePrice({ upc, locale = "fr" }: { upc: string; locale?: "fr
   }
   return (
     <span className="mt-3 block font-display text-2xl text-primary" data-release-price={upc}>
-      <span className="sr-only">{locale === "fr" ? "Prix indicatif : " : "Indicative price: "}</span>{" "}
+      <span className="sr-only">
+        {locale === "fr" ? "Prix indicatif : " : "Indicative price: "}
+      </span>{" "}
       <span aria-hidden="true">{formatShopPrice(cents)}</span>
     </span>
   );
