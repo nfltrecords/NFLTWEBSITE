@@ -132,7 +132,8 @@ grant select, insert, update, delete on public.nflt_organizations, public.nflt_p
   public.nflt_relationships, public.nflt_projects, public.nflt_services,
   public.nflt_project_services to authenticated;
 grant select on public.nflt_user_roles, public.nflt_audit_events to authenticated;
-grant insert on public.nflt_audit_events to authenticated;
+-- Audit events are written only by trusted server-side service_role tooling.
+-- Authenticated administrators may read the audit log but cannot create or forge entries.
 grant all on public.nflt_organizations, public.nflt_people, public.nflt_relationships,
   public.nflt_projects, public.nflt_services, public.nflt_project_services,
   public.nflt_user_roles, public.nflt_audit_events to service_role;
@@ -153,8 +154,6 @@ create policy nflt_user_roles_admin_read on public.nflt_user_roles
   for select to authenticated using (public.nflt_is_admin());
 create policy nflt_audit_events_admin_read on public.nflt_audit_events
   for select to authenticated using (public.nflt_is_admin());
-create policy nflt_audit_events_admin_insert on public.nflt_audit_events
-  for insert to authenticated with check (public.nflt_is_admin());
 
 revoke all on function public.nflt_is_admin() from public, anon;
 grant execute on function public.nflt_is_admin() to authenticated, service_role;
