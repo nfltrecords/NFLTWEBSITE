@@ -11,6 +11,9 @@ const covers = readdirSync(coverDir).filter(
   (name) => name.startsWith("cover-") && name.endsWith(".jpg"),
 );
 const previews = readdirSync(previewDir).filter((name) => name.toLowerCase().endsWith(".mp3"));
+const previewMapSource = readFileSync("src/lib/previews.ts", "utf8");
+const mappedPreviewPaths = [...previewMapSource.matchAll(/: "(\\/assets\\/previews\\/[^"]+\\.mp3)"/g)].map((match) => match[1]);
+const missingMappedPreviewFiles = mappedPreviewPaths.filter((src) => !existsSync(join("public", src.slice(1))));
 
 const previewHashes = new Map();
 for (const name of previews) {
@@ -37,6 +40,8 @@ console.log(
       coverFiles: covers.length,
       missingCoverUPCs: missing,
       previewMP3Files: previews.length,
+      mappedPreviewFiles: mappedPreviewPaths.length,
+      missingMappedPreviewFiles,
       duplicatePreviewFiles,
       previewSizeRangeBytes,
       routeFiles: routeFiles.length,
@@ -47,4 +52,6 @@ console.log(
   ),
 );
 
-if (missing.length || covers.length !== upcs.length) process.exitCode = 1;
+if (missing.length || covers.length !== upcs.length || missingMappedPreviewFiles.length) {
+  process.exitCode = 1;
+}
