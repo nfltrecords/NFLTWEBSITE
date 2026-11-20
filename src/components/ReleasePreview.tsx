@@ -13,9 +13,7 @@ export function ReleasePreview({ upc, locale = "fr" }: { upc: string; locale?: "
           preload="none"
           className="w-full"
           aria-label={
-            locale === "fr"
-              ? "Écouter un extrait de 30 secondes"
-              : "Listen to a 30-second preview"
+            locale === "fr" ? "Écouter un extrait de 30 secondes" : "Listen to a 30-second preview"
           }
         >
           <source src={src} type="audio/mpeg" />
