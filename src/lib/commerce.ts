@@ -24,12 +24,29 @@ export const shopPriceTiers = [
 ] as const;
 export const formatShopPrice = (cents: number) => `${(cents / 100).toFixed(2).replace(".", ",")} €`;
 
-// Only publish a release price when its format is supported by explicit owner-provided evidence.
-// The owner confirmed #NEVERFAKELIKETHEM as a single and 30.000 GÉNOCIDES as an 8-track release.
-// All other release formats remain unverified; do not infer a single from missing tracklist data.
-export const verifiedReleaseTrackCounts: Readonly<Record<string, number>> = {
+// Track counts and resulting prices below are provisional catalogue pricing.
+// Singles are provisionally priced at 9.99 EUR; the two multi-track albums use
+// the owner-supplied album tier. Confirm final tracklists and delivered masters
+// UPC by UPC before opening checkout.
+export const provisionalReleaseTrackCounts: Readonly<Record<string, number>> = {
+  "199955740199": 1,
+  "199956554184": 1,
+  "199956222809": 9,
   "199955715135": 1,
   "199955742094": 8,
+  "199955701558": 1,
+  "199955715203": 1,
+  "199751511160": 1,
+  "199751512501": 1,
+  "199751514697": 1,
+  "199751613871": 1,
+  "199751508283": 1,
+  "199751168234": 1,
+  "199751170992": 1,
+  "199956557857": 1,
+  "199954147302": 1,
+  "199951252436": 1,
+  "821440674572": 1,
 };
 export function priceForTrackCount(count: number | undefined): number | null {
   if (count === undefined || !Number.isSafeInteger(count) || count < 1) return null;
@@ -40,7 +57,7 @@ export function priceForTrackCount(count: number | undefined): number | null {
 }
 export const releasePriceCents = (upc: string) =>
   releases.some((release) => release.upc === upc)
-    ? priceForTrackCount(verifiedReleaseTrackCounts[upc])
+    ? priceForTrackCount(provisionalReleaseTrackCounts[upc])
     : null;
 export const inquirySchema = z
   .object({
