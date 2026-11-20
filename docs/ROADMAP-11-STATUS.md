@@ -56,3 +56,30 @@
 ## Dépendances externes
 
 Les comptes Supabase, registrar/messagerie, PayPal/Payhip, Oracle Cloud et plateformes de licences ne sont pas vérifiés par le seul contenu du dépôt. Ne pas prétendre avoir inspecté leurs tableaux de bord ou leurs contrats de compte. Aucun secret ne doit être partagé dans Git.
+
+## Rapprochement préliminaire MP3 ↔ 18 UPC — 20 novembre 2026
+
+### Associations déjà intégrées et explicitement confirmées
+
+| UPC | Sortie du catalogue | Fichier MP3 |
+|---|---|---|
+| 199751168234 | 836.722 (1995) [18] [73] | MASTERPIECE_PREVIEW_30S.mp3 |
+| 199955701558 | Dilemma (Radio Edit) | Dilemma_PREVIEW_30S.mp3 |
+| 821440674572 | GR 4LIFE | GR4LIFE_PREVIEW_30S.mp3 |
+| 199751508283 | Hot | NFLTHOT_PREVIEW_30S.mp3 |
+| 199955715203 | Hustle & Grind (Radio Edit) | Hustlegrind_PREVIEW_30S.mp3 |
+| 199751512501 | In My Party | NFLTINMYPARTYBEATNFLTRECORDS_PREVIEW_30S.mp3 |
+
+### Candidats repérés par ressemblance de nom uniquement — ne pas intégrer sans preuve DistroKid/Spotify ou confirmation du propriétaire
+
+| UPC candidat | Sortie | Fichier candidat | Statut |
+|---|---|---|---|
+| 199955742094 | 30.000 GÉNOCIDES | 30.000Genocides_PREVIEW_30S.mp3 | Nom très proche, association non confirmée |
+| 199955715135 | #NEVERFAKELIKETHEM (Chapter One) | NEVERFAKELIKETHEM_PREVIEW_30S.mp3 | Nom très proche, association non confirmée |
+| 199956222809 | NOUS Y SOMMES (TU M'AURAS JAMAIS) | Nousysommes_PREVIEW_30S.mp3 | Nom très proche, association non confirmée |
+| 199751511160 | The Dopest Collection (Vol. 1) | NFLTTHEDOPIESTCOLLECTIONBEATNFLTRECORDS_PREVIEW_30S.mp3 | Nom proche, association non confirmée |
+| 199751514697 | The Dopest Collection, Vol. 2 | DCVOL2_PREVIEW_30S.mp3 | Nom proche, association non confirmée |
+| 199955740199 | The Luxury - The Highest - Unequivocal | NFLTTHELUXURYTHEHIGHESTUNEQUIVOCAL_PREVIEW_30S.mp3 | Nom proche, association non confirmée |
+| 199751170992 | Transcendence Of Natural Truths | NFLTTRANSCENDANCEOFNATURALTRUTHSBEATNFLTRECORDS_PREVIEW_30S.mp3 | Nom proche, association non confirmée |
+
+Ces sept rapprochements sont des pistes de travail issues des noms de fichiers et des titres du catalogue, pas des validations. Ils ne sont pas ajoutés à `src/lib/previews.ts`. Les 11 autres fichiers sans piste fiable restent non attribués. Les 18 UPC restent la liste canonique du catalogue ; aucun UPC supplémentaire n'est créé.
