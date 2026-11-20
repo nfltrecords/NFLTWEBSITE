@@ -24,6 +24,11 @@ export const shopPriceTiers = [
 ] as const;
 export const formatShopPrice = (cents: number) => `${(cents / 100).toFixed(2).replace(".", ",")} €`;
 
+export const verifiedReleaseTrackCounts: Readonly<Record<string, number>> = {
+  "199955715135": 1,
+  "199955742094": 8,
+};
+
 // Track counts and resulting prices below are provisional catalogue pricing.
 // Singles are provisionally priced at 9.99 EUR; the two multi-track albums use
 // the owner-supplied album tier. Confirm final tracklists and delivered masters
