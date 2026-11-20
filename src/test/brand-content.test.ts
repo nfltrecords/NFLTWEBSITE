@@ -6,18 +6,16 @@ describe("Owner-confirmed application and locations", () => {
     expect(mobileApplication.name).toBe("NFLT RECORDS");
     expect(mobileApplication.developer).toBe("Apps wiz");
   });
-  it("uses the exact official Google Play link confirmed by the owner", () => {
-    const officialUrl =
-      "https://play.google.com/store/apps/details?id=com.appswiz.nfltrecordshfegh";
-    expect(mobileApplication.googlePlayUrl).toBe(officialUrl);
-    expect(validatedGooglePlayUrl(mobileApplication.googlePlayUrl)).toBe(officialUrl);
+  it("keeps the download link disabled while the application is unpublished", () => {
+    expect(mobileApplication.googlePlayUrl).toBeNull();
+    expect(validatedGooglePlayUrl(mobileApplication.googlePlayUrl)).toBeNull();
   });
   it("keeps download unavailable when no link exists", () => {
     expect(validatedGooglePlayUrl(null)).toBeNull();
   });
   it("preserves the confirmed package identifier and its official store destination", () => {
     expect(mobileApplication.packageId).toBe("com.appswiz.nfltrecordshfegh");
-    expect(new URL(mobileApplication.googlePlayUrl).searchParams.get("id")).toBe(mobileApplication.packageId);
+    expect(mobileApplication.googlePlayUrl).toBeNull();
   });
   it("rejects invalid or non-Google Play store destinations", () => {
     for (const value of [

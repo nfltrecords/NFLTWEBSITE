@@ -1,34 +1,29 @@
-# PayPal Checkout integration — private implementation notes
+# Intégration PayPal — état de préparation
 
-Status: server adapter prepared; checkout remains disabled.
+Statut : une intégration serveur préparatoire existe dans la branche ; le checkout reste désactivé et aucun paiement ne peut être considéré comme opérationnel.
 
-## Required Cloudflare Worker secrets
-- `PAYPAL_CLIENT_ID`
-- `PAYPAL_CLIENT_SECRET`
-- `PAYPAL_MODE` = `sandbox` for testing, then `live` only after end-to-end approval
-- `PAYPAL_WEBHOOK_ID` after registering the production webhook URL
+## Conditions préalables à toute activation
 
-Never put the client secret in browser code, Git, chat, or a public environment variable.
+1. Définir le vendeur légal pour chaque produit et transaction, ainsi que les droits et territoires autorisés.
+2. Vérifier les correspondances UPC, nombres de pistes et prix sur preuves catalogue primaires.
+3. Confirmer la disponibilité des masters livrables et les conditions de téléchargement.
+4. Finaliser le stockage des commandes, les contrôles de prix côté serveur et l'idempotence des opérations.
+5. Vérifier les signatures des notifications du prestataire et ne livrer qu'après confirmation fiable d'un paiement capturé.
+6. Tester en environnement sandbox les commandes, approbations, captures, doublons, refus, remboursements, inversions et échecs.
+7. Faire auditer les migrations et politiques d'accès de la base de données sur un environnement de développement avant toute migration réelle.
+8. Vérifier les obligations consommateurs, TVA, facturation, remboursements et protection des données.
+9. Obtenir une autorisation explicite avant d'enregistrer un webhook, d'activer le checkout ou de passer en production.
 
-## Safety gates still required before enabling checkout
-1. Persist a pending order server-side before redirecting to PayPal; never trust a browser-supplied price.
-2. Populate the UPC-to-track-count map only from verified catalogue evidence; current map is empty, so catalogue prices are intentionally withheld.
-3. Confirm per-release seller, rights, territory and MP3/WAV master availability.
-4. Implement idempotent capture and persist PayPal order/capture IDs and final state.
-5. Verify webhook signatures with PayPal and fulfill only on `PAYMENT.CAPTURE.COMPLETED`; never fulfill on approval or pending status.
-6. Test sandbox create, approve, capture, duplicate webhook, denied payment, refund/reversal, and failure paths.
-7. Apply `drizzle/migrations/0002_create_private_shop_orders.sql` to the connected Supabase database, then add restricted service-role order operations before exposing checkout UI.
+## Configuration
 
-## Server checkout functions committed
-`src/lib/paypal.functions.ts` now contains server functions to create a pending order using a server-derived UPC price, request PayPal approval, and confirm/capture only against the matching stored order. It verifies the returned capture status, EUR currency and exact amount before marking an order paid. These functions are not yet connected to the shop UI and have not been build-tested or exercised against PayPal Sandbox. The current UPC track-count map is empty, so order creation correctly returns `price_not_verified` for every catalogue release.
+Les identifiants PayPal et clés de service doivent être configurés exclusivement dans les secrets du fournisseur d'hébergement. Ne jamais les placer dans le code navigateur, Git, un document public ou une conversation.
 
-## Database foundation committed
-`drizzle/migrations/0002_create_private_shop_orders.sql` defines a private `shop_orders` ledger and an idempotency ledger for verified PayPal webhook events. RLS is enabled, and `anon` / `authenticated` receive no table privileges; only `service_role` is granted access. The migration is committed but has **not** been applied to the live Lovable/Supabase database.
+## État de l'implémentation
 
-## Current behaviour
-This adapter has no UI entry point and does not enable payments. It fails closed when PayPal credentials are absent. Sandbox is the default; live mode must be deliberately configured.
-## Raw-body webhook verification correction
-The earlier parsed-and-reserialized webhook verification limitation has been corrected in `src/lib/paypal.server.ts` and the route now passes the original request body unchanged to PayPal's verification API. Preserve this raw-body path; do not replace it with JSON parse/stringify before verification.
+Des fonctions serveur et un endpoint de notification ont été préparés dans le dépôt. Ils n'ont pas été validés par une campagne complète de tests PayPal Sandbox. Le registre de commandes et la logique d'idempotence dépendent d'une migration SQL qui n'a pas été appliquée à la base de données réelle.
 
-## Webhook endpoint added — not yet validated in Sandbox
-`src/routes/api.paypal.webhook.ts` now defines the TanStack Start POST endpoint at `/api/paypal/webhook`. It captures the original request body before parsing, checks the PayPal transmission headers and HTTPS certificate URL, asks PayPal to verify the signature while embedding the original event JSON unchanged, stores event IDs in the private idempotency ledger, and only marks a matching order paid for a verified `PAYMENT.CAPTURE.COMPLETED` event whose EUR amount matches the stored order. Duplicate completed events are acknowledged without applying the payment twice. If a verified capture arrives before its order row is visible, the endpoint returns HTTP 503 so PayPal can retry delivery; it no longer acknowledges that unprocessed capture with a 2xx response. The browser confirmation path also checks the persisted capture ID after a concurrent webhook update rather than assuming an empty database update succeeded. The route has not been built or tested against real PayPal Sandbox deliveries. It requires the SQL migration and `SUPABASE_SERVICE_ROLE_KEY`, `PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET`, and `PAYPAL_WEBHOOK_ID` before it can operate. Do not register the endpoint in the PayPal dashboard or enable live checkout until the build and Sandbox delivery/retry tests pass.
+Le verrou de paiement reste fermé. Aucun bouton d'achat fonctionnel, commande, capture, livraison numérique ou remboursement n'est disponible. Ne pas considérer le code préparatoire comme une solution de paiement prête à vendre.
+
+## Décision
+
+Aucun secret n'a été copié dans le dépôt. Aucun webhook n'a été enregistré auprès de PayPal. Aucun checkout ou paiement n'a été activé.

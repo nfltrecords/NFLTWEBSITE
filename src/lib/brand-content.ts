@@ -2,7 +2,7 @@ export const mobileApplication = {
   name: "NFLT RECORDS",
   developer: "Apps wiz",
   packageId: "com.appswiz.nfltrecordshfegh",
-  googlePlayUrl: "https://play.google.com/store/apps/details?id=com.appswiz.nfltrecordshfegh",
+  googlePlayUrl: null,
 };
 
 export function validatedGooglePlayUrl(value: string | null): string | null {

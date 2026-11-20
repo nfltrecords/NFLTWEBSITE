@@ -64,7 +64,10 @@ async function handleWebhook(request: Request): Promise<Response> {
 
   const certUrl = requiredHeader(request, "paypal-cert-url");
   const cert = new URL(certUrl);
-  if (cert.protocol !== "https:" || !(cert.hostname === "paypal.com" || cert.hostname.endsWith(".paypal.com"))) {
+  if (
+    cert.protocol !== "https:" ||
+    !(cert.hostname === "paypal.com" || cert.hostname.endsWith(".paypal.com"))
+  ) {
     return new Response("Invalid PayPal certificate URL", { status: 400 });
   }
 
@@ -121,12 +124,14 @@ async function handleWebhook(request: Request): Promise<Response> {
       return new Response("Invalid completed capture details", { status: 400 });
     }
 
-    const orders = await databaseRequest<Array<{
-      id: string;
-      amount_cents: number;
-      status: string;
-      paypal_capture_id: string | null;
-    }>>(
+    const orders = await databaseRequest<
+      Array<{
+        id: string;
+        amount_cents: number;
+        status: string;
+        paypal_capture_id: string | null;
+      }>
+    >(
       `shop_orders?paypal_order_id=eq.${encodeURIComponent(paypalOrderId)}&select=id,amount_cents,status,paypal_capture_id&limit=1`,
     );
     const order = orders[0];
@@ -154,9 +159,9 @@ async function handleWebhook(request: Request): Promise<Response> {
         },
       );
       if (!updated.length) {
-        const latest = await databaseRequest<Array<{ status: string; paypal_capture_id: string | null }>>(
-          `shop_orders?id=eq.${order.id}&select=status,paypal_capture_id&limit=1`,
-        );
+        const latest = await databaseRequest<
+          Array<{ status: string; paypal_capture_id: string | null }>
+        >(`shop_orders?id=eq.${order.id}&select=status,paypal_capture_id&limit=1`);
         if (latest[0]?.status !== "paid" || latest[0]?.paypal_capture_id !== captureId) {
           return new Response("Order state conflict", { status: 409 });
         }
@@ -166,11 +171,14 @@ async function handleWebhook(request: Request): Promise<Response> {
     }
   }
 
-  await databaseRequest<unknown>(`paypal_webhook_events?event_id=eq.${encodeURIComponent(event.id)}`, {
-    method: "PATCH",
-    headers: { Prefer: "return=minimal" },
-    body: JSON.stringify({ processed_at: new Date().toISOString() }),
-  });
+  await databaseRequest<unknown>(
+    `paypal_webhook_events?event_id=eq.${encodeURIComponent(event.id)}`,
+    {
+      method: "PATCH",
+      headers: { Prefer: "return=minimal" },
+      body: JSON.stringify({ processed_at: new Date().toISOString() }),
+    },
+  );
 
   return Response.json({ received: true });
 }

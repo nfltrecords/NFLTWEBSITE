@@ -12,6 +12,10 @@ import { ApplicationBlock } from "@/components/ApplicationPage";
 import { implantations } from "@/lib/brand-content";
 import { RadioTeaser } from "@/components/RadioPage";
 import { ReleasePrice } from "@/components/ReleasePrice";
+import { ReleasePreview } from "@/components/ReleasePreview";
+import { useCart } from "@/lib/cart-store";
+import { releasePriceCents as releasePriceCentsForButton } from "@/lib/commerce";
+import { ShoppingBag } from "lucide-react";
 
 const t = (locale: Locale, fr: string, en: string) => (locale === "fr" ? fr : en);
 function Action({
@@ -43,12 +47,11 @@ function ReleaseRow({
   index: number;
   showPrice?: boolean;
 }) {
+  const cart = useCart();
+  const quantity = cart.items[release.upc] ?? 0;
+  const canAdd = releasePriceCentsForButton(release.upc) !== null && quantity < 20;
   return (
-    <Link
-      to={locale === "fr" ? "/catalogue/$upc" : "/en/catalogue/$upc"}
-      params={{ upc: release.upc }}
-      className="release-row group"
-    >
+    <div className={`release-row group${showPrice ? " release-row--commerce" : ""}`}>
       <span className="release-index">{String(index + 1).padStart(2, "0")}</span>
       <img
         className="release-cover"
@@ -58,14 +61,43 @@ function ReleaseRow({
         width={64}
         height={64}
       />
-      <div>
+      <Link
+        to={locale === "fr" ? "/catalogue/$upc" : "/en/catalogue/$upc"}
+        params={{ upc: release.upc }}
+        className="release-row-main"
+      >
         <span className="release-artist">NFLT</span>
         <h3 className="release-title">{release.title}</h3>
-        {showPrice ? <ReleasePrice upc={release.upc} /> : null}
-      </div>
+        {showPrice ? <ReleasePrice upc={release.upc} locale={locale} /> : null}
+      </Link>
       <span className="release-upc">UPC {release.upc}</span>
-      <ArrowUpRight className="text-primary transition-transform group-hover:translate-x-1" />
-    </Link>
+      {showPrice ? (
+        <Button
+          type="button"
+          size="sm"
+          className="release-row-add"
+          disabled={!canAdd}
+          onClick={() => cart.add(release.upc)}
+          aria-label={t(
+            locale,
+            `Ajouter ${release.title} au panier`,
+            `Add ${release.title} to cart`,
+          )}
+        >
+          <ShoppingBag size={15} />
+          {t(locale, "Ajouter", "Add")}
+          {quantity > 0 ? ` · ${quantity}` : ""}
+        </Button>
+      ) : (
+        <Link
+          to={locale === "fr" ? "/catalogue/$upc" : "/en/catalogue/$upc"}
+          params={{ upc: release.upc }}
+          aria-label={t(locale, `Voir ${release.title}`, `View ${release.title}`)}
+        >
+          <ArrowUpRight className="text-primary transition-transform group-hover:translate-x-1" />
+        </Link>
+      )}
+    </div>
   );
 }
 export function HomePage({ locale = "fr" }: { locale?: Locale }) {
@@ -280,6 +312,8 @@ export function CataloguePage({ locale = "fr" }: { locale?: Locale }) {
   );
 }
 export function ReleasePage({ release, locale = "fr" }: { release: Release; locale?: Locale }) {
+  const cart = useCart();
+  const quantity = cart.items[release.upc] ?? 0;
   return (
     <SiteLayout>
       <section className="editorial-section release-detail">
@@ -311,7 +345,29 @@ export function ReleasePage({ release, locale = "fr" }: { release: Release; loca
                 </div>
               ))}
             </dl>
-            <ReleasePrice upc={release.upc} />
+            <ReleasePrice upc={release.upc} locale={locale} />
+            <ReleasePreview upc={release.upc} locale={locale} />
+            <div className="mt-6">
+              <Button
+                type="button"
+                className="editorial-action"
+                onClick={() => cart.add(release.upc)}
+                disabled={quantity >= 20 || releasePriceCentsForButton(release.upc) === null}
+              >
+                <ShoppingBag size={16} />
+                {t(locale, "Ajouter au panier", "Add to cart")}
+                {quantity > 0 ? ` · ${quantity}` : ""}
+              </Button>
+              {quantity > 0 ? (
+                <p className="body-copy mt-2">
+                  {t(
+                    locale,
+                    `${quantity} article(s) dans votre panier.`,
+                    `${quantity} item(s) in your cart.`,
+                  )}
+                </p>
+              ) : null}
+            </div>
             <div className="flex flex-wrap gap-4 mt-8">
               <Button asChild variant="outline" className="editorial-action">
                 <Link

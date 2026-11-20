@@ -33,8 +33,8 @@ export function ApplicationBlock({
           <h2 className="statement">NFLT RECORDS</h2>
           <p className="body-copy mt-8">
             {fr
-              ? "L’application officielle NFLT RECORDS est disponible sur Google Play."
-              : "The official NFLT RECORDS app is available on Google Play."}
+              ? "L’application NFLT RECORDS est en cours de réorganisation. Le téléchargement sera annoncé après sa republication officielle."
+              : "The NFLT RECORDS app is being reorganised. Download details will be announced after its official republication."}
           </p>
           <div className="mt-10 border-y border-border py-8">
             <p className="eyebrow mb-4">GOOGLE PLAY</p>
@@ -44,7 +44,9 @@ export function ApplicationBlock({
                 <dd className="mt-1">{mobileApplication.name}</dd>
               </div>
               <div className="min-w-0 sm:col-span-2">
-                <dt className="text-muted-foreground">{fr ? "Identifiant du package" : "Package ID"}</dt>
+                <dt className="text-muted-foreground">
+                  {fr ? "Identifiant du package" : "Package ID"}
+                </dt>
                 <dd className="mt-1 break-all">{mobileApplication.packageId}</dd>
               </div>
             </dl>
@@ -54,9 +56,12 @@ export function ApplicationBlock({
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-8 block w-fit max-w-full"
-                aria-label={fr ? "Télécharger NFLT RECORDS sur Google Play (nouvel onglet)" : "Download NFLT RECORDS on Google Play (new tab)"}
-              >
-              </a>
+                aria-label={
+                  fr
+                    ? "Télécharger NFLT RECORDS sur Google Play (nouvel onglet)"
+                    : "Download NFLT RECORDS on Google Play (new tab)"
+                }
+              ></a>
             ) : null}
             <div className="mt-8 flex flex-wrap items-center gap-5">
               {downloadUrl ? (
@@ -81,9 +86,7 @@ export function ApplicationBlock({
                   id={compact ? "home-play-pending" : "application-play-pending"}
                   className="metadata-note"
                 >
-                  {fr
-                    ? "Bientôt disponible."
-                    : "Coming soon."}
+                  {fr ? "Bientôt disponible." : "Coming soon."}
                 </p>
               )}
             </div>

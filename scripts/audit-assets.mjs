@@ -1,23 +1,61 @@
-import { readFileSync, readdirSync, existsSync } from 'node:fs';
-import { join } from 'node:path';
+import { readFileSync, readdirSync, existsSync } from "node:fs";
+import { createHash } from "node:crypto";
+import { join } from "node:path";
 
-const catalogue = readFileSync('src/lib/catalogue.ts', 'utf8');
+const catalogue = readFileSync("src/lib/catalogue.ts", "utf8");
 const upcs = [...catalogue.matchAll(/upc: "(\d+)"/g)].map((m) => m[1]);
-const coverDir = 'public/assets/covers';
-const previewDir = 'public/assets/previews';
+const coverDir = "public/assets/covers";
+const previewDir = "public/assets/previews";
 const missing = upcs.filter((upc) => !existsSync(join(coverDir, `cover-${upc}.jpg`)));
-const covers = readdirSync(coverDir).filter((name) => name.startsWith('cover-') && name.endsWith('.jpg'));
-const previews = readdirSync(previewDir).filter((name) => name.toLowerCase().endsWith('.mp3'));
-const routeFiles = readdirSync('src/routes').filter((name) => name.endsWith('.tsx'));
-const testFiles = readdirSync('src/test').filter((name) => name.includes('.test.'));
+const covers = readdirSync(coverDir).filter(
+  (name) => name.startsWith("cover-") && name.endsWith(".jpg"),
+);
+const previews = readdirSync(previewDir).filter((name) => name.toLowerCase().endsWith(".mp3"));
+const previewMapSource = readFileSync("src/lib/previews.ts", "utf8");
+const mappedPreviewPaths = [
+  ...previewMapSource.matchAll(/: "(\/assets\/previews\/[^"]+\.mp3)"/g),
+].map((match) => match[1]);
+const missingMappedPreviewFiles = mappedPreviewPaths.filter(
+  (src) => !existsSync(join("public", src.slice(1))),
+);
 
-console.log(JSON.stringify({
-  catalogueReleases: upcs.length,
-  coverFiles: covers.length,
-  missingCoverUPCs: missing,
-  previewMP3Files: previews.length,
-  routeFiles: routeFiles.length,
-  testFiles: testFiles.length,
-}, null, 2));
+const previewHashes = new Map();
+for (const name of previews) {
+  const digest = createHash("sha256")
+    .update(readFileSync(join(previewDir, name)))
+    .digest("hex");
+  const names = previewHashes.get(digest) ?? [];
+  names.push(name);
+  previewHashes.set(digest, names);
+}
+const duplicatePreviewFiles = [...previewHashes.values()].filter((names) => names.length > 1);
+const previewSizes = previews.map((name) => readFileSync(join(previewDir, name)).byteLength);
+const previewSizeRangeBytes = previewSizes.length
+  ? { min: Math.min(...previewSizes), max: Math.max(...previewSizes) }
+  : { min: 0, max: 0 };
 
-if (missing.length || covers.length !== upcs.length) process.exitCode = 1;
+const routeFiles = readdirSync("src/routes").filter((name) => name.endsWith(".tsx"));
+const testFiles = readdirSync("src/test").filter((name) => name.includes(".test."));
+
+console.log(
+  JSON.stringify(
+    {
+      catalogueReleases: upcs.length,
+      coverFiles: covers.length,
+      missingCoverUPCs: missing,
+      previewMP3Files: previews.length,
+      mappedPreviewFiles: mappedPreviewPaths.length,
+      missingMappedPreviewFiles,
+      duplicatePreviewFiles,
+      previewSizeRangeBytes,
+      routeFiles: routeFiles.length,
+      testFiles: testFiles.length,
+    },
+    null,
+    2,
+  ),
+);
+
+if (missing.length || covers.length !== upcs.length || missingMappedPreviewFiles.length) {
+  process.exitCode = 1;
+}

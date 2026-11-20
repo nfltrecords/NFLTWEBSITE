@@ -1,0 +1,42 @@
+-- NFLT RECORDS — checklist de validation RLS
+-- MANUAL TEST PLAN ONLY. Do not execute against production.
+-- Run only after applying the reviewed migration to a disposable Supabase DEV project.
+-- Provision separate test users with the trusted service role before testing.
+--
+-- Required test identities:
+--   anon: no authenticated JWT
+--   ordinary: authenticated user with no nflt_user_roles row
+--   operations: nflt_user_roles.role = 'operations'
+--   sales: nflt_user_roles.role = 'sales'
+--   read_only: nflt_user_roles.role = 'read_only'
+--   admin: nflt_user_roles.role = 'admin'
+--
+-- For each authenticated identity, set JWT claims in the SQL test session:
+--   select set_config('request.jwt.claim.sub', '<test-user-uuid>', true);
+--   select set_config('request.jwt.claims',
+--     '{"sub":"<test-user-uuid>","role":"authenticated","app_metadata":{}}', true);
+--   set local role authenticated;
+--
+-- Expected results for the CURRENT foundation SQL (not the future access matrix):
+-- 1. anon: no SELECT/INSERT/UPDATE/DELETE on all nflt_* tables.
+-- 2. ordinary authenticated user: no rows visible; writes rejected by RLS.
+-- 3. operations/sales/read_only: no rows visible; writes rejected by RLS.
+-- 4. admin: CRUD on organizations, people, relationships, projects, services,
+--    project_services; SELECT on user_roles and audit_events; no audit-event writes.
+-- 5. admin cannot INSERT/UPDATE/DELETE nflt_user_roles using authenticated role.
+-- 6. non-admin cannot EXECUTE public.nflt_is_admin() only if explicitly revoked;
+--    current draft grants EXECUTE to authenticated, but the function returns false.
+-- 7. service_role can provision roles in DEV; this key must never be exposed client-side.
+-- 8. a user with role 'owner' has the same table privileges as 'admin' in the draft.
+--
+-- Important: PostgreSQL errors abort a transaction. Test denied writes in separate
+-- savepoints or individual transactions and assert SQLSTATE 42501 / zero affected rows.
+-- Do not treat UI-hidden buttons as evidence of RLS enforcement.
+--
+-- Additional security review before approval:
+-- - Verify SECURITY DEFINER owner, search_path, function grants, and RLS bypass behavior.
+-- - Confirm no untrusted user can create/update/delete rows in nflt_user_roles.
+-- - Confirm audit events cannot be forged by authenticated users; only trusted server-side service_role tooling may insert them.
+-- - Confirm policies for storage buckets and object paths before storing documents/audio.
+-- - Confirm indexes for every foreign key and policy predicate.
+-- - Verify backups, retention, deletion, export and recovery procedures.

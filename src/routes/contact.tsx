@@ -52,15 +52,39 @@ function Contact() {
               }
             }}
           >
-            <input name="name" placeholder="Nom" className={field} />
-            <input name="email" type="email" placeholder="Email" className={field} />
+            <input
+              name="name"
+              placeholder="Nom"
+              aria-label="Nom"
+              autoComplete="name"
+              maxLength={100}
+              required
+              className={field}
+            />
+            <input
+              name="email"
+              type="email"
+              placeholder="Email"
+              aria-label="Email"
+              autoComplete="email"
+              maxLength={255}
+              required
+              className={field}
+            />
             <textarea
               name="message"
               rows={6}
               placeholder="Votre projet, lien vers votre démo…"
+              aria-label="Votre message"
+              maxLength={2000}
+              required
               className={field}
             />
-            {error && <p className="text-destructive text-sm">{error}</p>}
+            {error && (
+              <p role="alert" className="text-destructive text-sm">
+                {error}
+              </p>
+            )}
             <button
               disabled={sending}
               className="bg-primary text-primary-foreground px-6 py-3 uppercase tracking-widest text-sm font-bold disabled:opacity-60"

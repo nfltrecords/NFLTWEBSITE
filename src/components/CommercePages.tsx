@@ -1,21 +1,29 @@
+/* eslint-disable prettier/prettier -- JSX cart layout is intentionally kept compact. */
 import { Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
-import { ArrowUpRight, Check, Search, Send } from "lucide-react";
+import { ArrowUpRight, Check, Search, Send, ShoppingBag, Plus, Minus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SiteLayout, PageHeader } from "@/components/SiteLayout";
 import { releases, filterReleases } from "@/lib/catalogue";
 import { releaseCovers } from "@/lib/covers";
 import { publicPages, type Locale } from "@/lib/seo";
-import { inquirySchema, shopPriceTiers, formatShopPrice, type Inquiry } from "@/lib/commerce";
+import { inquirySchema, shopPriceTiers, formatShopPrice, releasePriceCents, type Inquiry } from "@/lib/commerce";
 import { submitLicensingInquiry } from "@/lib/commerce.functions";
 import { ReleasePrice } from "@/components/ReleasePrice";
+import { useCart } from "@/lib/cart-store";
 
 const text = (locale: Locale, fr: string, en: string) => (locale === "fr" ? fr : en);
 
 export function ShopPage({ locale }: { locale: Locale }) {
   const [query, setQuery] = useState("");
+  const sharedCart = useCart();
   const items = filterReleases("all", query);
+  const cartItems = releases.filter((release) => (sharedCart.items[release.upc] ?? 0) > 0);
+  const cartCount = sharedCart.count;
+  const cartTotalCents = cartItems.reduce((total, release) => total + (releasePriceCents(release.upc) ?? 0) * sharedCart.items[release.upc], 0);
+  const addToCart = sharedCart.add;
+  const changeCartQuantity = sharedCart.change;
   return (
     <SiteLayout>
       <div className="commerce-theme">
@@ -25,8 +33,8 @@ export function ShopPage({ locale }: { locale: Locale }) {
             <p className="body-copy">
               {text(
                 locale,
-                "La musique de NFLT. Les 18 sorties du catalogue, publiées via NFLT Records. Contactez le label pour une demande de disponibilité.",
-                "The music of NFLT. All 18 catalogue releases, published via NFLT Records. Contact the label for availability.",
+                "Parcourez les 18 sorties du catalogue NFLT et ajoutez vos sélections au panier. Les prix affichés sont indicatifs ; le paiement en ligne sera ouvert après validation des ventes et des livraisons.",
+                "Browse all 18 NFLT catalogue releases and add your selections to the cart. Displayed prices are indicative; online checkout will open after sales and delivery validation.",
               )}
             </p>
             <div className="flex flex-wrap gap-4">
@@ -47,6 +55,52 @@ export function ShopPage({ locale }: { locale: Locale }) {
               </Button>
             </div>
           </div>
+          <section id="panier" aria-labelledby="shop-cart-title" className="mb-10 border-y border-border py-6">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <h2 id="shop-cart-title" className="flex items-center gap-3 text-2xl">
+                <ShoppingBag aria-hidden="true" />
+                {text(locale, "Votre panier", "Your cart")}
+                <span className="text-base text-muted-foreground">({cartCount})</span>
+              </h2>
+              {cartCount > 0 && <Button type="button" variant="ghost" onClick={sharedCart.clear}><Trash2 size={16} />{text(locale, "Vider le panier", "Clear cart")}</Button>}
+            </div>
+            {cartItems.length === 0 ? (
+              <p className="body-copy mt-3">{text(locale, "Votre panier est vide. Ajoutez les sorties qui vous intéressent.", "Your cart is empty. Add the releases you are interested in.")}</p>
+            ) : (
+              <>
+                <ul className="mt-5 divide-y divide-border">
+                  {cartItems.map((release) => {
+                    const unitPrice = releasePriceCents(release.upc) ?? 0;
+                    const quantity = sharedCart.items[release.upc];
+                    return (
+                      <li key={release.upc} className="flex flex-wrap items-center justify-between gap-4 py-4">
+                        <div className="min-w-0 flex-1"><p className="font-medium">{release.title}</p><p className="text-sm text-muted-foreground">{formatShopPrice(unitPrice)} {text(locale, "l’unité", "each")}</p></div>
+                        <div className="flex items-center gap-2">
+                          <Button type="button" variant="outline" size="icon" aria-label={text(locale, "Retirer une unité", "Remove one")} onClick={() => changeCartQuantity(release.upc, -1)}><Minus size={15} /></Button>
+                          <span className="min-w-6 text-center tabular-nums" aria-live="polite">{quantity}</span>
+                          <Button type="button" variant="outline" size="icon" aria-label={text(locale, "Ajouter une unité", "Add one")} onClick={() => changeCartQuantity(release.upc, 1)} disabled={quantity >= 20}><Plus size={15} /></Button>
+                          <strong className="min-w-24 text-right tabular-nums">{formatShopPrice(unitPrice * quantity)}</strong>
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+                <div className="mt-5 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-5">
+                  <div><p className="text-sm text-muted-foreground">{text(locale, "Total indicatif", "Indicative total")}</p><p className="text-3xl text-primary tabular-nums">{formatShopPrice(cartTotalCents)}</p></div>
+                  <Button type="button" className="editorial-action" disabled>
+                    {text(locale, "Paiement bientôt disponible", "Checkout coming soon")}
+                  </Button>
+                </div>
+                <p className="body-copy mt-4 text-sm">
+                  {text(
+                    locale,
+                    "Le paiement en ligne est temporairement désactivé. Le panier sert uniquement à préparer votre sélection ; aucune commande ni aucun paiement ne sont acceptés pour le moment. Les prix, droits, vendeur, livraison et conditions doivent être validés avant l’ouverture des ventes.",
+                    "Online checkout is temporarily disabled. The cart is only for preparing your selection; orders and payments are not accepted at this time. Prices, rights, seller, delivery and terms must be validated before sales open.",
+                  )}
+                </p>
+              </>
+            )}
+          </section>
           <section
             aria-labelledby="shop-pricing-title"
             className="mb-12 border-y border-border py-8"
@@ -69,8 +123,8 @@ export function ShopPage({ locale }: { locale: Locale }) {
             <p className="body-copy mt-6">
               {text(
                 locale,
-                "Tarifs selon le nombre de pistes confirmé. La boutique reste non transactionnelle : aucune commande, aucun paiement ni téléchargement sur le site.",
-                "Price tiers depend on confirmed track counts. The shop remains non-transactional: no orders, payments or downloads are available on the site.",
+                "Tarifs indicatifs, calculés à partir de nombres de pistes qui restent à confirmer pour chaque sortie. Le panier permet de préparer une sélection, mais aucune commande ni aucun paiement n’est encore accepté. Les CD physiques, stocks et livraisons ne sont pas encore configurés.",
+                "Indicative prices based on track counts that still require confirmation for each release. The cart lets you prepare a selection, but orders and payments are not yet accepted. Physical CDs, inventory and shipping are not configured.",
               )}
             </p>
           </section>
@@ -104,9 +158,15 @@ export function ShopPage({ locale }: { locale: Locale }) {
                 <div className="shop-caption">
                   <span className="eyebrow">NFLT / NFLT RECORDS</span>
                   <h2>{release.title}</h2>
-                  <ReleasePrice upc={release.upc} />
+                  <ReleasePrice upc={release.upc} locale={locale} />
                   <p>UPC {release.upc}</p>
                 </div>
+                <Button type="button" className="editorial-action w-full" onClick={() => addToCart(release.upc)} disabled={
+                  (sharedCart.items[release.upc] ?? 0) >= 20 || releasePriceCents(release.upc) === null
+                }>
+                  <ShoppingBag size={16} />{text(locale, "Ajouter au panier", "Add to cart")}
+                  {(sharedCart.items[release.upc] ?? 0) > 0 ? ` · ${sharedCart.items[release.upc]}` : ""}
+                </Button>
                 <Button asChild variant="outline" className="editorial-action shop-availability">
                   <Link
                     to={publicPages.licensing[locale]}

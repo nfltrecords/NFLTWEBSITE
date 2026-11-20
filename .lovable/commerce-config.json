@@ -5,56 +5,19 @@
     "status": "owner-clarified-internal-only",
     "physicalCDPurchases": {
       "associatedEntity": "SAS NFLT RECORDS FRANCE",
-      "role": "associated-with-physical-cd-purchases",
       "sellerOfRecordConfirmed": false,
       "applicableTerritoryConfirmed": false,
-      "franceOnlyCustomers": false,
-      "note": "Owner clarification associates NFLT RECORDS FRANCE with purchases of physical CDs. The exact seller of record, fulfillment arrangement and applicable territory still require confirmation. This does not limit physical CD customers to France."
+      "franceOnlyCustomers": false
     },
     "digitalDownloadsAndLicensing": {
       "franceIsDefaultSeller": false,
       "franceIsDefaultLicensingCounterparty": false,
-      "potentialContractingEntities": [
-        "SAS NFLT RECORDS FRANCE",
-        "NFLT RECORDS INC.",
-        "another relevant group entity"
-      ],
-      "assignment": "pending-per-transaction-rights-fulfillment-and-territory-review",
-      "note": "NFLT RECORDS INC. or another relevant group entity may be the contracting party for digital products/downloads or licensing depending on the transaction. No seller, territory, tax treatment, rights allocation or governing law is inferred."
+      "assignment": "pending-per-transaction-rights-fulfillment-and-territory-review"
     }
   },
   "companyRecords": {
-    "status": "owner-provided-verified-company-identifiers",
+    "status": "owner-provided-identifiers-held-outside-public-repository",
     "independentlyRevalidated": false,
-    "france": {
-      "name": "SAS NFLT RECORDS FRANCE",
-      "legalForm": "SAS",
-      "siren": "999268741",
-      "siret": "99926874100017",
-      "registeredOffice": "Bureau 326 SOURCE, 78 AV DES CHAMPS ELYSEES, 75008 PARIS",
-      "ape": "5920Z",
-      "president": "Mohamed-Ali Jarry",
-      "vat": {
-        "id": "FR89999268741",
-        "status": "VIES-validated",
-        "formatMatchesSirenKey": true,
-        "viesValidation": "validated",
-        "evidenceDate": "2026-11-14",
-        "evidenceSource": "owner-supplied-VIES-screenshot-details",
-        "evidenceTimestampAsShown": "14/11/2026 11:31:39",
-        "memberState": "FR",
-        "numberAsShown": "89999268741",
-        "resultAsShown": "Oui, numéro de TVA valide"
-      }
-    },
-    "inc": {
-      "name": "NFLT RECORDS INC.",
-      "ein": "36-5112157",
-      "newYorkDosId": "7371381",
-      "incorporationDate": "2024-07-11",
-      "registeredMailingAddress": "447 Broadway, Floor 2, #656, New York, NY 10013",
-      "registeredAgent": "Republic Registered Agent Services Inc."
-    },
     "requestExistingCompanyDocumentsAgain": false,
     "publicLegalCopyApproved": false
   },
@@ -62,23 +25,11 @@
     "name": "NFLT RECORDS INC.",
     "scope": "only-sales-it-owns-or-fulfills"
   },
-  "ownerConfirmedAuthorization": {
-    "grantor": "NFLT RECORDS INC.",
-    "grantee": "NFLT RECORDS FRANCE",
-    "scope": [
-      "sell digital music downloads in Europe",
-      "manage music-licensing inquiries for the relevant catalogue"
-    ],
-    "status": "owner-confirmed-internal-only",
-    "note": "Internal authorization record only; not a public legal contract or rights claim and not a default seller allocation. Seller assignment per product/release and transaction remains subject to confirming which rights and masters are actually controlled and covered, the fulfillment arrangement and the customer territory."
-  },
   "intendedDeliveryFormats": {
     "formats": ["MP3", "WAV"],
-    "status": "intended-only",
-    "note": "Owner-confirmed requirement for the European digital shop. One single and album 30.000 GÉNOCIDES audio are owner-reported existing assets, awaiting exact file inventory/location confirmation; no audio filenames or attachments are visible in this project audit. Preserve existing assets; no claim that 18 tracks/files are uploaded. Remaining masters are expected from the owner's DistroKid Vault retrieval. No per-release MP3/WAV availability assigned."
+    "status": "intended-only"
   },
   "licensingNotificationReadiness": {
-    "recipient": "nfltrecords@nflt-records.com",
     "status": "pending-verified-sender-and-delivery-test",
     "senderVerification": "pending",
     "recipientDeliveryTest": "pending",
@@ -94,7 +45,7 @@
     "digitalAndLicensingContractingParty": "pending-per-transaction-rights-fulfillment-and-territory-review",
     "trackCountsAndPriceTierMapping": "pending",
     "mp3AndWavFiles": "pending-existing-audio-inventory-location-and-format-verification-remaining-masters-from-DistroKid-Vault",
-    "viesValidationAndVatTreatment": "VIES-validated-vat-treatment-pending",
+    "viesValidationAndVatTreatment": "VIES-validation-reported-by-owner-vat-treatment-pending",
     "applicableRegistrationAndLegalNoticeFields": "pending-review-of-already-provided-records-no-document-rerequest",
     "customerServiceContact": "pending-confirmation",
     "saleTerritoriesAndTaxInclusivePricing": "pending-confirmation",
@@ -117,27 +68,6 @@
     "franceDefaultForAllOnlinePurchases": false,
     "automaticSellerAssignment": false,
     "globalFrenchLawAssumed": false,
-    "potentialContractingEntities": [
-      "SAS NFLT RECORDS FRANCE",
-      "NFLT RECORDS INC.",
-      "another relevant group entity"
-    ],
-    "productCategoryRoles": {
-      "physicalCDs": {
-        "associatedEntity": "SAS NFLT RECORDS FRANCE",
-        "sellerOfRecord": "pending-exact-confirmation",
-        "applicableTerritory": "pending-confirmation",
-        "franceOnlyCustomers": false
-      },
-      "digitalDownloads": {
-        "defaultSeller": null,
-        "contractingParty": "pending-per-transaction"
-      },
-      "licensing": {
-        "defaultCounterparty": null,
-        "contractingParty": "pending-per-transaction"
-      }
-    },
     "assignmentFactors": [
       "product-category",
       "product-release",
@@ -157,7 +87,6 @@
     "productSellerAssignments": {},
     "approvedTerritories": [],
     "governingLawAssignments": {},
-    "legacyIntendedEUSellerMeaning": "superseded-not-exclusive-not-default-and-not-automatic",
-    "termsArchitecture": "modular-draft-distinguishing-physical-cds-digital-downloads-and-licensing-with-explicit-seller-identification-and-entity-territory-annexes-subject-to-legal-review"
+    "legacyIntendedEUSellerMeaning": "superseded-not-exclusive-not-default-and-not-automatic"
   }
 }

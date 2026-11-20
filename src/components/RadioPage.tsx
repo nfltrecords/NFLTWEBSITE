@@ -209,7 +209,9 @@ export function RadioPage({ locale }: { locale: Locale }) {
             <div className="section-heading">
               <div>
                 <p className="eyebrow">{fr ? "FORMAT / MIX A + C" : "FORMAT / MIX A + C"}</p>
-                <h2 id="radio-format-title">{fr ? "Une programmation hybride" : "A hybrid programme"}</h2>
+                <h2 id="radio-format-title">
+                  {fr ? "Une programmation hybride" : "A hybrid programme"}
+                </h2>
               </div>
             </div>
             <div className="radio-editorial-grid">
@@ -217,7 +219,10 @@ export function RadioPage({ locale }: { locale: Locale }) {
                 {
                   i: "A",
                   fr: ["Rotation NFLT", "Les 18 sorties de l’artiste NFLT en rotation récurrente."],
-                  en: ["NFLT rotation", "The 18 releases by the artist NFLT in recurring rotation."],
+                  en: [
+                    "NFLT rotation",
+                    "The 18 releases by the artist NFLT in recurring rotation.",
+                  ],
                 },
                 {
                   i: "C",
@@ -226,7 +231,10 @@ export function RadioPage({ locale }: { locale: Locale }) {
                 },
                 {
                   i: "+",
-                  fr: ["Émissions & invités", "Créneaux prévus pour émissions, interviews et invités."],
+                  fr: [
+                    "Émissions & invités",
+                    "Créneaux prévus pour émissions, interviews et invités.",
+                  ],
                   en: ["Shows & guests", "Slots planned for shows, interviews and guests."],
                 },
               ].map((b) => (

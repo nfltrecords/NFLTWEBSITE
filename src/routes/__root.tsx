@@ -9,10 +9,9 @@ import {
   Scripts,
   type ErrorComponentProps,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import type { ReactNode } from "react";
 
 import appCss from "../styles.css?url";
-import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {
   return (
@@ -39,9 +38,6 @@ function NotFoundComponent() {
 function ErrorComponent({ error, reset }: ErrorComponentProps) {
   console.error(error);
   const router = useRouter();
-  useEffect(() => {
-    reportLovableError(error, { boundary: "tanstack_root_error_component" });
-  }, [error]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -88,9 +84,23 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
-      { rel: "icon", href: "/nflt-records-favicon.ico?v=20261114-2", type: "image/x-icon", sizes: "16x16 32x32 48x48 64x64 128x128 256x256" },
-      { rel: "icon", href: "/nflt-records-favicon.png?v=20261114-2", type: "image/png", sizes: "64x64" },
-      { rel: "apple-touch-icon", href: "/nflt-records-apple-touch-icon.png?v=20261114-2", sizes: "180x180" },
+      {
+        rel: "icon",
+        href: "/nflt-records-favicon.ico?v=20261114-2",
+        type: "image/x-icon",
+        sizes: "16x16 32x32 48x48 64x64 128x128 256x256",
+      },
+      {
+        rel: "icon",
+        href: "/nflt-records-favicon.png?v=20261114-2",
+        type: "image/png",
+        sizes: "64x64",
+      },
+      {
+        rel: "apple-touch-icon",
+        href: "/nflt-records-apple-touch-icon.png?v=20261114-2",
+        sizes: "180x180",
+      },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       {
         rel: "stylesheet",

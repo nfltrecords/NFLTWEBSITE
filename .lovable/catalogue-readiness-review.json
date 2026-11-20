@@ -100,7 +100,7 @@
         250
       ],
       "bytes": 24229,
-      "hdOriginalStatus": "received-1920-square-owner-confirmed-integrated",
+      "hdOriginalStatus": "received-1920-square-owner-confirmed-pending-integration",
       "existingArtworkPreserved": false,
       "dimensionsMeaning": "existing legacy ZIP image; not the owner-reported HD source dimensions",
       "suppliedArtwork": {
@@ -126,7 +126,8 @@
         "sha256": "9db9b748b9d5248eed12890eb2a579857d7805630d43a9737703ff242f4a3552",
         "evidence": "owner attached this file directly in the Lovable thread on 2026-11-14 and explicitly stated this UPC; cover title visually matches the canonical title",
         "mappingStatus": "owner-confirmed-UPC-and-visible-title-match",
-        "integrated": true
+        "integrated": false,
+        "integrationStatus": "pending-exact-original-binary-replacement"
       }
     },
     {
@@ -141,7 +142,7 @@
         250
       ],
       "bytes": 20866,
-      "hdOriginalStatus": "received-1920-square-owner-confirmed-integrated",
+      "hdOriginalStatus": "received-1920-square-owner-confirmed-pending-integration",
       "existingArtworkPreserved": false,
       "dimensionsMeaning": "existing legacy ZIP image; not the owner-reported HD source dimensions",
       "suppliedArtwork": {
@@ -167,7 +168,8 @@
         "sha256": "c1dca0ee0633809e272791aa087a5405afe2b2eaa80a6cf0029c1484a2918ae5",
         "evidence": "owner attached this file directly in the Lovable thread on 2026-11-14 and explicitly stated this UPC; cover title visually matches the canonical title",
         "mappingStatus": "owner-confirmed-UPC-and-visible-title-match",
-        "integrated": true
+        "integrated": false,
+        "integrationStatus": "pending-exact-original-binary-replacement"
       }
     },
     {
@@ -573,13 +575,13 @@
     ],
     "byteIdenticalOriginalCopies": true,
     "integratedCount": 16,
-    "unverifiedUPCs": [],
-    "trackCountEvidence": "Vault file screens show track position, not complete release count; Spotify screen is partial and has no UPC; unscoped overlapping file lists do not establish release membership or count",
-    "readmeDiscrepancy": "README mentions 36 audio files and audio-inventory.csv, but no audio entries are present in this ZIP",
-    "ownerConfirmedIntegratedUPCs": [
+    "unverifiedUPCs": [
       "199955715135",
       "199955742094"
     ],
-    "totalIntegratedCount": 18
+    "trackCountEvidence": "Vault file screens show track position, not complete release count; Spotify screen is partial and has no UPC; unscoped overlapping file lists do not establish release membership or count",
+    "readmeDiscrepancy": "README mentions 36 audio files and audio-inventory.csv, but no audio entries are present in this ZIP",
+    "ownerConfirmedIntegratedUPCs": [],
+    "totalIntegratedCount": 16
   }
 }

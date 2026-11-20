@@ -23,8 +23,14 @@ export const shopPriceTiers = [
   },
 ] as const;
 export const formatShopPrice = (cents: number) => `${(cents / 100).toFixed(2).replace(".", ",")} €`;
-// Only UPC-specific evidenced counts may be added here; never infer from a title.
-export const verifiedReleaseTrackCounts: Readonly<Record<string, number>> = {};
+
+// Only publish a release price when its format is supported by explicit owner-provided evidence.
+// The owner confirmed #NEVERFAKELIKETHEM as a single and 30.000 GÉNOCIDES as an 8-track release.
+// All other release formats remain unverified; do not infer a single from missing tracklist data.
+export const verifiedReleaseTrackCounts: Readonly<Record<string, number>> = {
+  "199955715135": 1,
+  "199955742094": 8,
+};
 export function priceForTrackCount(count: number | undefined): number | null {
   if (count === undefined || !Number.isSafeInteger(count) || count < 1) return null;
   if (count === 1) return shopPriceTiers[0].cents;
@@ -51,7 +57,6 @@ export const inquirySchema = z
   })
   .strict();
 export type Inquiry = z.infer<typeof inquirySchema>;
-
 export const commerceSearchSchema = z.object({
   release: z
     .string()

@@ -13,7 +13,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "deploy": "npm run build && wrangler deploy",
-    "cf-typegen": "wrangler types"
+    "cf-typegen": "wrangler types",
+    "audit:assets": "node scripts/audit-assets.mjs"
   },
   "overrides": {
     "rolldown": "1.2.1"
