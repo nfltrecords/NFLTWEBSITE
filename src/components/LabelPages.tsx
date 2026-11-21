@@ -180,7 +180,7 @@ export function HomePage({ locale = "fr" }: { locale?: Locale }) {
       <section className="editorial-section">
         <div className="section-heading">
           <div>
-            <p className="eyebrow">02 / {t(locale, "LES SORTIES", "THE RELEASES")}</p>
+            <p className="eyebrow">02 / {t(locale, "LES TITRES", "THE TRACKS")}</p>
             <h2>{t(locale, "CATALOGUE NFLT", "NFLT CATALOGUE")}</h2>
           </div>
           <span className="text-muted-foreground">18 {t(locale, "SORTIES", "RELEASES")}</span>
