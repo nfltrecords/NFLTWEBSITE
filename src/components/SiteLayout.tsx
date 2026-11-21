@@ -158,8 +158,9 @@ export function SiteLayout({ children }: { children: ReactNode }) {
             <ArrowUpRight />
           </Link>
         </div>
-        <div className="footer-wordmark" aria-hidden="true">
-          <img src={goldLogoUrl} alt="" className="footer-logo" width={537} height={263} />
+        <div className="footer-wordmark footer-wordmark-type" aria-label="NFLT RECORDS">
+          <span>NFLT</span>
+          <span>RECORDS</span>
         </div>
         <div className="footer-bottom">
           <p>
