@@ -360,4 +360,16 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://nflt-records.com/en/catalogue/821440674572"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://nflt-records.com/catalogue/821440674572"/>
   </url>
+  <url>
+    <loc>https://nflt-records.com/ecouter</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://nflt-records.com/ecouter"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nflt-records.com/en/listen"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nflt-records.com/ecouter"/>
+  </url>
+  <url>
+    <loc>https://nflt-records.com/en/listen</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://nflt-records.com/ecouter"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nflt-records.com/en/listen"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://nflt-records.com/ecouter"/>
+  </url>
 </urlset>

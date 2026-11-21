@@ -16,6 +16,7 @@ describe("Public bilingual SEO rules", () => {
       "/radio",
       "/boutique",
       "/licences-musicales",
+      "/ecouter",
     ]);
     expect(
       pageHead("home").links.find((link) => "hrefLang" in link && link.hrefLang === "x-default")
@@ -23,11 +24,21 @@ describe("Public bilingual SEO rules", () => {
     ).toBe("https://nflt-records.com/");
   });
 
+  it("publishes the bilingual streaming page with reciprocal metadata", () => {
+    expect(publicPages.streaming).toEqual({ fr: "/ecouter", en: "/en/listen" });
+    for (const locale of ["fr", "en"] as const) {
+      const head = pageHead("streaming", locale);
+      expect(head.links.find((link) => link.rel === "canonical")?.href).toBe(
+        absoluteUrl(publicPages.streaming[locale]),
+      );
+    }
+  });
+
   it("excludes the private messages route from the public language map", () => {
     expect(Object.values(publicPages).flatMap((page) => [page.fr, page.en])).not.toContain(
       "/messages",
     );
-    expect(Object.keys(publicPages)).toHaveLength(12);
+    expect(Object.keys(publicPages)).toHaveLength(13);
   });
 
   it("uses a self-canonical and reciprocal French and English alternatives", () => {

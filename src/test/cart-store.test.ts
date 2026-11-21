@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { normalizeCart } from "@/lib/cart-store";
 
 describe("cart eligibility", () => {
-  it("drops legacy cart entries whose release price is not confirmed", () => {
+  it("retains legacy cart entries for releases with indicative reference prices", () => {
     expect(
       normalizeCart({
         "199955715135": 2,
@@ -13,6 +13,8 @@ describe("cart eligibility", () => {
     ).toEqual({
       "199955715135": 2,
       "199955742094": 1,
+      "199951252436": 4,
+      "199956222809": 3,
     });
   });
 

@@ -12,10 +12,10 @@ describe("sitemap", () => {
     ].map((path) => `${SITE_URL}${path}`);
     expect(locs.sort()).toEqual(expected.sort());
   });
-  it("lists 60 absolute public URLs without lastmod or private routes", () => {
+  it("lists 62 absolute public URLs without lastmod or private routes", () => {
     const locs = [...xml.matchAll(/<loc>(.*?)<\/loc>/g)].map((m) => m[1] ?? "");
-    expect(locs).toHaveLength(60);
-    expect(new Set(locs).size).toBe(60);
+    expect(locs).toHaveLength(62);
+    expect(new Set(locs).size).toBe(62);
     expect(locs).toContain("https://nflt-records.com/radio");
     expect(locs).toContain("https://nflt-records.com/en/radio");
     expect(locs.every((u) => u.startsWith("https://nflt-records.com/"))).toBe(true);

@@ -58,6 +58,7 @@ export const publicPages = {
   radio: { fr: "/radio", en: "/en/radio" },
   shop: { fr: "/boutique", en: "/en/shop" },
   licensing: { fr: "/licences-musicales", en: "/en/music-licensing" },
+  streaming: { fr: "/ecouter", en: "/en/listen" },
 } as const;
 export type PublicPage = keyof typeof publicPages;
 export const groupOrganization = {
@@ -190,6 +191,16 @@ const descriptions: Record<PublicPage, Record<Locale, [string, string]>> = {
     en: [
       "NFLT — Artist, official biographies & catalogue",
       "Artist NFLT, distinct from the NFLT RECORDS label: two authorised original Spotify biographies and a catalogue of 18 releases.",
+    ],
+  },
+  streaming: {
+    fr: [
+      "Écouter NFLT — Streaming | NFLT RECORDS",
+      "Retrouvez NFLT sur Spotify, Apple Music et YouTube, puis explorez les 18 sorties du catalogue.",
+    ],
+    en: [
+      "Listen to NFLT — Streaming | NFLT RECORDS",
+      "Find NFLT on Spotify, Apple Music and YouTube, and explore all 18 catalogue releases.",
     ],
   },
   press: {

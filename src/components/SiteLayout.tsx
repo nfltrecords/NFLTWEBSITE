@@ -19,6 +19,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
     ["shop", english ? "Shop" : "Boutique"],
     ["licensing", english ? "Music licensing" : "Licences musicales"],
     ["catalogue", english ? "Catalogue" : "Catalogue"],
+    ["streaming", english ? "Listen" : "Écouter"],
     ["artists", english ? "Artists" : "Artistes"],
     ["about", english ? "The label" : "Le label"],
     ["services", "Services"],
@@ -157,8 +158,9 @@ export function SiteLayout({ children }: { children: ReactNode }) {
             <ArrowUpRight />
           </Link>
         </div>
-        <div className="footer-wordmark" aria-hidden="true">
-          <img src={goldLogoUrl} alt="" className="footer-logo" width={537} height={263} />
+        <div className="footer-wordmark footer-wordmark-type" aria-label="NFLT RECORDS">
+          <span>NFLT</span>
+          <span>RECORDS</span>
         </div>
         <div className="footer-bottom">
           <p>

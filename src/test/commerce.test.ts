@@ -7,7 +7,7 @@ import {
   formatShopPrice,
   priceForTrackCount,
   releasePriceCents,
-  verifiedReleaseTrackCounts,
+  provisionalReleaseTrackCounts,
 } from "@/lib/commerce";
 import { releases } from "@/lib/catalogue";
 import { checkoutActivationApproved, payPalCheckoutIsEnabled } from "@/lib/paypal-checkout-gate";
@@ -43,18 +43,14 @@ describe("Commerce inquiry rules", () => {
       expect(priceForTrackCount(count)).toBeNull();
   });
 
-  it("publishes prices only for release formats supported by owner-confirmed evidence", () => {
-    expect(verifiedReleaseTrackCounts).toEqual({
-      "199955715135": 1,
-      "199955742094": 8,
-    });
+  it("shows provisional reference prices for all 18 catalogue releases while checkout stays closed", () => {
+    expect(Object.keys(provisionalReleaseTrackCounts)).toHaveLength(18);
     expect(releasePriceCents("199955715135")).toBe(999);
     expect(releasePriceCents("199955742094")).toBe(1999);
-    for (const release of releases.filter(
-      (r) => !["199955715135", "199955742094"].includes(r.upc),
-    )) {
-      expect(verifiedReleaseTrackCounts[release.upc]).toBeUndefined();
-      expect(releasePriceCents(release.upc)).toBeNull();
+    expect(releasePriceCents("199956222809")).toBe(1999);
+    for (const release of releases.filter((r) => !["199955742094", "199956222809"].includes(r.upc))) {
+      expect(provisionalReleaseTrackCounts[release.upc]).toBe(1);
+      expect(releasePriceCents(release.upc)).toBe(999);
     }
     expect(commerceConfig.checkoutEnabled).toBe(false);
     expect(commerceConfig.checkoutReadiness.trackCountsAndPriceTierMapping).toBe("pending");

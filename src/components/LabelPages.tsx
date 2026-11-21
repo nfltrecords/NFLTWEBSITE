@@ -130,8 +130,8 @@ export function HomePage({ locale = "fr" }: { locale?: Locale }) {
             <p>
               {t(
                 locale,
-                "La musique au premier plan.\nUne identité. Sans compromis.",
-                "Music at the forefront.\nOne identity. Uncompromising.",
+                "NFLT RECORDS : THE MOST ADVANCED DEPARTMENTS.",
+                "NFLT RECORDS: THE MOST ADVANCED DEPARTMENTS.",
               )}
             </p>
             <Button asChild className="editorial-action">
@@ -148,9 +148,9 @@ export function HomePage({ locale = "fr" }: { locale?: Locale }) {
       </section>
       <div className="identity-strip">
         <span>NFLT RECORDS INC.</span>
-        <span className="text-primary">✳</span>
+        <span className="identity-divider" aria-hidden="true" />
         <span>NFLT RECORDS FRANCE</span>
-        <span className="text-primary">✳</span>
+        <span className="identity-divider" aria-hidden="true" />
         <span>NFLT RECORDS BRUSSELS</span>
       </div>
       <section className="editorial-section intro-grid">

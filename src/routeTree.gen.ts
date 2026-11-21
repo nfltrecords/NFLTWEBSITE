@@ -24,6 +24,7 @@ import { Route as NfltRouteImport } from './routes/nflt'
 import { Route as PresseRouteImport } from './routes/presse'
 import { Route as RadioRouteImport } from './routes/radio'
 import { Route as ServicesRouteImport } from './routes/services'
+import { Route as EcouterRouteImport } from './routes/ecouter'
 import { Route as CatalogueUpcRouteImport } from './routes/catalogue_.$upc'
 import { Route as EnIndexRouteImport } from './routes/en.index'
 import { Route as EnAboutRouteImport } from './routes/en.about'
@@ -39,6 +40,7 @@ import { Route as EnRadioRouteImport } from './routes/en.radio'
 import { Route as EnServicesRouteImport } from './routes/en.services'
 import { Route as EnShopRouteImport } from './routes/en.shop'
 import { Route as EnTermsOfSaleRouteImport } from './routes/en.terms-of-sale'
+import { Route as EnListenRouteImport } from './routes/en.listen'
 import { Route as EnCatalogueUpcRouteImport } from './routes/en.catalogue_.$upc'
 
 const IndexRoute = IndexRouteImport.update({
@@ -116,6 +118,11 @@ const ServicesRoute = ServicesRouteImport.update({
   path: '/services',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EcouterRoute = EcouterRouteImport.update({
+  id: '/ecouter',
+  path: '/ecouter',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CatalogueUpcRoute = CatalogueUpcRouteImport.update({
   id: '/catalogue_/$upc',
   path: '/catalogue/$upc',
@@ -191,6 +198,11 @@ const EnTermsOfSaleRoute = EnTermsOfSaleRouteImport.update({
   path: '/en/terms-of-sale',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EnListenRoute = EnListenRouteImport.update({
+  id: '/en/listen',
+  path: '/en/listen',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EnCatalogueUpcRoute = EnCatalogueUpcRouteImport.update({
   id: '/en/catalogue_/$upc',
   path: '/en/catalogue/$upc',
@@ -213,6 +225,7 @@ export interface FileRoutesByFullPath {
   '/presse': typeof PresseRoute
   '/radio': typeof RadioRoute
   '/services': typeof ServicesRoute
+  '/ecouter': typeof EcouterRoute
   '/catalogue/$upc': typeof CatalogueUpcRoute
   '/en/about': typeof EnAboutRoute
   '/en/application': typeof EnApplicationRoute
@@ -227,6 +240,7 @@ export interface FileRoutesByFullPath {
   '/en/services': typeof EnServicesRoute
   '/en/shop': typeof EnShopRoute
   '/en/terms-of-sale': typeof EnTermsOfSaleRoute
+  '/en/listen': typeof EnListenRoute
   '/en/': typeof EnIndexRoute
   '/en/catalogue/$upc': typeof EnCatalogueUpcRoute
 }
@@ -315,6 +329,7 @@ export interface FileRouteTypes {
     | '/presse'
     | '/radio'
     | '/services'
+    | '/ecouter'
     | '/catalogue/$upc'
     | '/en/about'
     | '/en/application'
@@ -329,6 +344,7 @@ export interface FileRouteTypes {
     | '/en/services'
     | '/en/shop'
     | '/en/terms-of-sale'
+    | '/en/listen'
     | '/en/'
     | '/en/catalogue/$upc'
   fileRoutesByTo: FileRoutesByTo
@@ -415,6 +431,7 @@ export interface RootRouteChildren {
   PresseRoute: typeof PresseRoute
   RadioRoute: typeof RadioRoute
   ServicesRoute: typeof ServicesRoute
+  EcouterRoute: typeof EcouterRoute
   CatalogueUpcRoute: typeof CatalogueUpcRoute
   EnAboutRoute: typeof EnAboutRoute
   EnApplicationRoute: typeof EnApplicationRoute
@@ -429,6 +446,7 @@ export interface RootRouteChildren {
   EnServicesRoute: typeof EnServicesRoute
   EnShopRoute: typeof EnShopRoute
   EnTermsOfSaleRoute: typeof EnTermsOfSaleRoute
+  EnListenRoute: typeof EnListenRoute
   EnIndexRoute: typeof EnIndexRoute
   EnCatalogueUpcRoute: typeof EnCatalogueUpcRoute
 }
@@ -540,6 +558,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ServicesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ecouter': {
+      id: '/ecouter'
+      path: '/ecouter'
+      fullPath: '/ecouter'
+      preLoaderRoute: typeof EcouterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/catalogue_/$upc': {
       id: '/catalogue_/$upc'
       path: '/catalogue/$upc'
@@ -645,6 +670,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnTermsOfSaleRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/en/listen': {
+      id: '/en/listen'
+      path: '/en/listen'
+      fullPath: '/en/listen'
+      preLoaderRoute: typeof EnListenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/en/catalogue_/$upc': {
       id: '/en/catalogue_/$upc'
       path: '/en/catalogue/$upc'
@@ -671,6 +703,7 @@ const rootRouteChildren: RootRouteChildren = {
   PresseRoute: PresseRoute,
   RadioRoute: RadioRoute,
   ServicesRoute: ServicesRoute,
+  EcouterRoute: EcouterRoute,
   CatalogueUpcRoute: CatalogueUpcRoute,
   EnAboutRoute: EnAboutRoute,
   EnApplicationRoute: EnApplicationRoute,
@@ -685,6 +718,7 @@ const rootRouteChildren: RootRouteChildren = {
   EnServicesRoute: EnServicesRoute,
   EnShopRoute: EnShopRoute,
   EnTermsOfSaleRoute: EnTermsOfSaleRoute,
+  EnListenRoute: EnListenRoute,
   EnIndexRoute: EnIndexRoute,
   EnCatalogueUpcRoute: EnCatalogueUpcRoute,
 }
