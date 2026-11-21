@@ -115,7 +115,7 @@ export function HomePage({ locale = "fr" }: { locale?: Locale }) {
         />
         <div className="hero-shade" />
         <div className="hero-topline">
-          <span>{t(locale, "MAJOR MUSIC DEPARTMENT", "MAJOR MUSIC DEPARTMENT")}</span>
+          
           <span>NEW-YORK / PARIS / BRUSSELS</span>
         </div>
         <div className="hero-content">
