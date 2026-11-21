@@ -166,7 +166,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
           <p>
             {english ? "Independent record label" : "Maison de disques indépendante"}
             <br />
-            INC. / FRANCE / BRUSSELS
+            NEW-YORK / PARIS / BRUSSELS
           </p>
           <nav aria-label={english ? "Footer navigation" : "Navigation de pied de page"}>
             <Link to={publicPages.artist[locale]}>NFLT</Link>
