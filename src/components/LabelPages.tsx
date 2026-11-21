@@ -130,8 +130,8 @@ export function HomePage({ locale = "fr" }: { locale?: Locale }) {
             <p>
               {t(
                 locale,
-                "NFLT RECORDS : THE MOST ADVANCED DEPARTMENTS.",
-                "NFLT RECORDS: THE MOST ADVANCED DEPARTMENTS.",
+                "THE MOST ADVANCED DEPARTMENTS.",
+                "THE MOST ADVANCED DEPARTMENTS.",
               )}
             </p>
             <Button asChild className="editorial-action">
