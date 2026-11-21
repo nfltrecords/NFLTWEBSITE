@@ -115,11 +115,11 @@ export function HomePage({ locale = "fr" }: { locale?: Locale }) {
         />
         <div className="hero-shade" />
         <div className="hero-topline">
-          
+          <span>THE MOST ADVANCED DEPARTMENTS</span>
           <span>NEW-YORK / PARIS / BRUSSELS</span>
         </div>
         <div className="hero-content">
-          
+          <p className="eyebrow">11 DEPARTMENTS</p>
           <h1 className="hero-title">
             NFLT
             <span>
