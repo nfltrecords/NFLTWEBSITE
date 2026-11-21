@@ -115,11 +115,11 @@ export function HomePage({ locale = "fr" }: { locale?: Locale }) {
         />
         <div className="hero-shade" />
         <div className="hero-topline">
-          <span>{t(locale, "MAISON DE DISQUES INDÉPENDANTE", "INDEPENDENT RECORD LABEL")}</span>
+          <span>{t(locale, "MAJOR MUSIC DEPARTMENT", "MAJOR MUSIC DEPARTMENT")}</span>
           <span>NEW-YORK / PARIS / BRUSSELS</span>
         </div>
         <div className="hero-content">
-          <p className="eyebrow">INDEPENDENT. INTERNATIONAL.</p>
+          
           <h1 className="hero-title">
             NFLT
             <span>
@@ -154,21 +154,21 @@ export function HomePage({ locale = "fr" }: { locale?: Locale }) {
         <span>NFLT RECORDS BRUSSELS</span>
       </div>
       <section className="editorial-section intro-grid">
-        <p className="eyebrow">01 / {t(locale, "LE LABEL", "THE LABEL")}</p>
+        <p className="eyebrow">01 / {t(locale, "LE 1ER DEPARTEMENT", "THE 1ST DEPARTMENT")}</p>
         <div>
           <h2 className="statement">
             {t(
               locale,
-              "UNE MAISON.\nUNE IDENTITÉ.\nLA MUSIQUE.",
-              "ONE LABEL.\nONE IDENTITY.\nTHE MUSIC.",
+              "MAJOR MUSIC DEPARTMENT",
+              "MAJOR MUSIC DEPARTMENT",
             )}
           </h2>
           <div className="intro-bottom">
             <p className="body-copy">
               {t(
                 locale,
-                "NFLT RECORDS est une maison de disques indépendante internationale. Le label rassemble les activités de production musicale et le catalogue de l’artiste NFLT, au sein du groupe NFLT RECORDS INC.",
-                "NFLT RECORDS is an international independent record label. The label brings together music production activities and the artist NFLT’s catalogue within the NFLT RECORDS INC. group.",
+                "LE 1ER DEPARTEMENT D'NFLT RECORDS QUI COMPREND UNE SUCCURSALE A BRUXELLES ET UNE FILIALE EN FRANCE",
+                "THE 1ST DEPARTMENT OF NFLT RECORDS, WHICH INCLUDES A BRUSSELS BRANCH AND A FRENCH SUBSIDIARY.",
               )}
             </p>
             <Action locale={locale} page="about">
