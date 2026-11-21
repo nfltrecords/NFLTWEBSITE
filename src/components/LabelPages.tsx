@@ -406,8 +406,8 @@ export function ArtistPage({ locale = "fr" }: { locale?: Locale }) {
         title="NFLT"
       />
       <section className="editorial-section pt-0">
+        <p className="eyebrow mb-8">{t(locale, "Bio de l’artiste et bientôt la présentation du GR", "Artist biography and the GR presentation coming soon")}</p>
         <div className="intro-grid">
-          <p className="eyebrow">{t(locale, "Bio de l’artiste et bientôt la présentation du GR", "Artist biography and the GR presentation coming soon")}</p>
           <div>
             <div className="flex flex-wrap gap-4 mt-8">
               <Action locale={locale} page="catalogue">
