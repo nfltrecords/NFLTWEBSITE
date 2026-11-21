@@ -73,9 +73,9 @@ export function ShopPage({ locale }: { locale: Locale }) {
                     const unitPrice = releasePriceCents(release.upc) ?? 0;
                     const quantity = sharedCart.items[release.upc];
                     return (
-                      <li key={release.upc} className="flex flex-wrap items-center justify-between gap-4 py-4">
-                        <div className="min-w-0 flex-1"><p className="font-medium">{release.title}</p><p className="text-sm text-muted-foreground">{formatShopPrice(unitPrice)} {text(locale, "l’unité", "each")}</p></div>
-                        <div className="flex items-center gap-2">
+                      <li key={release.upc} className="cart-line-item py-4">
+                        <div className="cart-item-info"><p className="font-medium">{release.title}</p><p className="text-sm text-muted-foreground">{formatShopPrice(unitPrice)} {text(locale, "l’unité", "each")}</p></div>
+                        <div className="cart-item-controls">
                           <Button type="button" variant="outline" size="icon" aria-label={text(locale, "Retirer une unité", "Remove one")} onClick={() => changeCartQuantity(release.upc, -1)}><Minus size={15} /></Button>
                           <span className="min-w-6 text-center tabular-nums" aria-live="polite">{quantity}</span>
                           <Button type="button" variant="outline" size="icon" aria-label={text(locale, "Ajouter une unité", "Add one")} onClick={() => changeCartQuantity(release.upc, 1)} disabled={quantity >= 20}><Plus size={15} /></Button>
