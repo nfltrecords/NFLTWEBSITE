@@ -206,8 +206,8 @@ export function HomePage({ locale = "fr" }: { locale?: Locale }) {
             <p className="body-copy">
               {t(
                 locale,
-                "L’artiste NFLT. Le label NFLT RECORDS. Deux identités distinctes, un catalogue à découvrir.",
-                "The artist NFLT. The label NFLT RECORDS. Two distinct identities, a catalogue to discover.",
+                "NFLT est l’artiste du catalogue NFLT RECORDS.",
+                "NFLT is the artist featured in the NFLT RECORDS catalogue.",
               )}
             </p>
             <div className="flex flex-wrap gap-4 mt-8">
