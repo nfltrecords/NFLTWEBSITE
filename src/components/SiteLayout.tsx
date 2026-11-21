@@ -164,7 +164,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
         </div>
         <div className="footer-bottom">
           <p>
-            {english ? "Independent record label" : "Maison de disques indépendante"}
+            "11 DEPARTMENTS"
             <br />
             NEW-YORK / PARIS / BRUSSELS
           </p>
