@@ -407,7 +407,7 @@ export function ArtistPage({ locale = "fr" }: { locale?: Locale }) {
       />
       <section className="editorial-section pt-0">
         <div className="intro-grid">
-          <p className="eyebrow">ARTIST PROFILE</p>
+          <p className="eyebrow">{t(locale, "Bio de l’artiste et bientôt la présentation du GR", "Artist biography and the GR presentation coming soon")}</p>
           <div>
             <div className="flex flex-wrap gap-4 mt-8">
               <Action locale={locale} page="catalogue">
