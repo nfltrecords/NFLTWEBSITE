@@ -152,7 +152,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
       </main>
       <footer className="site-footer">
         <div className="footer-top">
-          <p>{english ? "YOUR NEXT CHAPTER." : "VOTRE PROCHAIN CHAPITRE."}</p>
+          <p>{english ? "OUR DEPARTMENTS." : "NOS DÉPARTEMENTS."}</p>
           <Link to={publicPages.contact[locale]}>
             {english ? "LET’S TALK." : "PARLONS-EN."}
             <ArrowUpRight />
