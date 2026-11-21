@@ -7,7 +7,7 @@ import { releases, filterReleases, type Release } from "@/lib/catalogue";
 import { releaseCovers } from "@/lib/covers";
 import { artistBiographies } from "@/lib/biographies";
 import { publicPages, type Locale } from "@/lib/seo";
-import hero from "@/assets/hero-studio.jpg";
+import hero from "../../Blanc Noir et Bleu Gris Minimaliste Bilan Résultats Publication Instagram_20261121_235925_0000.png";
 import { ApplicationBlock } from "@/components/ApplicationPage";
 import { implantations } from "@/lib/brand-content";
 import { RadioTeaser } from "@/components/RadioPage";
