@@ -971,7 +971,9 @@ a:focus-visible {
     color: var(--primary);
   }
   .label-hero {
-    height: 620px;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    min-height: 0;
   }
   .hero-topline {
     left: 6%;
@@ -985,7 +987,9 @@ a:focus-visible {
     text-align: right;
   }
   .hero-photo {
-    object-position: 59% center;
+    object-fit: contain;
+    object-position: center center;
+    background: #000;
   }
   .hero-content {
     left: 6%;
