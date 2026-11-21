@@ -203,13 +203,6 @@ export function HomePage({ locale = "fr" }: { locale?: Locale }) {
             </h2>
           </div>
           <div>
-            <p className="body-copy">
-              {t(
-                locale,
-                "NFLT est l’artiste du catalogue NFLT RECORDS.",
-                "NFLT is the artist featured in the NFLT RECORDS catalogue.",
-              )}
-            </p>
             <div className="flex flex-wrap gap-4 mt-8">
               <Action locale={locale} page="artist">
                 {t(locale, "Profil & biographies", "Profile & biographies")}
@@ -416,13 +409,6 @@ export function ArtistPage({ locale = "fr" }: { locale?: Locale }) {
         <div className="intro-grid">
           <p className="eyebrow">ARTIST PROFILE</p>
           <div>
-            <p className="body-copy">
-              {t(
-                locale,
-                "NFLT est l’artiste auquel appartiennent les 18 sorties du catalogue. NFLT RECORDS est la marque du label, distincte de l’identité de l’artiste.",
-                "NFLT is the artist behind the catalogue’s 18 releases. NFLT RECORDS is the label brand, distinct from the artist’s identity.",
-              )}
-            </p>
             <div className="flex flex-wrap gap-4 mt-8">
               <Action locale={locale} page="catalogue">
                 {t(locale, "Discographie NFLT", "NFLT discography")}
