@@ -242,12 +242,12 @@ export function HomePage({ locale = "fr" }: { locale?: Locale }) {
           <div className="network-panel" id="nflt-network">
             <div className="network-intro">
               <p className="eyebrow">NFLT RECORDS / GLOBAL PRESENCE</p>
-              <h3>{t(locale, "TROIS IMPLANTATIONS. UN MÊME RÉSEAU.", "THREE LOCATIONS. ONE NETWORK.")}</h3>
+              <h3>{t(locale, "NOS IMPLANTATIONS OFFICIELLES", "OUR OFFICIAL LOCATIONS")}</h3>
               <p className="body-copy">
                 {t(
                   locale,
-                  "Découvrez les trois implantations de NFLT RECORDS : la maison mère à New York, la filiale en France à Paris et la succursale de Bruxelles. Les cartes indiquent les villes d’implantation et permettent d’ouvrir leur localisation dans Google Maps.",
-                  "Discover the three NFLT RECORDS locations: the parent company in New York, the French subsidiary in Paris, and the Brussels branch. The maps show each city and let you open its location in Google Maps.",
+                  "Retrouvez les localisations officielles des trois entités NFLT RECORDS : NFLT RECORDS INC., maison mère à New York ; NFLT RECORDS FRANCE, filiale à Paris ; et NFLT RECORDS BRUSSELS, succursale à Bruxelles. Chaque carte affiche son emplacement sur Google Maps et permet d’ouvrir directement la carte.",
+                  "Find the official locations of the three NFLT RECORDS entities: NFLT RECORDS INC., parent company in New York; NFLT RECORDS FRANCE, subsidiary in Paris; and NFLT RECORDS BRUSSELS, branch in Brussels. Each card displays its Google Maps location and opens the map directly.",
                 )}
               </p>
             </div>
