@@ -116,8 +116,8 @@ export function HomePage({ locale = "fr" }: { locale?: Locale }) {
           0,
           Math.min(heroElement.offsetHeight, -heroElement.getBoundingClientRect().top),
         );
-        heroElement.style.setProperty("--hero-photo-shift", `${offset * 0.16}px`);
-        heroElement.style.setProperty("--hero-content-shift", `${offset * -0.045}px`);
+        heroElement.style.setProperty("--hero-photo-shift", `${offset * 0.42}px`);
+        heroElement.style.setProperty("--hero-content-shift", `${offset * -0.14}px`);
       });
     };
 
