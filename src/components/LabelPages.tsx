@@ -220,9 +220,8 @@ export function HomePage({ locale = "fr" }: { locale?: Locale }) {
               ) : null}
             </div>
             {index === 0 ? (
-              <Button
+              <button
                 type="button"
-                variant="outline"
                 className="editorial-action network-toggle"
                 aria-expanded={showNetwork}
                 aria-controls="nflt-network"
@@ -231,8 +230,8 @@ export function HomePage({ locale = "fr" }: { locale?: Locale }) {
                 {showNetwork
                   ? t(locale, "FERMER", "CLOSE")
                   : t(locale, "DÉCOUVRIR", "DISCOVER")}
-                <ArrowUpRight />
-              </Button>
+                <ArrowUpRight aria-hidden="true" />
+              </button>
             ) : (
               <p className="eyebrow">{t(locale, "EN CONSTRUCTION", "IN PROGRESS")}</p>
             )}
