@@ -223,9 +223,6 @@ export function HomePage({ locale = "fr" }: { locale?: Locale }) {
                   <ArrowUpRight aria-hidden="true" />
                 </Link>
               ) : null}
-              {index === 0 ? (
-details>
-              ) : null}
             </div>
             {index === 0 ? null : (
               <p className="eyebrow">{t(locale, "EN CONSTRUCTION", "IN PROGRESS")}</p>
