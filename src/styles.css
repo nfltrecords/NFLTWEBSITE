@@ -188,6 +188,8 @@ a:focus-visible {
   height: 100%;
   object-fit: cover;
   object-position: center 47%;
+  transform: translate3d(0, var(--hero-photo-shift, 0px), 0) scale(1.1);
+  will-change: transform;
 }
 .hero-shade {
   position: absolute;
@@ -208,6 +210,8 @@ a:focus-visible {
   bottom: 80px;
   left: 4%;
   right: 4%;
+  transform: translate3d(0, var(--hero-content-shift, 0px), 0);
+  will-change: transform;
 }
 .eyebrow {
   font-size: 11px;
