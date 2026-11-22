@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { Link } from "@tanstack/react-router";
-import { ArrowDown, ArrowUpRight, Search } from "lucide-react";
+import { ArrowDown, ArrowUpRight, Search, MapPin } from "lucide-react";
 import { useState } from "react";
 import { SiteLayout, PageHeader } from "@/components/SiteLayout";
 import { Button } from "@/components/ui/button";
@@ -102,6 +102,7 @@ function ReleaseRow({
   );
 }
 export function HomePage({ locale = "fr" }: { locale?: Locale }) {
+  const [showNetwork, setShowNetwork] = useState(false);
   const heroRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -218,11 +219,70 @@ export function HomePage({ locale = "fr" }: { locale?: Locale }) {
                 <p className="body-copy mt-4 text-primary">{department.description}</p>
               ) : null}
             </div>
-            {index > 0 ? (
+            {index === 0 ? (
+              <Button
+                type="button"
+                variant="outline"
+                className="editorial-action network-toggle"
+                aria-expanded={showNetwork}
+                aria-controls="nflt-network"
+                onClick={() => setShowNetwork((visible) => !visible)}
+              >
+                {showNetwork
+                  ? t(locale, "Fermer le réseau", "Close the network")
+                  : t(locale, "Explorer le réseau", "Explore the network")}
+                <ArrowUpRight />
+              </Button>
+            ) : (
               <p className="eyebrow">{t(locale, "EN CONSTRUCTION", "IN PROGRESS")}</p>
-            ) : null}
+            )}
           </div>
         ))}
+        {showNetwork ? (
+          <div className="network-panel" id="nflt-network">
+            <div className="network-intro">
+              <p className="eyebrow">NFLT RECORDS / GLOBAL PRESENCE</p>
+              <h3>{t(locale, "TROIS IMPLANTATIONS. UN MÊME RÉSEAU.", "THREE LOCATIONS. ONE NETWORK.")}</h3>
+              <p className="body-copy">
+                {t(
+                  locale,
+                  "Découvrez les trois implantations de NFLT RECORDS : la maison mère à New York, la filiale en France à Paris et la succursale de Bruxelles. Les cartes indiquent les villes d’implantation et permettent d’ouvrir leur localisation dans Google Maps.",
+                  "Discover the three NFLT RECORDS locations: the parent company in New York, the French subsidiary in Paris, and the Brussels branch. The maps show each city and let you open its location in Google Maps.",
+                )}
+              </p>
+            </div>
+            <div className="network-grid">
+              {implantations.map((location, locationIndex) => {
+                const city = location.city[locale];
+                const query = encodeURIComponent(city);
+                const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${query}`;
+                return (
+                  <article className="network-card" key={location.name}>
+                    <div className="network-map">
+                      <iframe
+                        title={t(locale, `Carte Google Maps — ${city}`, `Google Maps — ${city}`)}
+                        src={`https://www.google.com/maps?q=${query}&output=embed`}
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                        allowFullScreen
+                      />
+                    </div>
+                    <div className="network-card-copy">
+                      <span className="eyebrow">{String(locationIndex + 1).padStart(2, "0")} / {city.toUpperCase()}</span>
+                      <h4>{location.name}</h4>
+                      <p>{location.role[locale]}</p>
+                      <a href={mapsUrl} target="_blank" rel="noreferrer" className="network-map-link">
+                        <MapPin size={15} />
+                        {t(locale, "Voir sur Google Maps", "View on Google Maps")}
+                        <ArrowUpRight size={15} />
+                      </a>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          </div>
+        ) : null}
       </section>
       <section className="editorial-section">
         <div className="section-heading">
