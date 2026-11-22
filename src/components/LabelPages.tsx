@@ -160,6 +160,14 @@ export function HomePage({ locale = "fr" }: { locale?: Locale }) {
           </div>
         </div>
         {[
+          {
+            name: "MAJOR MUSIC DEPARTMENT",
+            description: t(
+              locale,
+              "LE 1ER DEPARTEMENT D'NFLT RECORDS QUI COMPREND UNE SUCCURSALE A BRUXELLES ET UNE FILIALE EN FRANCE",
+              "THE 1ST DEPARTMENT OF NFLT RECORDS, WHICH INCLUDES A BRUSSELS BRANCH AND A FRENCH SUBSIDIARY.",
+            ),
+          },
           { name: "NFLT - TV" },
           { name: "NFLT SOCIETY" },
           { name: "NETELIA" },
@@ -172,36 +180,21 @@ export function HomePage({ locale = "fr" }: { locale?: Locale }) {
           { name: "VOSO - SAHCI", detail: "TRULY MARTIAL ARTS OF NFLT" },
         ].map((department, index) => (
           <div className="service-row" key={department.name}>
-            <span className="eyebrow">{String(index + 2).padStart(2, "0")}</span>
+            <span className="eyebrow">{String(index + 1).padStart(2, "0")}</span>
             <div>
               <h2>{department.name}</h2>
               {department.detail ? (
                 <h2 className="department-detail">({department.detail})</h2>
               ) : null}
+              {department.description ? (
+                <p className="body-copy mt-4">{department.description}</p>
+              ) : null}
             </div>
-            <p className="eyebrow">{t(locale, "EN CONSTRUCTION", "IN PROGRESS")}</p>
+            {index > 0 ? (
+              <p className="eyebrow">{t(locale, "EN CONSTRUCTION", "IN PROGRESS")}</p>
+            ) : null}
           </div>
         ))}
-      </section>
-      <section className="editorial-section intro-grid">
-        <p className="eyebrow">01 / {t(locale, "LE 1ER DEPARTEMENT", "THE 1ST DEPARTMENT")}</p>
-        <div>
-          <h2 className="statement">
-            {t(locale, "MAJOR MUSIC DEPARTMENT", "MAJOR MUSIC DEPARTMENT")}
-          </h2>
-          <div className="intro-bottom">
-            <p className="body-copy">
-              {t(
-                locale,
-                "LE 1ER DEPARTEMENT D'NFLT RECORDS QUI COMPREND UNE SUCCURSALE A BRUXELLES ET UNE FILIALE EN FRANCE",
-                "THE 1ST DEPARTMENT OF NFLT RECORDS, WHICH INCLUDES A BRUSSELS BRANCH AND A FRENCH SUBSIDIARY.",
-              )}
-            </p>
-            <Action locale={locale} page="about">
-              {t(locale, "Découvrir le groupe", "Discover the group")}
-            </Action>
-          </div>
-        </div>
       </section>
       <section className="editorial-section">
         <div className="section-heading">
