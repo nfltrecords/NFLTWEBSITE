@@ -87,15 +87,29 @@ export function ShopPage({ locale }: { locale: Locale }) {
                 </ul>
                 <div className="mt-5 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-5">
                   <div><p className="text-sm text-muted-foreground">{text(locale, "Total indicatif", "Indicative total")}</p><p className="text-3xl text-primary tabular-nums">{formatShopPrice(cartTotalCents)}</p></div>
-                  <Button type="button" className="editorial-action" disabled>
-                    {text(locale, "Paiement bientôt disponible", "Checkout coming soon")}
-                  </Button>
+                  <form action="https://www.paypal.com/cgi-bin/webscr" method="post" className="flex flex-wrap items-center gap-3">
+                    <input type="hidden" name="cmd" value="_cart" />
+                    <input type="hidden" name="upload" value="1" />
+                    <input type="hidden" name="business" value="Encoresarbakane@gmail.com" />
+                    <input type="hidden" name="currency_code" value="EUR" />
+                    {cartItems.map((release, index) => (
+                      <div key={release.upc}>
+                        <input type="hidden" name={`item_name_${index + 1}`} value={release.title} />
+                        <input type="hidden" name={`item_number_${index + 1}`} value={release.upc} />
+                        <input type="hidden" name={`amount_${index + 1}`} value={((releasePriceCents(release.upc) ?? 0) / 100).toFixed(2)} />
+                        <input type="hidden" name={`quantity_${index + 1}`} value={sharedCart.items[release.upc]} />
+                      </div>
+                    ))}
+                    <Button type="submit" className="editorial-action">
+                      {text(locale, "Payer avec PayPal", "Pay with PayPal")}
+                    </Button>
+                  </form>
                 </div>
                 <p className="body-copy mt-4 text-sm">
                   {text(
                     locale,
-                    "Le paiement en ligne est temporairement désactivé. Le panier sert uniquement à préparer votre sélection ; aucune commande ni aucun paiement ne sont acceptés pour le moment. Les prix, droits, vendeur, livraison et conditions doivent être validés avant l’ouverture des ventes.",
-                    "Online checkout is temporarily disabled. The cart is only for preparing your selection; orders and payments are not accepted at this time. Prices, rights, seller, delivery and terms must be validated before sales open.",
+                    "Le paiement est traité sur la page sécurisée PayPal. La confirmation et le suivi de la commande sont consultables dans votre compte PayPal.",
+                    "Payment is processed on PayPal's secure checkout page. Payment confirmation and order details are available in your PayPal account.",
                   )}
                 </p>
               </>
