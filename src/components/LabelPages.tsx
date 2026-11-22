@@ -128,11 +128,7 @@ export function HomePage({ locale = "fr" }: { locale?: Locale }) {
           </h1>
           <div className="hero-bottom">
             <p>
-              {t(
-                locale,
-                "THE MOST ADVANCED DEPARTMENTS.",
-                "THE MOST ADVANCED DEPARTMENTS.",
-              )}
+              {t(locale, "THE MOST ADVANCED DEPARTMENTS.", "THE MOST ADVANCED DEPARTMENTS.")}
             </p>
             <Button asChild className="editorial-action">
               <Link to={publicPages.catalogue[locale]}>
@@ -153,10 +149,15 @@ export function HomePage({ locale = "fr" }: { locale?: Locale }) {
         <span className="identity-divider" aria-hidden="true" />
         <span>NFLT RECORDS BRUSSELS</span>
       </div>
-      <section className="editorial-section departments-progress" aria-label={t(locale, "Départements en construction", "Departments in progress")}>
+      <section
+        className="editorial-section departments-progress"
+        aria-label={t(locale, "Départements en construction", "Departments in progress")}
+      >
         <div className="section-heading">
           <div>
-            <p className="eyebrow">{t(locale, "NFLT RECORDS / DÉPARTEMENTS", "NFLT RECORDS / DEPARTMENTS")}</p>
+            <p className="eyebrow">
+              {t(locale, "NFLT RECORDS / DÉPARTEMENTS", "NFLT RECORDS / DEPARTMENTS")}
+            </p>
             <h2>{t(locale, "11 DÉPARTEMENTS", "11 DEPARTMENTS")}</h2>
           </div>
         </div>
@@ -176,7 +177,9 @@ export function HomePage({ locale = "fr" }: { locale?: Locale }) {
             <span className="eyebrow">{String(index + 2).padStart(2, "0")}</span>
             <div>
               <h2>{department.name}</h2>
-              {department.detail ? <h2 className="department-detail">({department.detail})</h2> : null}
+              {department.detail ? (
+                <h2 className="department-detail">({department.detail})</h2>
+              ) : null}
             </div>
             <p className="eyebrow">{t(locale, "EN CONSTRUCTION", "IN PROGRESS")}</p>
           </div>
@@ -186,11 +189,7 @@ export function HomePage({ locale = "fr" }: { locale?: Locale }) {
         <p className="eyebrow">01 / {t(locale, "LE 1ER DEPARTEMENT", "THE 1ST DEPARTMENT")}</p>
         <div>
           <h2 className="statement">
-            {t(
-              locale,
-              "MAJOR MUSIC DEPARTMENT",
-              "MAJOR MUSIC DEPARTMENT",
-            )}
+            {t(locale, "MAJOR MUSIC DEPARTMENT", "MAJOR MUSIC DEPARTMENT")}
           </h2>
           <div className="intro-bottom">
             <p className="body-copy">
@@ -435,7 +434,13 @@ export function ArtistPage({ locale = "fr" }: { locale?: Locale }) {
         title="NFLT"
       />
       <section className="editorial-section pt-0">
-        <p className="eyebrow mb-8">{t(locale, "Bio de l’artiste et bientôt la présentation du GR", "Artist biography and the GR presentation coming soon")}</p>
+        <p className="eyebrow mb-8">
+          {t(
+            locale,
+            "Bio de l’artiste et bientôt la présentation du GR",
+            "Artist biography and the GR presentation coming soon",
+          )}
+        </p>
         <div className="intro-grid">
           <div>
             <div className="flex flex-wrap gap-4 mt-8">
