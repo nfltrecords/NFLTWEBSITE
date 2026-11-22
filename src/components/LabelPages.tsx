@@ -229,8 +229,8 @@ export function HomePage({ locale = "fr" }: { locale?: Locale }) {
                 onClick={() => setShowNetwork((visible) => !visible)}
               >
                 {showNetwork
-                  ? t(locale, "Fermer le réseau", "Close the network")
-                  : t(locale, "Explorer le réseau", "Explore the network")}
+                  ? t(locale, "FERMER", "CLOSE")
+                  : t(locale, "DÉCOUVRIR NOS IMPLANTATIONS", "DISCOVER OUR LOCATIONS")}
                 <ArrowUpRight />
               </Button>
             ) : (
