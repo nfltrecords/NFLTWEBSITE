@@ -182,9 +182,9 @@ export function HomePage({ locale = "fr" }: { locale?: Locale }) {
           <div className="service-row" key={department.name}>
             <span className="eyebrow">{String(index + 1).padStart(2, "0")}</span>
             <div>
-              <h2>{department.name}</h2>
+              <h2 className="department-name">{department.name}</h2>
               {department.detail ? (
-                <h2 className="department-detail">({department.detail})</h2>
+                <div className="department-detail">({department.detail})</div>
               ) : null}
               {department.description ? (
                 <p className="body-copy mt-4">{department.description}</p>
