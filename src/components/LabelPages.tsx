@@ -219,17 +219,17 @@ export function HomePage({ locale = "fr" }: { locale?: Locale }) {
                 <p className="body-copy mt-4 text-primary">{department.description}</p>
               ) : null}
             </div>
-            {index === 0 ? (
-              <a href="#nflt-network" className="editorial-action network-toggle">
-                {t(locale, "DÉCOUVRIR", "DISCOVER")}
-                <ArrowUpRight aria-hidden="true" />
-              </a>
-            ) : (
+            {index === 0 ? null : (
               <p className="eyebrow">{t(locale, "EN CONSTRUCTION", "IN PROGRESS")}</p>
             )}
           </div>
         ))}
-        <div className="network-panel" id="nflt-network">
+        <details className="network-disclosure">
+          <summary className="editorial-action network-toggle">
+            {t(locale, "DÉCOUVRIR", "DISCOVER")}
+            <ArrowUpRight aria-hidden="true" />
+          </summary>
+          <div className="network-panel" id="nflt-network">
             <div className="network-intro">
               <p className="eyebrow">NFLT RECORDS / GLOBAL PRESENCE</p>
               <h3>{t(locale, "NOS IMPLANTATIONS OFFICIELLES", "OUR OFFICIAL LOCATIONS")}</h3>
@@ -274,6 +274,7 @@ export function HomePage({ locale = "fr" }: { locale?: Locale }) {
               })}
             </div>
           </div>
+        </details>
       </section>
       <section className="editorial-section">
         <div className="section-heading">
