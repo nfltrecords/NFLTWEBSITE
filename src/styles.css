@@ -1678,10 +1678,20 @@ a:focus-visible {
   color: #050505;
 }
 .network-panel {
+  display: none;
   grid-column: 1 / -1;
   border-top: 1px solid var(--primary);
   padding: clamp(36px, 5vw, 72px) 0 clamp(24px, 3vw, 48px);
   animation: network-reveal 0.35s ease-out both;
+}
+.network-panel:target {
+  display: block;
+  scroll-margin-top: 24px;
+}
+.network-toggle {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
 }
 .network-intro {
   display: grid;
