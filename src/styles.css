@@ -650,6 +650,14 @@ a:focus-visible {
   font-size: 38px;
   line-height: 1.1;
 }
+.service-row .department-detail {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  font-family: var(--font-display);
+  font-size: 24px;
+  line-height: 1.15;
+}
 .mobile-nav {
   display: none;
 }
