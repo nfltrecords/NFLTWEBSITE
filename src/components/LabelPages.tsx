@@ -218,63 +218,66 @@ export function HomePage({ locale = "fr" }: { locale?: Locale }) {
               {department.description ? (
                 <p className="body-copy mt-4 text-primary">{department.description}</p>
               ) : null}
+              {index === 0 ? (
+        <details className="network-disclosure">
+                        <summary className="editorial-action network-toggle">
+                          {t(locale, "DÉCOUVRIR", "DISCOVER")}
+                          <ArrowUpRight aria-hidden="true" />
+                        </summary>
+                        <div className="network-panel" id="nflt-network">
+                          <div className="network-intro">
+                            <p className="eyebrow">NFLT RECORDS / GLOBAL PRESENCE</p>
+                            <h3>{t(locale, "NOS IMPLANTATIONS OFFICIELLES", "OUR OFFICIAL LOCATIONS")}</h3>
+                            <p className="body-copy">
+                              {t(
+                                locale,
+                                "Retrouvez les localisations officielles des trois entités NFLT RECORDS : NFLT RECORDS INC., maison mère à New York ; NFLT RECORDS FRANCE, filiale à Paris ; et NFLT RECORDS BRUSSELS, succursale à Bruxelles. Chaque carte affiche son emplacement sur Google Maps et permet d’ouvrir directement la carte.",
+                                "Find the official locations of the three NFLT RECORDS entities: NFLT RECORDS INC., parent company in New York; NFLT RECORDS FRANCE, subsidiary in Paris; and NFLT RECORDS BRUSSELS, branch in Brussels. Each card displays its Google Maps location and opens the map directly.",
+                              )}
+                            </p>
+                          </div>
+                          <div className="network-grid">
+                            {implantations.map((location, locationIndex) => {
+                              const city = location.city[locale];
+                              const address = location.address[locale];
+                              const query = encodeURIComponent(address);
+                              const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${query}`;
+                              return (
+                                <article className="network-card" key={location.name}>
+                                  <div className="network-map">
+                                    <iframe
+                                      title={t(locale, `Carte Google Maps — ${city}`, `Google Maps — ${city}`)}
+                                      src={`https://www.google.com/maps?q=${query}&output=embed`}
+                                      loading="lazy"
+                                      referrerPolicy="no-referrer-when-downgrade"
+                                      allowFullScreen
+                                    />
+                                  </div>
+                                  <div className="network-card-copy">
+                                    <span className="eyebrow">{String(locationIndex + 1).padStart(2, "0")} / {city.toUpperCase()}</span>
+                                    <h4>{location.name}</h4>
+                                    <p>{location.role[locale]}</p>
+                                    <p className="network-address">{address}</p>
+                                    <a href={mapsUrl} target="_blank" rel="noreferrer" className="network-map-link">
+                                      <MapPin size={15} />
+                                      {t(locale, "Voir sur Google Maps", "View on Google Maps")}
+                                      <ArrowUpRight size={15} />
+                                    </a>
+                                  </div>
+                                </article>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </details>
+              ) : null}
             </div>
             {index === 0 ? null : (
               <p className="eyebrow">{t(locale, "EN CONSTRUCTION", "IN PROGRESS")}</p>
             )}
           </div>
         ))}
-        <details className="network-disclosure">
-          <summary className="editorial-action network-toggle">
-            {t(locale, "DÉCOUVRIR", "DISCOVER")}
-            <ArrowUpRight aria-hidden="true" />
-          </summary>
-          <div className="network-panel" id="nflt-network">
-            <div className="network-intro">
-              <p className="eyebrow">NFLT RECORDS / GLOBAL PRESENCE</p>
-              <h3>{t(locale, "NOS IMPLANTATIONS OFFICIELLES", "OUR OFFICIAL LOCATIONS")}</h3>
-              <p className="body-copy">
-                {t(
-                  locale,
-                  "Retrouvez les localisations officielles des trois entités NFLT RECORDS : NFLT RECORDS INC., maison mère à New York ; NFLT RECORDS FRANCE, filiale à Paris ; et NFLT RECORDS BRUSSELS, succursale à Bruxelles. Chaque carte affiche son emplacement sur Google Maps et permet d’ouvrir directement la carte.",
-                  "Find the official locations of the three NFLT RECORDS entities: NFLT RECORDS INC., parent company in New York; NFLT RECORDS FRANCE, subsidiary in Paris; and NFLT RECORDS BRUSSELS, branch in Brussels. Each card displays its Google Maps location and opens the map directly.",
-                )}
-              </p>
-            </div>
-            <div className="network-grid">
-              {implantations.map((location, locationIndex) => {
-                const city = location.city[locale];
-                const address = location.address[locale];
-                const query = encodeURIComponent(address);
-                const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${query}`;
-                return (
-                  <article className="network-card" key={location.name}>
-                    <div className="network-map">
-                      <iframe
-                        title={t(locale, `Carte Google Maps — ${city}`, `Google Maps — ${city}`)}
-                        src={`https://www.google.com/maps?q=${query}&output=embed`}
-                        loading="lazy"
-                        referrerPolicy="no-referrer-when-downgrade"
-                        allowFullScreen
-                      />
-                    </div>
-                    <div className="network-card-copy">
-                      <span className="eyebrow">{String(locationIndex + 1).padStart(2, "0")} / {city.toUpperCase()}</span>
-                      <h4>{location.name}</h4>
-                      <p>{location.role[locale]}</p>
-                      <p className="network-address">{address}</p>
-                      <a href={mapsUrl} target="_blank" rel="noreferrer" className="network-map-link">
-                        <MapPin size={15} />
-                        {t(locale, "Voir sur Google Maps", "View on Google Maps")}
-                        <ArrowUpRight size={15} />
-                      </a>
-                    </div>
-                  </article>
-                );
-              })}
-            </div>
-          </div>
-        </details>
+
       </section>
       <section className="editorial-section">
         <div className="section-heading">
