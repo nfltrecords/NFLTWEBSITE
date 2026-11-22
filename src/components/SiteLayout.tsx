@@ -199,9 +199,6 @@ export function PageHeader({ kicker, title }: { kicker: string; title: string })
     <section className="page-header">
       <p className="eyebrow">{kicker}</p>
       <h1>{title}</h1>
-      <span className="page-header-mark" aria-hidden="true">
-        ✳
-      </span>
     </section>
   );
 }
