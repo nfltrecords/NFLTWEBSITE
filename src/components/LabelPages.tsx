@@ -230,7 +230,7 @@ export function HomePage({ locale = "fr" }: { locale?: Locale }) {
               >
                 {showNetwork
                   ? t(locale, "FERMER", "CLOSE")
-                  : t(locale, "DÉCOUVRIR NOS IMPLANTATIONS", "DISCOVER OUR LOCATIONS")}
+                  : t(locale, "DÉCOUVRIR", "DISCOVER")}
                 <ArrowUpRight />
               </Button>
             ) : (
