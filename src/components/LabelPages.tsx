@@ -187,7 +187,7 @@ export function HomePage({ locale = "fr" }: { locale?: Locale }) {
                 <div className="department-detail">({department.detail})</div>
               ) : null}
               {department.description ? (
-                <p className="body-copy mt-4">{department.description}</p>
+                <p className="body-copy mt-4 text-primary">{department.description}</p>
               ) : null}
             </div>
             {index > 0 ? (
