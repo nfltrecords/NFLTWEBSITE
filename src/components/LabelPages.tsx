@@ -254,7 +254,8 @@ export function HomePage({ locale = "fr" }: { locale?: Locale }) {
             <div className="network-grid">
               {implantations.map((location, locationIndex) => {
                 const city = location.city[locale];
-                const query = encodeURIComponent(city);
+                const address = location.address[locale];
+                const query = encodeURIComponent(address);
                 const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${query}`;
                 return (
                   <article className="network-card" key={location.name}>
@@ -271,6 +272,7 @@ export function HomePage({ locale = "fr" }: { locale?: Locale }) {
                       <span className="eyebrow">{String(locationIndex + 1).padStart(2, "0")} / {city.toUpperCase()}</span>
                       <h4>{location.name}</h4>
                       <p>{location.role[locale]}</p>
+                      <p className="network-address">{address}</p>
                       <a href={mapsUrl} target="_blank" rel="noreferrer" className="network-map-link">
                         <MapPin size={15} />
                         {t(locale, "Voir sur Google Maps", "View on Google Maps")}
