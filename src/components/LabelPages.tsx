@@ -127,9 +127,7 @@ export function HomePage({ locale = "fr" }: { locale?: Locale }) {
             </span>
           </h1>
           <div className="hero-bottom">
-            <p>
-{t(locale, "THE MOST ADVANCED DEPARTMENTS.", "THE MOST ADVANCED DEPARTMENTS.")}
-            </p>
+            <p>{t(locale, "THE MOST ADVANCED DEPARTMENTS.", "THE MOST ADVANCED DEPARTMENTS.")}</p>
             <Button asChild className="editorial-action">
               <Link to={publicPages.catalogue[locale]}>
                 {t(locale, "Explorer le catalogue", "Explore the catalogue")}
