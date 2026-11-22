@@ -1677,21 +1677,31 @@ a:focus-visible {
   background: var(--primary);
   color: #050505;
 }
-.network-panel {
-  display: none;
+ .network-panel {
+  display: block;
   grid-column: 1 / -1;
   border-top: 1px solid var(--primary);
   padding: clamp(36px, 5vw, 72px) 0 clamp(24px, 3vw, 48px);
   animation: network-reveal 0.35s ease-out both;
 }
-.network-panel:target {
-  display: block;
-  scroll-margin-top: 24px;
+.network-disclosure {
+  grid-column: 1 / -1;
 }
 .network-toggle {
   display: inline-flex;
   align-items: center;
   text-decoration: none;
+  cursor: pointer;
+  list-style: none;
+}
+.network-toggle::-webkit-details-marker {
+  display: none;
+}
+.network-disclosure[open] > .network-toggle {
+  margin-bottom: 24px;
+}
+.network-disclosure[open] > .network-toggle svg {
+  transform: rotate(45deg);
 }
 .network-intro {
   display: grid;
