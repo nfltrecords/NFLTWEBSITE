@@ -153,6 +153,35 @@ export function HomePage({ locale = "fr" }: { locale?: Locale }) {
         <span className="identity-divider" aria-hidden="true" />
         <span>NFLT RECORDS BRUSSELS</span>
       </div>
+      <section className="editorial-section departments-progress" aria-label={t(locale, "Départements en construction", "Departments in progress")}>
+        <div className="section-heading">
+          <div>
+            <p className="eyebrow">{t(locale, "NFLT RECORDS / DÉPARTEMENTS", "NFLT RECORDS / DEPARTMENTS")}</p>
+            <h2>{t(locale, "11 DÉPARTEMENTS", "11 DEPARTMENTS")}</h2>
+          </div>
+        </div>
+        {[
+          { name: "NFLT - TV" },
+          { name: "NFLT SOCIETY" },
+          { name: "NETELIA" },
+          { name: "LES SUCCURSALES, FILIALES FILIÈRES+ SALLES" },
+          { name: "LES GRANDS ROYAUMES ET LES FAMILLES IMPÉRIALES" },
+          { name: "GRAND ROYAUME 21" },
+          { name: "BEAHNERGY OF NFLT", detail: "TRULY ENERGY" },
+          { name: "C'DVI SUAB", detail: "TRULY TECHNOLOGY OF NFLT" },
+          { name: "UVL YCOV HZO", detail: "TRULY SCIENCE OF NFLT" },
+          { name: "VOSO - SAHCI", detail: "TRULY MARTIAL ARTS OF NFLT" },
+        ].map((department, index) => (
+          <div className="service-row" key={department.name}>
+            <span className="eyebrow">{String(index + 2).padStart(2, "0")}</span>
+            <div>
+              <h2>{department.name}</h2>
+              {department.detail ? <h2 className="department-detail">({department.detail})</h2> : null}
+            </div>
+            <p className="eyebrow">{t(locale, "EN CONSTRUCTION", "IN PROGRESS")}</p>
+          </div>
+        ))}
+      </section>
       <section className="editorial-section intro-grid">
         <p className="eyebrow">01 / {t(locale, "LE 1ER DEPARTEMENT", "THE 1ST DEPARTMENT")}</p>
         <div>
@@ -176,32 +205,6 @@ export function HomePage({ locale = "fr" }: { locale?: Locale }) {
             </Action>
           </div>
         </div>
-      </section>
-      <section className="editorial-section departments-progress" aria-label={t(locale, "Départements en construction", "Departments in progress")}>
-        <div className="section-heading">
-          <div>
-            <p className="eyebrow">{t(locale, "NFLT RECORDS / DÉPARTEMENTS", "NFLT RECORDS / DEPARTMENTS")}</p>
-            <h2>{t(locale, "02 — 11 DÉPARTEMENTS", "02 — 11 DEPARTMENTS")}</h2>
-          </div>
-        </div>
-        {[
-          "NFLT - TV",
-          "NFLT SOCIETY",
-          "NETELIA",
-          "LES SUCCURSALES, FILIALES FILIÈRES+ SALLES",
-          "LES GRANDS ROYAUMES ET LES FAMILLES IMPÉRIALES",
-          "GRAND ROYAUME 21",
-          "BEAHNERGY OF NFLT (TRULY ENERGY)",
-          "C'DVI SUAB (TRULY TECHNOLOGY OF NFLT)",
-          "UVL YCOV HZO (TRULY SCIENCE OF NFLT)",
-          "VOSO - SAHCI (TRULY MARTIAL ARTS OF NFLT)",
-        ].map((department, index) => (
-          <div className="service-row" key={department}>
-            <span className="eyebrow">{String(index + 2).padStart(2, "0")}</span>
-            <h2>{department}</h2>
-            <p className="eyebrow">{t(locale, "EN CONSTRUCTION", "IN PROGRESS")}</p>
-          </div>
-        ))}
       </section>
       <section className="editorial-section">
         <div className="section-heading">
