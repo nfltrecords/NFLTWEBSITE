@@ -102,7 +102,6 @@ function ReleaseRow({
   );
 }
 export function HomePage({ locale = "fr" }: { locale?: Locale }) {
-  const [showNetwork, setShowNetwork] = useState(false);
   const heroRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
