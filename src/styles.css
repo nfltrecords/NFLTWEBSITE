@@ -1737,6 +1737,12 @@ a:focus-visible {
   color: var(--muted-foreground);
   font-size: 13px;
 }
+.network-card-copy > .network-address {
+  min-height: 3.5em;
+  color: var(--foreground);
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
 .network-map-link {
   display: inline-flex;
   align-items: center;
