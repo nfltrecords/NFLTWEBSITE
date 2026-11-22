@@ -220,25 +220,16 @@ export function HomePage({ locale = "fr" }: { locale?: Locale }) {
               ) : null}
             </div>
             {index === 0 ? (
-              <button
-                type="button"
-                className="editorial-action network-toggle"
-                aria-expanded={showNetwork}
-                aria-controls="nflt-network"
-                onClick={() => setShowNetwork((visible) => !visible)}
-              >
-                {showNetwork
-                  ? t(locale, "FERMER", "CLOSE")
-                  : t(locale, "DÉCOUVRIR", "DISCOVER")}
+              <a href="#nflt-network" className="editorial-action network-toggle">
+                {t(locale, "DÉCOUVRIR", "DISCOVER")}
                 <ArrowUpRight aria-hidden="true" />
-              </button>
+              </a>
             ) : (
               <p className="eyebrow">{t(locale, "EN CONSTRUCTION", "IN PROGRESS")}</p>
             )}
           </div>
         ))}
-        {showNetwork ? (
-          <div className="network-panel" id="nflt-network">
+        <div className="network-panel" id="nflt-network">
             <div className="network-intro">
               <p className="eyebrow">NFLT RECORDS / GLOBAL PRESENCE</p>
               <h3>{t(locale, "NOS IMPLANTATIONS OFFICIELLES", "OUR OFFICIAL LOCATIONS")}</h3>
@@ -283,7 +274,6 @@ export function HomePage({ locale = "fr" }: { locale?: Locale }) {
               })}
             </div>
           </div>
-        ) : null}
       </section>
       <section className="editorial-section">
         <div className="section-heading">
