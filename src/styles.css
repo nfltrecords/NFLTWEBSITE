@@ -1662,10 +1662,16 @@ a:focus-visible {
 
 /* Interactive global locations panel for the Major Music Department. */
 .network-toggle {
+  position: relative;
+  z-index: 5;
   justify-self: start;
   align-self: start;
-  border-color: var(--primary);
+  border: 1px solid var(--primary);
+  border-radius: 0;
+  background: transparent;
   color: var(--primary);
+  cursor: pointer;
+  pointer-events: auto;
 }
 .network-toggle:hover {
   background: var(--primary);
