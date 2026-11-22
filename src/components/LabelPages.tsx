@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowDown, ArrowUpRight, Search } from "lucide-react";
 import { useState } from "react";
@@ -101,9 +102,36 @@ function ReleaseRow({
   );
 }
 export function HomePage({ locale = "fr" }: { locale?: Locale }) {
+  const heroRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const heroElement = heroRef.current;
+    if (!heroElement) return;
+
+    let frame = 0;
+    const updateParallax = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const offset = Math.max(
+          0,
+          Math.min(heroElement.offsetHeight, -heroElement.getBoundingClientRect().top),
+        );
+        heroElement.style.setProperty("--hero-photo-shift", `${offset * 0.16}px`);
+        heroElement.style.setProperty("--hero-content-shift", `${offset * -0.045}px`);
+      });
+    };
+
+    window.addEventListener("scroll", updateParallax, { passive: true });
+    updateParallax();
+    return () => {
+      window.removeEventListener("scroll", updateParallax);
+      cancelAnimationFrame(frame);
+    };
+  }, []);
+
   return (
     <SiteLayout>
-      <section className="label-hero">
+      <section className="label-hero" ref={heroRef}>
         <img
           src={hero}
           alt={t(
