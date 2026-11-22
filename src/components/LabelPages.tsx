@@ -453,7 +453,7 @@ export function ArtistPage({ locale = "fr" }: { locale?: Locale }) {
         title="NFLT"
       />
       <section className="editorial-section pt-0">
-        <p className="eyebrow mb-8">
+        <p className="eyebrow mb-8 text-primary">
           {t(
             locale,
             "Bio de l’artiste et bientôt la présentation du GR",
