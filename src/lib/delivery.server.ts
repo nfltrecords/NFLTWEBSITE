@@ -1,9 +1,7 @@
 import { env } from "cloudflare:workers";
 import { releases } from "@/lib/catalogue";
 
-type R2Object = { body: ReadableStream; httpMetadata?: { contentType?: string }; size: number };
 type RuntimeBindings = {
-  NFLT_AUDIO?: { get(key: string): Promise<R2Object | null> };
   DELIVERY_TOKEN_SECRET?: string;
   RESEND_API_KEY?: string;
   DELIVERY_FROM_EMAIL?: string;
@@ -38,6 +36,18 @@ async function db<T>(path: string, init: RequestInit = {}): Promise<T> {
   if (!response.ok) throw new Error(`Order delivery database error (HTTP ${response.status}).`);
   if (response.status === 204) return undefined as T;
   return (await response.json()) as T;
+}
+const STORAGE_BUCKET = "nflt-private-audio";
+function storageObjectUrl(url: string, path: string, authenticated = false): string {
+  const encoded = path.split("/").map(encodeURIComponent).join("/");
+  return url + "/storage/v1/object/" + (authenticated ? "authenticated/" : "") + STORAGE_BUCKET + "/" + encoded;
+}
+async function getPrivateAudio(path: string): Promise<Response> {
+  const { url, key } = databaseConfig();
+  return fetch(storageObjectUrl(url, path, true), {
+    headers: { apikey: key, Authorization: "Bearer " + key },
+    cache: "no-store",
+  });
 }
 function base64url(bytes: Uint8Array): string {
   let binary = "";
@@ -75,12 +85,11 @@ export async function sendPaidOrderDelivery(orderId: string): Promise<string> {
   const order = rows[0];
   if (!order || order.status !== "paid")
     throw new Error("Only a paid order can receive a download.");
-  const assets = await db<Array<{ r2_object_key: string }>>(
-    `shop_release_assets?release_upc=eq.${encodeURIComponent(order.release_upc)}&select=r2_object_key&limit=1`,
+  const assets = await db<Array<{ storage_object_path: string | null }>>(
+    `shop_release_assets?release_upc=eq.${encodeURIComponent(order.release_upc)}&select=storage_object_path&limit=1`,
   );
-  if (!assets[0]?.r2_object_key)
+  if (!assets[0]?.storage_object_path)
     throw new Error("No verified master audio file is mapped to this release.");
-  if (!bindings.NFLT_AUDIO) throw new Error("The private NFLT audio bucket is not connected.");
   let expiry = order.download_expires_at;
   if (!expiry) {
     const candidate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
@@ -172,13 +181,13 @@ export async function servePaidOrderDownload(request: Request): Promise<Response
     return new Response("Lien invalide ou expiré.", { status: 404 });
   if (!safeEqual(await tokenFor(order.id, order.download_expires_at), supplied))
     return new Response("Lien invalide ou expiré.", { status: 404 });
-  const assets = await db<Array<{ r2_object_key: string }>>(
-    `shop_release_assets?release_upc=eq.${encodeURIComponent(order.release_upc)}&select=r2_object_key&limit=1`,
+  const assets = await db<Array<{ storage_object_path: string | null }>>(
+    `shop_release_assets?release_upc=eq.${encodeURIComponent(order.release_upc)}&select=storage_object_path&limit=1`,
   );
-  const key = assets[0]?.r2_object_key;
-  if (!key || !bindings.NFLT_AUDIO) return new Response("Fichier indisponible.", { status: 503 });
-  const object = await bindings.NFLT_AUDIO.get(key);
-  if (!object) return new Response("Fichier indisponible.", { status: 503 });
+  const path = assets[0]?.storage_object_path;
+  if (!path) return new Response("Fichier indisponible.", { status: 503 });
+  const object = await getPrivateAudio(path);
+  if (!object.ok || !object.body) return new Response("Fichier indisponible.", { status: 503 });
   const title =
     releases.find((item) => item.upc === order.release_upc)?.title ?? "NFLT-RECORDS-audio";
   const filename =
@@ -186,13 +195,13 @@ export async function servePaidOrderDownload(request: Request): Promise<Response
       .normalize("NFKD")
       .replace(/[^A-Za-z0-9._-]+/g, "-")
       .replace(/^-|-$/g, "") + ".wav";
-  return new Response(object.body, {
-    headers: {
-      "Content-Type": object.httpMetadata?.contentType ?? "audio/wav",
-      "Content-Length": String(object.size),
-      "Content-Disposition": `attachment; filename="${filename}"`,
-      "Cache-Control": "private, no-store, max-age=0",
-      "X-Content-Type-Options": "nosniff",
-    },
+  const headers = new Headers({
+    "Content-Type": object.headers.get("Content-Type") ?? "audio/wav",
+    "Content-Disposition": `attachment; filename="${filename}"`,
+    "Cache-Control": "private, no-store, max-age=0",
+    "X-Content-Type-Options": "nosniff",
   });
+  const contentLength = object.headers.get("Content-Length");
+  if (contentLength) headers.set("Content-Length", contentLength);
+  return new Response(object.body, { headers });
 }
