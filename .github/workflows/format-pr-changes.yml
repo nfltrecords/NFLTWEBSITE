@@ -27,8 +27,6 @@ jobs:
           npx prettier --write \
             docs/MANUAL-PAYPAL-AUTOMATIC-WAV-DELIVERY.md \
             docs/SECURE-AUDIO-DELIVERY-SETUP.md \
-            drizzle/migrations/0003_shop_order_delivery.sql \
-            drizzle/migrations/0004_paypal_ipn_transaction.sql \
             src/components/CommercePages.tsx \
             src/lib/delivery.server.ts \
             src/lib/manual-orders.functions.ts \
@@ -48,7 +46,7 @@ jobs:
           if [ -n "$(git status --porcelain)" ]; then
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add docs drizzle src vitest.config.ts wrangler.jsonc
+            git add docs src vitest.config.ts wrangler.jsonc
             git commit -m "Format secure audio delivery changes"
             git push
           fi
