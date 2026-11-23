@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { sendPaidOrderDelivery } from "@/lib/delivery.server";
 
 type Order = {
   id: string;
@@ -104,8 +105,10 @@ async function handleIpn(request: Request): Promise<Response> {
     return new Response("Order is not payable", { status: 409 });
   }
 
-  // Record verified payment only. The owner checks the PayPal account and triggers WAV delivery
-  // from /espace-commandes, so an IPN notification alone never releases a master file.
+  // Deliver only after PayPal's IPN has been cryptographically verified and the exact
+  // amount, currency, receiver, order reference and transaction have been persisted.
+  // Calling this for an already-paid duplicate also safely retries a previously failed email.
+  await sendPaidOrderDelivery(orderId);
   return new Response("OK", { status: 200, headers: { "Cache-Control": "no-store" } });
 }
 
