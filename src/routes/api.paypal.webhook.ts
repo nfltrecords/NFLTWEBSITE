@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { verifyPayPalWebhook } from "@/lib/paypal.server";
+import { sendPaidOrderDelivery } from "@/lib/delivery.server";
 
 type PayPalWebhookEvent = {
   id?: string;
@@ -169,6 +170,9 @@ async function handleWebhook(request: Request): Promise<Response> {
     } else if (order.paypal_capture_id !== captureId) {
       return new Response("Conflicting capture for paid order", { status: 409 });
     }
+
+    // Delivery is idempotent and only starts after the capture is confirmed and persisted.
+    await sendPaidOrderDelivery(order.id);
   }
 
   await databaseRequest<unknown>(
