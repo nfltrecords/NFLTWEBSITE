@@ -3,7 +3,7 @@ alter table public.shop_orders
   add column if not exists updated_at timestamptz not null default now(),
   add column if not exists paid_at timestamptz,
   add column if not exists download_expires_at timestamptz,
-  add column if not exists delivery_email_sent_at timestamptz;
+  add column if not exists delivery_email_sent_at timestamptz,\n  add column if not exists paypal_transaction_id text;\n\ncreate unique index if not exists shop_orders_paypal_transaction_id_uidx\n  on public.shop_orders (paypal_transaction_id) where paypal_transaction_id is not null;
 
 create table if not exists public.shop_release_assets (
   release_upc text primary key check (release_upc ~ '^[0-9]{12,14}$'),
