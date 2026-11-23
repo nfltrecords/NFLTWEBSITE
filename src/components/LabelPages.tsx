@@ -229,7 +229,6 @@ export function HomePage({ locale = "fr" }: { locale?: Locale }) {
             )}
           </div>
         ))}
-
       </section>
       <section className="editorial-section">
         <div className="section-heading">
@@ -686,7 +685,6 @@ export function PressPage({ locale = "fr" }: { locale?: Locale }) {
   );
 }
 
-
 export function LocationsPage({ locale = "fr" }: { locale?: Locale }) {
   return (
     <SiteLayout>
@@ -721,7 +719,9 @@ export function LocationsPage({ locale = "fr" }: { locale?: Locale }) {
                     />
                   </div>
                   <div className="network-card-copy">
-                    <span className="eyebrow">{String(locationIndex + 1).padStart(2, "0")} / {city.toUpperCase()}</span>
+                    <span className="eyebrow">
+                      {String(locationIndex + 1).padStart(2, "0")} / {city.toUpperCase()}
+                    </span>
                     <h4>{location.name}</h4>
                     <p>{location.role[locale]}</p>
                     <p className="network-address">{address}</p>
