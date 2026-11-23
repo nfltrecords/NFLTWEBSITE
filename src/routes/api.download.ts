@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { servePaidOrderDownload } from "@/lib/delivery.server";
 export const Route = createFileRoute("/api/download")({
-  server: { handlers: { GET: async ({ request }) => {
+  server: { handlers: { POST: async ({ request }) => {
     try { return await servePaidOrderDownload(request); }
     catch (error) {
       console.error("Paid download failed", error);
