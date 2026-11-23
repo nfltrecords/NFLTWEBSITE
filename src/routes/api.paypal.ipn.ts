@@ -37,14 +37,15 @@ async function handleIpn(request: Request): Promise<Response> {
   if ((await verification.text()).trim() !== "VERIFIED") return new Response("Invalid PayPal notification", { status: 400 });
 
   const data = new URLSearchParams(raw);
-  const orderId = data.get("custom") ?? "";
+  const orderId = (data.get("memo") ?? "").trim().replace(/^NFLT(?: RECORDS)?\s*[:#-]\s*/i, "");
   const transactionId = data.get("txn_id") ?? "";
   const receiver = (data.get("receiver_email") ?? data.get("business") ?? "").trim().toLowerCase();
   const status = data.get("payment_status");
+  const txnType = data.get("txn_type");
   const amount = Number(data.get("mc_gross"));
   const currency = data.get("mc_currency");
-  if (!/^[0-9a-f-]{36}$/i.test(orderId) || !transactionId || transactionId.length > 128) return new Response("Missing order or transaction reference", { status: 400 });
-  if (receiver !== "encoresarbakane@gmail.com" || status !== "Completed" || currency !== "EUR" || !Number.isFinite(amount)) return new Response("Payment does not meet fulfillment requirements", { status: 400 });
+  if (!/^[0-9a-f-]{36}$/i.test(orderId) || !transactionId || transactionId.length > 128) return new Response("Missing order reference or transaction ID in PayPal note", { status: 400 });
+  if (receiver !== "encoresarbakane@gmail.com" || status !== "Completed" || currency !== "EUR" || txnType !== "send_money" || !Number.isFinite(amount)) return new Response("Payment does not meet personal-account fulfillment requirements", { status: 400 });
 
   const rows = await db<Order[]>(`shop_orders?id=eq.${encodeURIComponent(orderId)}&select=id,amount_cents,currency,status,paypal_transaction_id&limit=1`);
   const order = rows[0];
@@ -62,7 +63,9 @@ async function handleIpn(request: Request): Promise<Response> {
     return new Response("Order is not payable", { status: 409 });
   }
 
-  // Only verified, completed, exact-amount EUR payments reach the automatic WAV delivery.
+  // PayPal.Me personal-account payments are matched only by the unique order reference
+  // the buyer enters in the optional payment note (memo), exact amount, EUR, recipient,
+  // completed status, and verified IPN signature.
   await sendPaidOrderDelivery(orderId);
   return new Response("OK", { status: 200, headers: { "Cache-Control": "no-store" } });
 }
