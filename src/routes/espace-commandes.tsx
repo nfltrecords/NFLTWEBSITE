@@ -57,7 +57,7 @@ function OrdersPage() {
       } else setMessage("Commande non validable. Vérifiez son état.");
     } catch {
       setMessage(
-        "Validation enregistrée ou livraison impossible. Vérifiez la configuration R2, Supabase et Resend avant de réessayer.",
+        "Validation enregistrée ou livraison impossible. Vérifiez la configuration Supabase Storage et Resend avant de réessayer.",
       );
     } finally {
       setLoading(false);
