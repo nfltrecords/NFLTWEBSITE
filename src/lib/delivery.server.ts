@@ -69,29 +69,23 @@ export async function sendPaidOrderDelivery(orderId: string): Promise<string> {
   const link = `https://nflt-records.com/telechargement#order=${encodeURIComponent(order.id)}&token=${encodeURIComponent(token)}`;
   if (!order.delivery_email_sent_at) {
     const apiKey = bindings.RESEND_API_KEY, from = bindings.DELIVERY_FROM_EMAIL;
-    if (apiKey && from) {
-      try {
-        const title = releases.find((item) => item.upc === order.release_upc)?.title ?? "Votre musique NFLT RECORDS";
-        const safeTitle = title.replace(/[&<>"]/g, "");
-        const response = await fetch("https://api.resend.com/emails", {
-          method: "POST",
-          headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json", "Idempotency-Key": `nflt-paid-order-${order.id}` },
-          body: JSON.stringify({
-            from, to: [order.buyer_email], subject: "Votre téléchargement NFLT RECORDS est prêt",
-            text: `Merci pour votre achat de ${title}. Téléchargez votre fichier audio (lien valable 7 jours) : ${link}`,
-            html: `<p>Merci pour votre achat de <strong>${safeTitle}</strong>.</p><p><a href="${link}">Télécharger votre fichier audio</a></p><p>Ce lien sécurisé est valable 7 jours.</p>`,
-          }),
-        });
-        if (!response.ok) throw new Error(`Resend HTTP ${response.status}`);
-        await db<unknown>(`shop_orders?id=eq.${encodeURIComponent(order.id)}&delivery_email_sent_at=is.null`, {
-          method: "PATCH", headers: { Prefer: "return=minimal" },
-          body: JSON.stringify({ delivery_email_sent_at: new Date().toISOString(), updated_at: new Date().toISOString() }),
-        });
-      } catch (error) {
-        // The on-page download remains available even if the optional email provider is down.
-        console.error("Paid-order email delivery failed", error);
-      }
-    }
+    if (!apiKey || !from) throw new Error("Automatic delivery email is not configured (RESEND_API_KEY / DELIVERY_FROM_EMAIL).");
+    const title = releases.find((item) => item.upc === order.release_upc)?.title ?? "Votre musique NFLT RECORDS";
+    const safeTitle = title.replace(/[&<>"]/g, "");
+    const response = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json", "Idempotency-Key": `nflt-paid-order-${order.id}` },
+      body: JSON.stringify({
+        from, to: [order.buyer_email], subject: "Votre téléchargement NFLT RECORDS est prêt",
+        text: `Merci pour votre achat de ${title}. Téléchargez votre fichier audio (lien valable 7 jours) : ${link}`,
+        html: `<p>Merci pour votre achat de <strong>${safeTitle}</strong>.</p><p><a href="${link}">Télécharger votre fichier audio</a></p><p>Ce lien sécurisé est valable 7 jours.</p>`,
+      }),
+    });
+    if (!response.ok) throw new Error(`Resend HTTP ${response.status}`);
+    await db<unknown>(`shop_orders?id=eq.${encodeURIComponent(order.id)}&delivery_email_sent_at=is.null`, {
+      method: "PATCH", headers: { Prefer: "return=minimal" },
+      body: JSON.stringify({ delivery_email_sent_at: new Date().toISOString(), updated_at: new Date().toISOString() }),
+    });
   }
   return link;
 }
