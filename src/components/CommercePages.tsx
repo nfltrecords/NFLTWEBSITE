@@ -7,7 +7,13 @@ import { SiteLayout, PageHeader } from "@/components/SiteLayout";
 import { releases, filterReleases } from "@/lib/catalogue";
 import { releaseCovers } from "@/lib/covers";
 import { publicPages, type Locale } from "@/lib/seo";
-import { inquirySchema, shopPriceTiers, formatShopPrice, releasePriceCents, type Inquiry } from "@/lib/commerce";
+import {
+  inquirySchema,
+  shopPriceTiers,
+  formatShopPrice,
+  releasePriceCents,
+  type Inquiry,
+} from "@/lib/commerce";
 import { submitLicensingInquiry } from "@/lib/commerce.functions";
 import { ReleasePrice } from "@/components/ReleasePrice";
 import { useCart } from "@/lib/cart-store";
@@ -25,7 +31,11 @@ export function ShopPage({ locale }: { locale: Locale }) {
   const items = filterReleases("all", query);
   const cartItems = releases.filter((release) => (sharedCart.items[release.upc] ?? 0) > 0);
   const cartCount = sharedCart.count;
-  const cartTotalCents = cartItems.reduce((total, release) => total + (releasePriceCents(release.upc) ?? 0) * sharedCart.items[release.upc], 0);
+  const cartTotalCents = cartItems.reduce(
+    (total, release) =>
+      total + (releasePriceCents(release.upc) ?? 0) * sharedCart.items[release.upc],
+    0,
+  );
   const addToCart = sharedCart.add;
   const changeCartQuantity = sharedCart.change;
   return (
@@ -59,17 +69,32 @@ export function ShopPage({ locale }: { locale: Locale }) {
               </Button>
             </div>
           </div>
-          <section id="panier" aria-labelledby="shop-cart-title" className="mb-10 border-y border-border py-6">
+          <section
+            id="panier"
+            aria-labelledby="shop-cart-title"
+            className="mb-10 border-y border-border py-6"
+          >
             <div className="flex flex-wrap items-center justify-between gap-3">
               <h2 id="shop-cart-title" className="flex items-center gap-3 text-2xl">
                 <ShoppingBag aria-hidden="true" />
                 {text(locale, "Votre panier", "Your cart")}
                 <span className="text-base text-muted-foreground">({cartCount})</span>
               </h2>
-              {cartCount > 0 && <Button type="button" variant="ghost" onClick={sharedCart.clear}><Trash2 size={16} />{text(locale, "Vider le panier", "Clear cart")}</Button>}
+              {cartCount > 0 && (
+                <Button type="button" variant="ghost" onClick={sharedCart.clear}>
+                  <Trash2 size={16} />
+                  {text(locale, "Vider le panier", "Clear cart")}
+                </Button>
+              )}
             </div>
             {cartItems.length === 0 ? (
-              <p className="body-copy mt-3">{text(locale, "Votre panier est vide. Ajoutez les sorties qui vous intéressent.", "Your cart is empty. Add the releases you are interested in.")}</p>
+              <p className="body-copy mt-3">
+                {text(
+                  locale,
+                  "Votre panier est vide. Ajoutez les sorties qui vous intéressent.",
+                  "Your cart is empty. Add the releases you are interested in.",
+                )}
+              </p>
             ) : (
               <>
                 <ul className="mt-5 divide-y divide-border">
@@ -78,22 +103,59 @@ export function ShopPage({ locale }: { locale: Locale }) {
                     const quantity = sharedCart.items[release.upc];
                     return (
                       <li key={release.upc} className="cart-line-item py-4">
-                        <div className="cart-item-info"><p className="font-medium">{release.title}</p><p className="text-sm text-muted-foreground">{formatShopPrice(unitPrice)} {text(locale, "l’unité", "each")}</p></div>
+                        <div className="cart-item-info">
+                          <p className="font-medium">{release.title}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {formatShopPrice(unitPrice)} {text(locale, "l’unité", "each")}
+                          </p>
+                        </div>
                         <div className="cart-item-controls">
-                          <Button type="button" variant="outline" size="icon" aria-label={text(locale, "Retirer une unité", "Remove one")} onClick={() => changeCartQuantity(release.upc, -1)}><Minus size={15} /></Button>
-                          <span className="min-w-6 text-center tabular-nums" aria-live="polite">{quantity}</span>
-                          <Button type="button" variant="outline" size="icon" aria-label={text(locale, "Ajouter une unité", "Add one")} onClick={() => changeCartQuantity(release.upc, 1)} disabled={quantity >= 20}><Plus size={15} /></Button>
-                          <strong className="min-w-24 text-right tabular-nums">{formatShopPrice(unitPrice * quantity)}</strong>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="icon"
+                            aria-label={text(locale, "Retirer une unité", "Remove one")}
+                            onClick={() => changeCartQuantity(release.upc, -1)}
+                          >
+                            <Minus size={15} />
+                          </Button>
+                          <span className="min-w-6 text-center tabular-nums" aria-live="polite">
+                            {quantity}
+                          </span>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="icon"
+                            aria-label={text(locale, "Ajouter une unité", "Add one")}
+                            onClick={() => changeCartQuantity(release.upc, 1)}
+                            disabled={quantity >= 20}
+                          >
+                            <Plus size={15} />
+                          </Button>
+                          <strong className="min-w-24 text-right tabular-nums">
+                            {formatShopPrice(unitPrice * quantity)}
+                          </strong>
                         </div>
                       </li>
                     );
                   })}
                 </ul>
                 <div className="mt-5 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-5">
-                  <div><p className="text-sm text-muted-foreground">{text(locale, "Total indicatif", "Indicative total")}</p><p className="text-3xl text-primary tabular-nums">{formatShopPrice(cartTotalCents)}</p></div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">
+                      {text(locale, "Total indicatif", "Indicative total")}
+                    </p>
+                    <p className="text-3xl text-primary tabular-nums">
+                      {formatShopPrice(cartTotalCents)}
+                    </p>
+                  </div>
                   <div className="flex flex-col items-start gap-3">
                     <label className="text-sm" htmlFor="shop-buyer-email">
-                      {text(locale, "E-mail pour recevoir le fichier", "Email to receive your file")}
+                      {text(
+                        locale,
+                        "E-mail pour recevoir le fichier",
+                        "Email to receive your file",
+                      )}
                     </label>
                     <input
                       id="shop-buyer-email"
@@ -108,26 +170,47 @@ export function ShopPage({ locale }: { locale: Locale }) {
                     <Button
                       type="button"
                       className="editorial-action"
-                      disabled={checkoutState === "loading" || !buyerEmail.trim() || cartItems.length !== 1 || sharedCart.items[cartItems[0]?.upc ?? ""] !== 1}
+                      disabled={
+                        checkoutState === "loading" ||
+                        !buyerEmail.trim() ||
+                        cartItems.length !== 1 ||
+                        sharedCart.items[cartItems[0]?.upc ?? ""] !== 1
+                      }
                       onClick={async () => {
                         const release = cartItems[0];
                         if (!release || !buyerEmail.trim() || checkoutState === "loading") return;
                         setCheckoutState("loading");
                         setCheckoutMessage("");
                         try {
-                          const result = await createOrder({ data: { upc: release.upc, email: buyerEmail.trim() } });
+                          const result = await createOrder({
+                            data: { upc: release.upc, email: buyerEmail.trim() },
+                          });
                           if (!result.ok) throw new Error("Sortie indisponible.");
-                          window.location.assign(`/commande/paiement?order=${encodeURIComponent(result.orderId)}&amount=${encodeURIComponent(result.amount)}&title=${encodeURIComponent(result.releaseTitle)}`);
+                          window.location.assign(
+                            `/commande/paiement?order=${encodeURIComponent(result.orderId)}&amount=${encodeURIComponent(result.amount)}&title=${encodeURIComponent(result.releaseTitle)}`,
+                          );
                         } catch {
                           setCheckoutState("error");
-                          setCheckoutMessage(text(locale, "Impossible d’enregistrer la commande. Réessayez plus tard.", "Could not save the order. Please try again later."));
+                          setCheckoutMessage(
+                            text(
+                              locale,
+                              "Impossible d’enregistrer la commande. Réessayez plus tard.",
+                              "Could not save the order. Please try again later.",
+                            ),
+                          );
                         }
                       }}
                     >
-                      {checkoutState === "loading" ? text(locale, "Préparation…", "Preparing…") : text(locale, "Payer avec PayPal", "Pay with PayPal")}
+                      {checkoutState === "loading"
+                        ? text(locale, "Préparation…", "Preparing…")
+                        : text(locale, "Payer avec PayPal", "Pay with PayPal")}
                     </Button>
                     <p className="text-sm text-muted-foreground">
-                      {text(locale, "Après la création de la commande, une page affiche sa référence unique à copier dans le motif PayPal. Le paiement est vérifié manuellement avant l’envoi automatique du WAV.", "After the order is created, a page displays its unique reference to copy into the PayPal note. Payment is manually verified before the WAV is sent automatically.")}
+                      {text(
+                        locale,
+                        "Après la création de la commande, une page affiche sa référence unique à copier dans le motif PayPal. Le paiement est vérifié manuellement avant l’envoi automatique du WAV.",
+                        "After the order is created, a page displays its unique reference to copy into the PayPal note. Payment is manually verified before the WAV is sent automatically.",
+                      )}
                     </p>
                   </div>
                 </div>
@@ -201,11 +284,20 @@ export function ShopPage({ locale }: { locale: Locale }) {
                   <ReleasePrice upc={release.upc} locale={locale} />
                   <p>UPC {release.upc}</p>
                 </div>
-                <Button type="button" className="editorial-action w-full" onClick={() => addToCart(release.upc)} disabled={
-                  (sharedCart.items[release.upc] ?? 0) >= 20 || releasePriceCents(release.upc) === null
-                }>
-                  <ShoppingBag size={16} />{text(locale, "Ajouter au panier", "Add to cart")}
-                  {(sharedCart.items[release.upc] ?? 0) > 0 ? ` · ${sharedCart.items[release.upc]}` : ""}
+                <Button
+                  type="button"
+                  className="editorial-action w-full"
+                  onClick={() => addToCart(release.upc)}
+                  disabled={
+                    (sharedCart.items[release.upc] ?? 0) >= 20 ||
+                    releasePriceCents(release.upc) === null
+                  }
+                >
+                  <ShoppingBag size={16} />
+                  {text(locale, "Ajouter au panier", "Add to cart")}
+                  {(sharedCart.items[release.upc] ?? 0) > 0
+                    ? ` · ${sharedCart.items[release.upc]}`
+                    : ""}
                 </Button>
                 <Button asChild variant="outline" className="editorial-action shop-availability">
                   <Link

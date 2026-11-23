@@ -39,11 +39,24 @@ function DownloadPage() {
       <section className="editorial-section min-h-[55vh]">
         <p className="eyebrow">NFLT RECORDS / TÉLÉCHARGEMENT</p>
         <h1>Votre musique est prête.</h1>
-        <p className="body-copy mt-4">Le lien est privé et valable pendant 7 jours. Appuyez sur le bouton pour récupérer votre fichier audio.</p>
-        <Button type="button" className="editorial-action mt-8" onClick={download} disabled={state === "loading"}>
+        <p className="body-copy mt-4">
+          Le lien est privé et valable pendant 7 jours. Appuyez sur le bouton pour récupérer votre
+          fichier audio.
+        </p>
+        <Button
+          type="button"
+          className="editorial-action mt-8"
+          onClick={download}
+          disabled={state === "loading"}
+        >
           {state === "loading" ? "Préparation du fichier…" : "Télécharger mon fichier audio"}
         </Button>
-        {state === "error" ? <p role="alert" className="body-copy mt-4 text-destructive">Lien invalide, expiré ou fichier momentanément indisponible. Contactez NFLT RECORDS si le problème persiste.</p> : null}
+        {state === "error" ? (
+          <p role="alert" className="body-copy mt-4 text-destructive">
+            Lien invalide, expiré ou fichier momentanément indisponible. Contactez NFLT RECORDS si
+            le problème persiste.
+          </p>
+        ) : null}
       </section>
     </SiteLayout>
   );
