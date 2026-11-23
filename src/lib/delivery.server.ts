@@ -66,7 +66,7 @@ export async function sendPaidOrderDelivery(orderId: string): Promise<string> {
   }
   if (!expiry || new Date(expiry).getTime() <= Date.now()) throw new Error("The download window is unavailable.");
   const token = await tokenFor(order.id, expiry);
-  const link = `https://nflt-records.com/api/download?order=${encodeURIComponent(order.id)}&token=${encodeURIComponent(token)}`;
+  const link = `https://nflt-records.com/telechargement#order=${encodeURIComponent(order.id)}&token=${encodeURIComponent(token)}`;
   if (!order.delivery_email_sent_at) {
     const apiKey = bindings.RESEND_API_KEY, from = bindings.DELIVERY_FROM_EMAIL;
     if (apiKey && from) {
@@ -90,7 +90,11 @@ export async function sendPaidOrderDelivery(orderId: string): Promise<string> {
   return link;
 }
 export async function servePaidOrderDownload(request: Request): Promise<Response> {
-  const url = new URL(request.url), orderId = url.searchParams.get("order") ?? "", supplied = url.searchParams.get("token") ?? "";
+  let payload: { order?: unknown; token?: unknown };
+  try { payload = await request.json() as { order?: unknown; token?: unknown }; }
+  catch { return new Response("Requête invalide.", { status: 400 }); }
+  const orderId = typeof payload.order === "string" ? payload.order : "";
+  const supplied = typeof payload.token === "string" ? payload.token : "";
   if (!/^[0-9a-f-]{36}$/i.test(orderId) || !/^[A-Za-z0-9_-]{40,64}$/.test(supplied)) return new Response("Lien invalide ou expiré.", { status: 404 });
   const rows = await db<Order[]>(`shop_orders?id=eq.${encodeURIComponent(orderId)}&select=id,release_upc,buyer_email,status,download_expires_at,delivery_email_sent_at&limit=1`);
   const order = rows[0];
