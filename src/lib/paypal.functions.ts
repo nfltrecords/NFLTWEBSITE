@@ -4,6 +4,7 @@ import { releases } from "@/lib/catalogue";
 import { releasePriceCents } from "@/lib/commerce";
 import { payPalCheckoutIsEnabled } from "@/lib/paypal-checkout-gate";
 import { createPayPalOrder, capturePayPalOrder } from "@/lib/paypal.server";
+import { sendPaidOrderDelivery } from "@/lib/delivery.server";
 
 const startCheckoutSchema = z
   .object({
@@ -140,7 +141,10 @@ export const confirmPayPalCheckout = createServerFn({ method: "POST" })
     if (!order || order.paypal_order_id !== data.paypalOrderId) {
       return { ok: false as const, reason: "order_not_found" as const };
     }
-    if (order.status === "paid") return { ok: true as const, alreadyPaid: true as const };
+    if (order.status === "paid") {
+      const downloadUrl = await sendPaidOrderDelivery(order.id);
+      return { ok: true as const, alreadyPaid: true as const, downloadUrl };
+    }
     if (order.status !== "pending" || order.currency !== "EUR") {
       return { ok: false as const, reason: "order_not_payable" as const };
     }
@@ -174,7 +178,10 @@ export const confirmPayPalCheckout = createServerFn({ method: "POST" })
       },
     );
 
-    if (updated.length) return { ok: true as const, alreadyPaid: false as const };
+    if (updated.length) {
+      const downloadUrl = await sendPaidOrderDelivery(order.id);
+      return { ok: true as const, alreadyPaid: false as const, downloadUrl };
+    }
 
     // A webhook may have won the race and committed the same capture first.
     // Confirm the persisted state rather than reporting success on an empty PATCH.
@@ -182,7 +189,8 @@ export const confirmPayPalCheckout = createServerFn({ method: "POST" })
       Array<{ status: string; paypal_capture_id: string | null }>
     >(`shop_orders?id=eq.${data.orderId}&select=status,paypal_capture_id&limit=1`);
     if (latest[0]?.status === "paid" && latest[0]?.paypal_capture_id === capture.id) {
-      return { ok: true as const, alreadyPaid: true as const };
+      const downloadUrl = await sendPaidOrderDelivery(order.id);
+      return { ok: true as const, alreadyPaid: true as const, downloadUrl };
     }
     return { ok: false as const, reason: "order_state_conflict" as const };
   });
