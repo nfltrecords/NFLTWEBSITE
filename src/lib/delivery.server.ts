@@ -69,7 +69,7 @@ export async function sendPaidOrderDelivery(orderId: string): Promise<string> {
   const link = `https://nflt-records.com/api/download?order=${encodeURIComponent(order.id)}&token=${encodeURIComponent(token)}`;
   if (!order.delivery_email_sent_at) {
     const apiKey = bindings.RESEND_API_KEY, from = bindings.DELIVERY_FROM_EMAIL;
-    if (!apiKey || !from) throw new Error("Email delivery is not configured.");
+    if (apiKey && from) {
     const title = releases.find((item) => item.upc === order.release_upc)?.title ?? "Votre musique NFLT RECORDS";
     const safeTitle = title.replace(/[&<>"]/g, "");
     const response = await fetch("https://api.resend.com/emails", {
@@ -86,7 +86,7 @@ export async function sendPaidOrderDelivery(orderId: string): Promise<string> {
       method: "PATCH", headers: { Prefer: "return=minimal" },
       body: JSON.stringify({ delivery_email_sent_at: new Date().toISOString(), updated_at: new Date().toISOString() }),
     });
-  }
+    }
   return link;
 }
 export async function servePaidOrderDownload(request: Request): Promise<Response> {
