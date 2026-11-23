@@ -16,7 +16,7 @@
 3. Appliquer `drizzle/migrations/0003_shop_order_delivery.sql` au projet Supabase utilisé par le site. La migration précédente `0002` doit déjà être appliquée.
 4. Ajouter dans les secrets du Worker : `SUPABASE_SERVICE_ROLE_KEY`, `DELIVERY_TOKEN_SECRET` (au moins 32 caractères aléatoires), `PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET`, `PAYPAL_WEBHOOK_ID`, `RESEND_API_KEY`, `DELIVERY_FROM_EMAIL`. Garder `PAYPAL_MODE=sandbox` pendant les essais.
 5. Vérifier le domaine expéditeur chez le fournisseur d'e-mail et faire un test de réception.
-6. Importer les masters complets dans le bucket, puis remplir `shop_release_assets` avec les UPC et clés R2 exactes. Les extraits de préécoute 30 secondes ne sont pas des masters de livraison.
+6. Importer les masters complets dans le bucket, puis remplir `shop_release_assets` avec les UPC et clés R2 exactes. Le dépôt contient actuellement des extraits de préécoute de 30 secondes, pas les masters complets ; aucun fichier de livraison ne doit être construit à partir de ces extraits.
 7. Tester paiement accepté, refus, annulation, webhook dupliqué, commande déjà payée, e-mail, téléchargement expiré et fichier absent.
 
 ## Activation
