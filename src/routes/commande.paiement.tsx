@@ -13,12 +13,10 @@ export const Route = createFileRoute("/commande/paiement")({
 });
 function PaymentInstructions() {
   const { order, amount, title } = Route.useSearch();
-  return <SiteLayout><PageHeader kicker="NFLT RECORDS / PAIEMENT" title="Paiement indisponible" /><section className="mx-auto max-w-2xl px-5 pb-20 space-y-6">
-    <p role="status">Le checkout PayPal est désactivé. Aucun paiement ne peut être effectué depuis cette page. Revenez à la boutique ultérieurement.</p>
-  </section></SiteLayout>;
-}
-/* Ancienne interface de paiement retirée : aucun lien PayPal ne doit être affiché. */
-/*
+  const paymentUrl = `https://www.paypal.me/mohamedjarry/${amount}EUR`;
+  const note = `NFLT:${order}`;
+  return <SiteLayout><PageHeader kicker="NFLT RECORDS / PAIEMENT" title="Payer avec PayPal" /><section className="mx-auto max-w-2xl px-5 pb-20 space-y-6">
+    {!order || !amount ? <p role="alert">Référence de commande invalide. Revenez à la boutique et recommencez.</p> : <>
       <p className="body-copy">Votre commande est enregistrée. Le paiement utilise ton compte PayPal personnel.</p>
       <div className="border p-5 space-y-3">
         <p className="font-semibold">{title || "Sortie NFLT RECORDS"}</p>
