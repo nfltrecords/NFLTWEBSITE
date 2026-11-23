@@ -31,7 +31,7 @@ function OrdersPage() {
     setLoading(true); setMessage(""); setDownload("");
     try {
       const result = await approve({ data: { code, orderId } });
-      if (result.ok) { setDownload(result.downloadUrl); setMessage("Livraison WAV automatique confirmée par e-mail."); await refresh(); }
+      if (result.ok) { setDownload(result.downloadUrl); setMessage("Livraison WAV automatique confirmée par e-mail."); setOrders((current) => current.filter((order) => order.id !== orderId)); }
       else setMessage("Commande non validable. Vérifiez son état.");
     } catch { setMessage("Validation enregistrée ou livraison impossible. Vérifiez la configuration R2, Supabase et Resend avant de réessayer."); }
     finally { setLoading(false); }
