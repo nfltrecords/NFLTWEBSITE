@@ -16,11 +16,12 @@ export const Route = createFileRoute("/commande/confirmation")({
 function ConfirmationPage() {
   const { order, token } = Route.useSearch();
   const confirm = useServerFn(confirmPayPalCheckout);
-  const [state, setState] = useState<"loading" | "ready" | "error">("loading");
+  const [state, setState] = useState<"loading" | "ready" | "waiting" | "error">("loading");
   const [downloadUrl, setDownloadUrl] = useState("");
   useEffect(() => {
     let active = true;
-    if (!order || !token) { setState("error"); return; }
+    if (!order) { setState("error"); return; }
+    if (!token) { setState("waiting"); return; }
     confirm({ data: { orderId: order, paypalOrderId: token } })
       .then((result: Confirmation) => {
         if (!active) return;
@@ -50,6 +51,11 @@ function ConfirmationPage() {
             <Button asChild className="editorial-action mt-8">
               <a href={downloadUrl}>Télécharger mon fichier audio</a>
             </Button>
+          </>
+        ) : state === "waiting" ? (
+          <>
+            <h1>Paiement en cours de confirmation.</h1>
+            <p className="body-copy mt-4">PayPal nous transmet la confirmation sécurisée. Dès que le paiement est confirmé, le lien de téléchargement WAV est envoyé automatiquement à l’adresse e-mail indiquée lors de la commande. Ne payez pas une seconde fois.</p>
           </>
         ) : (
           <>
