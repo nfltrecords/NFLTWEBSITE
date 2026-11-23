@@ -10,6 +10,7 @@ import { releaseCovers } from "@/lib/covers";
 import { publicPages, type Locale } from "@/lib/seo";
 import { inquirySchema, shopPriceTiers, formatShopPrice, releasePriceCents, type Inquiry } from "@/lib/commerce";
 import { submitLicensingInquiry } from "@/lib/commerce.functions";
+import { startPayPalCheckout } from "@/lib/paypal.functions";
 import { ReleasePrice } from "@/components/ReleasePrice";
 import { useCart } from "@/lib/cart-store";
 
@@ -17,6 +18,10 @@ const text = (locale: Locale, fr: string, en: string) => (locale === "fr" ? fr :
 
 export function ShopPage({ locale }: { locale: Locale }) {
   const [query, setQuery] = useState("");
+  const [buyerEmail, setBuyerEmail] = useState("");
+  const [checkoutState, setCheckoutState] = useState<"idle" | "loading" | "error">("idle");
+  const [checkoutMessage, setCheckoutMessage] = useState("");
+  const startCheckout = useServerFn(startPayPalCheckout);
   const sharedCart = useCart();
   const items = filterReleases("all", query);
   const cartItems = releases.filter((release) => (sharedCart.items[release.upc] ?? 0) > 0);
@@ -87,22 +92,54 @@ export function ShopPage({ locale }: { locale: Locale }) {
                 </ul>
                 <div className="mt-5 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-5">
                   <div><p className="text-sm text-muted-foreground">{text(locale, "Total indicatif", "Indicative total")}</p><p className="text-3xl text-primary tabular-nums">{formatShopPrice(cartTotalCents)}</p></div>
-                  <form action="https://www.paypal.com/cgi-bin/webscr" method="post" className="flex flex-wrap items-center gap-3">
-                    <input type="hidden" name="cmd" value="_cart" />
-                    <input type="hidden" name="upload" value="1" />
-                    <input type="hidden" name="business" value="Encoresarbakane@gmail.com" />
-                    <input type="hidden" name="currency_code" value="EUR" />
-                    {cartItems.map((release, index) => (
-                      <div key={release.upc}>
-                        <input type="hidden" name={`item_name_${index + 1}`} value={release.title} />
-                        <input type="hidden" name={`item_number_${index + 1}`} value={release.upc} />
-                        <input type="hidden" name={`amount_${index + 1}`} value={((releasePriceCents(release.upc) ?? 0) / 100).toFixed(2)} />
-                        <input type="hidden" name={`quantity_${index + 1}`} value={sharedCart.items[release.upc]} />
-                      </div>
-                    ))}
-                    <Button type="submit" className="editorial-action">
-                      {text(locale, "Payer avec PayPal", "Pay with PayPal")}
+                  <form
+                    className="flex flex-col items-start gap-3"
+                    onSubmit={async (event) => {
+                      event.preventDefault();
+                      if (checkoutState === "loading") return;
+                      if (cartItems.length !== 1 || sharedCart.items[cartItems[0]?.upc ?? ""] !== 1) {
+                        setCheckoutState("error");
+                        setCheckoutMessage(text(locale, "Pour le moment, une seule sortie par commande est acceptée.", "For now, one release per order is supported."));
+                        return;
+                      }
+                      if (!buyerEmail.trim()) {
+                        setCheckoutState("error");
+                        setCheckoutMessage(text(locale, "Saisissez votre adresse e-mail pour recevoir le téléchargement.", "Enter your email address to receive your download."));
+                        return;
+                      }
+                      setCheckoutState("loading");
+                      setCheckoutMessage("");
+                      try {
+                        const result = await startCheckout({ data: { upc: cartItems[0].upc, email: buyerEmail.trim() } });
+                        if (!result.ok) {
+                          setCheckoutState("error");
+                          setCheckoutMessage(text(locale, "Le paiement n'est pas encore activé pour cette boutique.", "Checkout is not enabled for this shop yet."));
+                          return;
+                        }
+                        window.location.assign(result.approvalUrl);
+                      } catch {
+                        setCheckoutState("error");
+                        setCheckoutMessage(text(locale, "Impossible de préparer le paiement. Réessayez plus tard.", "Could not prepare checkout. Please try again later."));
+                      }
+                    }}
+                  >
+                    <label className="text-sm" htmlFor="shop-buyer-email">
+                      {text(locale, "E-mail pour recevoir le fichier", "Email to receive your file")}
+                    </label>
+                    <input
+                      id="shop-buyer-email"
+                      type="email"
+                      autoComplete="email"
+                      required
+                      maxLength={255}
+                      value={buyerEmail}
+                      onChange={(event) => setBuyerEmail(event.target.value)}
+                      className="w-full rounded-md border border-input bg-background px-3 py-2"
+                    />
+                    <Button type="submit" className="editorial-action" disabled={checkoutState === "loading" || cartItems.length !== 1 || sharedCart.items[cartItems[0]?.upc ?? ""] !== 1}>
+                      {checkoutState === "loading" ? text(locale, "Préparation…", "Preparing…") : text(locale, "Payer avec PayPal", "Pay with PayPal")}
                     </Button>
+                    {checkoutMessage ? <p role="alert" className="text-sm text-destructive">{checkoutMessage}</p> : null}
                   </form>
                 </div>
                 <p className="body-copy mt-4 text-sm">
