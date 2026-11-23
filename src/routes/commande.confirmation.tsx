@@ -46,7 +46,7 @@ function ConfirmationPage() {
         ) : state === "ready" ? (
           <>
             <h1>Paiement confirmé.</h1>
-            <p className="body-copy mt-4">Votre fichier audio est prêt. Un lien sécurisé vient également d'être envoyé à l'adresse e-mail fournie lors de la commande.</p>
+            <p className="body-copy mt-4">Votre fichier audio est prêt. Utilisez le bouton ci-dessous pour le télécharger.</p>
             <Button asChild className="editorial-action mt-8">
               <a href={downloadUrl}>Télécharger mon fichier audio</a>
             </Button>
