@@ -57,7 +57,22 @@ export const createManualPayPalOrder = createServerFn({ method: "POST" })
     });
     if (!rows[0]?.id) throw new Error("Could not save the order.");
     const amount = (amountCents / 100).toFixed(2);
-    return { ok: true as const, orderId: id, paymentUrl: `https://www.paypal.me/mohamedjarry/${amount}EUR`, amount, releaseTitle: release.title };
+    const payment = new URLSearchParams({
+      cmd: "_xclick",
+      business: "Encoresarbakane@gmail.com",
+      item_name: `NFLT RECORDS — ${release.title}`,
+      item_number: data.upc,
+      amount,
+      currency_code: "EUR",
+      custom: id,
+      invoice: id,
+      notify_url: "https://nflt-records.com/api/paypal/ipn",
+      return: `https://nflt-records.com/commande/confirmation?order=${encodeURIComponent(id)}`,
+      cancel_return: `https://nflt-records.com/commande/paiement?order=${encodeURIComponent(id)}&amount=${encodeURIComponent(amount)}&title=${encodeURIComponent(release.title)}&cancel=1`,
+      no_shipping: "1",
+      charset: "utf-8",
+    });
+    return { ok: true as const, orderId: id, paymentUrl: `https://www.paypal.com/cgi-bin/webscr?${payment.toString()}`, amount, releaseTitle: release.title };
   });
 
 export const listManualPayPalOrders = createServerFn({ method: "POST" })
