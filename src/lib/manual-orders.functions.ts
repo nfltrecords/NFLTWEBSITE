@@ -64,7 +64,7 @@ export const listManualPayPalOrders = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => z.object({ code: z.string().min(1).max(256) }).strict().parse(input))
   .handler(async ({ data }) => {
     if (!(await adminAuthorized(data.code))) return { ok: false as const, reason: "unauthorized" as const };
-    const rows = await db<Order[]>("shop_orders?status=eq.pending&select=id,release_upc,buyer_email,amount_cents,currency,status,created_at&order=created_at.desc&limit=100");
+    const rows = await db<Order[]>("shop_orders?or=(status.eq.pending,and(status.eq.paid,delivery_email_sent_at.is.null))&select=id,release_upc,buyer_email,amount_cents,currency,status,created_at&order=created_at.desc&limit=100");
     return { ok: true as const, orders: rows.map((order) => ({ ...order, title: releases.find((r) => r.upc === order.release_upc)?.title ?? order.release_upc })) };
   });
 
