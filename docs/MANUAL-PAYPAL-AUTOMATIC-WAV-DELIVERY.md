@@ -1,16 +1,15 @@
-# PayPal Standard IPN checkout with automatic WAV delivery
+# PayPal.Me personal account with IPN-based automatic WAV delivery
 
 ## Intended flow
 
-1. The shop creates a private `shop_orders` row before redirecting the buyer to the owner-supplied PayPal.Me link.
-2. The payment instruction page shows the unique order UUID. The buyer copies it into the PayPal payment note.
-3. 2. The buyer is sent to PayPal Payments Standard (`_xclick`) with the order UUID in both `custom` and `invoice`, and the IPN listener URL in `notify_url`.
-3. PayPal posts the payment event to `/api/paypal/ipn`. The listener sends the exact original payload back to PayPal for `VERIFIED` authentication.
-4. The listener checks the intended recipient, `payment_status=Completed`, EUR currency, exact order amount, and unique transaction ID.
-5. Only then does the server mark the order paid, resolve the release UPC to its private R2 master, create a seven-day HMAC-protected download link, and send it to the buyer using Resend.
-6. PayPal retries failed IPN deliveries. The admin page can retry email delivery only for orders already marked paid.
+1. The shop creates a private `shop_orders` row before sending the buyer to PayPal.Me.
+2. The buyer sees a unique reference in the form `NFLT:<order UUID>`, copies it, opens the owner-provided PayPal.Me personal link with the exact EUR amount, and enters that reference in PayPal's optional payment note.
+3. PayPal sends an IPN notification to `/api/paypal/ipn` when the personal-account payment is recorded.
+4. The listener posts the exact original payload back to PayPal for `VERIFIED` authentication.
+5. The listener accepts only `txn_type=send_money`, the configured receiving email, `payment_status=Completed`, EUR, exact order amount, and the unique order UUID extracted from the PayPal note (`memo`).
+6. Only then does the server mark the order paid, resolve the release UPC to its private R2 master, create a seven-day HMAC-protected download link, and send it using Resend.
 
-PayPal.Me does not provide the order-linked server callback required here. This integration uses legacy PayPal Standard IPN rather than REST API credentials or REST webhooks. It requires a PayPal Business account and must be tested in the live account before accepting sales.
+**Important limitation:** this depends on PayPal sending an IPN for the PayPal.Me personal-account transfer and including the buyer's note in the IPN `memo` field. PayPal documents IPN for transaction notifications and documents the `memo` field for notes, but does not clearly guarantee this exact combination for every PayPal.Me payment. It must be proven with one small live test before the shop accepts orders. No payment is delivered if the note/reference is missing or the IPN cannot be verified.
 
 ## Required database setup
 
