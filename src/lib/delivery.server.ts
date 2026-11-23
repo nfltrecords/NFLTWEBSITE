@@ -40,7 +40,14 @@ async function db<T>(path: string, init: RequestInit = {}): Promise<T> {
 const STORAGE_BUCKET = "nflt-private-audio";
 function storageObjectUrl(url: string, path: string, authenticated = false): string {
   const encoded = path.split("/").map(encodeURIComponent).join("/");
-  return url + "/storage/v1/object/" + (authenticated ? "authenticated/" : "") + STORAGE_BUCKET + "/" + encoded;
+  return (
+    url +
+    "/storage/v1/object/" +
+    (authenticated ? "authenticated/" : "") +
+    STORAGE_BUCKET +
+    "/" +
+    encoded
+  );
 }
 async function getPrivateAudio(path: string): Promise<Response> {
   const { url, key } = databaseConfig();
