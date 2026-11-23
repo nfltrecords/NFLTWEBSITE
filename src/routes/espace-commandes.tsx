@@ -5,7 +5,7 @@ import { SiteLayout, PageHeader } from "@/components/SiteLayout";
 import { approveManualPayPalOrder, listManualPayPalOrders } from "@/lib/manual-orders.functions";
 import { Button } from "@/components/ui/button";
 
-type Order = { id: string; title: string; buyer_email: string; amount_cents: number; created_at: string };
+type Order = { id: string; title: string; buyer_email: string; amount_cents: number; status: string; created_at: string };
 export const Route = createFileRoute("/espace-commandes")({
   head: () => ({ meta: [{ title: "Espace commandes — NFLT RECORDS" }, { name: "robots", content: "noindex,nofollow" }] }),
   component: OrdersPage,
@@ -31,7 +31,7 @@ function OrdersPage() {
     setLoading(true); setMessage(""); setDownload("");
     try {
       const result = await approve({ data: { code, orderId } });
-      if (result.ok) { setDownload(result.downloadUrl); setMessage("Paiement validé : le lien WAV sécurisé a été envoyé au client."); await refresh(); }
+      if (result.ok) { setDownload(result.downloadUrl); setMessage("Livraison WAV automatique confirmée par e-mail."); await refresh(); }
       else setMessage("Commande non validable. Vérifiez son état.");
     } catch { setMessage("Validation enregistrée ou livraison impossible. Vérifiez la configuration R2, Supabase et Resend avant de réessayer."); }
     finally { setLoading(false); }
@@ -48,7 +48,7 @@ function OrdersPage() {
       <p className="font-semibold">{order.title}</p>
       <p>{(order.amount_cents / 100).toFixed(2).replace(".", ",")} € · {order.buyer_email}</p>
       <p className="text-xs text-muted-foreground">Référence {order.id} · {new Date(order.created_at).toLocaleString("fr-FR")}</p>
-      <Button disabled={loading} onClick={() => void validate(order.id)}>Paiement vérifié — envoyer le WAV</Button>
+      <Button disabled={loading} onClick={() => void validate(order.id)}>{order.status === "paid" ? "Renvoyer le lien WAV" : "Paiement vérifié — envoyer le WAV"}</Button>
     </li>)}</ul>
     {orders.length === 0 && code ? <p className="text-sm text-muted-foreground">Aucune commande en attente affichée.</p> : null}
   </section></SiteLayout>;
