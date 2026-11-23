@@ -25,7 +25,7 @@ function PaymentInstructions() {
         <Button type="button" variant="outline" onClick={() => void navigator.clipboard?.writeText(note)}>Copier le motif de paiement</Button>
       </div>
       <p className="body-copy">PayPal envoie au site une notification sécurisée. Après confirmation du paiement intégral, le master WAV est envoyé automatiquement à l’adresse e-mail fournie.</p>
-      <form method="get" action="https://www.paypal.com/cgi-bin/webscr">
+      <form method="post" action="https://www.paypal.com/cgi-bin/webscr">
         <input type="hidden" name="cmd" value="_xclick" />
         <input type="hidden" name="business" value="Encoresarbakane@gmail.com" />
         <input type="hidden" name="item_name" value={`NFLT RECORDS — ${title}`} />
