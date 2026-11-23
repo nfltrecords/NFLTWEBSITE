@@ -127,16 +127,8 @@ export function ShopPage({ locale }: { locale: Locale }) {
                       {checkoutState === "loading" ? text(locale, "Préparation…", "Preparing…") : text(locale, "Payer avec PayPal", "Pay with PayPal")}
                     </Button>
                     <p className="text-sm text-muted-foreground">
-                      {text(locale, "Dans PayPal, indiquez le titre de la sortie dans le motif du paiement. Après paiement, envoyez votre reçu et votre adresse e-mail à Encoresarbakane@gmail.com pour vérification manuelle.", "In PayPal, include the release title in the payment note. After paying, email your receipt and delivery email to Encoresarbakane@gmail.com for manual verification.")}
+                      {text(locale, "Après la création de la commande, une page affiche sa référence unique à copier dans le motif PayPal. Le paiement est vérifié manuellement avant l’envoi automatique du WAV.", "After the order is created, a page displays its unique reference to copy into the PayPal note. Payment is manually verified before the WAV is sent automatically.")}
                     </p>
-                    {cartItems[0] ? (
-                      <a
-                        className="text-sm underline text-primary"
-                        href={`mailto:Encoresarbakane@gmail.com?subject=${encodeURIComponent("Confirmation de paiement NFLT RECORDS")}&body=${encodeURIComponent("Bonjour, voici ma confirmation de paiement PayPal.\n\nSortie : " + cartItems[0].title + "\nMontant : " + formatShopPrice(releasePriceCents(cartItems[0].upc) ?? 0) + "\nE-mail de livraison : " + buyerEmail + "\n\nJe joins mon reçu PayPal.")}`}
-                      >
-                        {text(locale, "Envoyer ma confirmation de paiement", "Send my payment confirmation")}
-                      </a>
-                    ) : null}
                   </div>
                 </div>
                 <p className="body-copy mt-4 text-sm">
