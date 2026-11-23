@@ -112,9 +112,9 @@ export async function servePaidOrderDownload(request: Request): Promise<Response
   const object = await bindings.NFLT_AUDIO.get(key);
   if (!object) return new Response("Fichier indisponible.", { status: 503 });
   const title = releases.find((item) => item.upc === order.release_upc)?.title ?? "NFLT-RECORDS-audio";
-  const filename = title.normalize("NFKD").replace(/[^A-Za-z0-9._-]+/g, "-").replace(/^-|-$/g, "") + ".mp3";
+  const filename = title.normalize("NFKD").replace(/[^A-Za-z0-9._-]+/g, "-").replace(/^-|-$/g, "") + ".wav";
   return new Response(object.body, { headers: {
-    "Content-Type": object.httpMetadata?.contentType ?? "audio/mpeg", "Content-Length": String(object.size),
+    "Content-Type": object.httpMetadata?.contentType ?? "audio/wav", "Content-Length": String(object.size),
     "Content-Disposition": `attachment; filename="${filename}"`, "Cache-Control": "private, no-store, max-age=0", "X-Content-Type-Options": "nosniff",
   } });
 }
