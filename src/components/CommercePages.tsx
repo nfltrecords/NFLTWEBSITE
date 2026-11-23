@@ -117,7 +117,7 @@ export function ShopPage({ locale }: { locale: Locale }) {
                         try {
                           const result = await createOrder({ data: { upc: release.upc, email: buyerEmail.trim() } });
                           if (!result.ok) throw new Error("Sortie indisponible.");
-                          window.location.assign(result.paymentUrl);
+                          window.location.assign(`/commande/paiement?order=${encodeURIComponent(result.orderId)}&amount=${encodeURIComponent(result.amount)}&title=${encodeURIComponent(result.releaseTitle)}`);
                         } catch {
                           setCheckoutState("error");
                           setCheckoutMessage(text(locale, "Impossible d’enregistrer la commande. Réessayez plus tard.", "Could not save the order. Please try again later."));
