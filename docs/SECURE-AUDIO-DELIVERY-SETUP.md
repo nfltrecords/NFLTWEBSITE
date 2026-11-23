@@ -11,8 +11,8 @@
 
 ## Bloqueurs avant test réel
 
-1. Activer R2 dans le tableau de bord Cloudflare. L'API du compte répond actuellement que R2 doit d'abord être activé dans le tableau de bord.
-2. Créer ensuite un seul bucket privé nommé `nflt-audio-master` et conserver le binding `NFLT_AUDIO` de `wrangler.jsonc`.
+1. R2 est activé et le bucket privé `nflt-audio-master` a été créé en région WEUR.
+2. Le Worker `nfltwebsite` possède maintenant le binding `NFLT_AUDIO` vers ce bucket. Un test d'écriture/suppression via l'API R2 a réussi.
 3. Appliquer `drizzle/migrations/0003_shop_order_delivery.sql` au projet Supabase utilisé par le site. La migration précédente `0002` doit déjà être appliquée.
 4. Ajouter dans les secrets du Worker : `SUPABASE_SERVICE_ROLE_KEY`, `DELIVERY_TOKEN_SECRET` (au moins 32 caractères aléatoires), `PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET`, `PAYPAL_WEBHOOK_ID`, `RESEND_API_KEY`, `DELIVERY_FROM_EMAIL`. Garder `PAYPAL_MODE=sandbox` pendant les essais.
 5. Vérifier le domaine expéditeur chez le fournisseur d'e-mail et faire un test de réception.
