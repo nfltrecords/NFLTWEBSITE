@@ -49,6 +49,15 @@ function storageObjectUrl(url: string, path: string, authenticated = false): str
     encoded
   );
 }
+async function privateAudioExists(path: string): Promise<boolean> {
+  const { url, key } = databaseConfig();
+  const response = await fetch(storageObjectUrl(url, path, true), {
+    method: "HEAD",
+    headers: { apikey: key, Authorization: "Bearer " + key },
+    cache: "no-store",
+  });
+  return response.ok;
+}
 async function getPrivateAudio(path: string): Promise<Response> {
   const { url, key } = databaseConfig();
   return fetch(storageObjectUrl(url, path, true), {
@@ -97,6 +106,8 @@ export async function sendPaidOrderDelivery(orderId: string): Promise<string> {
   );
   if (!assets[0]?.storage_object_path)
     throw new Error("No verified master audio file is mapped to this release.");
+  if (!(await privateAudioExists(assets[0].storage_object_path)))
+    throw new Error("The private master audio file is not available in storage yet.");
   let expiry = order.download_expires_at;
   if (!expiry) {
     const candidate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
