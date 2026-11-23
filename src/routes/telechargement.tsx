@@ -24,7 +24,7 @@ function DownloadPage() {
       const objectUrl = URL.createObjectURL(blob);
       const anchor = document.createElement("a");
       anchor.href = objectUrl;
-      anchor.download = "NFLT-RECORDS-audio.mp3";
+      anchor.download = "NFLT-RECORDS-audio.wav";
       document.body.appendChild(anchor);
       anchor.click();
       anchor.remove();
