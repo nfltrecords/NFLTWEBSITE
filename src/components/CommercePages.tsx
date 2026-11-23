@@ -11,6 +11,7 @@ import { inquirySchema, shopPriceTiers, formatShopPrice, releasePriceCents, type
 import { submitLicensingInquiry } from "@/lib/commerce.functions";
 import { ReleasePrice } from "@/components/ReleasePrice";
 import { useCart } from "@/lib/cart-store";
+import { createManualPayPalOrder } from "@/lib/manual-orders.functions";
 
 const text = (locale: Locale, fr: string, en: string) => (locale === "fr" ? fr : en);
 
@@ -19,6 +20,7 @@ export function ShopPage({ locale }: { locale: Locale }) {
   const [buyerEmail, setBuyerEmail] = useState("");
   const [checkoutState, setCheckoutState] = useState<"idle" | "loading" | "error">("idle");
   const [checkoutMessage, setCheckoutMessage] = useState("");
+  const createOrder = useServerFn(createManualPayPalOrder);
   const sharedCart = useCart();
   const items = filterReleases("all", query);
   const cartItems = releases.filter((release) => (sharedCart.items[release.upc] ?? 0) > 0);
@@ -106,15 +108,23 @@ export function ShopPage({ locale }: { locale: Locale }) {
                     <Button
                       type="button"
                       className="editorial-action"
-                      disabled={!buyerEmail.trim() || cartItems.length !== 1 || sharedCart.items[cartItems[0]?.upc ?? ""] !== 1}
-                      onClick={() => {
+                      disabled={checkoutState === "loading" || !buyerEmail.trim() || cartItems.length !== 1 || sharedCart.items[cartItems[0]?.upc ?? ""] !== 1}
+                      onClick={async () => {
                         const release = cartItems[0];
-                        if (!release || !buyerEmail.trim()) return;
-                        const amount = ((releasePriceCents(release.upc) ?? 0) / 100).toFixed(2);
-                        window.location.assign(`https://www.paypal.me/mohamedjarry/${amount}EUR`);
+                        if (!release || !buyerEmail.trim() || checkoutState === "loading") return;
+                        setCheckoutState("loading");
+                        setCheckoutMessage("");
+                        try {
+                          const result = await createOrder({ data: { upc: release.upc, email: buyerEmail.trim() } });
+                          if (!result.ok) throw new Error("Sortie indisponible.");
+                          window.location.assign(result.paymentUrl);
+                        } catch {
+                          setCheckoutState("error");
+                          setCheckoutMessage(text(locale, "Impossible d’enregistrer la commande. Réessayez plus tard.", "Could not save the order. Please try again later."));
+                        }
                       }}
                     >
-                      {text(locale, "Payer avec PayPal", "Pay with PayPal")}
+                      {checkoutState === "loading" ? text(locale, "Préparation…", "Preparing…") : text(locale, "Payer avec PayPal", "Pay with PayPal")}
                     </Button>
                     <p className="text-sm text-muted-foreground">
                       {text(locale, "Dans PayPal, indiquez le titre de la sortie dans le motif du paiement. Après paiement, envoyez votre reçu et votre adresse e-mail à Encoresarbakane@gmail.com pour vérification manuelle.", "In PayPal, include the release title in the payment note. After paying, email your receipt and delivery email to Encoresarbakane@gmail.com for manual verification.")}
