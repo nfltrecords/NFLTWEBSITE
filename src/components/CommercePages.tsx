@@ -11,11 +11,16 @@ import { inquirySchema, shopPriceTiers, formatShopPrice, releasePriceCents, type
 import { submitLicensingInquiry } from "@/lib/commerce.functions";
 import { ReleasePrice } from "@/components/ReleasePrice";
 import { useCart } from "@/lib/cart-store";
+import { createManualPayPalOrder } from "@/lib/manual-orders.functions";
 
 const text = (locale: Locale, fr: string, en: string) => (locale === "fr" ? fr : en);
 
 export function ShopPage({ locale }: { locale: Locale }) {
   const [query, setQuery] = useState("");
+  const [buyerEmail, setBuyerEmail] = useState("");
+  const [checkoutState, setCheckoutState] = useState<"idle" | "loading" | "error">("idle");
+  const [checkoutMessage, setCheckoutMessage] = useState("");
+  const createOrder = useServerFn(createManualPayPalOrder);
   const sharedCart = useCart();
   const items = filterReleases("all", query);
   const cartItems = releases.filter((release) => (sharedCart.items[release.upc] ?? 0) > 0);
@@ -32,8 +37,8 @@ export function ShopPage({ locale }: { locale: Locale }) {
             <p className="body-copy">
               {text(
                 locale,
-                "La boutique est actuellement en préparation. Aucun paiement en ligne n’est accepté pour le moment.",
-                "The shop is being prepared. Online payments are not currently accepted.",
+                "Parcourez le catalogue NFLT. Le paiement s’effectue manuellement via PayPal.Me ; chaque commande est vérifiée avant l’envoi du fichier WAV.",
+                "Browse the NFLT catalogue. Payment is made manually through PayPal.Me; each order is checked before the WAV file is sent.",
               )}
             </p>
             <div className="flex flex-wrap gap-4">
@@ -86,7 +91,45 @@ export function ShopPage({ locale }: { locale: Locale }) {
                 </ul>
                 <div className="mt-5 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-5">
                   <div><p className="text-sm text-muted-foreground">{text(locale, "Total indicatif", "Indicative total")}</p><p className="text-3xl text-primary tabular-nums">{formatShopPrice(cartTotalCents)}</p></div>
-                  <p className="text-sm text-muted-foreground">{text(locale, "Paiement PayPal désactivé. Aucune commande ni aucun paiement ne peut être effectué depuis cette boutique.", "PayPal checkout is disabled. Orders and payments cannot currently be placed through this shop.")}</p>
+                  <div className="flex flex-col items-start gap-3">
+                    <label className="text-sm" htmlFor="shop-buyer-email">
+                      {text(locale, "E-mail pour recevoir le fichier", "Email to receive your file")}
+                    </label>
+                    <input
+                      id="shop-buyer-email"
+                      type="email"
+                      autoComplete="email"
+                      required
+                      maxLength={255}
+                      value={buyerEmail}
+                      onChange={(event) => setBuyerEmail(event.target.value)}
+                      className="w-full rounded-md border border-input bg-background px-3 py-2"
+                    />
+                    <Button
+                      type="button"
+                      className="editorial-action"
+                      disabled={checkoutState === "loading" || !buyerEmail.trim() || cartItems.length !== 1 || sharedCart.items[cartItems[0]?.upc ?? ""] !== 1}
+                      onClick={async () => {
+                        const release = cartItems[0];
+                        if (!release || !buyerEmail.trim() || checkoutState === "loading") return;
+                        setCheckoutState("loading");
+                        setCheckoutMessage("");
+                        try {
+                          const result = await createOrder({ data: { upc: release.upc, email: buyerEmail.trim() } });
+                          if (!result.ok) throw new Error("Sortie indisponible.");
+                          window.location.assign(`/commande/paiement?order=${encodeURIComponent(result.orderId)}&amount=${encodeURIComponent(result.amount)}&title=${encodeURIComponent(result.releaseTitle)}`);
+                        } catch {
+                          setCheckoutState("error");
+                          setCheckoutMessage(text(locale, "Impossible d’enregistrer la commande. Réessayez plus tard.", "Could not save the order. Please try again later."));
+                        }
+                      }}
+                    >
+                      {checkoutState === "loading" ? text(locale, "Préparation…", "Preparing…") : text(locale, "Payer avec PayPal", "Pay with PayPal")}
+                    </Button>
+                    <p className="text-sm text-muted-foreground">
+                      {text(locale, "Après la création de la commande, une page affiche sa référence unique à copier dans le motif PayPal. Le paiement est vérifié manuellement avant l’envoi automatique du WAV.", "After the order is created, a page displays its unique reference to copy into the PayPal note. Payment is manually verified before the WAV is sent automatically.")}
+                    </p>
+                  </div>
                 </div>
                 <p className="body-copy mt-4 text-sm">
                   {text(
