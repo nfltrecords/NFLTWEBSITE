@@ -1,26 +1,27 @@
-# Manual PayPal checkout with automatic WAV delivery
+# PayPal Standard IPN checkout with automatic WAV delivery
 
 ## Intended flow
 
 1. The shop creates a private `shop_orders` row before redirecting the buyer to the owner-supplied PayPal.Me link.
 2. The payment instruction page shows the unique order UUID. The buyer copies it into the PayPal payment note.
-3. The owner checks the incoming payment in PayPal and opens `/espace-commandes`.
-4. The owner enters the private admin code and approves only a payment that is visible as completed in PayPal.
-5. The server changes the order from `pending` to `paid`, resolves the release UPC to its private R2 master, creates a seven-day HMAC-protected download link, and sends that link to the buyer using Resend.
-6. If email delivery fails, the paid order remains visible in the admin queue until the owner retries delivery. A successful email is recorded to prevent duplicate sends.
+3. 2. The buyer is sent to PayPal Payments Standard (`_xclick`) with the order UUID in both `custom` and `invoice`, and the IPN listener URL in `notify_url`.
+3. PayPal posts the payment event to `/api/paypal/ipn`. The listener sends the exact original payload back to PayPal for `VERIFIED` authentication.
+4. The listener checks the intended recipient, `payment_status=Completed`, EUR currency, exact order amount, and unique transaction ID.
+5. Only then does the server mark the order paid, resolve the release UPC to its private R2 master, create a seven-day HMAC-protected download link, and send it to the buyer using Resend.
+6. PayPal retries failed IPN deliveries. The admin page can retry email delivery only for orders already marked paid.
 
-PayPal.Me is not an API payment confirmation. This design deliberately requires the owner to verify each incoming payment manually. The download email is automatic only after that manual approval.
+PayPal.Me does not provide the order-linked server callback required here. This integration uses legacy PayPal Standard IPN rather than REST API credentials or REST webhooks. It requires a PayPal Business account and must be tested in the live account before accepting sales.
 
 ## Required database setup
 
 Apply these migrations to the production Supabase project, in order:
 
 - `drizzle/migrations/0002_create_private_shop_orders.sql`
-- `drizzle/migrations/0003_shop_order_delivery.sql`
+- `drizzle/migrations/0003_shop_order_delivery.sql`\n- `drizzle/migrations/0004_paypal_ipn_transaction.sql`
 
 Do not expose the service-role key to the browser.
 
-## Required Worker secrets / variables
+## PayPal account requirement\n\nPayPal's current documentation says only Business accounts can create Payment Links and Buttons, and the Belgian user agreement requires a Business account when PayPal is used primarily to sell. Convert the receiving account to Business or use the NFLT RECORDS business account. The checkout form currently names the owner-provided PayPal email as the recipient; verify it is the primary receiving email on the upgraded account before launch.\n\nIn PayPal account settings, enable Instant Payment Notifications (IPN) and set the notification URL to `https://nflt-records.com/api/paypal/ipn`. The form also sends `notify_url` for each payment.\n\n## Required Worker secrets / variables
 
 Configure these on the production Cloudflare Worker `nfltwebsite`:
 
