@@ -3,6 +3,10 @@
 alter table public.shop_release_assets
   add column if not exists storage_object_path text;
 
+-- The legacy R2 key is no longer required for Supabase Storage-only assets.
+alter table public.shop_release_assets
+  alter column r2_object_key drop not null;
+
 create unique index if not exists shop_release_assets_storage_object_path_uidx
   on public.shop_release_assets (storage_object_path)
   where storage_object_path is not null;
