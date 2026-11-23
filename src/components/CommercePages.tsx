@@ -1,6 +1,5 @@
 /* eslint-disable prettier/prettier -- JSX cart layout is intentionally kept compact. */
 import { Link } from "@tanstack/react-router";
-import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
 import { ArrowUpRight, Check, Search, Send, ShoppingBag, Plus, Minus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -10,7 +9,6 @@ import { releaseCovers } from "@/lib/covers";
 import { publicPages, type Locale } from "@/lib/seo";
 import { inquirySchema, shopPriceTiers, formatShopPrice, releasePriceCents, type Inquiry } from "@/lib/commerce";
 import { submitLicensingInquiry } from "@/lib/commerce.functions";
-import { startPayPalCheckout } from "@/lib/paypal.functions";
 import { ReleasePrice } from "@/components/ReleasePrice";
 import { useCart } from "@/lib/cart-store";
 
@@ -21,7 +19,6 @@ export function ShopPage({ locale }: { locale: Locale }) {
   const [buyerEmail, setBuyerEmail] = useState("");
   const [checkoutState, setCheckoutState] = useState<"idle" | "loading" | "error">("idle");
   const [checkoutMessage, setCheckoutMessage] = useState("");
-  const startCheckout = useServerFn(startPayPalCheckout);
   const sharedCart = useCart();
   const items = filterReleases("all", query);
   const cartItems = releases.filter((release) => (sharedCart.items[release.upc] ?? 0) > 0);
@@ -38,8 +35,8 @@ export function ShopPage({ locale }: { locale: Locale }) {
             <p className="body-copy">
               {text(
                 locale,
-                "Parcourez les 18 sorties du catalogue NFLT et ajoutez vos sélections au panier. Les prix affichés sont indicatifs ; le paiement en ligne sera ouvert après validation des ventes et des livraisons.",
-                "Browse all 18 NFLT catalogue releases and add your selections to the cart. Displayed prices are indicative; online checkout will open after sales and delivery validation.",
+                "Parcourez le catalogue NFLT. Le paiement s’effectue manuellement via PayPal.Me ; chaque commande est vérifiée avant l’envoi du fichier WAV.",
+                "Browse the NFLT catalogue. Payment is made manually through PayPal.Me; each order is checked before the WAV file is sent.",
               )}
             </p>
             <div className="flex flex-wrap gap-4">
@@ -92,37 +89,7 @@ export function ShopPage({ locale }: { locale: Locale }) {
                 </ul>
                 <div className="mt-5 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-5">
                   <div><p className="text-sm text-muted-foreground">{text(locale, "Total indicatif", "Indicative total")}</p><p className="text-3xl text-primary tabular-nums">{formatShopPrice(cartTotalCents)}</p></div>
-                  <form
-                    className="flex flex-col items-start gap-3"
-                    onSubmit={async (event) => {
-                      event.preventDefault();
-                      if (checkoutState === "loading") return;
-                      if (cartItems.length !== 1 || sharedCart.items[cartItems[0]?.upc ?? ""] !== 1) {
-                        setCheckoutState("error");
-                        setCheckoutMessage(text(locale, "Pour le moment, une seule sortie par commande est acceptée.", "For now, one release per order is supported."));
-                        return;
-                      }
-                      if (!buyerEmail.trim()) {
-                        setCheckoutState("error");
-                        setCheckoutMessage(text(locale, "Saisissez votre adresse e-mail pour recevoir le téléchargement.", "Enter your email address to receive your download."));
-                        return;
-                      }
-                      setCheckoutState("loading");
-                      setCheckoutMessage("");
-                      try {
-                        const result = await startCheckout({ data: { upc: cartItems[0].upc, email: buyerEmail.trim() } });
-                        if (!result.ok) {
-                          setCheckoutState("error");
-                          setCheckoutMessage(text(locale, "Le paiement n'est pas encore activé pour cette boutique.", "Checkout is not enabled for this shop yet."));
-                          return;
-                        }
-                        window.location.assign(result.approvalUrl);
-                      } catch {
-                        setCheckoutState("error");
-                        setCheckoutMessage(text(locale, "Impossible de préparer le paiement. Réessayez plus tard.", "Could not prepare checkout. Please try again later."));
-                      }
-                    }}
-                  >
+                  <div className="flex flex-col items-start gap-3">
                     <label className="text-sm" htmlFor="shop-buyer-email">
                       {text(locale, "E-mail pour recevoir le fichier", "Email to receive your file")}
                     </label>
@@ -136,17 +103,37 @@ export function ShopPage({ locale }: { locale: Locale }) {
                       onChange={(event) => setBuyerEmail(event.target.value)}
                       className="w-full rounded-md border border-input bg-background px-3 py-2"
                     />
-                    <Button type="submit" className="editorial-action" disabled={checkoutState === "loading" || cartItems.length !== 1 || sharedCart.items[cartItems[0]?.upc ?? ""] !== 1}>
-                      {checkoutState === "loading" ? text(locale, "Préparation…", "Preparing…") : text(locale, "Payer avec PayPal", "Pay with PayPal")}
+                    <Button
+                      type="button"
+                      className="editorial-action"
+                      disabled={!buyerEmail.trim() || cartItems.length !== 1 || sharedCart.items[cartItems[0]?.upc ?? ""] !== 1}
+                      onClick={() => {
+                        const release = cartItems[0];
+                        if (!release || !buyerEmail.trim()) return;
+                        const amount = ((releasePriceCents(release.upc) ?? 0) / 100).toFixed(2);
+                        window.location.assign(`https://www.paypal.me/mohamedjarry/${amount}EUR`);
+                      }}
+                    >
+                      {text(locale, "Payer avec PayPal", "Pay with PayPal")}
                     </Button>
-                    {checkoutMessage ? <p role="alert" className="text-sm text-destructive">{checkoutMessage}</p> : null}
-                  </form>
+                    <p className="text-sm text-muted-foreground">
+                      {text(locale, "Dans PayPal, indiquez le titre de la sortie dans le motif du paiement. Après paiement, envoyez votre reçu et votre adresse e-mail à Encoresarbakane@gmail.com pour vérification manuelle.", "In PayPal, include the release title in the payment note. After paying, email your receipt and delivery email to Encoresarbakane@gmail.com for manual verification.")}
+                    </p>
+                    {cartItems[0] ? (
+                      <a
+                        className="text-sm underline text-primary"
+                        href={`mailto:Encoresarbakane@gmail.com?subject=${encodeURIComponent("Confirmation de paiement NFLT RECORDS")}&body=${encodeURIComponent("Bonjour, voici ma confirmation de paiement PayPal.\n\nSortie : " + cartItems[0].title + "\nMontant : " + formatShopPrice(releasePriceCents(cartItems[0].upc) ?? 0) + "\nE-mail de livraison : " + buyerEmail + "\n\nJe joins mon reçu PayPal.")}`}
+                      >
+                        {text(locale, "Envoyer ma confirmation de paiement", "Send my payment confirmation")}
+                      </a>
+                    ) : null}
+                  </div>
                 </div>
                 <p className="body-copy mt-4 text-sm">
                   {text(
                     locale,
-                    "Le paiement est traité sur la page sécurisée PayPal. La confirmation et le suivi de la commande sont consultables dans votre compte PayPal.",
-                    "Payment is processed on PayPal's secure checkout page. Payment confirmation and order details are available in your PayPal account.",
+                    "Le bouton ouvre PayPal.Me avec le montant de la sortie. Le téléchargement n’est pas automatique : NFLT RECORDS vérifie le paiement puis envoie le master WAV à l’adresse indiquée.",
+                    "The button opens PayPal.Me with the release amount. Downloads are not automatic: NFLT RECORDS verifies payment and then sends the WAV master to the supplied email address.",
                   )}
                 </p>
               </>
@@ -174,8 +161,8 @@ export function ShopPage({ locale }: { locale: Locale }) {
             <p className="body-copy mt-6">
               {text(
                 locale,
-                "Tarifs indicatifs, calculés à partir de nombres de pistes qui restent à confirmer pour chaque sortie. Le panier permet de préparer une sélection, mais aucune commande ni aucun paiement n’est encore accepté. Les CD physiques, stocks et livraisons ne sont pas encore configurés.",
-                "Indicative prices based on track counts that still require confirmation for each release. The cart lets you prepare a selection, but orders and payments are not yet accepted. Physical CDs, inventory and shipping are not configured.",
+                "Tarifs indicatifs. Paiement PayPal manuel ; livraison du fichier après vérification du paiement. Les CD physiques, stocks et livraisons ne sont pas encore configurés.",
+                "Indicative prices. Manual PayPal payment; the file is delivered after payment verification. Physical CDs, inventory and shipping are not configured.",
               )}
             </p>
           </section>
