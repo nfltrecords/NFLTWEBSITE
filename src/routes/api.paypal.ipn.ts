@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { sendPaidOrderDelivery } from "@/lib/delivery.server";
 
 type Order = { id: string; amount_cents: number; currency: string; status: string; paypal_transaction_id: string | null };
 
@@ -27,7 +26,6 @@ async function handleIpn(request: Request): Promise<Response> {
   const raw = await request.text();
   if (!raw || new TextEncoder().encode(raw).byteLength > 64_000) return new Response("Invalid IPN payload", { status: 413 });
 
-  // Verify the exact original form payload with PayPal before trusting any field.
   const verification = await fetch("https://ipnpb.paypal.com/cgi-bin/webscr", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded", "User-Agent": "NFLT-RECORDS-IPN/1.0" },
@@ -37,15 +35,21 @@ async function handleIpn(request: Request): Promise<Response> {
   if ((await verification.text()).trim() !== "VERIFIED") return new Response("Invalid PayPal notification", { status: 400 });
 
   const data = new URLSearchParams(raw);
-  const orderId = (data.get("memo") ?? "").trim().replace(/^NFLT(?: RECORDS)?\s*[:#-]\s*/i, "");
-  const transactionId = data.get("txn_id") ?? "";
+  const reference = [data.get("custom"), data.get("invoice"), data.get("memo")]
+    .map((value) => (value ?? "").trim().replace(/^NFLT(?: RECORDS)?\s*[:#-]\s*/i, ""))
+    .find((value) => /^[0-9a-f-]{36}$/i.test(value));
+  const orderId = reference ?? "";
+  const transactionId = (data.get("txn_id") ?? "").trim();
   const receiver = (data.get("receiver_email") ?? data.get("business") ?? "").trim().toLowerCase();
   const status = data.get("payment_status");
   const txnType = data.get("txn_type");
   const amount = Number(data.get("mc_gross"));
   const currency = data.get("mc_currency");
-  if (!/^[0-9a-f-]{36}$/i.test(orderId) || !transactionId || transactionId.length > 128) return new Response("Missing order reference or transaction ID in PayPal note", { status: 400 });
-  if (receiver !== "encoresarbakane@gmail.com" || status !== "Completed" || currency !== "EUR" || txnType !== "send_money" || !Number.isFinite(amount)) return new Response("Payment does not meet personal-account fulfillment requirements", { status: 400 });
+  const allowedTypes = new Set(["send_money", "web_accept"]);
+  if (!orderId || !transactionId || transactionId.length > 128) return new Response("Missing order reference or transaction ID", { status: 400 });
+  if (receiver !== "encoresarbakane@gmail.com" || status !== "Completed" || currency !== "EUR" || !allowedTypes.has(txnType ?? "") || !Number.isFinite(amount)) {
+    return new Response("Payment does not meet NFLT order requirements", { status: 400 });
+  }
 
   const rows = await db<Order[]>(`shop_orders?id=eq.${encodeURIComponent(orderId)}&select=id,amount_cents,currency,status,paypal_transaction_id&limit=1`);
   const order = rows[0];
@@ -63,10 +67,8 @@ async function handleIpn(request: Request): Promise<Response> {
     return new Response("Order is not payable", { status: 409 });
   }
 
-  // PayPal.Me personal-account payments are matched only by the unique order reference
-  // the buyer enters in the optional payment note (memo), exact amount, EUR, recipient,
-  // completed status, and verified IPN signature.
-  await sendPaidOrderDelivery(orderId);
+  // Record verified payment only. The owner checks the PayPal account and triggers WAV delivery
+  // from /espace-commandes, so an IPN notification alone never releases a master file.
   return new Response("OK", { status: 200, headers: { "Cache-Control": "no-store" } });
 }
 
