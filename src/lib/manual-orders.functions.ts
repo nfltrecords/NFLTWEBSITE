@@ -89,14 +89,7 @@ export const approveManualPayPalOrder = createServerFn({ method: "POST" })
     if (!(await adminAuthorized(data.code))) return { ok: false as const, reason: "unauthorized" as const };
     const rows = await db<Order[]>(`shop_orders?id=eq.${data.orderId}&select=id,status&limit=1`);
     const order = rows[0];
-    if (!order || (order.status !== "pending" && order.status !== "paid")) return { ok: false as const, reason: "not_pending" as const };
-    if (order.status === "pending") {
-      const updated = await db<Array<{ id: string }>>(`shop_orders?id=eq.${data.orderId}&status=eq.pending`, {
-        method: "PATCH", headers: { Prefer: "return=representation" },
-        body: JSON.stringify({ status: "paid", paid_at: new Date().toISOString(), updated_at: new Date().toISOString() }),
-      });
-      if (!updated.length) return { ok: false as const, reason: "already_processed" as const };
-    }
+    if (!order || order.status !== "paid") return { ok: false as const, reason: "payment_not_confirmed" as const };
     const downloadUrl = await sendPaidOrderDelivery(data.orderId);
     return { ok: true as const, downloadUrl };
   });
