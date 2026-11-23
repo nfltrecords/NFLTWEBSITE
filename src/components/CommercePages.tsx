@@ -47,8 +47,8 @@ export function ShopPage({ locale }: { locale: Locale }) {
             <p className="body-copy">
               {text(
                 locale,
-                "Parcourez le catalogue NFLT. Le paiement s’effectue manuellement via PayPal.Me ; chaque commande est vérifiée avant l’envoi du fichier WAV.",
-                "Browse the NFLT catalogue. Payment is made manually through PayPal.Me; each order is checked before the WAV file is sent.",
+                "Parcourez le catalogue NFLT. Après confirmation sécurisée du paiement PayPal, le fichier WAV est envoyé automatiquement à l’adresse e-mail indiquée.",
+                "Browse the NFLT catalogue. After PayPal securely confirms the payment, the WAV file is sent automatically to the supplied email address.",
               )}
             </p>
             <div className="flex flex-wrap gap-4">
@@ -208,8 +208,8 @@ export function ShopPage({ locale }: { locale: Locale }) {
                     <p className="text-sm text-muted-foreground">
                       {text(
                         locale,
-                        "Après la création de la commande, une page affiche sa référence unique à copier dans le motif PayPal. Le paiement est vérifié manuellement avant l’envoi automatique du WAV.",
-                        "After the order is created, a page displays its unique reference to copy into the PayPal note. Payment is manually verified before the WAV is sent automatically.",
+                        "Après la création de la commande, une page affiche sa référence unique à copier dans le motif PayPal. Le paiement est vérifié automatiquement par PayPal avant l’envoi du WAV.",
+                        "After the order is created, a page displays its unique reference to copy into the PayPal note. PayPal automatically verifies the payment before the WAV is sent.",
                       )}
                     </p>
                   </div>
@@ -217,8 +217,8 @@ export function ShopPage({ locale }: { locale: Locale }) {
                 <p className="body-copy mt-4 text-sm">
                   {text(
                     locale,
-                    "Le bouton ouvre PayPal.Me avec le montant de la sortie. Le téléchargement n’est pas automatique : NFLT RECORDS vérifie le paiement puis envoie le master WAV à l’adresse indiquée.",
-                    "The button opens PayPal.Me with the release amount. Downloads are not automatic: NFLT RECORDS verifies payment and then sends the WAV master to the supplied email address.",
+                    "Le bouton ouvre PayPal.Me avec le montant de la sortie. Après confirmation PayPal, le système envoie automatiquement le master WAV à l’adresse indiquée.",
+                    "The button opens PayPal.Me with the release amount. After PayPal confirmation, the system automatically sends the WAV master to the supplied email address.",
                   )}
                 </p>
               </>
