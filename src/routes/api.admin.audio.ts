@@ -156,6 +156,8 @@ export const Route = createFileRoute("/api/admin/audio")({
             if (!isValidSessionId(sessionId)) {
               return Response.json({ error: "Session invalide" }, { status: 400 });
             }
+            const completedRaw = await shopEnv.AUDIO_KV.get(`upload:${sessionId}:complete`);
+            if (completedRaw) return Response.json(JSON.parse(completedRaw));
 
             const raw = await shopEnv.AUDIO_KV.get(`upload:${sessionId}`);
             if (!raw) return Response.json({ error: "Session expirée" }, { status: 410 });
@@ -244,6 +246,18 @@ export const Route = createFileRoute("/api/admin/audio")({
               );
             }
 
+            const completed = {
+              ok: true,
+              upc: session.upc,
+              objectKey: session.objectKey,
+              fileName: session.fileName,
+              fileSize: session.fileSize,
+            };
+            await shopEnv.AUDIO_KV.put(
+              `upload:${sessionId}:complete`,
+              JSON.stringify(completed),
+              { expirationTtl: 3600 },
+            );
             await shopEnv.AUDIO_KV.delete(`upload:${sessionId}`);
             await Promise.all(
               Array.from({ length: session.chunkCount }, (_, index) =>
@@ -251,13 +265,7 @@ export const Route = createFileRoute("/api/admin/audio")({
               ),
             );
 
-            return Response.json({
-              ok: true,
-              upc: session.upc,
-              objectKey: session.objectKey,
-              fileName: session.fileName,
-              fileSize: session.fileSize,
-            });
+            return Response.json(completed);
           }
 
           return Response.json({ error: "Action inconnue" }, { status: 400 });
