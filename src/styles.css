@@ -1914,3 +1914,10 @@ a:focus-visible {
   font-size: 0.7rem;
   letter-spacing: 0.04em;
 }
+
+
+.release-row-meta {
+  display: grid;
+  gap: 0.35rem;
+  align-content: center;
+}
