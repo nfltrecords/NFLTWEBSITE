@@ -20,7 +20,7 @@ export const Route = createFileRoute("/api/order-status")({ server: { handlers: 
     const downloads = await Promise.all(items.map(async (item, index) => {
       const asset = await getShopAsset(item.upc);
       const title = releases.find((release) => release.upc === item.upc)?.title ?? "NFLT audio";
-      return asset ? { title, quantity: item.quantity, url: `/api/download?order=${encodeURIComponent(id)}&item=${index}` } : null;
+      return asset && asset.file_name.toLowerCase().endsWith(".wav") ? { title, quantity: item.quantity, url: `/api/download?order=${encodeURIComponent(id)}&item=${index}` } : null;
     }));
     return Response.json({ ok: true, paid: true, ready: downloads.every(Boolean), downloads: downloads.filter(Boolean) }, { headers: { "Cache-Control": "no-store" } });
   } catch { return Response.json({ ok: false }, { status: 503 }); }
