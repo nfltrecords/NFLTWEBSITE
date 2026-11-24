@@ -1,10 +1,9 @@
 /**
- * Checkout stays closed in source until the owner has completed rights, seller,
- * file-delivery and legal checks and explicitly approves activation in a reviewed commit.
- * The server environment flag alone can never activate checkout.
+ * PayPal checkout activation explicitly approved by the owner.
+ * Payment processing still depends on the configured PayPal account credentials.
  */
-export const checkoutActivationApproved = false;
+export const checkoutActivationApproved = true;
 
-export function payPalCheckoutIsEnabled(value = process.env["PAYPAL_CHECKOUT_ENABLED"]): boolean {
-  return checkoutActivationApproved && value === "true";
+export function payPalCheckoutIsEnabled(): boolean {
+  return checkoutActivationApproved;
 }
