@@ -16,6 +16,7 @@ import { releasePreviews } from "@/lib/previews";
 import { useCart } from "@/lib/cart-store";
 import { createManualPayPalOrder } from "@/lib/manual-orders.functions";
 import { payPalCheckoutIsEnabled } from "@/lib/paypal-checkout-gate";
+import { useShopAvailability } from "@/lib/use-shop-availability";
 
 const text = (locale: Locale, fr: string, en: string) => (locale === "fr" ? fr : en);
 
@@ -26,10 +27,13 @@ export function ShopPage({ locale }: { locale: Locale }) {
   const [checkoutError, setCheckoutError] = useState("");
   const createOrder = useServerFn(createManualPayPalOrder);
   const checkoutEnabled = payPalCheckoutIsEnabled();
+  const { availableUpcs, availabilityLoaded } = useShopAvailability();
   const sharedCart = useCart();
   const items = filterReleases("all", query);
   const cartItems = releases.filter((release) => (sharedCart.items[release.upc] ?? 0) > 0);
   const cartCount = sharedCart.count;
+  const cartHasUnavailableItems =
+    availabilityLoaded && cartItems.some((release) => !availableUpcs?.has(release.upc));
   const cartTotalCents = cartItems.reduce((total, release) => total + (releasePriceCents(release.upc) ?? 0) * (sharedCart.items[release.upc] ?? 0), 0);
   const addToCart = sharedCart.add;
   const changeCartQuantity = sharedCart.change;
@@ -83,7 +87,13 @@ export function ShopPage({ locale }: { locale: Locale }) {
                     const quantity = sharedCart.items[release.upc] ?? 0;
                     return (
                       <li key={release.upc} className="cart-line-item py-4">
-                        <div className="cart-item-info"><p className="font-medium">{release.title}</p><p className="text-sm text-muted-foreground">{formatShopPrice(unitPrice)} {text(locale, "l’unité", "each")}</p></div>
+                        <div className="cart-item-info">
+                          <p className="font-medium">{release.title}</p>
+                          <p className="text-sm text-muted-foreground">{formatShopPrice(unitPrice)} {text(locale, "l’unité", "each")}</p>
+                          {availabilityLoaded && !availableUpcs?.has(release.upc) ? (
+                            <p className="text-xs text-destructive">{text(locale, "Master WAV incomplet — commande indisponible", "WAV master incomplete — order unavailable")}</p>
+                          ) : null}
+                        </div>
                         <div className="cart-item-controls">
                           <Button type="button" variant="outline" size="icon" aria-label={text(locale, "Retirer une unité", "Remove one")} onClick={() => changeCartQuantity(release.upc, -1)}><Minus size={15} /></Button>
                           <span className="min-w-6 text-center tabular-nums" aria-live="polite">{quantity}</span>
@@ -99,7 +109,12 @@ export function ShopPage({ locale }: { locale: Locale }) {
                   <div className="flex flex-col items-start gap-3">
                     <label className="text-sm" htmlFor="shop-buyer-email">{text(locale, "E-mail pour recevoir la commande", "Email for your order")}</label>
                     <input id="shop-buyer-email" type="email" required maxLength={255} autoComplete="email" value={buyerEmail} onChange={(event) => setBuyerEmail(event.target.value)} className="w-full rounded-md border border-input bg-background px-3 py-2" />
-                    <Button type="button" className="editorial-action" disabled={!checkoutEnabled || checkoutBusy || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(buyerEmail.trim())} onClick={async () => {
+                    {cartHasUnavailableItems ? (
+                      <p role="status" className="text-sm text-destructive">
+                        {text(locale, "Retirez les sorties dont le master WAV est incomplet avant de commander.", "Remove releases with incomplete WAV masters before checkout.")}
+                      </p>
+                    ) : null}
+                    <Button type="button" className="editorial-action" disabled={!checkoutEnabled || checkoutBusy || !availabilityLoaded || cartHasUnavailableItems || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(buyerEmail.trim())} onClick={async () => {
                       if (!checkoutEnabled || cartItems.length === 0 || !buyerEmail.trim() || checkoutBusy) return;
                       setCheckoutBusy(true); setCheckoutError("");
                       try {
@@ -163,7 +178,9 @@ export function ShopPage({ locale }: { locale: Locale }) {
             <span>{items.length} / 18</span>
           </label>
           <div className="shop-grid">
-            {items.map((release) => (
+            {items.map((release) => {
+              const masterAvailable = availableUpcs?.has(release.upc) ?? false;
+              return (
               <article key={release.upc} className="shop-release">
                 <Link
                   to={locale === "fr" ? "/catalogue/$upc" : "/en/catalogue/$upc"}
@@ -183,6 +200,13 @@ export function ShopPage({ locale }: { locale: Locale }) {
                   <h2>{release.title}</h2>
                   <ReleasePrice upc={release.upc} locale={locale} />
                   <p>UPC {release.upc}</p>
+                  <p className="shop-master-status">
+                    {availabilityLoaded
+                      ? masterAvailable
+                        ? text(locale, "Master WAV disponible", "WAV master available")
+                        : text(locale, "Master WAV en préparation", "WAV master in preparation")
+                      : text(locale, "Vérification des masters…", "Checking WAV masters…")}
+                  </p>
                 </div>
                 {(releasePreviews[release.upc]?.length ?? 0) > 0 ? (
                   <details className="shop-preview-details">
@@ -197,7 +221,7 @@ export function ShopPage({ locale }: { locale: Locale }) {
                   </details>
                 ) : null}
                 <Button type="button" className="editorial-action w-full" onClick={() => addToCart(release.upc)} disabled={
-                  (sharedCart.items[release.upc] ?? 0) >= 20 || releasePriceCents(release.upc) === null
+                  !availabilityLoaded || !masterAvailable || (sharedCart.items[release.upc] ?? 0) >= 20 || releasePriceCents(release.upc) === null
                 }>
                   <ShoppingBag size={16} />{text(locale, "Ajouter au panier", "Add to cart")}
                   {(sharedCart.items[release.upc] ?? 0) > 0 ? ` · ${sharedCart.items[release.upc]}` : ""}
@@ -212,7 +236,8 @@ export function ShopPage({ locale }: { locale: Locale }) {
                   </Link>
                 </Button>
               </article>
-            ))}
+              );
+            })}
           </div>
           {items.length === 0 && (
             <p className="body-copy py-12">
