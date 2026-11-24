@@ -10,10 +10,13 @@ export async function sendPaidOrderDelivery(orderId: string): Promise<string> {
 }
 
 export async function servePaidOrderDownload(request: Request): Promise<Response> {
-  let payload: { order?: unknown };
-  try { payload = (await request.json()) as { order?: unknown }; }
-  catch { return new Response("Requête invalide.", { status: 400 }); }
-  const orderId = typeof payload.order === "string" ? payload.order : "";
+  let orderId = new URL(request.url).searchParams.get("order") ?? "";
+  if (request.method === "POST") {
+    try {
+      const payload = (await request.json()) as { order?: unknown };
+      if (typeof payload.order === "string") orderId = payload.order;
+    } catch { return new Response("Requête invalide.", { status: 400 }); }
+  }
   if (!/^[0-9a-f-]{36}$/i.test(orderId)) return new Response("Commande invalide.", { status: 404 });
 
   const order = await getShopOrder(orderId);
