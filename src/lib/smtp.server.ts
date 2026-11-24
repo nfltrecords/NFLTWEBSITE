@@ -128,6 +128,7 @@ export async function sendTransactionalEmail(
   to: string,
   subject: string,
   body: string,
+  messageId?: string,
 ): Promise<void> {
   const config = getSmtpConfig();
   if (!config) throw new Error("SMTP is not configured");
@@ -154,7 +155,7 @@ export async function sendTransactionalEmail(
       to,
       subject,
       body,
-      messageId: `${crypto.randomUUID()}@nflt-records.com`,
+      messageId: messageId ?? `${crypto.randomUUID()}@nflt-records.com`,
       date: new Date().toUTCString(),
     });
     await session.sendData(message);
