@@ -60,6 +60,23 @@ La vérification continue inclut les tests Vitest, un contrôle TypeScript stric
 
 Ces protections sont des contrôles de code et de données. Elles ne constituent pas une preuve de paiement PayPal ou de livraison client réelle.
 
+## Inventaire audio et boutique — vérification de production du 24 novembre 2026
+
+L'état actuel est plus récent que l'ancien relevé à 11 associations :
+
+- D1 contient maintenant 18 lignes dans `shop_release_assets`, toutes associées à des fichiers WAV existants dans R2. Aucune ligne D1 ne pointe vers un M4A.
+- Le bucket R2 complet contient 56 objets : 18 WAV, 19 M4A et 19 visuels. Aucun autre WAV n'a été trouvé ailleurs dans le bucket.
+- Les 18 WAV associés couvrent 12 UPC : 11 sorties ont leur ensemble complet ; `NOUS Y SOMMES` n'a que 3 masters sur 9.
+- Les 5 UPC vérifiés sans master WAV sont `Dilemma` (1 piste), `#NEVERFAKELIKETHEM` (1), `30.000 GÉNOCIDES` (8), `Hot` (1) et `GR 4LIFE` (1). Il manque également 6 WAV pour `NOUS Y SOMMES`.
+- Cela représente 18 masters WAV manquants pour les tracklists vérifiées. `Hustle & Grind` n'a pas de WAV associé et son nombre exact de pistes reste non confirmé.
+- Les M4A présents dans R2 restent des préécoutes ; ils ne sont jamais utilisés comme masters de livraison.
+
+Les 37 MP3 de préécoute sont désormais associés aux 18 UPC dans `src/lib/previews.ts`. Les lecteurs sont disponibles dans les fiches catalogue et directement dans les cartes de la boutique. Le contrôle `npm run audit:assets`, ajouté à GitHub Actions, vérifie les 18 pochettes et les 37 associations MP3. Les tests, le build, le contrôle TypeScript et le lint passent sur le dernier commit.
+
+Les masters WAV manquants n'ont été trouvés ni ailleurs dans le bucket R2, ni dans les archives ZIP examinées de GitHub et de la bibliothèque de fichiers. Ne pas convertir les M4A pour combler ces manques. Le transfert des nouveaux masters peut se faire via `/admin/audio`.
+
+Le verrou `checkoutActivationApproved` reste à `false`. Aucune commande n'est payée et aucun paiement réel n'a été effectué.
+
 ## Email automatique — code prêt, identifiant SMTP manquant
 
 Le mécanisme d'email est maintenant intégré au checkout existant :
