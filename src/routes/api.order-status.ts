@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { getShopAsset, getShopOrder } from "@/lib/shop-db.server";
-import { sendPaidOrderDelivery } from "@/lib/delivery.server";
 
 export const Route = createFileRoute("/api/order-status")({
   server: {
