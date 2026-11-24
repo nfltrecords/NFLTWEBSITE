@@ -65,25 +65,36 @@ describe("Owner-reported original artwork evidence", () => {
       releases.map((release) => release.upc),
     );
     expect(review.releases).toHaveLength(18);
-    expect(verifiedReleaseTrackCounts).toEqual({
+    const confirmedCounts: Record<string, number> = {
+      "199751168234": 1,
+      "199751170992": 1,
+      "199751508283": 1,
+      "199751511160": 1,
+      "199751512501": 1,
+      "199751514697": 1,
+      "199751613871": 1,
+      "199951252436": 1,
+      "199954147302": 1,
+      "199955701558": 1,
       "199955715135": 1,
+      "199955740199": 1,
       "199955742094": 8,
       "199956222809": 9,
       "199956554184": 5,
-    });
+      "199956557857": 1,
+      "821440674572": 1,
+    };
+    expect(verifiedReleaseTrackCounts).toEqual(confirmedCounts);
     for (const release of releases) {
-      const confirmedCount: Record<string, number> = {
-        "199955715135": 1,
-        "199955742094": 8,
-        "199956222809": 9,
-        "199956554184": 5,
-      };
-      expect(verifiedReleaseTrackCounts[release.upc]).toBe(confirmedCount[release.upc]);
+      expect(verifiedReleaseTrackCounts[release.upc]).toBe(confirmedCounts[release.upc]);
     }
     expect(releasePriceCents("199955715135")).toBe(999);
     expect(releasePriceCents("199955742094")).toBe(1999);
     expect(releasePriceCents("199956222809")).toBe(1999);
     expect(releasePriceCents("199956554184")).toBe(1499);
+    expect(releasePriceCents("199955701558")).toBe(999);
+    expect(releasePriceCents("199751508283")).toBe(999);
+    expect(releasePriceCents("821440674572")).toBe(999);
     for (const release of releases.filter(
       (r) =>
         !["199955715135", "199955742094", "199956222809", "199956554184"].includes(r.upc),

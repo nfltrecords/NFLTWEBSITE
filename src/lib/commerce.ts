@@ -25,15 +25,28 @@ export const shopPriceTiers = [
 export const formatShopPrice = (cents: number) => `${(cents / 100).toFixed(2).replace(".", ",")} €`;
 
 export const verifiedReleaseTrackCounts: Readonly<Record<string, number>> = {
+  "199751168234": 1,
+  "199751170992": 1,
+  "199751508283": 1,
+  "199751511160": 1,
+  "199751512501": 1,
+  "199751514697": 1,
+  "199751613871": 1,
+  "199951252436": 1,
+  "199954147302": 1,
+  "199955701558": 1,
   "199955715135": 1,
+  "199955740199": 1,
   "199955742094": 8,
   "199956222809": 9,
   "199956554184": 5,
+  "199956557857": 1,
+  "821440674572": 1,
 };
 
 // Track counts and resulting prices below are provisional catalogue pricing.
-// The three screenshot-confirmed multi-track releases use their supplied tiers;
-// other single-track assumptions remain provisional until their tracklists are verified.
+// Counts are verified from owner-supplied tracklist evidence and official Amazon/Apple Music release pages.
+// Hustle & Grind remains provisional because its exact release tracklist is not yet independently verified.
 export const provisionalReleaseTrackCounts: Readonly<Record<string, number>> = {
   "199955740199": 1,
   "199956554184": 5,
