@@ -66,6 +66,17 @@ export const Route = createFileRoute("/api/admin/audio")({
 
             const upc = body.upc!;
             const fileName = body.fileName.normalize("NFC");
+            const duplicateName = await shopEnv.DB.prepare(
+              "SELECT 1 AS found FROM shop_release_assets WHERE release_upc = ? AND lower(file_name) = lower(?) LIMIT 1",
+            )
+              .bind(upc, fileName)
+              .first<{ found: number }>();
+            if (duplicateName) {
+              return Response.json(
+                { error: "Un fichier WAV portant ce nom est déjà associé à cette sortie" },
+                { status: 409 },
+              );
+            }
             const fileSize = body.fileSize!;
             const chunkCount = Math.ceil(fileSize / CHUNK);
             const sessionId = crypto.randomUUID();
