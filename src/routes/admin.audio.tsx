@@ -3,7 +3,10 @@ import { useState } from "react";
 import { releases } from "@/lib/catalogue";
 import { SiteLayout } from "@/components/SiteLayout";
 import { Button } from "@/components/ui/button";
-export const Route = createFileRoute("/admin/audio")({ component: Page });
+export const Route = createFileRoute("/admin/audio")({
+  component: Page,
+  head: () => ({ meta: [{ name: "robots", content: "noindex,nofollow" }] }),
+});
 type UploadStartResult = {
   assetKey: string;
   chunkCount: number;
