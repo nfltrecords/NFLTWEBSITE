@@ -73,7 +73,9 @@ function Page() {
       if (!response.ok || !data.ok) {
         throw new Error(data.error ?? "Configuration email indisponible");
       }
-      setMessage(`Email de test envoyé à ${data.recipient ?? "nflt-records@nflt-records.com"}. Vérifie la boîte de réception et les indésirables.`);
+      setMessage(
+        `Email de test envoyé à ${data.recipient ?? "nflt-records@nflt-records.com"}. Vérifie la boîte de réception et les indésirables.`,
+      );
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Erreur de test email");
     } finally {
