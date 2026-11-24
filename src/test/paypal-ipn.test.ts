@@ -1,10 +1,18 @@
 import { describe, expect, it } from "vitest";
-import { matchesPayPalCart, parsePayPalOrderManifest } from "@/lib/paypal-ipn";
+import { isFullRefundAmount, matchesPayPalCart, parsePayPalOrderManifest } from "@/lib/paypal-ipn";
 
 const firstUpc = "199955740199";
 const secondUpc = "199956554184";
 
 describe("PayPal Classic cart verification", () => {
+  it("recognizes full refunds without treating partial refunds as full reversals", () => {
+    expect(isFullRefundAmount("-14.99", 1499)).toBe(true);
+    expect(isFullRefundAmount("14.99", 1499)).toBe(true);
+    expect(isFullRefundAmount("-4.99", 1499)).toBe(false);
+    expect(isFullRefundAmount(null, 1499)).toBe(false);
+    expect(isFullRefundAmount("invalid", 1499)).toBe(false);
+  });
+
   it("parses a multi-item order manifest and legacy single-item orders", () => {
     expect(
       parsePayPalOrderManifest(
