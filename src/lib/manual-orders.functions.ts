@@ -17,7 +17,7 @@ async function adminAuthorized(code: string): Promise<boolean> {
 
 export const createManualPayPalOrder = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) =>
-    z.object({ upc: z.string().regex(/^\\d{12,14}$/), email: z.string().trim().email().max(255) }).strict().parse(input),
+    z.object({ upc: z.string().regex(/^\d{12,14}$/), email: z.string().trim().email().max(255) }).strict().parse(input),
   )
   .handler(async ({ data }) => {
     const release = releases.find((item) => item.upc === data.upc);
