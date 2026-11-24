@@ -11,7 +11,10 @@ async function handleIpn(request: Request): Promise<Response> {
 
   const verification = await fetch("https://ipnpb.paypal.com/cgi-bin/webscr", {
     method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded", "User-Agent": "NFLT-RECORDS-IPN/1.0" },
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      "User-Agent": "NFLT-RECORDS-IPN/1.0",
+    },
     body: `cmd=_notify-validate&${raw}`,
   });
   if (!verification.ok) return new Response("PayPal verification unavailable", { status: 503 });
@@ -28,9 +31,13 @@ async function handleIpn(request: Request): Promise<Response> {
   const amount = Number(data.get("mc_gross"));
   if (!orderId || !transactionId || transactionId.length > 128)
     return new Response("Missing order reference or transaction ID", { status: 400 });
-  if (receiver !== "encoresarbakane@gmail.com" || data.get("payment_status") !== "Completed" ||
-      data.get("mc_currency") !== "EUR" || !new Set(["send_money", "web_accept"]).has(data.get("txn_type") ?? "") ||
-      !Number.isFinite(amount)) {
+  if (
+    receiver !== "encoresarbakane@gmail.com" ||
+    data.get("payment_status") !== "Completed" ||
+    data.get("mc_currency") !== "EUR" ||
+    !new Set(["send_money", "web_accept"]).has(data.get("txn_type") ?? "") ||
+    !Number.isFinite(amount)
+  ) {
     return new Response("Payment does not meet NFLT order requirements", { status: 400 });
   }
 
@@ -56,11 +63,16 @@ async function handleIpn(request: Request): Promise<Response> {
 }
 
 export const Route = createFileRoute("/api/paypal/ipn")({
-  server: { handlers: { POST: async ({ request }) => {
-    try { return await handleIpn(request); }
-    catch (error) {
-      console.error("PayPal IPN processing failed", error);
-      return new Response("IPN processing failed; retry", { status: 503 });
-    }
-  } } },
+  server: {
+    handlers: {
+      POST: async ({ request }) => {
+        try {
+          return await handleIpn(request);
+        } catch (error) {
+          console.error("PayPal IPN processing failed", error);
+          return new Response("IPN processing failed; retry", { status: 503 });
+        }
+      },
+    },
+  },
 });

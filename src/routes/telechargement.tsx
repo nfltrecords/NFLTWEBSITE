@@ -16,11 +16,18 @@ function DownloadPage() {
       <section className="editorial-section min-h-[55vh]">
         <p className="eyebrow">NFLT RECORDS / TÉLÉCHARGEMENT</p>
         <h1>Votre musique est prête.</h1>
-        <p className="body-copy mt-4">Le téléchargement est disponible après confirmation du paiement PayPal.</p>
+        <p className="body-copy mt-4">
+          Le téléchargement est disponible après confirmation du paiement PayPal.
+        </p>
         {downloadHref ? (
-          <Button asChild className="editorial-action mt-8"><a href={downloadHref}>Télécharger mon fichier audio WAV</a></Button>
+          <Button asChild className="editorial-action mt-8">
+            <a href={downloadHref}>Télécharger mon fichier audio WAV</a>
+          </Button>
         ) : (
-          <p role="alert" className="body-copy mt-4 text-destructive">Référence de commande invalide. Ouvrez le lien de confirmation reçu après votre paiement.</p>
+          <p role="alert" className="body-copy mt-4 text-destructive">
+            Référence de commande invalide. Ouvrez le lien de confirmation reçu après votre
+            paiement.
+          </p>
         )}
       </section>
     </SiteLayout>

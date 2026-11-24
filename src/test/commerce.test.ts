@@ -48,7 +48,9 @@ describe("Commerce inquiry rules", () => {
     expect(releasePriceCents("199955715135")).toBe(999);
     expect(releasePriceCents("199955742094")).toBe(1999);
     expect(releasePriceCents("199956222809")).toBe(1999);
-    for (const release of releases.filter((r) => !["199955742094", "199956222809"].includes(r.upc))) {
+    for (const release of releases.filter(
+      (r) => !["199955742094", "199956222809"].includes(r.upc),
+    )) {
       expect(provisionalReleaseTrackCounts[release.upc]).toBe(1);
       expect(releasePriceCents(release.upc)).toBe(999);
     }
@@ -57,7 +59,9 @@ describe("Commerce inquiry rules", () => {
   });
 
   it("does not publish company identifiers or claim legal approval", () => {
-    expect(commerceConfig.companyRecords.status).toBe("owner-provided-identifiers-held-outside-public-repository");
+    expect(commerceConfig.companyRecords.status).toBe(
+      "owner-provided-identifiers-held-outside-public-repository",
+    );
     expect(commerceConfig.companyRecords.independentlyRevalidated).toBe(false);
     expect(commerceConfig.companyRecords.requestExistingCompanyDocumentsAgain).toBe(false);
     expect(commerceConfig.companyRecords.publicLegalCopyApproved).toBe(false);
@@ -71,13 +75,28 @@ describe("Commerce inquiry rules", () => {
 
   it("keeps seller assignment pending and does not infer the seller for digital or licensing", () => {
     expect(commerceConfig.intendedEUSeller).toBeNull();
-    expect(commerceConfig.sellerStatus).toBe("not-default-for-digital-licensing-or-all-online-purchases");
-    expect(commerceConfig.sellerRoleClarification.digitalDownloadsAndLicensing.franceIsDefaultSeller).toBe(false);
-    expect(commerceConfig.sellerRoleClarification.digitalDownloadsAndLicensing.franceIsDefaultLicensingCounterparty).toBe(false);
-    expect(commerceConfig.sellerRoleClarification.physicalCDPurchases.associatedEntity).toBe("SAS NFLT RECORDS FRANCE");
-    expect(commerceConfig.sellerRoleClarification.physicalCDPurchases.sellerOfRecordConfirmed).toBe(false);
-    expect(commerceConfig.sellerRoleClarification.physicalCDPurchases.applicableTerritoryConfirmed).toBe(false);
-    expect(commerceConfig.sellerRoleClarification.physicalCDPurchases.franceOnlyCustomers).toBe(false);
+    expect(commerceConfig.sellerStatus).toBe(
+      "not-default-for-digital-licensing-or-all-online-purchases",
+    );
+    expect(
+      commerceConfig.sellerRoleClarification.digitalDownloadsAndLicensing.franceIsDefaultSeller,
+    ).toBe(false);
+    expect(
+      commerceConfig.sellerRoleClarification.digitalDownloadsAndLicensing
+        .franceIsDefaultLicensingCounterparty,
+    ).toBe(false);
+    expect(commerceConfig.sellerRoleClarification.physicalCDPurchases.associatedEntity).toBe(
+      "SAS NFLT RECORDS FRANCE",
+    );
+    expect(commerceConfig.sellerRoleClarification.physicalCDPurchases.sellerOfRecordConfirmed).toBe(
+      false,
+    );
+    expect(
+      commerceConfig.sellerRoleClarification.physicalCDPurchases.applicableTerritoryConfirmed,
+    ).toBe(false);
+    expect(commerceConfig.sellerRoleClarification.physicalCDPurchases.franceOnlyCustomers).toBe(
+      false,
+    );
   });
 
   it("keeps owner and company authorization details out of the public configuration", () => {
@@ -96,27 +115,37 @@ describe("Commerce inquiry rules", () => {
   });
 
   it("requires a verified sender and delivery test without changing contact", () => {
-    expect(commerceConfig.licensingNotificationReadiness.status).toBe("pending-verified-sender-and-delivery-test");
+    expect(commerceConfig.licensingNotificationReadiness.status).toBe(
+      "pending-verified-sender-and-delivery-test",
+    );
     expect(commerceConfig.licensingNotificationReadiness.emailDeliveryEnabled).toBe(false);
     expect(commerceConfig.licensingNotificationReadiness.existingContactWorkflow).toBe("unchanged");
   });
 
   it("keeps the checkout readiness gates closed", () => {
     expect(commerceConfig.checkoutReadiness.explicitCheckoutActivationApproval).toBe("not-granted");
-    expect(commerceConfig.checkoutReadiness.paymentProviderAndMerchantAccount).toBe("not-selected-or-integrated");
-    expect(commerceConfig.checkoutReadiness.ordersInvoicesSecureDeliveryAndRefunds).toBe("not-implemented");
+    expect(commerceConfig.checkoutReadiness.paymentProviderAndMerchantAccount).toBe(
+      "not-selected-or-integrated",
+    );
+    expect(commerceConfig.checkoutReadiness.ordersInvoicesSecureDeliveryAndRefunds).toBe(
+      "not-implemented",
+    );
     expect(commerceConfig.sellerOfRecordPreparation.automaticSellerAssignment).toBe(false);
     expect(commerceConfig.sellerOfRecordPreparation.productSellerAssignments).toEqual({});
     expect(commerceConfig.sellerOfRecordPreparation.approvedTerritories).toEqual([]);
   });
 
   it("keeps the licensing contact channel separate from user-provided recipients", () => {
-    expect(inquirySchema.safeParse({ ...input, recipient: "other@example.com", card: "1234" }).success).toBe(false);
+    expect(
+      inquirySchema.safeParse({ ...input, recipient: "other@example.com", card: "1234" }).success,
+    ).toBe(false);
   });
 
   it("preserves only the three confirmed reference price tiers", () => {
     expect(shopPriceTiers.map((tier) => [tier.tracks, tier.currency])).toEqual([
-      [1, "EUR"], [5, "EUR"], [6, "EUR"],
+      [1, "EUR"],
+      [5, "EUR"],
+      [6, "EUR"],
     ]);
     expect(formatShopPrice(999)).toBe("9,99 €");
     expect(formatShopPrice(1499)).toBe("14,99 €");
@@ -143,14 +172,20 @@ describe("Commerce inquiry rules", () => {
       release: undefined,
       intent: undefined,
     }));
-  it.each(releases)("preserves availability and licensing intent for UPC $upc in both languages", (r) => {
-    for (const locale of ["fr", "en"])
-      for (const intent of ["availability", "licensing"] as const) {
-        expect(commerceSearchSchema.parse({ release: r.upc, intent })).toEqual({
-          release: r.upc,
-          intent,
-        });
-        expect(inquirySchema.safeParse({ ...input, release_upc: r.upc, inquiry_type: intent, locale }).success).toBe(true);
-      }
-  });
+  it.each(releases)(
+    "preserves availability and licensing intent for UPC $upc in both languages",
+    (r) => {
+      for (const locale of ["fr", "en"])
+        for (const intent of ["availability", "licensing"] as const) {
+          expect(commerceSearchSchema.parse({ release: r.upc, intent })).toEqual({
+            release: r.upc,
+            intent,
+          });
+          expect(
+            inquirySchema.safeParse({ ...input, release_upc: r.upc, inquiry_type: intent, locale })
+              .success,
+          ).toBe(true);
+        }
+    },
+  );
 });

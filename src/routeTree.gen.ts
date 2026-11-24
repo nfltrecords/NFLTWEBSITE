@@ -18,20 +18,29 @@ import { Route as CatalogueRouteImport } from './routes/catalogue'
 import { Route as ConditionsDeVenteRouteImport } from './routes/conditions-de-vente'
 import { Route as ConfidentialiteRouteImport } from './routes/confidentialite'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as EcouterRouteImport } from './routes/ecouter'
+import { Route as EspaceCommandesRouteImport } from './routes/espace-commandes'
+import { Route as ImplantationsRouteImport } from './routes/implantations'
 import { Route as LicencesMusicalesRouteImport } from './routes/licences-musicales'
 import { Route as MessagesRouteImport } from './routes/messages'
 import { Route as NfltRouteImport } from './routes/nflt'
 import { Route as PresseRouteImport } from './routes/presse'
 import { Route as RadioRouteImport } from './routes/radio'
 import { Route as ServicesRouteImport } from './routes/services'
-import { Route as EcouterRouteImport } from './routes/ecouter'
+import { Route as TelechargementRouteImport } from './routes/telechargement'
+import { Route as AdminAudioRouteImport } from './routes/admin.audio'
+import { Route as ApiDownloadRouteImport } from './routes/api.download'
+import { Route as ApiOrderStatusRouteImport } from './routes/api.order-status'
 import { Route as CatalogueUpcRouteImport } from './routes/catalogue_.$upc'
+import { Route as CommandeConfirmationRouteImport } from './routes/commande.confirmation'
+import { Route as CommandePaiementRouteImport } from './routes/commande.paiement'
 import { Route as EnIndexRouteImport } from './routes/en.index'
 import { Route as EnAboutRouteImport } from './routes/en.about'
 import { Route as EnApplicationRouteImport } from './routes/en.application'
 import { Route as EnArtistsRouteImport } from './routes/en.artists'
 import { Route as EnCatalogueRouteImport } from './routes/en.catalogue'
 import { Route as EnContactRouteImport } from './routes/en.contact'
+import { Route as EnListenRouteImport } from './routes/en.listen'
 import { Route as EnMusicLicensingRouteImport } from './routes/en.music-licensing'
 import { Route as EnNfltRouteImport } from './routes/en.nflt'
 import { Route as EnPressRouteImport } from './routes/en.press'
@@ -40,7 +49,9 @@ import { Route as EnRadioRouteImport } from './routes/en.radio'
 import { Route as EnServicesRouteImport } from './routes/en.services'
 import { Route as EnShopRouteImport } from './routes/en.shop'
 import { Route as EnTermsOfSaleRouteImport } from './routes/en.terms-of-sale'
-import { Route as EnListenRouteImport } from './routes/en.listen'
+import { Route as ApiAdminAudioRouteImport } from './routes/api.admin.audio'
+import { Route as ApiPaypalIpnRouteImport } from './routes/api.paypal.ipn'
+import { Route as ApiPaypalWebhookRouteImport } from './routes/api.paypal.webhook'
 import { Route as EnCatalogueUpcRouteImport } from './routes/en.catalogue_.$upc'
 
 const IndexRoute = IndexRouteImport.update({
@@ -88,6 +99,21 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EcouterRoute = EcouterRouteImport.update({
+  id: '/ecouter',
+  path: '/ecouter',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EspaceCommandesRoute = EspaceCommandesRouteImport.update({
+  id: '/espace-commandes',
+  path: '/espace-commandes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ImplantationsRoute = ImplantationsRouteImport.update({
+  id: '/implantations',
+  path: '/implantations',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LicencesMusicalesRoute = LicencesMusicalesRouteImport.update({
   id: '/licences-musicales',
   path: '/licences-musicales',
@@ -118,14 +144,39 @@ const ServicesRoute = ServicesRouteImport.update({
   path: '/services',
   getParentRoute: () => rootRouteImport,
 } as any)
-const EcouterRoute = EcouterRouteImport.update({
-  id: '/ecouter',
-  path: '/ecouter',
+const TelechargementRoute = TelechargementRouteImport.update({
+  id: '/telechargement',
+  path: '/telechargement',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminAudioRoute = AdminAudioRouteImport.update({
+  id: '/admin/audio',
+  path: '/admin/audio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiDownloadRoute = ApiDownloadRouteImport.update({
+  id: '/api/download',
+  path: '/api/download',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiOrderStatusRoute = ApiOrderStatusRouteImport.update({
+  id: '/api/order-status',
+  path: '/api/order-status',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CatalogueUpcRoute = CatalogueUpcRouteImport.update({
   id: '/catalogue_/$upc',
   path: '/catalogue/$upc',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CommandeConfirmationRoute = CommandeConfirmationRouteImport.update({
+  id: '/commande/confirmation',
+  path: '/commande/confirmation',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CommandePaiementRoute = CommandePaiementRouteImport.update({
+  id: '/commande/paiement',
+  path: '/commande/paiement',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EnIndexRoute = EnIndexRouteImport.update({
@@ -156,6 +207,11 @@ const EnCatalogueRoute = EnCatalogueRouteImport.update({
 const EnContactRoute = EnContactRouteImport.update({
   id: '/en/contact',
   path: '/en/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EnListenRoute = EnListenRouteImport.update({
+  id: '/en/listen',
+  path: '/en/listen',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EnMusicLicensingRoute = EnMusicLicensingRouteImport.update({
@@ -198,9 +254,19 @@ const EnTermsOfSaleRoute = EnTermsOfSaleRouteImport.update({
   path: '/en/terms-of-sale',
   getParentRoute: () => rootRouteImport,
 } as any)
-const EnListenRoute = EnListenRouteImport.update({
-  id: '/en/listen',
-  path: '/en/listen',
+const ApiAdminAudioRoute = ApiAdminAudioRouteImport.update({
+  id: '/api/admin/audio',
+  path: '/api/admin/audio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPaypalIpnRoute = ApiPaypalIpnRouteImport.update({
+  id: '/api/paypal/ipn',
+  path: '/api/paypal/ipn',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPaypalWebhookRoute = ApiPaypalWebhookRouteImport.update({
+  id: '/api/paypal/webhook',
+  path: '/api/paypal/webhook',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EnCatalogueUpcRoute = EnCatalogueUpcRouteImport.update({
@@ -219,19 +285,28 @@ export interface FileRoutesByFullPath {
   '/conditions-de-vente': typeof ConditionsDeVenteRoute
   '/confidentialite': typeof ConfidentialiteRoute
   '/contact': typeof ContactRoute
+  '/ecouter': typeof EcouterRoute
+  '/espace-commandes': typeof EspaceCommandesRoute
+  '/implantations': typeof ImplantationsRoute
   '/licences-musicales': typeof LicencesMusicalesRoute
   '/messages': typeof MessagesRoute
   '/nflt': typeof NfltRoute
   '/presse': typeof PresseRoute
   '/radio': typeof RadioRoute
   '/services': typeof ServicesRoute
-  '/ecouter': typeof EcouterRoute
+  '/telechargement': typeof TelechargementRoute
+  '/admin/audio': typeof AdminAudioRoute
+  '/api/download': typeof ApiDownloadRoute
+  '/api/order-status': typeof ApiOrderStatusRoute
   '/catalogue/$upc': typeof CatalogueUpcRoute
+  '/commande/confirmation': typeof CommandeConfirmationRoute
+  '/commande/paiement': typeof CommandePaiementRoute
   '/en/about': typeof EnAboutRoute
   '/en/application': typeof EnApplicationRoute
   '/en/artists': typeof EnArtistsRoute
   '/en/catalogue': typeof EnCatalogueRoute
   '/en/contact': typeof EnContactRoute
+  '/en/listen': typeof EnListenRoute
   '/en/music-licensing': typeof EnMusicLicensingRoute
   '/en/nflt': typeof EnNfltRoute
   '/en/press': typeof EnPressRoute
@@ -240,8 +315,10 @@ export interface FileRoutesByFullPath {
   '/en/services': typeof EnServicesRoute
   '/en/shop': typeof EnShopRoute
   '/en/terms-of-sale': typeof EnTermsOfSaleRoute
-  '/en/listen': typeof EnListenRoute
   '/en/': typeof EnIndexRoute
+  '/api/admin/audio': typeof ApiAdminAudioRoute
+  '/api/paypal/ipn': typeof ApiPaypalIpnRoute
+  '/api/paypal/webhook': typeof ApiPaypalWebhookRoute
   '/en/catalogue/$upc': typeof EnCatalogueUpcRoute
 }
 export interface FileRoutesByTo {
@@ -254,18 +331,28 @@ export interface FileRoutesByTo {
   '/conditions-de-vente': typeof ConditionsDeVenteRoute
   '/confidentialite': typeof ConfidentialiteRoute
   '/contact': typeof ContactRoute
+  '/ecouter': typeof EcouterRoute
+  '/espace-commandes': typeof EspaceCommandesRoute
+  '/implantations': typeof ImplantationsRoute
   '/licences-musicales': typeof LicencesMusicalesRoute
   '/messages': typeof MessagesRoute
   '/nflt': typeof NfltRoute
   '/presse': typeof PresseRoute
   '/radio': typeof RadioRoute
   '/services': typeof ServicesRoute
+  '/telechargement': typeof TelechargementRoute
+  '/admin/audio': typeof AdminAudioRoute
+  '/api/download': typeof ApiDownloadRoute
+  '/api/order-status': typeof ApiOrderStatusRoute
   '/catalogue/$upc': typeof CatalogueUpcRoute
+  '/commande/confirmation': typeof CommandeConfirmationRoute
+  '/commande/paiement': typeof CommandePaiementRoute
   '/en/about': typeof EnAboutRoute
   '/en/application': typeof EnApplicationRoute
   '/en/artists': typeof EnArtistsRoute
   '/en/catalogue': typeof EnCatalogueRoute
   '/en/contact': typeof EnContactRoute
+  '/en/listen': typeof EnListenRoute
   '/en/music-licensing': typeof EnMusicLicensingRoute
   '/en/nflt': typeof EnNfltRoute
   '/en/press': typeof EnPressRoute
@@ -275,6 +362,9 @@ export interface FileRoutesByTo {
   '/en/shop': typeof EnShopRoute
   '/en/terms-of-sale': typeof EnTermsOfSaleRoute
   '/en': typeof EnIndexRoute
+  '/api/admin/audio': typeof ApiAdminAudioRoute
+  '/api/paypal/ipn': typeof ApiPaypalIpnRoute
+  '/api/paypal/webhook': typeof ApiPaypalWebhookRoute
   '/en/catalogue/$upc': typeof EnCatalogueUpcRoute
 }
 export interface FileRoutesById {
@@ -288,18 +378,28 @@ export interface FileRoutesById {
   '/conditions-de-vente': typeof ConditionsDeVenteRoute
   '/confidentialite': typeof ConfidentialiteRoute
   '/contact': typeof ContactRoute
+  '/ecouter': typeof EcouterRoute
+  '/espace-commandes': typeof EspaceCommandesRoute
+  '/implantations': typeof ImplantationsRoute
   '/licences-musicales': typeof LicencesMusicalesRoute
   '/messages': typeof MessagesRoute
   '/nflt': typeof NfltRoute
   '/presse': typeof PresseRoute
   '/radio': typeof RadioRoute
   '/services': typeof ServicesRoute
+  '/telechargement': typeof TelechargementRoute
+  '/admin/audio': typeof AdminAudioRoute
+  '/api/download': typeof ApiDownloadRoute
+  '/api/order-status': typeof ApiOrderStatusRoute
   '/catalogue_/$upc': typeof CatalogueUpcRoute
+  '/commande/confirmation': typeof CommandeConfirmationRoute
+  '/commande/paiement': typeof CommandePaiementRoute
   '/en/about': typeof EnAboutRoute
   '/en/application': typeof EnApplicationRoute
   '/en/artists': typeof EnArtistsRoute
   '/en/catalogue': typeof EnCatalogueRoute
   '/en/contact': typeof EnContactRoute
+  '/en/listen': typeof EnListenRoute
   '/en/music-licensing': typeof EnMusicLicensingRoute
   '/en/nflt': typeof EnNfltRoute
   '/en/press': typeof EnPressRoute
@@ -309,6 +409,9 @@ export interface FileRoutesById {
   '/en/shop': typeof EnShopRoute
   '/en/terms-of-sale': typeof EnTermsOfSaleRoute
   '/en/': typeof EnIndexRoute
+  '/api/admin/audio': typeof ApiAdminAudioRoute
+  '/api/paypal/ipn': typeof ApiPaypalIpnRoute
+  '/api/paypal/webhook': typeof ApiPaypalWebhookRoute
   '/en/catalogue_/$upc': typeof EnCatalogueUpcRoute
 }
 export interface FileRouteTypes {
@@ -323,19 +426,28 @@ export interface FileRouteTypes {
     | '/conditions-de-vente'
     | '/confidentialite'
     | '/contact'
+    | '/ecouter'
+    | '/espace-commandes'
+    | '/implantations'
     | '/licences-musicales'
     | '/messages'
     | '/nflt'
     | '/presse'
     | '/radio'
     | '/services'
-    | '/ecouter'
+    | '/telechargement'
+    | '/admin/audio'
+    | '/api/download'
+    | '/api/order-status'
     | '/catalogue/$upc'
+    | '/commande/confirmation'
+    | '/commande/paiement'
     | '/en/about'
     | '/en/application'
     | '/en/artists'
     | '/en/catalogue'
     | '/en/contact'
+    | '/en/listen'
     | '/en/music-licensing'
     | '/en/nflt'
     | '/en/press'
@@ -344,8 +456,10 @@ export interface FileRouteTypes {
     | '/en/services'
     | '/en/shop'
     | '/en/terms-of-sale'
-    | '/en/listen'
     | '/en/'
+    | '/api/admin/audio'
+    | '/api/paypal/ipn'
+    | '/api/paypal/webhook'
     | '/en/catalogue/$upc'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -358,18 +472,28 @@ export interface FileRouteTypes {
     | '/conditions-de-vente'
     | '/confidentialite'
     | '/contact'
+    | '/ecouter'
+    | '/espace-commandes'
+    | '/implantations'
     | '/licences-musicales'
     | '/messages'
     | '/nflt'
     | '/presse'
     | '/radio'
     | '/services'
+    | '/telechargement'
+    | '/admin/audio'
+    | '/api/download'
+    | '/api/order-status'
     | '/catalogue/$upc'
+    | '/commande/confirmation'
+    | '/commande/paiement'
     | '/en/about'
     | '/en/application'
     | '/en/artists'
     | '/en/catalogue'
     | '/en/contact'
+    | '/en/listen'
     | '/en/music-licensing'
     | '/en/nflt'
     | '/en/press'
@@ -379,6 +503,9 @@ export interface FileRouteTypes {
     | '/en/shop'
     | '/en/terms-of-sale'
     | '/en'
+    | '/api/admin/audio'
+    | '/api/paypal/ipn'
+    | '/api/paypal/webhook'
     | '/en/catalogue/$upc'
   id:
     | '__root__'
@@ -391,18 +518,28 @@ export interface FileRouteTypes {
     | '/conditions-de-vente'
     | '/confidentialite'
     | '/contact'
+    | '/ecouter'
+    | '/espace-commandes'
+    | '/implantations'
     | '/licences-musicales'
     | '/messages'
     | '/nflt'
     | '/presse'
     | '/radio'
     | '/services'
+    | '/telechargement'
+    | '/admin/audio'
+    | '/api/download'
+    | '/api/order-status'
     | '/catalogue_/$upc'
+    | '/commande/confirmation'
+    | '/commande/paiement'
     | '/en/about'
     | '/en/application'
     | '/en/artists'
     | '/en/catalogue'
     | '/en/contact'
+    | '/en/listen'
     | '/en/music-licensing'
     | '/en/nflt'
     | '/en/press'
@@ -412,6 +549,9 @@ export interface FileRouteTypes {
     | '/en/shop'
     | '/en/terms-of-sale'
     | '/en/'
+    | '/api/admin/audio'
+    | '/api/paypal/ipn'
+    | '/api/paypal/webhook'
     | '/en/catalogue_/$upc'
   fileRoutesById: FileRoutesById
 }
@@ -425,19 +565,28 @@ export interface RootRouteChildren {
   ConditionsDeVenteRoute: typeof ConditionsDeVenteRoute
   ConfidentialiteRoute: typeof ConfidentialiteRoute
   ContactRoute: typeof ContactRoute
+  EcouterRoute: typeof EcouterRoute
+  EspaceCommandesRoute: typeof EspaceCommandesRoute
+  ImplantationsRoute: typeof ImplantationsRoute
   LicencesMusicalesRoute: typeof LicencesMusicalesRoute
   MessagesRoute: typeof MessagesRoute
   NfltRoute: typeof NfltRoute
   PresseRoute: typeof PresseRoute
   RadioRoute: typeof RadioRoute
   ServicesRoute: typeof ServicesRoute
-  EcouterRoute: typeof EcouterRoute
+  TelechargementRoute: typeof TelechargementRoute
+  AdminAudioRoute: typeof AdminAudioRoute
+  ApiDownloadRoute: typeof ApiDownloadRoute
+  ApiOrderStatusRoute: typeof ApiOrderStatusRoute
   CatalogueUpcRoute: typeof CatalogueUpcRoute
+  CommandeConfirmationRoute: typeof CommandeConfirmationRoute
+  CommandePaiementRoute: typeof CommandePaiementRoute
   EnAboutRoute: typeof EnAboutRoute
   EnApplicationRoute: typeof EnApplicationRoute
   EnArtistsRoute: typeof EnArtistsRoute
   EnCatalogueRoute: typeof EnCatalogueRoute
   EnContactRoute: typeof EnContactRoute
+  EnListenRoute: typeof EnListenRoute
   EnMusicLicensingRoute: typeof EnMusicLicensingRoute
   EnNfltRoute: typeof EnNfltRoute
   EnPressRoute: typeof EnPressRoute
@@ -446,8 +595,10 @@ export interface RootRouteChildren {
   EnServicesRoute: typeof EnServicesRoute
   EnShopRoute: typeof EnShopRoute
   EnTermsOfSaleRoute: typeof EnTermsOfSaleRoute
-  EnListenRoute: typeof EnListenRoute
   EnIndexRoute: typeof EnIndexRoute
+  ApiAdminAudioRoute: typeof ApiAdminAudioRoute
+  ApiPaypalIpnRoute: typeof ApiPaypalIpnRoute
+  ApiPaypalWebhookRoute: typeof ApiPaypalWebhookRoute
   EnCatalogueUpcRoute: typeof EnCatalogueUpcRoute
 }
 
@@ -516,6 +667,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ecouter': {
+      id: '/ecouter'
+      path: '/ecouter'
+      fullPath: '/ecouter'
+      preLoaderRoute: typeof EcouterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/espace-commandes': {
+      id: '/espace-commandes'
+      path: '/espace-commandes'
+      fullPath: '/espace-commandes'
+      preLoaderRoute: typeof EspaceCommandesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/implantations': {
+      id: '/implantations'
+      path: '/implantations'
+      fullPath: '/implantations'
+      preLoaderRoute: typeof ImplantationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/licences-musicales': {
       id: '/licences-musicales'
       path: '/licences-musicales'
@@ -558,11 +730,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ServicesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/ecouter': {
-      id: '/ecouter'
-      path: '/ecouter'
-      fullPath: '/ecouter'
-      preLoaderRoute: typeof EcouterRouteImport
+    '/telechargement': {
+      id: '/telechargement'
+      path: '/telechargement'
+      fullPath: '/telechargement'
+      preLoaderRoute: typeof TelechargementRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/audio': {
+      id: '/admin/audio'
+      path: '/admin/audio'
+      fullPath: '/admin/audio'
+      preLoaderRoute: typeof AdminAudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/download': {
+      id: '/api/download'
+      path: '/api/download'
+      fullPath: '/api/download'
+      preLoaderRoute: typeof ApiDownloadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/order-status': {
+      id: '/api/order-status'
+      path: '/api/order-status'
+      fullPath: '/api/order-status'
+      preLoaderRoute: typeof ApiOrderStatusRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/catalogue_/$upc': {
@@ -570,6 +763,20 @@ declare module '@tanstack/react-router' {
       path: '/catalogue/$upc'
       fullPath: '/catalogue/$upc'
       preLoaderRoute: typeof CatalogueUpcRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/commande/confirmation': {
+      id: '/commande/confirmation'
+      path: '/commande/confirmation'
+      fullPath: '/commande/confirmation'
+      preLoaderRoute: typeof CommandeConfirmationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/commande/paiement': {
+      id: '/commande/paiement'
+      path: '/commande/paiement'
+      fullPath: '/commande/paiement'
+      preLoaderRoute: typeof CommandePaiementRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/en/': {
@@ -612,6 +819,13 @@ declare module '@tanstack/react-router' {
       path: '/en/contact'
       fullPath: '/en/contact'
       preLoaderRoute: typeof EnContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/en/listen': {
+      id: '/en/listen'
+      path: '/en/listen'
+      fullPath: '/en/listen'
+      preLoaderRoute: typeof EnListenRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/en/music-licensing': {
@@ -670,11 +884,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EnTermsOfSaleRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/en/listen': {
-      id: '/en/listen'
-      path: '/en/listen'
-      fullPath: '/en/listen'
-      preLoaderRoute: typeof EnListenRouteImport
+    '/api/admin/audio': {
+      id: '/api/admin/audio'
+      path: '/api/admin/audio'
+      fullPath: '/api/admin/audio'
+      preLoaderRoute: typeof ApiAdminAudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/paypal/ipn': {
+      id: '/api/paypal/ipn'
+      path: '/api/paypal/ipn'
+      fullPath: '/api/paypal/ipn'
+      preLoaderRoute: typeof ApiPaypalIpnRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/paypal/webhook': {
+      id: '/api/paypal/webhook'
+      path: '/api/paypal/webhook'
+      fullPath: '/api/paypal/webhook'
+      preLoaderRoute: typeof ApiPaypalWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/en/catalogue_/$upc': {
@@ -697,19 +925,28 @@ const rootRouteChildren: RootRouteChildren = {
   ConditionsDeVenteRoute: ConditionsDeVenteRoute,
   ConfidentialiteRoute: ConfidentialiteRoute,
   ContactRoute: ContactRoute,
+  EcouterRoute: EcouterRoute,
+  EspaceCommandesRoute: EspaceCommandesRoute,
+  ImplantationsRoute: ImplantationsRoute,
   LicencesMusicalesRoute: LicencesMusicalesRoute,
   MessagesRoute: MessagesRoute,
   NfltRoute: NfltRoute,
   PresseRoute: PresseRoute,
   RadioRoute: RadioRoute,
   ServicesRoute: ServicesRoute,
-  EcouterRoute: EcouterRoute,
+  TelechargementRoute: TelechargementRoute,
+  AdminAudioRoute: AdminAudioRoute,
+  ApiDownloadRoute: ApiDownloadRoute,
+  ApiOrderStatusRoute: ApiOrderStatusRoute,
   CatalogueUpcRoute: CatalogueUpcRoute,
+  CommandeConfirmationRoute: CommandeConfirmationRoute,
+  CommandePaiementRoute: CommandePaiementRoute,
   EnAboutRoute: EnAboutRoute,
   EnApplicationRoute: EnApplicationRoute,
   EnArtistsRoute: EnArtistsRoute,
   EnCatalogueRoute: EnCatalogueRoute,
   EnContactRoute: EnContactRoute,
+  EnListenRoute: EnListenRoute,
   EnMusicLicensingRoute: EnMusicLicensingRoute,
   EnNfltRoute: EnNfltRoute,
   EnPressRoute: EnPressRoute,
@@ -718,8 +955,10 @@ const rootRouteChildren: RootRouteChildren = {
   EnServicesRoute: EnServicesRoute,
   EnShopRoute: EnShopRoute,
   EnTermsOfSaleRoute: EnTermsOfSaleRoute,
-  EnListenRoute: EnListenRoute,
   EnIndexRoute: EnIndexRoute,
+  ApiAdminAudioRoute: ApiAdminAudioRoute,
+  ApiPaypalIpnRoute: ApiPaypalIpnRoute,
+  ApiPaypalWebhookRoute: ApiPaypalWebhookRoute,
   EnCatalogueUpcRoute: EnCatalogueUpcRoute,
 }
 export const routeTree = rootRouteImport

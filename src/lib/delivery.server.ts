@@ -3,7 +3,8 @@ import { releases } from "@/lib/catalogue";
 
 export async function sendPaidOrderDelivery(orderId: string): Promise<string> {
   const order = await getShopOrder(orderId);
-  if (!order || order.status !== "paid") throw new Error("Only a paid order can receive a download.");
+  if (!order || order.status !== "paid")
+    throw new Error("Only a paid order can receive a download.");
   const asset = await getShopAsset(order.release_upc);
   if (!asset) throw new Error("The master audio file is not available for this release yet.");
   return `https://nflt-records.com/telechargement#order=${encodeURIComponent(order.id)}`;
@@ -15,12 +16,15 @@ export async function servePaidOrderDownload(request: Request): Promise<Response
     try {
       const payload = (await request.json()) as { order?: unknown };
       if (typeof payload.order === "string") orderId = payload.order;
-    } catch { return new Response("Requête invalide.", { status: 400 }); }
+    } catch {
+      return new Response("Requête invalide.", { status: 400 });
+    }
   }
   if (!/^[0-9a-f-]{36}$/i.test(orderId)) return new Response("Commande invalide.", { status: 404 });
 
   const order = await getShopOrder(orderId);
-  if (!order || order.status !== "paid") return new Response("Paiement non confirmé.", { status: 403 });
+  if (!order || order.status !== "paid")
+    return new Response("Paiement non confirmé.", { status: 403 });
   const asset = await getShopAsset(order.release_upc);
   if (!asset || asset.file_size <= 0 || asset.chunk_count <= 0)
     return new Response("Fichier indisponible.", { status: 503 });
@@ -53,11 +57,18 @@ export async function servePaidOrderDownload(request: Request): Promise<Response
         controller.error(error);
       }
     },
-    cancel() { index = asset.chunk_count; },
+    cancel() {
+      index = asset.chunk_count;
+    },
   });
 
-  const title = releases.find((item) => item.upc === order.release_upc)?.title ?? "NFLT-RECORDS-audio";
-  const filename = title.normalize("NFKD").replace(/[^A-Za-z0-9._-]+/g, "-").replace(/^-|-$/g, "") + ".wav";
+  const title =
+    releases.find((item) => item.upc === order.release_upc)?.title ?? "NFLT-RECORDS-audio";
+  const filename =
+    title
+      .normalize("NFKD")
+      .replace(/[^A-Za-z0-9._-]+/g, "-")
+      .replace(/^-|-$/g, "") + ".wav";
   return new Response(stream, {
     headers: {
       "Content-Type": "audio/wav",

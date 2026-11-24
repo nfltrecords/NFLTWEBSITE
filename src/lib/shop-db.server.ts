@@ -30,19 +30,25 @@ export type ShopAsset = {
 export async function getShopOrder(id: string): Promise<ShopOrder | null> {
   return shopEnv.DB.prepare(
     "SELECT id, release_upc, buyer_email, amount_cents, currency, status, paypal_transaction_id, created_at, paid_at FROM shop_orders WHERE id = ? LIMIT 1",
-  ).bind(id).first<ShopOrder>();
+  )
+    .bind(id)
+    .first<ShopOrder>();
 }
 
 export async function getShopAsset(upc: string): Promise<ShopAsset | null> {
   return shopEnv.DB.prepare(
     "SELECT release_upc, asset_key, file_name, file_size, chunk_count FROM shop_release_assets WHERE release_upc = ? LIMIT 1",
-  ).bind(upc).first<ShopAsset>();
+  )
+    .bind(upc)
+    .first<ShopAsset>();
 }
 
 export async function markShopOrderPaid(id: string, transactionId: string): Promise<boolean> {
   const result = await shopEnv.DB.prepare(
     "UPDATE shop_orders SET status = 'paid', paypal_transaction_id = ?, paid_at = CURRENT_TIMESTAMP, updated_at = CURRENT_TIMESTAMP WHERE id = ? AND status = 'pending'",
-  ).bind(transactionId, id).run();
+  )
+    .bind(transactionId, id)
+    .run();
   return (result.meta.changes ?? 0) > 0;
 }
 
