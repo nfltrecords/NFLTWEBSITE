@@ -45,7 +45,11 @@ export const Route = createFileRoute("/api/order-status")({
             );
           }
 
-          await sendOrderEmailForOrder(id);
+          try {
+            await sendOrderEmailForOrder(id);
+          } catch (error) {
+            console.error("Order email retry failed", error);
+          }
           const items = parseItems(order.release_upc);
           if (!items.length) {
             return Response.json(
