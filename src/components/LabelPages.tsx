@@ -444,20 +444,20 @@ export function ReleasePage({ release, locale = "fr" }: { release: Release; loca
                 {availabilityLoaded
                   ? masterAvailable
                     ? t(
-                      locale,
-                      "Master WAV disponible pour cette sortie.",
-                      "WAV master available for this release.",
-                    )
+                        locale,
+                        "Master WAV disponible pour cette sortie.",
+                        "WAV master available for this release.",
+                      )
                     : t(
-                      locale,
-                      "Master WAV en cours de préparation pour cette sortie.",
-                      "WAV master for this release is still being prepared.",
-                    )
+                        locale,
+                        "Master WAV en cours de préparation pour cette sortie.",
+                        "WAV master for this release is still being prepared.",
+                      )
                   : t(
-                    locale,
-                    "Vérification de la disponibilité du master WAV…",
-                    "Checking WAV master availability…",
-                  )}
+                      locale,
+                      "Vérification de la disponibilité du master WAV…",
+                      "Checking WAV master availability…",
+                    )}
               </p>
               {quantity > 0 ? (
                 <p className="body-copy mt-2">
