@@ -28,9 +28,7 @@ const orderSelect =
   "SELECT id, release_upc, buyer_email, amount_cents, currency, status, paypal_transaction_id, created_at, paid_at FROM shop_orders";
 
 export async function getShopOrder(id: string): Promise<ShopOrder | null> {
-  return shopEnv.DB.prepare(`${orderSelect} WHERE id = ? LIMIT 1`)
-    .bind(id)
-    .first<ShopOrder>();
+  return shopEnv.DB.prepare(`${orderSelect} WHERE id = ? LIMIT 1`).bind(id).first<ShopOrder>();
 }
 
 export async function getShopOrderByTransactionId(
