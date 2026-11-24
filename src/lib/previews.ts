@@ -31,7 +31,9 @@ export const releasePreviews: Readonly<Record<string, readonly string[]>> = {
   ],
   "199751511160": ["/assets/previews/NFLTTHEDOPIESTCOLLECTIONBEATNFLTRECORDS_PREVIEW_30S.mp3"],
   "199751514697": ["/assets/previews/DCVOL2_PREVIEW_30S.mp3"],
-  "199751170992": ["/assets/previews/NFLTTRANSCENDANCEOFNATURALTRUTHSBEATNFLTRECORDS_PREVIEW_30S.mp3"],
+  "199751170992": [
+    "/assets/previews/NFLTTRANSCENDANCEOFNATURALTRUTHSBEATNFLTRECORDS_PREVIEW_30S.mp3",
+  ],
   "199951252436": ["/assets/previews/medley_PREVIEW_30S.mp3"],
   "199954147302": ["/assets/previews/NINTENDO_PREVIEW_30S.mp3"],
   "199956554184": [
