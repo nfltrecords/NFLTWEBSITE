@@ -1,4 +1,4 @@
-// Preview paths use exact title/file-name matches plus the six UPC links verified in the catalogue review.
+// Preview paths use the source-to-preview README and the archived UPC catalogue mapping.
 export const releasePreviews: Readonly<Record<string, string>> = {
   "199751168234": "/assets/previews/MASTERPIECE_PREVIEW_30S.mp3",
   "199955701558": "/assets/previews/Dilemma_PREVIEW_30S.mp3",
@@ -13,4 +13,8 @@ export const releasePreviews: Readonly<Record<string, string>> = {
   "199751511160": "/assets/previews/NFLTTHEDOPIESTCOLLECTIONBEATNFLTRECORDS_PREVIEW_30S.mp3",
   "199751514697": "/assets/previews/DCVOL2_PREVIEW_30S.mp3",
   "199751170992": "/assets/previews/NFLTTRANSCENDANCEOFNATURALTRUTHSBEATNFLTRECORDS_PREVIEW_30S.mp3",
+  "199951252436": "/assets/previews/medley_PREVIEW_30S.mp3",
+  "199954147302": "/assets/previews/NINTENDO_PREVIEW_30S.mp3",
+  "199956557857": "/assets/previews/Ridewithme_PREVIEW_30S.mp3",
+  "199751613871": "/assets/previews/NFLT_PREVIEW_30S.mp3",
 };
