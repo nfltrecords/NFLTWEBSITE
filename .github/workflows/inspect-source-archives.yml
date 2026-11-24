@@ -1,0 +1,78 @@
+name: Inspect source archives
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/inspect-source-archives.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Extract README and mapping documents from existing ZIPs
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile, BadZipFile
+          import re
+
+          archives = [
+              "NFLT_PREVIEWS_30S.zip",
+              "NFLT_CLOUDFLARE_UPLOAD_CORRIGE.zip",
+              "NFLT-18-covers-and-mapping.zip",
+              "NFLT_PAGES_DEPLOY.zip",
+              "NFLT_SITE_CLOUDFLARE_UPLOAD.zip",
+              "nflt-records.zip",
+          ]
+          out = Path("archive-report")
+          out.mkdir(exist_ok=True)
+          report = []
+          for archive in archives:
+              path = Path(archive)
+              if not path.exists():
+                  report.append(f"ARCHIVE MISSING: {archive}")
+                  continue
+              report.append(f"\\n===== ARCHIVE: {archive} =====")
+              try:
+                  with ZipFile(path) as z:
+                      entries = z.infolist()
+                      report.append(f"ENTRY COUNT: {len(entries)}")
+                      for info in entries:
+                          name = info.filename
+                          base = Path(name).name.lower()
+                          suffix = Path(name).suffix.lower()
+                          selected = (
+                              base.startswith("readme")
+                              or any(word in base for word in ("mapping", "manifest", "catalog", "preview", "master", "asset"))
+                              or suffix in (".csv", ".tsv")
+                          )
+                          if not selected or info.is_dir() or info.file_size > 2_000_000:
+                              continue
+                          if suffix not in (".md", ".txt", ".csv", ".tsv", ".json", ".yaml", ".yml", ".xml", ".sql", ".ts", ".js", ".html"):
+                              continue
+                          try:
+                              text = z.read(info).decode("utf-8-sig", errors="replace")
+                          except Exception as exc:
+                              report.append(f"READ ERROR {name}: {exc}")
+                              continue
+                          safe = re.sub(r"[^A-Za-z0-9._-]+", "_", f"{path.stem}__{name}")
+                          (out / safe).write_text(text, encoding="utf-8")
+                          report.append(f"\\n--- FILE: {name} ({info.file_size} bytes) ---\\n{text}")
+              except BadZipFile:
+                  report.append("INVALID ZIP")
+          (out / "INDEX-AND-CONTENTS.txt").write_text("\\n".join(report), encoding="utf-8")
+          print("\\n".join(report))
+          PY
+      - name: Upload extracted text report
+        uses: actions/upload-artifact@v4
+        with:
+          name: nflt-source-archive-report
+          path: archive-report/
+          if-no-files-found: error
+          retention-days: 7
