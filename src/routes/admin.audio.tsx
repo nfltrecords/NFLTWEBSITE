@@ -107,6 +107,11 @@ function Page() {
         <p role="status" className="body-copy mt-3">
           {msg}
         </p>
+        <p className="body-copy mt-6">
+          <a className="underline" href="/admin/orders">
+            Gestion des commandes
+          </a>
+        </p>
       </section>
     </SiteLayout>
   );
