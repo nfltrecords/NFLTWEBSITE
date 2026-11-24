@@ -53,6 +53,22 @@ describe("PayPal Classic cart verification", () => {
     ).toBe(true);
   });
 
+  it("rejects a cart count that matches neither line count nor total quantity", () => {
+    const data = new URLSearchParams({
+      num_cart_items: "5",
+      item_number1: firstUpc,
+      quantity1: "3",
+      item_number2: secondUpc,
+      quantity2: "1",
+    });
+    expect(
+      matchesPayPalCart(data, [
+        { upc: firstUpc, quantity: 3 },
+        { upc: secondUpc, quantity: 1 },
+      ]),
+    ).toBe(false);
+  });
+
   it("supports underscore item fields from the outgoing Classic cart form", () => {
     const data = new URLSearchParams({
       num_cart_items: "1",

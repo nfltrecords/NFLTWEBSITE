@@ -48,7 +48,12 @@ export function matchesPayPalCart(
   if (expectedItems.length < 1 || expectedItems.length > 18) return false;
 
   const cartCount = data.get("num_cart_items");
-  if (cartCount !== null && (!/^\d+$/.test(cartCount) || Number(cartCount) < expectedItems.length)) return false;
+  if (cartCount !== null) {
+    if (!/^\d+$/.test(cartCount)) return false;
+    const count = Number(cartCount);
+    const quantityCount = expectedItems.reduce((sum, item) => sum + item.quantity, 0);
+    if (count !== expectedItems.length && count !== quantityCount) return false;
+  }
 
   const expectedUpcs = new Set<string>();
   for (const [index, expected] of expectedItems.entries()) {
