@@ -13,8 +13,16 @@ const covers = readdirSync(coverDir).filter(
 const previews = readdirSync(previewDir).filter((name) => name.toLowerCase().endsWith(".mp3"));
 const previewMapSource = readFileSync("src/lib/previews.ts", "utf8");
 const mappedPreviewPaths = [
-  ...previewMapSource.matchAll(/: "(\/assets\/previews\/[^"]+\.mp3)"/g),
+  ...previewMapSource.matchAll(/"(\/assets\/previews\/[^"]+\.mp3)"/g),
 ].map((match) => match[1]);
+const mappedPreviewUPCs = [
+  ...previewMapSource.matchAll(/^\s*"([0-9]{12,14})":\s*\[/gm),
+].map((match) => match[1]);
+const mappedPreviewNames = new Set(mappedPreviewPaths.map((src) => src.split("/").at(-1)));
+const unmappedPreviewFiles = previews.filter((name) => !mappedPreviewNames.has(name));
+const duplicateMappedPreviewPaths = mappedPreviewPaths.filter(
+  (src, index) => mappedPreviewPaths.indexOf(src) !== index,
+);
 const missingMappedPreviewFiles = mappedPreviewPaths.filter(
   (src) => !existsSync(join("public", src.slice(1))),
 );
@@ -44,8 +52,11 @@ console.log(
       coverFiles: covers.length,
       missingCoverUPCs: missing,
       previewMP3Files: previews.length,
+      mappedPreviewUPCs: mappedPreviewUPCs.length,
       mappedPreviewFiles: mappedPreviewPaths.length,
       missingMappedPreviewFiles,
+      unmappedPreviewFiles,
+      duplicateMappedPreviewPaths,
       duplicatePreviewFiles,
       previewSizeRangeBytes,
       routeFiles: routeFiles.length,
@@ -56,6 +67,14 @@ console.log(
   ),
 );
 
-if (missing.length || covers.length !== upcs.length || missingMappedPreviewFiles.length) {
+if (
+  missing.length ||
+  covers.length !== upcs.length ||
+  mappedPreviewUPCs.length !== upcs.length ||
+  mappedPreviewPaths.length !== previews.length ||
+  missingMappedPreviewFiles.length ||
+  unmappedPreviewFiles.length ||
+  duplicateMappedPreviewPaths.length
+) {
   process.exitCode = 1;
 }
