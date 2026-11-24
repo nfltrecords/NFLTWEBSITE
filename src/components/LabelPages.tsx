@@ -56,7 +56,10 @@ function ReleaseRow({
   const cart = useCart();
   const quantity = cart.items[release.upc] ?? 0;
   const canAdd =
-    availabilityLoaded && available && releasePriceCentsForButton(release.upc) !== null && quantity < 20;
+    availabilityLoaded &&
+    available &&
+    releasePriceCentsForButton(release.upc) !== null &&
+    quantity < 20;
   return (
     <div className={`release-row group${showPrice ? " release-row--commerce" : ""}`}>
       <span className="release-index">{String(index + 1).padStart(2, "0")}</span>
@@ -426,7 +429,12 @@ export function ReleasePage({ release, locale = "fr" }: { release: Release; loca
                 type="button"
                 className="editorial-action"
                 onClick={() => cart.add(release.upc)}
-                disabled={!availabilityLoaded || !masterAvailable || quantity >= 20 || releasePriceCentsForButton(release.upc) === null}
+                disabled={
+                  !availabilityLoaded ||
+                  !masterAvailable ||
+                  quantity >= 20 ||
+                  releasePriceCentsForButton(release.upc) === null
+                }
               >
                 <ShoppingBag size={16} />
                 {t(locale, "Ajouter au panier", "Add to cart")}
