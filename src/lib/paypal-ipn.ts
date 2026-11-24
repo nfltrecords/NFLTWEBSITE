@@ -21,15 +21,16 @@ export function parsePayPalOrderManifest(value: string): PayPalOrderItem[] {
 
   try {
     const parsed: unknown = JSON.parse(value);
-    if (!Array.isArray(parsed) || parsed.length === 0 || !parsed.every(isPayPalOrderItem)) {
-      return [];
+    if (Array.isArray(parsed)) {
+      if (parsed.length === 0 || !parsed.every(isPayPalOrderItem)) return [];
+      const upcs = parsed.map((item) => item.upc);
+      if (new Set(upcs).size !== upcs.length) return [];
+      return parsed;
     }
-    const upcs = parsed.map((item) => item.upc);
-    if (new Set(upcs).size !== upcs.length) return [];
-    return parsed;
   } catch {
-    return /^\d{12,14}$/.test(value) ? [{ upc: value, quantity: 1 }] : [];
+    // Legacy orders stored a single UPC as plain text, not JSON.
   }
+  return /^\d{12,14}$/.test(value) ? [{ upc: value, quantity: 1 }] : [];
 }
 
 function indexedValue(data: URLSearchParams, name: string, index: number): string | null {
