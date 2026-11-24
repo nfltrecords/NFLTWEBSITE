@@ -7,10 +7,10 @@ function isPayPalOrderItem(value: unknown): value is PayPalOrderItem {
   if (!value || typeof value !== "object") return false;
   const item = value as Record<string, unknown>;
   return (
-    typeof item.upc === "string" &&
-    /^\d{12,14}$/.test(item.upc) &&
-    Number.isSafeInteger(item.quantity) &&
-    Number(item.quantity) >= 1 &&
+    typeof item["upc"] === "string" &&
+    /^\d{12,14}$/.test(item["upc"]) &&
+    Number.isSafeInteger(item["quantity"]) &&
+    Number(item["quantity"]) >= 1 &&
     Number(item.quantity) <= 20
   );
 }
