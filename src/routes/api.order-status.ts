@@ -18,7 +18,7 @@ export const Route = createFileRoute("/api/order-status")({ server: { handlers: 
     if (!order || order.status !== "paid") return Response.json({ ok: true, paid: false }, { headers: { "Cache-Control": "no-store" } });
     const items = parseItems(order.release_upc);
     const downloads = (await Promise.all(items.map(async (item, index) => {
-      const assets = (await getShopAssets(item.upc)).filter((asset) => asset.file_name.toLowerCase().endsWith(".wav"));
+      const assets = (await getShopAssets(item.upc)).filter((asset) => isWavMasterFileName(asset.file_name));
       const title = releases.find((release) => release.upc === item.upc)?.title ?? "NFLT audio";
       return assets.map((asset, track) => ({
         title, track: asset.file_name.replace(/\.wav$/i, ""), quantity: item.quantity,

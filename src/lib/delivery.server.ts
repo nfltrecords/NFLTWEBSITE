@@ -1,5 +1,6 @@
 import { getShopAssets, getShopOrder, shopEnv } from "@/lib/shop-db.server";
 import { releases } from "@/lib/catalogue";
+import { isWavMasterFileName, safeWavDownloadName } from "@/lib/audio-assets";
 
 type OrderItem = { upc: string; quantity: number };
 function orderItems(value: string): OrderItem[] {
@@ -22,13 +23,13 @@ export async function servePaidOrderDownload(request: Request): Promise<Response
   const itemIndex = Number(url.searchParams.get("item") ?? "0");
   if (!Number.isInteger(itemIndex) || itemIndex < 0 || itemIndex >= items.length) return new Response("Article invalide", { status: 404 });
   const item = items[itemIndex];
-  const tracks = (await getShopAssets(item.upc)).filter((asset) => asset.file_name.toLowerCase().endsWith(".wav"));
+  const tracks = (await getShopAssets(item.upc)).filter((asset) => isWavMasterFileName(asset.file_name));
   const trackIndex = Number(url.searchParams.get("track") ?? "0");
   if (!Number.isInteger(trackIndex) || trackIndex < 0 || trackIndex >= tracks.length) return new Response("Piste indisponible", { status: 404 });
   const asset = tracks[trackIndex];
   const title = releases.find((release) => release.upc === item.upc)?.title ?? "NFLT-audio";
   const safeTitle = title.normalize("NFKD").replace(/[^A-Za-z0-9._-]+/g, "-");
-  const safeTrack = asset.file_name.replace(/[^A-Za-z0-9._-]+/g, "-");
+  const safeTrack = safeWavDownloadName(asset.file_name);
   if (asset.asset_key.startsWith("r2:")) {
     const object = await shopEnv.AUDIO_R2.get(asset.asset_key.slice(3));
     if (!object) return new Response("Fichier indisponible", { status: 503 });
