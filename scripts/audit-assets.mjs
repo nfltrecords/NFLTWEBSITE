@@ -26,7 +26,7 @@ function collectSourceFiles(directory) {
 collectSourceFiles("src");
 const stalePreviewReferences = sourceFiles.filter((path) => {
   const source = readFileSync(path, "utf8");
-  return /\\/assets\\/previews\\/|releasePreviews|ReleasePreview/.test(source);
+  return source.includes("/assets/previews/") || source.includes("releasePreviews") || source.includes("ReleasePreview");
 });
 
 const result = {
