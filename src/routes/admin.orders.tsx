@@ -124,7 +124,9 @@ function Page() {
                   </td>
                   <td className="p-3">{order.buyer_email}</td>
                   <td className="p-3">
-                    <div className="font-medium">{order.items.map((item) => item.title).join(", ")}</div>
+                    <div className="font-medium">
+                      {order.items.map((item) => item.title).join(", ")}
+                    </div>
                     <div className="text-xs opacity-70">
                       {order.items.map((item) => `${item.quantity} × ${item.upc}`).join(" · ")}
                     </div>
