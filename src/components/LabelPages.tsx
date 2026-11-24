@@ -13,7 +13,6 @@ import { ApplicationBlock } from "@/components/ApplicationPage";
 import { implantations } from "@/lib/brand-content";
 import { RadioTeaser } from "@/components/RadioPage";
 import { ReleasePrice } from "@/components/ReleasePrice";
-import { ReleasePreview } from "@/components/ReleasePreview";
 import { useCart } from "@/lib/cart-store";
 import { releasePriceCents as releasePriceCentsForButton } from "@/lib/commerce";
 import { useShopAvailability } from "@/lib/use-shop-availability";
@@ -423,7 +422,6 @@ export function ReleasePage({ release, locale = "fr" }: { release: Release; loca
               ))}
             </dl>
             <ReleasePrice upc={release.upc} locale={locale} />
-            <ReleasePreview upc={release.upc} locale={locale} />
             <div className="mt-6">
               <Button
                 type="button"

@@ -11,8 +11,6 @@ import { publicPages, type Locale } from "@/lib/seo";
 import { inquirySchema, shopPriceTiers, formatShopPrice, releasePriceCents, type Inquiry } from "@/lib/commerce";
 import { submitLicensingInquiry } from "@/lib/commerce.functions";
 import { ReleasePrice } from "@/components/ReleasePrice";
-import { ReleasePreview } from "@/components/ReleasePreview";
-import { releasePreviews } from "@/lib/previews";
 import { useCart } from "@/lib/cart-store";
 import { createManualPayPalOrder } from "@/lib/manual-orders.functions";
 import { payPalCheckoutIsEnabled } from "@/lib/paypal-checkout-gate";
@@ -208,18 +206,6 @@ export function ShopPage({ locale }: { locale: Locale }) {
                       : text(locale, "Vérification des masters…", "Checking WAV masters…")}
                   </p>
                 </div>
-                {(releasePreviews[release.upc]?.length ?? 0) > 0 ? (
-                  <details className="shop-preview-details">
-                    <summary>
-                      {text(
-                        locale,
-                        `Écouter les ${releasePreviews[release.upc]?.length ?? 0} extraits`,
-                        `Listen to ${releasePreviews[release.upc]?.length ?? 0} previews`,
-                      )}
-                    </summary>
-                    <ReleasePreview upc={release.upc} locale={locale} compact hideTitle />
-                  </details>
-                ) : null}
                 <Button type="button" className="editorial-action w-full" onClick={() => addToCart(release.upc)} disabled={
                   !availabilityLoaded || !masterAvailable || (sharedCart.items[release.upc] ?? 0) >= 20 || releasePriceCents(release.upc) === null
                 }>
