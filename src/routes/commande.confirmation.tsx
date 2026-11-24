@@ -22,7 +22,7 @@ function Page() {
         const response = await fetch("/api/order-status?order=" + encodeURIComponent(order), {
           cache: "no-store",
         });
-        const data = await response.json();
+        const data = (await response.json()) as { paid?: boolean; downloads?: unknown };
         if (!active) return;
         if (data.paid) {
           setPaid(true);
