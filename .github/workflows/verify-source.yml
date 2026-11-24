@@ -22,10 +22,14 @@ jobs:
         run: npm install --no-audit --no-fund
       - name: Run tests
         run: npm test
-      - name: Typecheck
-        run: npm run typecheck
       - name: Lint
         run: npm run lint
       - name: Build (no deployment)
         if: always() && !cancelled()
         run: npm run build
+      - name: Generate Cloudflare binding types
+        if: always() && !cancelled()
+        run: npm run cf-typegen
+      - name: Typecheck
+        if: always() && !cancelled()
+        run: npm run typecheck
