@@ -71,9 +71,9 @@ L'état actuel est plus récent que l'ancien relevé à 11 associations :
 - Cela représente 18 masters WAV manquants pour les tracklists vérifiées. `Hustle & Grind` n'a pas de WAV associé et son nombre exact de pistes reste non confirmé.
 - Les M4A présents dans R2 restent des préécoutes ; ils ne sont jamais utilisés comme masters de livraison.
 
-Les 37 MP3 de préécoute sont désormais associés aux 18 UPC dans `src/lib/previews.ts`. Les lecteurs sont disponibles dans les fiches catalogue et directement dans les cartes de la boutique. Le contrôle `npm run audit:assets`, ajouté à GitHub Actions, vérifie les 18 pochettes et les 37 associations MP3. Les tests, l'audit des ressources, le build, le contrôle TypeScript et le lint passent sur le dernier commit de code vérifié.
+Les 37 MP3 de préécoute sont désormais associés aux 18 UPC dans `src/lib/previews.ts`. Les lecteurs sont disponibles dans les fiches catalogue et directement dans les cartes de la boutique. Le point `/api/shop-availability` vérifie les masters complets dans D1/R2 ; les ajouts au panier sont désactivés pour les sorties incomplètes, et le panier bloque aussi les sélections anciennes devenues indisponibles. Le contrôle `npm run audit:assets`, ajouté à GitHub Actions, vérifie les 18 pochettes et les 37 associations MP3. Les tests, l'audit des ressources, le build, le contrôle TypeScript et le lint passent sur le dernier commit de code vérifié.
 
-Les masters WAV manquants n'ont été trouvés ni ailleurs dans le bucket R2, ni dans les archives ZIP examinées de GitHub et de la bibliothèque de fichiers. Ne pas convertir les M4A pour combler ces manques. Le transfert des nouveaux masters peut se faire via `/admin/audio`.
+Les masters WAV manquants n'ont été trouvés ni ailleurs dans le bucket R2, ni dans les archives ZIP examinées de GitHub et de la bibliothèque de fichiers. Ne pas convertir les M4A pour combler ces manques. Le transfert des nouveaux masters se fait via `/admin/audio` : l'outil utilise désormais le multipart R2, conserve uniquement la session et les ETags temporaires dans KV, vérifie la taille de l'objet, puis crée l'association D1 avec un asset key `r2:`. Les noms de fichiers déjà associés sont rejetés et la finalisation est idempotente.
 
 Le verrou `checkoutActivationApproved` reste à `false`. Aucune commande n'est payée et aucun paiement réel n'a été effectué.
 
