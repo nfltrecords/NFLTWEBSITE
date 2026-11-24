@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { SiteLayout } from "@/components/SiteLayout";
 export const Route = createFileRoute("/commande/confirmation")({
   validateSearch: (s: Record<string, unknown>) => ({
-    order: typeof s.order === "string" ? s.order : "",
+    order: typeof s["order"] === "string" ? s["order"] : "",
   }),
   component: Page,
 });
