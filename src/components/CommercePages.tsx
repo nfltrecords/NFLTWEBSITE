@@ -12,11 +12,16 @@ import { inquirySchema, shopPriceTiers, formatShopPrice, releasePriceCents, type
 import { submitLicensingInquiry } from "@/lib/commerce.functions";
 import { ReleasePrice } from "@/components/ReleasePrice";
 import { useCart } from "@/lib/cart-store";
+import { createManualPayPalOrder } from "@/lib/manual-orders.functions";
 
 const text = (locale: Locale, fr: string, en: string) => (locale === "fr" ? fr : en);
 
 export function ShopPage({ locale }: { locale: Locale }) {
   const [query, setQuery] = useState("");
+  const [buyerEmail, setBuyerEmail] = useState("");
+  const [checkoutBusy, setCheckoutBusy] = useState(false);
+  const [checkoutError, setCheckoutError] = useState("");
+  const createOrder = useServerFn(createManualPayPalOrder);
   const sharedCart = useCart();
   const items = filterReleases("all", query);
   const cartItems = releases.filter((release) => (sharedCart.items[release.upc] ?? 0) > 0);
@@ -87,28 +92,26 @@ export function ShopPage({ locale }: { locale: Locale }) {
                 </ul>
                 <div className="mt-5 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-5">
                   <div><p className="text-sm text-muted-foreground">{text(locale, "Total indicatif", "Indicative total")}</p><p className="text-3xl text-primary tabular-nums">{formatShopPrice(cartTotalCents)}</p></div>
-                  <form action="https://www.paypal.com/cgi-bin/webscr" method="post" className="flex flex-wrap items-center gap-3">
-                    <input type="hidden" name="cmd" value="_cart" />
-                    <input type="hidden" name="upload" value="1" />
-                    <input type="hidden" name="business" value="Encoresarbakane@gmail.com" />
-                    <input type="hidden" name="currency_code" value="EUR" />
-                    {cartItems.map((release, index) => (
-                      <div key={release.upc}>
-                        <input type="hidden" name={`item_name_${index + 1}`} value={release.title} />
-                        <input type="hidden" name={`item_number_${index + 1}`} value={release.upc} />
-                        <input type="hidden" name={`amount_${index + 1}`} value={((releasePriceCents(release.upc) ?? 0) / 100).toFixed(2)} />
-                        <input type="hidden" name={`quantity_${index + 1}`} value={sharedCart.items[release.upc]} />
-                      </div>
-                    ))}
-                    <Button type="submit" className="editorial-action">
-                      {text(locale, "Payer avec PayPal", "Pay with PayPal")}
-                    </Button>
-                  </form>
+                  <div className="flex flex-col items-start gap-3">
+                    <label className="text-sm" htmlFor="shop-buyer-email">{text(locale, "E-mail pour recevoir la commande", "Email for your order")}</label>
+                    <input id="shop-buyer-email" type="email" required maxLength={255} autoComplete="email" value={buyerEmail} onChange={(event) => setBuyerEmail(event.target.value)} className="w-full rounded-md border border-input bg-background px-3 py-2" />
+                    <Button type="button" className="editorial-action" disabled={checkoutBusy || !buyerEmail.trim() || cartItems.length !== 1 || sharedCart.items[cartItems[0]?.upc ?? ""] !== 1} onClick={async () => {
+                      const release = cartItems[0];
+                      if (!release || !buyerEmail.trim() || checkoutBusy) return;
+                      setCheckoutBusy(true); setCheckoutError("");
+                      try {
+                        const result = await createOrder({ data: { upc: release.upc, email: buyerEmail.trim() } });
+                        if (!result.ok || !result.paymentUrl) throw new Error("Commande indisponible.");
+                        window.location.assign(result.paymentUrl);
+                      } catch (error) { setCheckoutError(error instanceof Error ? error.message : "Erreur de paiement."); setCheckoutBusy(false); }
+                    }}>{checkoutBusy ? text(locale, "Préparation…", "Preparing…") : text(locale, "Payer avec PayPal", "Pay with PayPal")}</Button>
+                    {checkoutError ? <p role="alert" className="text-sm text-destructive">{checkoutError}</p> : null}
+                  </div>
                 </div>
                 <p className="body-copy mt-4 text-sm">
                   {text(
                     locale,
-                    "Le paiement est traité sur la page sécurisée PayPal. La confirmation et le suivi de la commande sont consultables dans votre compte PayPal.",
+                    "Vous êtes redirigé vers PayPal. Après confirmation vérifiée du paiement, le master WAV sera disponible sur la page de confirmation.",
                     "Payment is processed on PayPal's secure checkout page. Payment confirmation and order details are available in your PayPal account.",
                   )}
                 </p>
