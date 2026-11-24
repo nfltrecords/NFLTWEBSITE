@@ -26,6 +26,11 @@ jobs:
           if (( ${#files[@]} > 0 )); then
             npx prettier --write "${files[@]}"
           fi
+      - name: Run lint, tests and production build
+        run: |
+          npm run lint
+          npm test
+          npm run build
       - name: Commit formatted files
         run: |
           if [[ -n "$(git status --porcelain)" ]]; then
