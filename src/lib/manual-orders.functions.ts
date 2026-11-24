@@ -6,7 +6,7 @@ import { shopEnv } from "@/lib/shop-db.server";
 
 const orderInput = z.object({
   items: z.array(z.object({
-    upc: z.string().regex(/^\\d{12,14}$/),
+    upc: z.string().regex(/^\d{12,14}$/),
     quantity: z.number().int().min(1).max(20),
   }).strict()).min(1).max(18),
   email: z.string().trim().email().max(255),
