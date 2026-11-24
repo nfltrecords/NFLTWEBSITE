@@ -7,6 +7,7 @@ import {
   restoreShopOrderPaid,
 } from "@/lib/shop-db.server";
 import { isFullRefundAmount, matchesPayPalCart, parsePayPalOrderManifest } from "@/lib/paypal-ipn";
+import { sendOrderEmailForOrder } from "@/lib/shop-email-delivery.server";
 
 function acknowledgeIpn(): Response {
   return new Response("OK", { headers: { "Cache-Control": "no-store" } });
@@ -86,6 +87,8 @@ async function processIpn(request: Request): Promise<Response> {
   if (transactionOwner && transactionOwner.id !== id) return acknowledgeIpn();
 
   if (order.status === "paid") {
+    const email = await sendOrderEmailForOrder(id);
+    if (email.status === "retry") return new Response("Email retry", { status: 503 });
     return acknowledgeIpn();
   }
   if (order.status !== "pending") return acknowledgeIpn();
@@ -102,6 +105,8 @@ async function processIpn(request: Request): Promise<Response> {
   if (!changed) {
     const latest = await getShopOrder(id);
     if (latest?.status === "paid" && latest.paypal_transaction_id === transactionId) {
+      const email = await sendOrderEmailForOrder(id);
+      if (email.status === "retry") return new Response("Email retry", { status: 503 });
       return acknowledgeIpn();
     }
     const owner = await getShopOrderByTransactionId(transactionId);
@@ -109,6 +114,8 @@ async function processIpn(request: Request): Promise<Response> {
     return new Response("Retry", { status: 503 });
   }
 
+  const email = await sendOrderEmailForOrder(id);
+  if (email.status === "retry") return new Response("Email retry", { status: 503 });
   return acknowledgeIpn();
 }
 
