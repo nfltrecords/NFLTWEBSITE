@@ -1,5 +1,8 @@
 name: Format secure audio delivery branch
 on:
+  pull_request:
+    branches:
+      - main
   push:
     branches:
       - work/secure-audio-delivery
