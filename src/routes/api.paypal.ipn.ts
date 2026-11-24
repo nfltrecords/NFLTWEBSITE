@@ -20,7 +20,7 @@ async function handleIpn(request: Request): Promise<Response> {
 
   const data = new URLSearchParams(raw);
   const reference = [data.get("custom"), data.get("invoice"), data.get("memo")]
-    .map((value) => (value ?? "").trim().replace(/^NFLT(?: RECORDS)?\\s*[:#-]\\s*/i, ""))
+    .map((value) => (value ?? "").trim().replace(/^NFLT(?: RECORDS)?\s*[:#-]\s*/i, ""))
     .find((value) => /^[0-9a-f-]{36}$/i.test(value));
   const orderId = reference ?? "";
   const transactionId = (data.get("txn_id") ?? "").trim();
