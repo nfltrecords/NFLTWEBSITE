@@ -19,26 +19,38 @@ Le verrou `checkoutActivationApproved` reste à `false`. La réparation techniqu
 
 ## État des masters et des nombres de pistes
 
-Les nombres de pistes confirmés par les éléments catalogue archivés sont :
+17 nombres de pistes sont vérifiés à partir des preuves fournies par le propriétaire et des pages publiques Amazon Music / Apple Music. Les références sont consignées dans `docs/track-count-evidence-2026-11-24.md`.
 
-| UPC | Sortie | Pistes confirmées | WAV associés |
-|---|---|---:|---:|
-| 199955715135 | #NEVERFAKELIKETHEM | 1 | 0 |
-| 199955742094 | 30.000 GÉNOCIDES | 8 | 0 |
-| 199956222809 | NOUS Y SOMMES | 9 | 3 |
-| 199956554184 | 0+ | 5 | 5 |
+| UPC | Sortie | Pistes confirmées | WAV associés | État |
+|---|---|---:|---:|---|
+| 199751168234 | 836.722 (1995) [18] [73] | 1 | 1 | Complet |
+| 199751170992 | Transcendence Of Natural Truths | 1 | 1 | Complet |
+| 199751508283 | Hot | 1 | 0 | Master manquant |
+| 199751511160 | The Dopest Collection Vol. 1 | 1 | 1 | Complet |
+| 199751512501 | In My Party | 1 | 1 | Complet |
+| 199751514697 | The Dopest Collection Vol. 2 | 1 | 1 | Complet |
+| 199751613871 | Ma Luxure | 1 | 1 | Complet |
+| 199951252436 | L'écran vient de chez nous (Radio Edit) | 1 | 1 | Complet |
+| 199954147302 | NFLT Social Community (The Most Advanced Societies) | 1 | 1 | Complet |
+| 199955701558 | Dilemma (Radio Edit) | 1 | 0 | Master manquant |
+| 199955715135 | #NEVERFAKELIKETHEM (Chapter One) | 1 | 0 | Master manquant |
+| 199955740199 | The Luxury - The Highest - Unequivocal | 1 | 1 | Complet |
+| 199955742094 | 30.000 GÉNOCIDES | 8 | 0 | 8 masters manquants |
+| 199956222809 | NOUS Y SOMMES (TU M'AURAS JAMAIS) | 9 | 3 | Incomplet : 6 masters manquants |
+| 199956554184 | 0+ | 5 | 5 | Complet |
+| 199956557857 | Ma Luxure 2 (MVP) | 1 | 1 | Complet |
+| 821440674572 | GR 4LIFE | 1 | 0 | Master manquant |
+| 199955715203 | Hustle & Grind (Radio Edit) | À confirmer | 0 | Nombre de pistes et master à confirmer |
 
-Seule la sortie **0+** dispose actuellement de ses cinq masters WAV associés. NOUS Y SOMMES est incomplet (3/9) ; 30.000 GÉNOCIDES et #NEVERFAKELIKETHEM n'ont pas encore leurs masters WAV associés.
+**Bilan : 11 sorties disposent de leur ensemble complet de masters WAV ; cinq sorties vérifiées n'ont aucun WAV associé ; NOUS Y SOMMES est incomplet ; Hustle & Grind reste non vérifié.** Les 18 associations D1 ne représentent donc pas 18 UPC : elles couvrent 12 UPC.
 
-Les nombres de pistes des 14 autres sorties ne sont pas confirmés. Le fait qu'une sortie ait un MP3 de préécoute ou un WAV associé ne prouve pas à lui seul son nombre total de pistes. Aucun prix ni parcours d'achat ne doit être considéré comme définitivement validé sur cette seule base.
-
-Six UPC n'ont actuellement aucune association WAV : 199955701558, 199955715135, 199955715203, 199955742094, 199751508283 et 821440674572. Les fichiers M4A présents ne peuvent pas remplacer ces masters.
+Les M4A ne remplacent jamais les WAV. Les nombres de pistes sont vérifiés indépendamment de la présence des masters.
 
 ## Protections ajoutées au code
 
-La vérification continue inclut désormais les tests Vitest, un contrôle TypeScript strict (\`tsc --noEmit\`), ESLint/Prettier et le build Vite.
+La vérification continue inclut les tests Vitest, un contrôle TypeScript strict (`tsc --noEmit`), ESLint/Prettier et le build Vite.
 
-- La création d'une commande est refusée si le nombre de pistes n'est pas confirmé, si le nombre de masters WAV ne correspond pas au nombre confirmé ou si un objet R2 / un morceau KV manque.
+- La création d'une commande est refusée si le nombre de pistes n'est pas vérifié, si le nombre de masters WAV ne correspond pas au nombre vérifié ou si un objet R2 / un morceau KV manque.
 - La notification IPN vérifie la notification auprès de PayPal, le destinataire, le statut `Completed`, la devise EUR, le montant, les UPC et quantités du panier et l'unicité de l'identifiant de transaction.
 - Les notifications invalides ou non pertinentes sont acquittées sans marquer la commande payée ; les erreurs temporaires de vérification ou de base de données provoquent une réponse réessayable.
 - La page de confirmation ne présente des liens que si tous les articles de la commande disposent de leur ensemble complet de masters.
@@ -57,12 +69,11 @@ Ces protections sont des contrôles de code et de données. Elles ne constituent
 
 ## Ordre de finalisation
 
-1. Retrouver les masters WAV manquants ; ne jamais convertir un M4A en faux master WAV.
-2. Confirmer les nombres de pistes des 14 UPC restants à partir de preuves catalogue fiables.
-3. Compléter les associations UPC → WAV et vérifier les objets R2.
-4. Configurer un expéditeur email existant et effectuer un vrai test de réception, avec reprise idempotente.
-5. Tester PayPal Classic/IPN en environnement contrôlé : panier multi-articles, doublons, refus, remboursement et inversion.
-6. Valider vendeur légal, territoires, droits, TVA et obligations consommateurs.
-7. Obtenir l'autorisation explicite du propriétaire avant d'ouvrir le checkout en production.
+1. Récupérer les WAV manquants des cinq sorties vérifiées, les six WAV manquants de NOUS Y SOMMES et le master de Hustle & Grind une fois son nombre de pistes confirmé.
+2. Compléter et vérifier les associations UPC → WAV ; ne jamais convertir un M4A en faux master WAV.
+3. Configurer un expéditeur email existant et effectuer un vrai test de réception, avec reprise idempotente.
+4. Tester PayPal Classic/IPN en environnement contrôlé : panier multi-articles, doublons, refus, remboursement et inversion.
+5. Valider vendeur légal, territoires, droits, TVA et obligations consommateurs.
+6. Obtenir l'autorisation explicite du propriétaire avant d'ouvrir le checkout en production.
 
 **Ne pas activer le checkout tant que ces étapes ne sont pas validées.**
