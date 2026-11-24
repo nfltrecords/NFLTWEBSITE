@@ -2,7 +2,7 @@ import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { join } from "node:path";
 
 const catalogue = readFileSync("src/lib/catalogue.ts", "utf8");
-const upcs = [...catalogue.matchAll(/upc: "(\\d+)"/g)].map((match) => match[1]);
+const upcs = [...catalogue.matchAll(/upc: "([0-9]+)"/g)].map((match) => match[1]);
 const coverDir = "public/assets/covers";
 const missingCoverUPCs = upcs.filter((upc) => !existsSync(join(coverDir, `cover-${upc}.jpg`)));
 const coverFiles = readdirSync(coverDir).filter(
@@ -20,7 +20,7 @@ function collectSourceFiles(directory) {
   for (const name of readdirSync(directory, { withFileTypes: true })) {
     const path = join(directory, name.name);
     if (name.isDirectory()) collectSourceFiles(path);
-    else if (/\\.(?:ts|tsx|js|jsx|mjs)$/.test(name.name)) sourceFiles.push(path);
+    else if ([".ts", ".tsx", ".js", ".jsx", ".mjs"].some((extension) => name.name.endsWith(extension))) sourceFiles.push(path);
   }
 }
 collectSourceFiles("src");
