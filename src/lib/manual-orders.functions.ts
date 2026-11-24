@@ -3,6 +3,7 @@ import { z } from "zod";
 import { releases } from "@/lib/catalogue";
 import { releasePriceCents } from "@/lib/commerce";
 import { shopEnv } from "@/lib/shop-db.server";
+import { payPalCheckoutIsEnabled } from "@/lib/paypal-checkout-gate";
 
 const orderInput = z.object({
   items: z.array(z.object({
@@ -15,6 +16,7 @@ const orderInput = z.object({
 export const createManualPayPalOrder = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => orderInput.parse(input))
   .handler(async ({ data }) => {
+    if (!payPalCheckoutIsEnabled()) return { ok: false as const };
     const unique = new Map<string, number>();
     for (const item of data.items) unique.set(item.upc, (unique.get(item.upc) ?? 0) + item.quantity);
     if ([...unique.values()].some((quantity) => quantity > 20)) return { ok: false as const };

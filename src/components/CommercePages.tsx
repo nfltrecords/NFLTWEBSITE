@@ -13,6 +13,7 @@ import { submitLicensingInquiry } from "@/lib/commerce.functions";
 import { ReleasePrice } from "@/components/ReleasePrice";
 import { useCart } from "@/lib/cart-store";
 import { createManualPayPalOrder } from "@/lib/manual-orders.functions";
+import { payPalCheckoutIsEnabled } from "@/lib/paypal-checkout-gate";
 
 const text = (locale: Locale, fr: string, en: string) => (locale === "fr" ? fr : en);
 
@@ -22,6 +23,7 @@ export function ShopPage({ locale }: { locale: Locale }) {
   const [checkoutBusy, setCheckoutBusy] = useState(false);
   const [checkoutError, setCheckoutError] = useState("");
   const createOrder = useServerFn(createManualPayPalOrder);
+  const checkoutEnabled = payPalCheckoutIsEnabled();
   const sharedCart = useCart();
   const items = filterReleases("all", query);
   const cartItems = releases.filter((release) => (sharedCart.items[release.upc] ?? 0) > 0);
@@ -106,7 +108,7 @@ export function ShopPage({ locale }: { locale: Locale }) {
                         if (!result.ok || !result.paymentUrl) throw new Error("Commande indisponible.");
                         window.location.assign(result.paymentUrl);
                       } catch (error) { setCheckoutError(error instanceof Error ? error.message : "Erreur de paiement."); setCheckoutBusy(false); }
-                    }}>{checkoutBusy ? text(locale, "Préparation…", "Preparing…") : text(locale, "Payer avec PayPal", "Pay with PayPal")}</Button>
+                    }}>{checkoutBusy ? text(locale, "Préparation…", "Preparing…") : checkoutEnabled ? text(locale, "Payer avec PayPal", "Pay with PayPal") : text(locale, "Paiement bientôt disponible", "Payments coming soon")}</Button>
                     {checkoutError ? <p role="alert" className="text-sm text-destructive">{checkoutError}</p> : null}
                   </div>
                 </div>
