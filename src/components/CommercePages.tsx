@@ -28,7 +28,7 @@ export function ShopPage({ locale }: { locale: Locale }) {
   const items = filterReleases("all", query);
   const cartItems = releases.filter((release) => (sharedCart.items[release.upc] ?? 0) > 0);
   const cartCount = sharedCart.count;
-  const cartTotalCents = cartItems.reduce((total, release) => total + (releasePriceCents(release.upc) ?? 0) * sharedCart.items[release.upc], 0);
+  const cartTotalCents = cartItems.reduce((total, release) => total + (releasePriceCents(release.upc) ?? 0) * (sharedCart.items[release.upc] ?? 0), 0);
   const addToCart = sharedCart.add;
   const changeCartQuantity = sharedCart.change;
   return (
@@ -78,7 +78,7 @@ export function ShopPage({ locale }: { locale: Locale }) {
                 <ul className="mt-5 divide-y divide-border">
                   {cartItems.map((release) => {
                     const unitPrice = releasePriceCents(release.upc) ?? 0;
-                    const quantity = sharedCart.items[release.upc];
+                    const quantity = sharedCart.items[release.upc] ?? 0;
                     return (
                       <li key={release.upc} className="cart-line-item py-4">
                         <div className="cart-item-info"><p className="font-medium">{release.title}</p><p className="text-sm text-muted-foreground">{formatShopPrice(unitPrice)} {text(locale, "l’unité", "each")}</p></div>
