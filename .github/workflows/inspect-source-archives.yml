@@ -43,6 +43,7 @@ jobs:
                   with ZipFile(path) as z:
                       entries = z.infolist()
                       report.append(f"ENTRY COUNT: {len(entries)}")
+                      report.extend(f"ENTRY: {info.filename} [{info.file_size} bytes]" for info in entries)
                       for info in entries:
                           name = info.filename
                           base = Path(name).name.lower()
