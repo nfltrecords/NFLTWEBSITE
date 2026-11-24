@@ -48,6 +48,8 @@ Les M4A ne remplacent jamais les WAV. Les nombres de pistes sont vérifiés ind�
 
 ## Protections ajoutées au code
 
+Deux outils administrateur protégés par le code `ADMIN_ORDERS_CODE` sont disponibles : `/admin/orders` pour consulter les commandes et `/admin/audio` pour transférer les masters WAV. La page de commandes est en lecture seule ; seul l'IPN PayPal vérifié peut faire passer une commande à `paid`.
+
 La vérification continue inclut les tests Vitest, un contrôle TypeScript strict (`tsc --noEmit`), ESLint/Prettier et le build Vite.
 
 - La création d'une commande est refusée si le nombre de pistes n'est pas vérifié, si le nombre de masters WAV ne correspond pas au nombre vérifié ou si un objet R2 / un morceau KV manque.
