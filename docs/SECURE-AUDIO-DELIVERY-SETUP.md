@@ -1,44 +1,41 @@
 # NFLT RECORDS — mise en service de la livraison audio
 
-## Architecture préparée
+## Architecture actuelle — livraison WAV sans Supabase ni R2
 
-- Le checkout PayPal existant est conservé.
-- La notification PayPal vérifiée déclenche la livraison uniquement après passage de la commande à `paid`.
-- Les WAV sont lus depuis un bucket Supabase Storage privé nommé `nflt-private-audio`; aucun objet n'est public.
-- Le lien est signé HMAC, lié à une commande payée et valable 7 jours.
-- L'e-mail client est envoyé via Resend avec une clé d'idempotence.
-- Le navigateur ne reçoit jamais la clé service-role.
+- Le checkout manuel PayPal standard est conservé.
+- Les commandes et les associations UPC/audio sont stockées dans Cloudflare D1 (`nflt-records-data`).
+- Les masters WAV sont stockés dans Cloudflare KV (`nflt-audio-chunks`) en blocs de 20 Mio, sous la limite de taille par valeur KV.
+- L’IPN PayPal est vérifié auprès de PayPal avant que la commande passe à `paid`.
+- La page de confirmation interroge D1 et affiche le téléchargement dès que le paiement et le master sont confirmés.
+- Le téléchargement est diffusé en flux, bloc par bloc, sans charger tout le WAV en mémoire.
+- Aucun e-mail automatique n’est envoyé dans cette version : le client télécharge depuis la page de confirmation. Aucun service e-mail externe n’est requis.
+- Le transfert administrateur est disponible sur `/admin/audio`; l’endpoint est protégé par `ADMIN_ORDERS_CODE`.
 
-## Configuration serveur requise
+## Ressources Cloudflare
 
-Configurer sur le Worker de production `nfltwebsite` :
+- D1 : `nflt-records-data`, binding `DB`
+- KV : `nflt-audio-chunks`, binding `AUDIO_KV`
+- Worker : `nfltwebsite`
 
-- `SUPABASE_URL`
-- `SUPABASE_SERVICE_ROLE_KEY` — clé serveur du projet Supabase utilisé par le site
-- `DELIVERY_TOKEN_SECRET` — secret aléatoire indépendant d'au moins 32 caractères
-- `RESEND_API_KEY`
-- `DELIVERY_FROM_EMAIL` — adresse expéditrice validée chez Resend
-- `ADMIN_ORDERS_CODE` — code administrateur indépendant
+Les tables `shop_orders` et `shop_release_assets` sont créées dans D1. Les WAV ne sont pas encore chargés dans KV tant que le transfert n’a pas été exécuté.
 
-Ne pas mettre ces secrets dans le code, GitHub, ni dans le navigateur.
+## Import des masters
 
-## Base et stockage
+1. Ouvrir `/admin/audio` sur la version déployée.
+2. Fournir le code administrateur déjà configuré dans `ADMIN_ORDERS_CODE`.
+3. Sélectionner l’UPC exact dans le catalogue et le master WAV correspondant.
+4. L’interface transfère les blocs de 20 Mio, contrôle chaque taille, puis vérifie la présence de tous les blocs avant d’enregistrer la ligne D1.
+5. Recommencer pour les masters disponibles.
 
-Appliquer dans l'ordre les migrations de commandes existantes, puis :
+Le plafond actuel de l’interface est 110 Mio par fichier. Les masters WAV complets uniquement doivent être utilisés, jamais les MP3 de préécoute.
 
-- `drizzle/migrations/0003_shop_order_delivery.sql`
-- `drizzle/migrations/0004_paypal_ipn_transaction.sql`
-- `drizzle/migrations/0005_supabase_private_audio_storage.sql`
+## Contrôles obligatoires avant d’annoncer la mise en service
 
-La migration 0005 crée le bucket privé et ajoute `storage_object_path` à `shop_release_assets`. Les objets doivent être importés dans ce bucket et leur chemin privé associé à l'UPC exact. Les masters complets uniquement : jamais les MP3 de préécoute.
+- Les workflows GitHub doivent terminer avec succès.
+- La compilation de production doit réussir.
+- Transférer les masters et vérifier leur présence dans KV.
+- Vérifier que la page de confirmation détecte une commande payée et un master existant.
+- Effectuer un achat PayPal de test réel, vérifier l’IPN et télécharger le WAV reçu.
+- Vérifier les paiements refusés, les commandes non payées, les références invalides et les fichiers manquants.
 
-## Vérifications avant mise en production
-
-- Confirmer que les migrations sont appliquées sur le projet Supabase de production.
-- Confirmer que le bucket privé existe et que le Worker peut lire un objet avec la clé serveur.
-- Importer les masters complets et vérifier chaque chemin de stockage.
-- Vérifier le domaine expéditeur Resend et recevoir un e-mail de test.
-- Tester les paiements confirmés, refusés, annulés et les notifications dupliquées.
-- Tester les liens expirés, les tokens invalides et les objets absents.
-
-Aucun changement de verrou ou de comportement du checkout PayPal n'est requis par cette migration. Ne pas publier la livraison avant que le stockage, les secrets, l'e-mail et le test complet soient validés.
+Ne pas publier la fonctionnalité de paiement/téléchargement en production avant ces vérifications. Ne pas activer le flux PayPal Orders API désactivé séparément.
