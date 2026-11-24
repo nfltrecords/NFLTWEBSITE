@@ -77,16 +77,18 @@ function ReleaseRow({
         <h3 className="release-title">{release.title}</h3>
         {showPrice ? <ReleasePrice upc={release.upc} locale={locale} /> : null}
       </Link>
-      <span className="release-upc">UPC {release.upc}</span>
-      {showPrice ? (
-        <span className="release-master-status">
-          {availabilityLoaded
-            ? available
-              ? t(locale, "Master WAV disponible", "WAV master available")
-              : t(locale, "Master WAV en préparation", "WAV master in preparation")
-            : t(locale, "Vérification…", "Checking…")}
-        </span>
-      ) : null}
+      <div className="release-row-meta">
+        <span className="release-upc">UPC {release.upc}</span>
+        {showPrice ? (
+          <span className="release-master-status">
+            {availabilityLoaded
+              ? available
+                ? t(locale, "Master WAV disponible", "WAV master available")
+                : t(locale, "Master WAV en préparation", "WAV master in preparation")
+              : t(locale, "Vérification…", "Checking…")}
+          </span>
+        ) : null}
+      </div>
       {showPrice ? (
         <Button
           type="button"
