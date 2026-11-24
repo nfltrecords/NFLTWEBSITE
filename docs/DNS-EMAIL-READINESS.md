@@ -1,31 +1,39 @@
-# DNS et messagerie NFLT RECORDS — état et contrôle
+# DNS et messagerie NFLT RECORDS — état vérifié
 
-## Règle de sécurité
-
-Les valeurs DNS historiques, adresses IP, noms de boîtes et paramètres de messagerie ne sont pas reproduits dans ce dépôt public. Le relevé antérieur n'est pas une interrogation DNS en direct et ne doit pas être utilisé comme configuration actuelle.
+## Règles de sécurité
 
 - Ne pas changer les nameservers.
 - Ne pas modifier/supprimer les enregistrements MX, SPF, DKIM ou DMARC lors d'une migration web.
-- Avant tout changement web autorisé, exporter la zone DNS complète depuis le registrar et vérifier les TTL, sous-domaines et enregistrements de validation.
-- Ne pas activer de proxy sur les enregistrements de messagerie.
-- Tester séparément HTTPS, résolution web, réception/envoi et authentification e-mail après tout changement approuvé.
+- Ne pas activer le proxy sur les enregistrements de messagerie.
+- Ne jamais publier de mot de passe, jeton ou valeur secrète dans GitHub ou dans les journaux.
+- Tester séparément HTTPS, réception, envoi et authentification e-mail.
 
-## Comportement actuel des formulaires
+## État DNS contrôlé le 24 novembre 2026
 
-- Les fonctions de contact enregistrent les messages dans Supabase ; une insertion réussie ne signifie pas qu'un e-mail a été envoyé.
-- Les demandes de disponibilité/licence sont enregistrées dans Supabase ; aucun transfert vers une boîte externe n'est effectué par cette fonction.
-- Les paramètres de destinataire et de messagerie doivent rester côté serveur et ne doivent pas être copiés dans le dépôt public.
-- Aucune livraison e-mail n'a été testée dans cette session.
+La zone Cloudflare est active. Le contrôle en lecture seule a retrouvé les enregistrements de messagerie attendus : MX, SPF, DKIM et DMARC, ainsi que les noms de serveurs de messagerie. Les enregistrements de messagerie n'ont pas été modifiés.
 
-## Contrôles requis dans le compte du fournisseur
+La présence de ces enregistrements ne prouve pas à elle seule que l'envoi SMTP fonctionne ni que la boîte expéditrice est opérationnelle.
 
-1. Vérifier le domaine, la zone DNS complète et le renouvellement.
-2. Vérifier l'existence et l'état des boîtes nécessaires.
-3. Vérifier réception et envoi sans publier de mot de passe.
-4. Relever les valeurs SPF, DKIM et DMARC depuis le fournisseur ; ne pas inventer ni remplacer leurs valeurs.
-5. Effectuer des tests entrants et sortants.
-6. Si des notifications automatiques sont souhaitées, choisir un fournisseur d'envoi et tester la livraison, les rebonds et les réponses avant activation.
+## Envoi transactionnel de la boutique
 
-## Blocage
+Le dépôt contient désormais :
+- un client SMTP sécurisé pour le serveur mail du domaine, port SSL/TLS 465 ;
+- une table D1 `shop_email_deliveries` pour suivre les tentatives et éviter les doublons ;
+- un envoi déclenché après IPN PayPal vérifié ;
+- une page administrateur pour consulter les commandes, tester la messagerie et relancer un envoi ;
+- un lien de téléchargement sécurisé vers les masters WAV complets, jamais vers les extraits.
 
-Aucun accès au compte registrar ni à la messagerie n'est connecté ici. Aucun DNS, nameserver, MX, SPF, DKIM, DMARC ou paramètre de messagerie n'a été modifié. Les formulaires actuels enregistrent les demandes mais n'envoient pas de notification e-mail.
+**Dépendance actuelle constatée dans le Worker de production :** les paramètres SMTP non secrets sont présents, mais le secret `SMTP_PASSWORD` n'est pas configuré dans la version active. Le code ne peut donc pas s'authentifier auprès du serveur SMTP et aucun e-mail client n'est actuellement prouvé comme envoyé.
+
+Ne pas inscrire le mot de passe dans le dépôt ni le transmettre dans une conversation. Il doit être ajouté comme secret Worker `SMTP_PASSWORD` depuis le tableau de bord Cloudflare, puis un test réel doit être effectué depuis `/admin/orders` avec le code administrateur. Le résultat doit être vérifié dans la boîte destinataire et dans les indésirables.
+
+## Contrôles requis après configuration
+
+1. Ajouter le secret SMTP dans Cloudflare, sans modifier les DNS existants.
+2. Lancer l'e-mail de test depuis l'administration et vérifier sa réception.
+3. Effectuer un test d'envoi vers une boîte externe contrôlée.
+4. Vérifier le statut `sent`, l'horodatage et l'absence de doublon dans D1.
+5. Vérifier qu'une commande payée avec tous ses WAV déclenche l'e-mail et que le lien ouvre bien les masters.
+6. Tester une panne SMTP et la relance depuis l'administration.
+
+Aucun paiement réel ne doit être effectué sans autorisation explicite. Le checkout PayPal reste fermé.
