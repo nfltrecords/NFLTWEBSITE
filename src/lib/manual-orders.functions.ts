@@ -3,7 +3,7 @@ import { z } from "zod";
 import { releases } from "@/lib/catalogue";
 import { releasePriceCents } from "@/lib/commerce";
 import { shopEnv } from "@/lib/shop-db.server";
-export const createManualPayPalOrder = createServerFn({method:"POST"}).inputValidator((input:unknown)=>z.object({upc:z.string().regex(/^\\d{12,14}$/),email:z.string().trim().email().max(255)}).strict().parse(input)).handler(async({data})=>{
+export const createManualPayPalOrder = createServerFn({method:"POST"}).inputValidator((input:unknown)=>z.object({upc:z.string().regex(/^\d{12,14}$/),email:z.string().trim().email().max(255)}).strict().parse(input)).handler(async({data})=>{
  const release=releases.find(item=>item.upc===data.upc); const cents=releasePriceCents(data.upc);
  if(!release||cents===null)return {ok:false as const};
  const id=crypto.randomUUID();
