@@ -14,7 +14,11 @@ export const Route = createFileRoute("/api/shop-availability")({
             })),
           );
           return Response.json(
-            { availableUpcs: availability.filter((item) => item.available).map((item) => item.upc) },
+            {
+              availableUpcs: availability
+                .filter((item) => item.available)
+                .map((item) => item.upc),
+            },
             { headers: { "Cache-Control": "public, max-age=60, s-maxage=60" } },
           );
         } catch (error) {
