@@ -253,11 +253,9 @@ export const Route = createFileRoute("/api/admin/audio")({
               fileName: session.fileName,
               fileSize: session.fileSize,
             };
-            await shopEnv.AUDIO_KV.put(
-              `upload:${sessionId}:complete`,
-              JSON.stringify(completed),
-              { expirationTtl: 3600 },
-            );
+            await shopEnv.AUDIO_KV.put(`upload:${sessionId}:complete`, JSON.stringify(completed), {
+              expirationTtl: 3600,
+            });
             await shopEnv.AUDIO_KV.delete(`upload:${sessionId}`);
             await Promise.all(
               Array.from({ length: session.chunkCount }, (_, index) =>
