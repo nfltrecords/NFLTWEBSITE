@@ -58,8 +58,9 @@ export const Route = createFileRoute("/api/admin/audio")({
               !releases.some((release) => release.upc === body.upc) ||
               typeof body.fileName !== "string" ||
               !/^[A-Za-z0-9À-ÿ ._()'-]{1,180}\.wav$/i.test(body.fileName) ||
+              typeof body.fileSize !== "number" ||
               !Number.isSafeInteger(body.fileSize) ||
-              Number(body.fileSize) < 12 ||
+              body.fileSize < 12 ||
               body.fileSize > MAX_FILE_SIZE
             ) {
               return Response.json({ error: "Métadonnées WAV invalides" }, { status: 400 });
