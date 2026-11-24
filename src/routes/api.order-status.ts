@@ -1,27 +1,29 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { getShopOrder, getShopAssets } from "@/lib/shop-db.server";
+import { getShopOrder } from "@/lib/shop-db.server";
 import { releases } from "@/lib/catalogue";
-import { hasCompleteWavMasterSet, isWavMasterFileName, safeWavDownloadName } from "@/lib/audio-assets";
-import { releasePreviews } from "@/lib/previews";
+import { getCompleteWavTracks } from "@/lib/delivery.server";
+import { safeWavDownloadName } from "@/lib/audio-assets";
 
 function parseItems(value: string): { upc: string; quantity: number }[] {
   try {
     const parsed: unknown = JSON.parse(value);
     if (Array.isArray(parsed)) {
-      return parsed.filter(
+      const items = parsed.filter(
         (item): item is { upc: string; quantity: number } =>
           !!item &&
           typeof item === "object" &&
           typeof item.upc === "string" &&
+          /^\d{12,14}$/.test(item.upc) &&
           Number.isInteger(item.quantity) &&
           item.quantity > 0 &&
           item.quantity <= 20,
       );
+      return items.length === parsed.length ? items : [];
     }
   } catch {
     // Legacy single-release order.
   }
-  return [{ upc: value, quantity: 1 }];
+  return /^\d{12,14}$/.test(value) ? [{ upc: value, quantity: 1 }] : [];
 }
 
 export const Route = createFileRoute("/api/order-status")({
@@ -43,28 +45,29 @@ export const Route = createFileRoute("/api/order-status")({
           }
 
           const items = parseItems(order.release_upc);
-          const downloads = (
-            await Promise.all(
-              items.map(async (item, index) => {
-                const assets = (await getShopAssets(item.upc)).filter((asset) =>
-                  isWavMasterFileName(asset.file_name),
-                );
-                const expectedTrackCount = releasePreviews[item.upc]?.length ?? 0;
-                if (!hasCompleteWavMasterSet(assets.map((asset) => asset.file_name), expectedTrackCount)) {
-                  return [];
-                }
-                const title =
-                  releases.find((release) => release.upc === item.upc)?.title ?? "NFLT audio";
+          if (!items.length) {
+            return Response.json(
+              { ok: true, paid: true, ready: false, downloads: [] },
+              { headers: { "Cache-Control": "no-store" } },
+            );
+          }
 
-                return assets.map((asset, track) => ({
-                  title,
-                  track: safeWavDownloadName(asset.file_name).replace(/\\.wav$/i, ""),
-                  quantity: item.quantity,
-                  url: `/api/download?order=${encodeURIComponent(id)}&item=${index}&track=${track}`,
-                }));
-              }),
-            )
-          ).flat();
+          const allTracks = await Promise.all(items.map((item) => getCompleteWavTracks(item.upc)));
+          if (allTracks.some((tracks) => tracks === null)) {
+            return Response.json(
+              { ok: true, paid: true, ready: false, downloads: [] },
+              { headers: { "Cache-Control": "no-store" } },
+            );
+          }
+
+          const downloads = allTracks.flatMap((tracks, index) =>
+            tracks!.map((asset, track) => ({
+              title: releases.find((release) => release.upc === items[index].upc)?.title ?? "NFLT audio",
+              track: safeWavDownloadName(asset.file_name).replace(/\.wav$/i, ""),
+              quantity: items[index].quantity,
+              url: `/api/download?order=${encodeURIComponent(id)}&item=${index}&track=${track}`,
+            })),
+          );
 
           return Response.json(
             { ok: true, paid: true, ready: downloads.length > 0, downloads },
