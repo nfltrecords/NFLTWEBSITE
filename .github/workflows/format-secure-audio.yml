@@ -22,13 +22,9 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm install --no-audit --no-fund
-      - name: Format all changed source and configuration files
+      - name: Format source and configuration files
         run: |
-          git fetch origin main
-          mapfile -t files < <(git diff --name-only origin/main...HEAD | grep -E '\.(ts|tsx|js|jsx|json|md|css|yml|yaml|jsonc)$' || true)
-          if (( ${#files[@]} > 0 )); then
-            npx prettier --write "${files[@]}"
-          fi
+          npx prettier --write "src/**/*.{ts,tsx,js,jsx,json,md,css}" "wrangler.jsonc" ".github/workflows/*.yml"
       - name: Run lint, tests and production build
         run: |
           npm run lint
