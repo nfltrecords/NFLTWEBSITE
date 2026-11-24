@@ -11,7 +11,7 @@ function isPayPalOrderItem(value: unknown): value is PayPalOrderItem {
     /^\d{12,14}$/.test(item["upc"]) &&
     Number.isSafeInteger(item["quantity"]) &&
     Number(item["quantity"]) >= 1 &&
-    Number(item.quantity) <= 20
+    Number(item["quantity"]) <= 20
   );
 }
 
