@@ -1,0 +1,46 @@
+name: One-time source formatting repair
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/format-nflt-once.yml"
+permissions:
+  contents: write
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install project dependencies
+        run: |
+          npm install --global npm@11.21.2
+          npm install --no-audit --no-fund
+      - name: Format only files reported by the current lint run
+        run: |
+          npx prettier --write \
+            src/components/LabelPages.tsx \
+            src/lib/delivery.server.ts \
+            src/lib/shop-db.server.ts \
+            src/routes/admin.audio.tsx \
+            src/routes/api.admin.audio.ts \
+            src/routes/api.download.ts \
+            src/routes/api.order-status.ts \
+            src/routes/api.paypal.ipn.ts \
+            src/routes/commande.confirmation.tsx \
+            src/routes/commande.paiement.tsx
+      - name: Commit formatting changes
+        run: |
+          if git diff --quiet; then
+            echo "No formatting changes."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/components/LabelPages.tsx src/lib/delivery.server.ts src/lib/shop-db.server.ts src/routes/admin.audio.tsx src/routes/api.admin.audio.ts src/routes/api.download.ts src/routes/api.order-status.ts src/routes/api.paypal.ipn.ts src/routes/commande.confirmation.tsx src/routes/commande.paiement.tsx
+          git commit -m "Format shop and delivery source files"
+          git push origin main
