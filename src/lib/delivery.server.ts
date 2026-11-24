@@ -24,6 +24,7 @@ export async function servePaidOrderDownload(request: Request): Promise<Response
   const item = items[index];
   const asset = await getShopAsset(item.upc);
   if (!asset) return new Response("Fichier indisponible", { status: 503 });
+  if (!asset.file_name.toLowerCase().endsWith(".wav")) return new Response("Master WAV indisponible pour cette sortie", { status: 503 });
   const title = releases.find((release) => release.upc === item.upc)?.title ?? "NFLT-audio";
   const safeTitle = title.normalize("NFKD").replace(/[^A-Za-z0-9._-]+/g, "-");
   if (asset.asset_key.startsWith("r2:")) {
