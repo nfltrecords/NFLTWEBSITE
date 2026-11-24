@@ -36,6 +36,8 @@ Six UPC n'ont actuellement aucune association WAV : 199955701558, 199955715135, 
 
 ## Protections ajoutées au code
 
+La vérification continue inclut désormais les tests Vitest, un contrôle TypeScript strict (\`tsc --noEmit\`), ESLint/Prettier et le build Vite.
+
 - La création d'une commande est refusée si le nombre de pistes n'est pas confirmé, si le nombre de masters WAV ne correspond pas au nombre confirmé ou si un objet R2 / un morceau KV manque.
 - La notification IPN vérifie la notification auprès de PayPal, le destinataire, le statut `Completed`, la devise EUR, le montant, les UPC et quantités du panier et l'unicité de l'identifiant de transaction.
 - Les notifications invalides ou non pertinentes sont acquittées sans marquer la commande payée ; les erreurs temporaires de vérification ou de base de données provoquent une réponse réessayable.
