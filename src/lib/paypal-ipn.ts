@@ -72,3 +72,11 @@ export function matchesPayPalCart(
     indexedValue(data, "quantity", nextIndex) === null
   );
 }
+
+export function isFullRefundAmount(gross: string | null, orderAmountCents: number): boolean {
+  if (gross === null || !Number.isSafeInteger(orderAmountCents) || orderAmountCents < 1) {
+    return false;
+  }
+  const amount = Number(gross);
+  return Number.isFinite(amount) && Math.round(Math.abs(amount) * 100) >= orderAmountCents;
+}
