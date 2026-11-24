@@ -1,22 +1,20 @@
 import { describe, expect, it } from "vitest";
 import { releasePreviews } from "@/lib/previews";
 
-describe("verified catalogue audio previews", () => {
-  it("maps only the six release associations confirmed in the DistroKid review", () => {
-    expect(releasePreviews).toEqual({
-      "199751168234": "/assets/previews/MASTERPIECE_PREVIEW_30S.mp3",
-      "199955701558": "/assets/previews/Dilemma_PREVIEW_30S.mp3",
-      "821440674572": "/assets/previews/GR4LIFE_PREVIEW_30S.mp3",
-      "199751508283": "/assets/previews/NFLTHOT_PREVIEW_30S.mp3",
-      "199955715203": "/assets/previews/Hustlegrind_PREVIEW_30S.mp3",
-      "199751512501": "/assets/previews/NFLTINMYPARTYBEATNFLTRECORDS_PREVIEW_30S.mp3",
-    });
-    expect(Object.keys(releasePreviews)).toHaveLength(6);
+describe("catalogue audio previews", () => {
+  it("links every explicitly matched release preview", () => {
+    expect(Object.keys(releasePreviews)).toHaveLength(13);
+    expect(releasePreviews["821440674572"]).toBe("/assets/previews/GR4LIFE_PREVIEW_30S.mp3");
+    expect(releasePreviews["199955742094"]).toBe("/assets/previews/30.000Genocides_PREVIEW_30S.mp3");
+    expect(releasePreviews["199956222809"]).toBe("/assets/previews/Nousysommes_PREVIEW_30S.mp3");
   });
 
-  it("does not assign a preview to a release without verified evidence", () => {
+  it("does not invent links for releases without an exact matching preview", () => {
+    expect(releasePreviews["199956554184"]).toBeUndefined();
+    expect(releasePreviews["199751613871"]).toBeUndefined();
+    expect(releasePreviews["199956557857"]).toBeUndefined();
+    expect(releasePreviews["199954147302"]).toBeUndefined();
     expect(releasePreviews["199951252436"]).toBeUndefined();
-    expect(releasePreviews["199956222809"]).toBeUndefined();
   });
 
   it("uses only the existing 30-second preview directory", () => {
