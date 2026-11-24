@@ -20,13 +20,21 @@ function collectSourceFiles(directory) {
   for (const name of readdirSync(directory, { withFileTypes: true })) {
     const path = join(directory, name.name);
     if (name.isDirectory()) collectSourceFiles(path);
-    else if ([".ts", ".tsx", ".js", ".jsx", ".mjs"].some((extension) => name.name.endsWith(extension))) sourceFiles.push(path);
+    else if (
+      [".ts", ".tsx", ".js", ".jsx", ".mjs"].some((extension) => name.name.endsWith(extension))
+    ) {
+      sourceFiles.push(path);
+    }
   }
 }
 collectSourceFiles("src");
 const stalePreviewReferences = sourceFiles.filter((path) => {
   const source = readFileSync(path, "utf8");
-  return source.includes("/assets/previews/") || source.includes("releasePreviews") || source.includes("ReleasePreview");
+  return (
+    source.includes("/assets/previews/") ||
+    source.includes("releasePreviews") ||
+    source.includes("ReleasePreview")
+  );
 });
 
 const result = {
