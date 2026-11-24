@@ -24,5 +24,6 @@ describe("WAV master filenames", () => {
     expect(hasCompleteWavMasterSet(["a.wav"], 2)).toBe(false);
     expect(hasCompleteWavMasterSet(["a.wav", "b.m4a"], 2)).toBe(false);
     expect(hasCompleteWavMasterSet(["a.wav"], 0)).toBe(false);
+    expect(hasCompleteWavMasterSet(["a.wav", "A.WAV"], 2)).toBe(false);
   });
 });
