@@ -1,6 +1,7 @@
 import { getShopAssets, getShopOrder, shopEnv } from "@/lib/shop-db.server";
 import { releases } from "@/lib/catalogue";
-import { isWavMasterFileName, safeWavDownloadName } from "@/lib/audio-assets";
+import { hasCompleteWavMasterSet, isWavMasterFileName, safeWavDownloadName } from "@/lib/audio-assets";
+import { releasePreviews } from "@/lib/previews";
 
 type OrderItem = { upc: string; quantity: number };
 function orderItems(value: string): OrderItem[] {
@@ -36,6 +37,10 @@ export async function servePaidOrderDownload(request: Request): Promise<Response
   const tracks = (await getShopAssets(item.upc)).filter((asset) =>
     isWavMasterFileName(asset.file_name),
   );
+  const expectedTrackCount = releasePreviews[item.upc]?.length ?? 0;
+  if (!hasCompleteWavMasterSet(tracks.map((asset) => asset.file_name), expectedTrackCount)) {
+    return new Response("Masters incomplets", { status: 503 });
+  }
   const trackIndex = Number(url.searchParams.get("track") ?? "0");
   if (!Number.isInteger(trackIndex) || trackIndex < 0 || trackIndex >= tracks.length)
     return new Response("Piste indisponible", { status: 404 });

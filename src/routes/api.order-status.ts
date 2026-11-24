@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { getShopOrder, getShopAssets } from "@/lib/shop-db.server";
 import { releases } from "@/lib/catalogue";
-import { isWavMasterFileName, safeWavDownloadName } from "@/lib/audio-assets";
+import { hasCompleteWavMasterSet, isWavMasterFileName, safeWavDownloadName } from "@/lib/audio-assets";
+import { releasePreviews } from "@/lib/previews";
 
 function parseItems(value: string): { upc: string; quantity: number }[] {
   try {
@@ -48,6 +49,10 @@ export const Route = createFileRoute("/api/order-status")({
                 const assets = (await getShopAssets(item.upc)).filter((asset) =>
                   isWavMasterFileName(asset.file_name),
                 );
+                const expectedTrackCount = releasePreviews[item.upc]?.length ?? 0;
+                if (!hasCompleteWavMasterSet(assets.map((asset) => asset.file_name), expectedTrackCount)) {
+                  return [];
+                }
                 const title =
                   releases.find((release) => release.upc === item.upc)?.title ?? "NFLT audio";
 
