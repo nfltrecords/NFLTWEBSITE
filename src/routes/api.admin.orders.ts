@@ -13,11 +13,11 @@ function parseOrderItems(value: string): OrderItem[] {
         (item): item is { upc: string; quantity: number } =>
           !!item &&
           typeof item === "object" &&
-          typeof item.upc === "string" &&
-          /^\d{12,14}$/.test(item.upc) &&
-          Number.isInteger(item.quantity) &&
-          item.quantity > 0 &&
-          item.quantity <= 20,
+          typeof item["upc"] === "string" &&
+          /^\d{12,14}$/.test(item["upc"]) &&
+          Number.isInteger(item["quantity"]) &&
+          item["quantity"] > 0 &&
+          item["quantity"] <= 20,
       );
       if (items.length !== parsed.length) return [];
       return items.map((item) => ({
