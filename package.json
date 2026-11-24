@@ -14,7 +14,8 @@
     "test:watch": "vitest",
     "deploy": "npm run build && wrangler deploy",
     "cf-typegen": "wrangler types",
-    "audit:assets": "node scripts/audit-assets.mjs"
+    "audit:assets": "node scripts/audit-assets.mjs",
+    "typecheck": "tsc --noEmit"
   },
   "overrides": {
     "rolldown": "1.2.1"

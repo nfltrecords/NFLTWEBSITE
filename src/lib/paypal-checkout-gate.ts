@@ -1,6 +1,6 @@
 /**
- * PayPal checkout activation explicitly approved by the owner.
- * Payment processing still depends on the configured PayPal account credentials.
+ * Keep checkout closed until the readiness checks pass and the owner explicitly approves
+ * live activation. A request to repair the implementation does not activate payments.
  */
 export const checkoutActivationApproved = false;
 
