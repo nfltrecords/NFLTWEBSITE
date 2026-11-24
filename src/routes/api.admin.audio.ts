@@ -163,6 +163,26 @@ export const Route = createFileRoute("/api/admin/audio")({
               parts.push(part);
             }
 
+            const assetKey = `r2:${session.objectKey}`;
+            const existingAssociation = await shopEnv.DB.prepare(
+              "SELECT release_upc, file_name, file_size FROM shop_release_assets WHERE asset_key = ?",
+            )
+              .bind(assetKey)
+              .first<{ release_upc: string; file_name: string; file_size: number }>();
+            if (!existingAssociation) {
+              const duplicateName = await shopEnv.DB.prepare(
+                "SELECT 1 AS found FROM shop_release_assets WHERE release_upc = ? AND lower(file_name) = lower(?) LIMIT 1",
+              )
+                .bind(session.upc, session.fileName)
+                .first<{ found: number }>();
+              if (duplicateName) {
+                return Response.json(
+                  { error: "Un fichier WAV portant ce nom est déjà associé à cette sortie" },
+                  { status: 409 },
+                );
+              }
+            }
+
             let object = await shopEnv.AUDIO_R2.head(session.objectKey);
             if (!object) {
               const multipart = shopEnv.AUDIO_R2.resumeMultipartUpload(
@@ -179,7 +199,6 @@ export const Route = createFileRoute("/api/admin/audio")({
               );
             }
 
-            const assetKey = `r2:${session.objectKey}`;
             await shopEnv.DB.prepare(
               "INSERT OR IGNORE INTO shop_release_assets (release_upc, asset_key, file_name, file_size, chunk_count) VALUES (?, ?, ?, ?, ?)",
             )
