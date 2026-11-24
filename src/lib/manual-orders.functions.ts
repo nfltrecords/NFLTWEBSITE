@@ -2,7 +2,9 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { releases } from "@/lib/catalogue";
 import { releasePriceCents } from "@/lib/commerce";
-import { shopEnv } from "@/lib/shop-db.server";
+import { releasePreviews } from "@/lib/previews";
+import { getShopAssets, shopEnv } from "@/lib/shop-db.server";
+import { hasCompleteWavMasterSet, isWavMasterFileName } from "@/lib/audio-assets";
 import { payPalCheckoutIsEnabled } from "@/lib/paypal-checkout-gate";
 
 const orderInput = z
@@ -22,24 +24,64 @@ const orderInput = z
   })
   .strict();
 
+async function hasCompleteAvailableWavMasters(upc: string): Promise<boolean> {
+  const expectedTrackCount = releasePreviews[upc]?.length ?? 0;
+  if (expectedTrackCount < 1) return false;
+
+  const assets = (await getShopAssets(upc)).filter((asset) =>
+    isWavMasterFileName(asset.file_name),
+  );
+  if (!hasCompleteWavMasterSet(assets.map((asset) => asset.file_name), expectedTrackCount)) {
+    return false;
+  }
+
+  const available = await Promise.all(
+    assets.map(async (asset) => {
+      if (asset.asset_key.startsWith("r2:")) {
+        return Boolean(await shopEnv.AUDIO_R2.head(asset.asset_key.slice(3)));
+      }
+      if (!Number.isInteger(asset.chunk_count) || asset.chunk_count < 1 || asset.chunk_count > 10) {
+        return false;
+      }
+      const chunks = await Promise.all(
+        Array.from({ length: asset.chunk_count }, (_, index) =>
+          shopEnv.AUDIO_KV.head(`${asset.asset_key}:${index}`),
+        ),
+      );
+      return chunks.every(Boolean);
+    }),
+  );
+
+  return available.every(Boolean);
+}
+
 export const createManualPayPalOrder = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => orderInput.parse(input))
   .handler(async ({ data }) => {
     if (!payPalCheckoutIsEnabled()) return { ok: false as const };
+
     const unique = new Map<string, number>();
     for (const item of data.items) {
       unique.set(item.upc, (unique.get(item.upc) ?? 0) + item.quantity);
     }
     if ([...unique.values()].some((quantity) => quantity > 20)) return { ok: false as const };
+
     const items = [...unique.entries()].map(([upc, quantity]) => {
       const release = releases.find((entry) => entry.upc === upc);
       const cents = releasePriceCents(upc);
       return release && cents !== null ? { upc, quantity, cents, title: release.title } : null;
     });
     if (items.some((item) => item === null)) return { ok: false as const };
+
     const validItems = items as { upc: string; quantity: number; cents: number; title: string }[];
+    const masterReadiness = await Promise.all(
+      validItems.map((item) => hasCompleteAvailableWavMasters(item.upc)),
+    );
+    if (masterReadiness.some((ready) => !ready)) return { ok: false as const };
+
     const totalCents = validItems.reduce((sum, item) => sum + item.cents * item.quantity, 0);
     if (!Number.isSafeInteger(totalCents) || totalCents <= 0) return { ok: false as const };
+
     const id = crypto.randomUUID();
     // Keep the existing schema compatible: release_upc stores a JSON item manifest for multi-item orders.
     await shopEnv.DB.prepare(
@@ -52,6 +94,7 @@ export const createManualPayPalOrder = createServerFn({ method: "POST" })
         totalCents,
       )
       .run();
+
     const params = new URLSearchParams({
       cmd: "_cart",
       upload: "1",
@@ -65,6 +108,7 @@ export const createManualPayPalOrder = createServerFn({ method: "POST" })
       no_shipping: "1",
       charset: "utf-8",
     });
+
     validItems.forEach((item, index) => {
       const n = index + 1;
       params.set(`item_name_${n}`, `NFLT RECORDS — ${item.title}`);
@@ -72,6 +116,7 @@ export const createManualPayPalOrder = createServerFn({ method: "POST" })
       params.set(`amount_${n}`, (item.cents / 100).toFixed(2));
       params.set(`quantity_${n}`, String(item.quantity));
     });
+
     return {
       ok: true as const,
       paymentUrl: `https://www.paypal.com/cgi-bin/webscr?${params.toString()}`,
