@@ -16,6 +16,7 @@ import { ReleasePrice } from "@/components/ReleasePrice";
 import { ReleasePreview } from "@/components/ReleasePreview";
 import { useCart } from "@/lib/cart-store";
 import { releasePriceCents as releasePriceCentsForButton } from "@/lib/commerce";
+import { useShopAvailability } from "@/lib/use-shop-availability";
 import { ShoppingBag } from "lucide-react";
 
 const t = (locale: Locale, fr: string, en: string) => (locale === "fr" ? fr : en);
@@ -42,15 +43,20 @@ function ReleaseRow({
   locale,
   index,
   showPrice = false,
+  available = false,
+  availabilityLoaded = false,
 }: {
   release: Release;
   locale: Locale;
   index: number;
   showPrice?: boolean;
+  available?: boolean;
+  availabilityLoaded?: boolean;
 }) {
   const cart = useCart();
   const quantity = cart.items[release.upc] ?? 0;
-  const canAdd = releasePriceCentsForButton(release.upc) !== null && quantity < 20;
+  const canAdd =
+    availabilityLoaded && available && releasePriceCentsForButton(release.upc) !== null && quantity < 20;
   return (
     <div className={`release-row group${showPrice ? " release-row--commerce" : ""}`}>
       <span className="release-index">{String(index + 1).padStart(2, "0")}</span>
@@ -72,6 +78,15 @@ function ReleaseRow({
         {showPrice ? <ReleasePrice upc={release.upc} locale={locale} /> : null}
       </Link>
       <span className="release-upc">UPC {release.upc}</span>
+      {showPrice ? (
+        <span className="release-master-status">
+          {availabilityLoaded
+            ? available
+              ? t(locale, "Master WAV disponible", "WAV master available")
+              : t(locale, "Master WAV en préparation", "WAV master in preparation")
+            : t(locale, "Vérification…", "Checking…")}
+        </span>
+      ) : null}
       {showPrice ? (
         <Button
           type="button"
@@ -296,6 +311,7 @@ export function HomePage({ locale = "fr" }: { locale?: Locale }) {
   );
 }
 export function CataloguePage({ locale = "fr" }: { locale?: Locale }) {
+  const { availableUpcs, availabilityLoaded } = useShopAvailability();
   const [year, setYear] = useState("all");
   const [query, setQuery] = useState("");
   const filtered = filterReleases(year, query);
@@ -346,7 +362,15 @@ export function CataloguePage({ locale = "fr" }: { locale?: Locale }) {
           <span className="text-muted-foreground">{filtered.length} / 18</span>
         </div>
         {filtered.map((r, i) => (
-          <ReleaseRow key={r.upc} release={r} locale={locale} index={i} showPrice />
+          <ReleaseRow
+            key={r.upc}
+            release={r}
+            locale={locale}
+            index={i}
+            showPrice
+            available={availableUpcs?.has(r.upc) ?? false}
+            availabilityLoaded={availabilityLoaded}
+          />
         ))}
         {filtered.length === 0 && (
           <p className="py-16 text-muted-foreground">
@@ -358,6 +382,8 @@ export function CataloguePage({ locale = "fr" }: { locale?: Locale }) {
   );
 }
 export function ReleasePage({ release, locale = "fr" }: { release: Release; locale?: Locale }) {
+  const { availableUpcs, availabilityLoaded } = useShopAvailability();
+  const masterAvailable = availableUpcs?.has(release.upc) ?? false;
   const cart = useCart();
   const quantity = cart.items[release.upc] ?? 0;
   return (
@@ -398,12 +424,19 @@ export function ReleasePage({ release, locale = "fr" }: { release: Release; loca
                 type="button"
                 className="editorial-action"
                 onClick={() => cart.add(release.upc)}
-                disabled={quantity >= 20 || releasePriceCentsForButton(release.upc) === null}
+                disabled={!availabilityLoaded || !masterAvailable || quantity >= 20 || releasePriceCentsForButton(release.upc) === null}
               >
                 <ShoppingBag size={16} />
                 {t(locale, "Ajouter au panier", "Add to cart")}
                 {quantity > 0 ? ` · ${quantity}` : ""}
               </Button>
+              <p className="body-copy mt-2">
+                {availabilityLoaded
+                  ? masterAvailable
+                    ? t(locale, "Master WAV disponible pour cette sortie.", "WAV master available for this release.")
+                    : t(locale, "Master WAV en cours de préparation pour cette sortie.", "WAV master for this release is still being prepared.")
+                  : t(locale, "Vérification de la disponibilité du master WAV…", "Checking WAV master availability…")}
+              </p>
               {quantity > 0 ? (
                 <p className="body-copy mt-2">
                   {t(
