@@ -71,7 +71,7 @@ L'état actuel est plus récent que l'ancien relevé à 11 associations :
 - Cela représente 18 masters WAV manquants pour les tracklists vérifiées. `Hustle & Grind` n'a pas de WAV associé et son nombre exact de pistes reste non confirmé.
 - Les M4A présents dans R2 restent des préécoutes ; ils ne sont jamais utilisés comme masters de livraison.
 
-Les 37 MP3 de préécoute sont désormais associés aux 18 UPC dans `src/lib/previews.ts`. Les lecteurs sont disponibles dans les fiches catalogue et directement dans les cartes de la boutique. Le contrôle `npm run audit:assets`, ajouté à GitHub Actions, vérifie les 18 pochettes et les 37 associations MP3. Les tests, le build, le contrôle TypeScript et le lint passent sur le dernier commit.
+Les 37 MP3 de préécoute sont désormais associés aux 18 UPC dans `src/lib/previews.ts`. Les lecteurs sont disponibles dans les fiches catalogue et directement dans les cartes de la boutique. Le contrôle `npm run audit:assets`, ajouté à GitHub Actions, vérifie les 18 pochettes et les 37 associations MP3. Les tests, l'audit des ressources, le build, le contrôle TypeScript et le lint passent sur le dernier commit de code vérifié.
 
 Les masters WAV manquants n'ont été trouvés ni ailleurs dans le bucket R2, ni dans les archives ZIP examinées de GitHub et de la bibliothèque de fichiers. Ne pas convertir les M4A pour combler ces manques. Le transfert des nouveaux masters peut se faire via `/admin/audio`.
 
