@@ -134,10 +134,12 @@ export async function sendTransactionalEmail(
   if (!config) throw new Error("SMTP is not configured");
   if (!isSafeEmailAddress(to)) throw new Error("Invalid recipient email");
 
-  const socket = connect(
-    { hostname: config.host, port: config.port },
-    { secureTransport: "on" as const },
-  );
+  // The Workers runtime supports secureTransport="on" for implicit TLS on port 465.
+  // Keep this narrow cast for the generated SocketOptions declaration in the current Wrangler toolchain.
+  const socketOptions = { secureTransport: "on" } as unknown as NonNullable<
+    Parameters<typeof connect>[1]
+  >;
+  const socket = connect({ hostname: config.host, port: config.port }, socketOptions);
   const session = new SmtpSession(socket);
 
   try {
