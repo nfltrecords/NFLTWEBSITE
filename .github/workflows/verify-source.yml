@@ -22,7 +22,7 @@ jobs:
         run: npm install --no-audit --no-fund
       - name: Run tests
         run: npm test
-      - name: Audit catalogue covers and preview mappings
+      - name: Audit catalogue covers and confirm preview removal
         run: npm run audit:assets
       - name: Generate Cloudflare binding types
         if: always() && !cancelled()
