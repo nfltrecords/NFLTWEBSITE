@@ -136,7 +136,7 @@ export async function sendTransactionalEmail(
 
   const socket = connect(
     { hostname: config.host, port: config.port },
-    { secureTransport: "on" },
+    { secureTransport: "on" as const },
   );
   const session = new SmtpSession(socket);
 
