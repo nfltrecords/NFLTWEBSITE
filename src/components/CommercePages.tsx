@@ -153,8 +153,8 @@ export function ShopPage({ locale }: { locale: Locale }) {
                     <label className="text-sm" htmlFor="shop-buyer-email">
                       {text(
                         locale,
-                        "E-mail pour recevoir le fichier",
-                        "Email to receive your file",
+                        "E-mail associé à la commande",
+                        "Email associated with the order",
                       )}
                     </label>
                     <input
@@ -207,8 +207,8 @@ export function ShopPage({ locale }: { locale: Locale }) {
                     <p className="text-sm text-muted-foreground">
                       {text(
                         locale,
-                        "La commande est créée puis vous êtes redirigé directement vers le paiement PayPal sécurisé. PayPal transmet la référence de commande pour vérification automatique avant l’envoi du WAV.",
-                        "Your order is created and you are redirected directly to secure PayPal checkout. PayPal sends the order reference for automatic verification before the WAV is delivered.",
+                        "La commande est créée puis vous êtes redirigé directement vers le paiement PayPal sécurisé. PayPal transmet la référence de commande pour vérification automatique. Le WAV sera téléchargeable sur la page de confirmation.",
+                        "Your order is created and you are redirected directly to secure PayPal checkout. PayPal sends the order reference for automatic verification. The WAV will be available on the confirmation page.",
                       )}
                     </p>
                   </div>
@@ -216,8 +216,8 @@ export function ShopPage({ locale }: { locale: Locale }) {
                 <p className="body-copy mt-4 text-sm">
                   {text(
                     locale,
-                    "Le bouton ouvre le paiement PayPal standard avec la référence de commande intégrée. Après confirmation vérifiée par PayPal, le système envoie automatiquement le master WAV à l’adresse indiquée.",
-                    "The button opens standard PayPal checkout with the order reference included. After PayPal verification, the system automatically sends the WAV master to the supplied email address.",
+                    "Le bouton ouvre le paiement PayPal standard avec la référence de commande intégrée. Après confirmation vérifiée par PayPal, le master WAV sera disponible au téléchargement directement sur la page de confirmation.",
+                    "The button opens standard PayPal checkout with the order reference included. After PayPal verification, the WAV master will be available to download directly from the confirmation page.",
                   )}
                 </p>
               </>
