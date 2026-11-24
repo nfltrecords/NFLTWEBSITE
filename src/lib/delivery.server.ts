@@ -6,6 +6,7 @@ import {
   safeWavDownloadName,
 } from "@/lib/audio-assets";
 import { releasePreviews } from "@/lib/previews";
+import { verifiedReleaseTrackCounts } from "@/lib/commerce";
 
 type OrderItem = { upc: string; quantity: number };
 
@@ -32,8 +33,9 @@ function orderItems(value: string): OrderItem[] {
 }
 
 export async function getCompleteWavTracks(upc: string): Promise<ShopAsset[] | null> {
-  const expectedTrackCount = releasePreviews[upc]?.length ?? 0;
-  if (expectedTrackCount < 1) return null;
+  const expectedTrackCount = verifiedReleaseTrackCounts[upc] ?? 0;
+  const previewCount = releasePreviews[upc]?.length ?? 0;
+  if (expectedTrackCount < 1 || previewCount !== expectedTrackCount) return null;
 
   const tracks = (await getShopAssets(upc)).filter((asset) =>
     isWavMasterFileName(asset.file_name),
