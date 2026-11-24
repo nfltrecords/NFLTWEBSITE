@@ -60,14 +60,15 @@ export const Route = createFileRoute("/api/order-status")({
             );
           }
 
-          const downloads = allTracks.flatMap((tracks, index) =>
-            tracks!.map((asset, track) => ({
-              title: releases.find((release) => release.upc === items[index].upc)?.title ?? "NFLT audio",
+          const downloads = allTracks.flatMap((tracks, index) => {
+            const item = items[index]!;
+            return tracks!.map((asset, track) => ({
+              title: releases.find((release) => release.upc === item.upc)?.title ?? "NFLT audio",
               track: safeWavDownloadName(asset.file_name).replace(/\.wav$/i, ""),
-              quantity: items[index].quantity,
+              quantity: item.quantity,
               url: `/api/download?order=${encodeURIComponent(id)}&item=${index}&track=${track}`,
-            })),
-          );
+            }));
+          });
 
           return Response.json(
             { ok: true, paid: true, ready: downloads.length > 0, downloads },
