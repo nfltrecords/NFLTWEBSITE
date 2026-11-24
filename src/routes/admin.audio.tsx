@@ -4,6 +4,13 @@ import { releases } from "@/lib/catalogue";
 import { SiteLayout } from "@/components/SiteLayout";
 import { Button } from "@/components/ui/button";
 export const Route = createFileRoute("/admin/audio")({ component: Page });
+type UploadStartResult = {
+  assetKey: string;
+  chunkCount: number;
+  chunkSize: number;
+  error?: string;
+};
+
 function Page() {
   const [code, setCode] = useState(""),
     [upc, setUpc] = useState<string>(releases[0]?.upc ?? ""),
@@ -22,8 +29,8 @@ function Page() {
         headers: { ...headers, "Content-Type": "application/json" },
         body: JSON.stringify({ upc, fileName: file.name, fileSize: file.size }),
       });
-      const m = await r.json();
-      if (!r.ok) throw Error(m.error);
+      const m = (await r.json()) as UploadStartResult;
+      if (!r.ok) throw Error(m.error ?? "Impossible de démarrer le transfert");
       for (let i = 0; i < m.chunkCount; i++) {
         const p = file.slice(i * m.chunkSize, Math.min(file.size, (i + 1) * m.chunkSize));
         const c = await fetch("/api/admin/audio?action=chunk", {
@@ -31,7 +38,10 @@ function Page() {
           headers: { ...headers, "x-nflt-asset-key": m.assetKey, "x-nflt-chunk-index": String(i) },
           body: p,
         });
-        if (!c.ok) throw Error((await c.json()).error);
+        if (!c.ok) {
+          const chunkResult = (await c.json()) as { error?: string };
+          throw Error(chunkResult.error ?? "Échec du transfert du bloc");
+        }
         setProgress(Math.round(((i + 1) / m.chunkCount) * 100));
       }
       const done = await fetch("/api/admin/audio?action=finish", {
@@ -39,8 +49,8 @@ function Page() {
         headers: { ...headers, "Content-Type": "application/json" },
         body: JSON.stringify({ assetKey: m.assetKey }),
       });
-      const result = await done.json();
-      if (!done.ok) throw Error(result.error);
+      const result = (await done.json()) as { error?: string };
+      if (!done.ok) throw Error(result.error ?? "Impossible de finaliser le transfert");
       setMsg(
         "Piste WAV ajoutée à cette sortie. Vous pouvez envoyer les autres pistes en conservant le même UPC.",
       );
