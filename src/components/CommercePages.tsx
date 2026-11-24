@@ -96,11 +96,13 @@ export function ShopPage({ locale }: { locale: Locale }) {
                     <label className="text-sm" htmlFor="shop-buyer-email">{text(locale, "E-mail pour recevoir la commande", "Email for your order")}</label>
                     <input id="shop-buyer-email" type="email" required maxLength={255} autoComplete="email" value={buyerEmail} onChange={(event) => setBuyerEmail(event.target.value)} className="w-full rounded-md border border-input bg-background px-3 py-2" />
                     <Button type="button" className="editorial-action" disabled={checkoutBusy || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(buyerEmail.trim())} onClick={async () => {
-                      const release = cartItems[0];
-                      if (!release || !buyerEmail.trim() || checkoutBusy) return;
+                      if (cartItems.length === 0 || !buyerEmail.trim() || checkoutBusy) return;
                       setCheckoutBusy(true); setCheckoutError("");
                       try {
-                        const result = await createOrder({ data: { upc: release.upc, email: buyerEmail.trim() } });
+                        const result = await createOrder({ data: {
+                          items: cartItems.map((release) => ({ upc: release.upc, quantity: sharedCart.items[release.upc] })),
+                          email: buyerEmail.trim(),
+                        } });
                         if (!result.ok || !result.paymentUrl) throw new Error("Commande indisponible.");
                         window.location.assign(result.paymentUrl);
                       } catch (error) { setCheckoutError(error instanceof Error ? error.message : "Erreur de paiement."); setCheckoutBusy(false); }
