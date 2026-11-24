@@ -16,6 +16,9 @@ function isPayPalOrderItem(value: unknown): value is PayPalOrderItem {
 }
 
 export function parsePayPalOrderManifest(value: string): PayPalOrderItem[] {
+  const legacyUpc = value.trim();
+  if (/^\\d{12,14}$/.test(legacyUpc)) return [{ upc: legacyUpc, quantity: 1 }];
+
   try {
     const parsed: unknown = JSON.parse(value);
     if (!Array.isArray(parsed) || parsed.length === 0 || !parsed.every(isPayPalOrderItem)) {
