@@ -1,16 +1,13 @@
 import { fileURLToPath } from "node:url";
-import { defineConfig, mergeConfig } from "vitest/config";
-import viteConfig from "./vite.config";
+import { defineConfig } from "vitest/config";
 
-export default mergeConfig(
-  viteConfig,
-  defineConfig({
-    resolve: {
-      alias: {
-        "cloudflare:workers": fileURLToPath(
-          new URL("./src/test/mocks/cloudflare-workers.ts", import.meta.url),
-        ),
-      },
+export default defineConfig({
+  resolve: {
+    alias: {
+      "@": fileURLToPath(new URL("./src", import.meta.url)),
+      "cloudflare:workers": fileURLToPath(
+        new URL("./src/test/mocks/cloudflare-workers.ts", import.meta.url),
+      ),
     },
-  }),
-);
+  },
+});
