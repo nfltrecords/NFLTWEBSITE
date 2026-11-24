@@ -151,6 +151,7 @@ export async function sendOrderEmailForOrder(
       order.buyer_email,
       "Votre commande NFLT RECORDS est confirmée / Order confirmed",
       body,
+      `${order.id}@nflt-records.com`,
     );
     await markShopEmailSent(order.id);
     return { status: "sent" };
