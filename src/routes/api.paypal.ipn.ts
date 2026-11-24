@@ -1,9 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import {
-  getShopOrder,
-  getShopOrderByTransactionId,
-  markShopOrderPaid,
-} from "@/lib/shop-db.server";
+import { getShopOrder, getShopOrderByTransactionId, markShopOrderPaid } from "@/lib/shop-db.server";
 import { matchesPayPalCart, parsePayPalOrderManifest } from "@/lib/paypal-ipn";
 
 function acknowledgeIpn(): Response {
@@ -28,9 +24,7 @@ async function processIpn(request: Request): Promise<Response> {
       (value) => !!value && /^[0-9a-f-]{36}$/i.test(value),
     ) ?? "";
   const transactionId = (data.get("txn_id") ?? "").trim();
-  const receiver = (data.get("receiver_email") ?? data.get("business") ?? "")
-    .trim()
-    .toLowerCase();
+  const receiver = (data.get("receiver_email") ?? data.get("business") ?? "").trim().toLowerCase();
   const amount = Number(data.get("mc_gross"));
 
   if (
