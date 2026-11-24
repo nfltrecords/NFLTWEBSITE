@@ -97,7 +97,7 @@ export async function servePaidOrderDownload(request: Request): Promise<Response
     return new Response("Piste indisponible", { status: 404 });
   }
 
-  const asset = tracks[trackIndex];
+  const asset = tracks[trackIndex]!;
   const safeTrack = safeWavDownloadName(asset.file_name);
   if (asset.asset_key.startsWith("r2:")) {
     const object = await shopEnv.AUDIO_R2.get(asset.asset_key.slice(3));
