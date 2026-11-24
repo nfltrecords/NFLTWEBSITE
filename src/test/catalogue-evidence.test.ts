@@ -68,21 +68,25 @@ describe("Owner-reported original artwork evidence", () => {
     expect(verifiedReleaseTrackCounts).toEqual({
       "199955715135": 1,
       "199955742094": 8,
+      "199956222809": 9,
+      "199956554184": 5,
     });
     for (const release of releases) {
-      if (release.upc === "199955715135") {
-        expect(verifiedReleaseTrackCounts[release.upc]).toBe(1);
-      } else if (release.upc === "199955742094") {
-        expect(verifiedReleaseTrackCounts[release.upc]).toBe(8);
-      } else {
-        expect(verifiedReleaseTrackCounts[release.upc]).toBeUndefined();
-      }
+      const confirmedCount: Record<string, number> = {
+        "199955715135": 1,
+        "199955742094": 8,
+        "199956222809": 9,
+        "199956554184": 5,
+      };
+      expect(verifiedReleaseTrackCounts[release.upc]).toBe(confirmedCount[release.upc]);
     }
     expect(releasePriceCents("199955715135")).toBe(999);
     expect(releasePriceCents("199955742094")).toBe(1999);
     expect(releasePriceCents("199956222809")).toBe(1999);
+    expect(releasePriceCents("199956554184")).toBe(1499);
     for (const release of releases.filter(
-      (r) => !["199955715135", "199955742094", "199956222809"].includes(r.upc),
+      (r) =>
+        !["199955715135", "199955742094", "199956222809", "199956554184"].includes(r.upc),
     )) {
       expect(releasePriceCents(release.upc)).toBe(999);
     }
