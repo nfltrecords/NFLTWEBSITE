@@ -1,6 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { getShopOrder, getShopOrderByTransactionId, markShopOrderPaid } from "@/lib/shop-db.server";
-import { matchesPayPalCart, parsePayPalOrderManifest } from "@/lib/paypal-ipn";
+import {
+  getShopOrder,
+  getShopOrderByTransactionId,
+  markShopOrderPaid,
+  markShopOrderRefunded,
+  restoreShopOrderPaid,
+} from "@/lib/shop-db.server";
+import {
+  isFullRefundAmount,
+  matchesPayPalCart,
+  parsePayPalOrderManifest,
+} from "@/lib/paypal-ipn";
 
 function acknowledgeIpn(): Response {
   return new Response("OK", { headers: { "Cache-Control": "no-store" } });
@@ -19,20 +29,48 @@ async function processIpn(request: Request): Promise<Response> {
   if ((await verify.text()).trim() !== "VERIFIED") return acknowledgeIpn();
 
   const data = new URLSearchParams(raw);
+  const receiver = (data.get("receiver_email") ?? data.get("business") ?? "").trim().toLowerCase();
+  const currency = data.get("mc_currency");
+  const paymentStatus = data.get("payment_status");
+
+  if (receiver !== "encoresarbakane@gmail.com" || currency !== "EUR") {
+    return acknowledgeIpn();
+  }
+
+  const parentTransactionId = (data.get("parent_txn_id") ?? "").trim();
+  if (paymentStatus === "Refunded" || paymentStatus === "Reversed") {
+    if (!parentTransactionId) return acknowledgeIpn();
+    const originalOrder = await getShopOrderByTransactionId(parentTransactionId);
+    if (!originalOrder) return acknowledgeIpn();
+
+    if (
+      paymentStatus === "Reversed" ||
+      isFullRefundAmount(data.get("mc_gross"), originalOrder.amount_cents)
+    ) {
+      await markShopOrderRefunded(parentTransactionId);
+    } else {
+      console.warn("Partial PayPal refund requires manual review", parentTransactionId);
+    }
+    return acknowledgeIpn();
+  }
+
+  if (paymentStatus === "Canceled_Reversal") {
+    if (!parentTransactionId) return acknowledgeIpn();
+    await restoreShopOrderPaid(parentTransactionId);
+    return acknowledgeIpn();
+  }
+
   const id =
     [data.get("custom"), data.get("invoice")].find(
       (value) => !!value && /^[0-9a-f-]{36}$/i.test(value),
     ) ?? "";
   const transactionId = (data.get("txn_id") ?? "").trim();
-  const receiver = (data.get("receiver_email") ?? data.get("business") ?? "").trim().toLowerCase();
   const amount = Number(data.get("mc_gross"));
 
   if (
     !id ||
     !transactionId ||
-    receiver !== "encoresarbakane@gmail.com" ||
-    data.get("payment_status") !== "Completed" ||
-    data.get("mc_currency") !== "EUR" ||
+    paymentStatus !== "Completed" ||
     !Number.isFinite(amount) ||
     amount <= 0
   ) {
