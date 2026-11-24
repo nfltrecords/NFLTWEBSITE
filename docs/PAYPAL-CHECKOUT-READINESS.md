@@ -51,7 +51,7 @@ Les M4A ne remplacent jamais les WAV. Les nombres de pistes sont vérifiés ind�
 La vérification continue inclut les tests Vitest, un contrôle TypeScript strict (`tsc --noEmit`), ESLint/Prettier et le build Vite.
 
 - La création d'une commande est refusée si le nombre de pistes n'est pas vérifié, si le nombre de masters WAV ne correspond pas au nombre vérifié ou si un objet R2 / un morceau KV manque.
-- La notification IPN vérifie la notification auprès de PayPal, le destinataire, le statut `Completed`, la devise EUR, le montant, les UPC et quantités du panier et l'unicité de l'identifiant de transaction.
+- La notification IPN vérifie la notification auprès de PayPal, le destinataire, le statut `Completed`, la devise EUR, le montant, les UPC et quantités du panier et l'unicité de l'identifiant de transaction. Les remboursements complets et inversions révoquent l'accès ; une annulation d'inversion restaure l'accès ; les remboursements partiels sont signalés pour revue manuelle.
 - Les notifications invalides ou non pertinentes sont acquittées sans marquer la commande payée ; les erreurs temporaires de vérification ou de base de données provoquent une réponse réessayable.
 - La page de confirmation ne présente des liens que si tous les articles de la commande disposent de leur ensemble complet de masters.
 - Le téléchargement exige une commande payée et ne sert que des WAV. Les objets R2 sont contrôlés par taille ; les fichiers KV sont contrôlés par présence et longueur totale.
@@ -60,7 +60,7 @@ Ces protections sont des contrôles de code et de données. Elles ne constituent
 
 ## Points non validés — aucune déclaration de réussite
 
-- Aucun test IPN réel ni campagne PayPal Sandbox complète n'a été effectué.
+- Les gestionnaires de remboursement, inversion et annulation d'inversion sont codés, mais aucun test IPN réel ni campagne PayPal Sandbox complète n'a été effectué.
 - Aucun paiement réel n'a été réalisé.
 - Aucun email automatique de commande ou de téléchargement n'a été envoyé ou reçu.
 - Le DNS du domaine comporte des enregistrements de messagerie (MX, SPF et DKIM vers `mail.nflt-records.com`), mais aucun identifiant SMTP ou service d'envoi n'est configuré dans le Worker.
