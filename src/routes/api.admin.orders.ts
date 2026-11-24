@@ -3,6 +3,7 @@ import { env } from "cloudflare:workers";
 import { releases } from "@/lib/catalogue";
 import { shopEnv, type ShopOrder } from "@/lib/shop-db.server";
 import { getShopEmailDelivery, sendOrderEmailForOrder } from "@/lib/shop-email-delivery.server";
+import { isSmtpConfigured, sendTransactionalEmail } from "@/lib/smtp.server";
 
 type OrderItem = { upc: string; quantity: number; title: string };
 
@@ -126,9 +127,33 @@ export const Route = createFileRoute("/api/admin/orders")({
           if (!(await authorized(request))) {
             return Response.json({ ok: false, error: "Accès refusé" }, { status: 401 });
           }
-          const body = (await request.json().catch(() => null)) as
-            | { action?: string; orderId?: string }
-            | null;
+          const body = (await request.json().catch(() => null)) as {
+            action?: string;
+            orderId?: string;
+          } | null;
+
+          if (body?.action === "test-email") {
+            if (!isSmtpConfigured()) {
+              return Response.json(
+                { ok: false, status: "not_configured", error: "SMTP_PASSWORD absent" },
+                { status: 409 },
+              );
+            }
+            const from =
+              (env as unknown as { SMTP_FROM?: string }).SMTP_FROM ??
+              "nflt-records@nflt-records.com";
+            await sendTransactionalEmail(
+              from,
+              "Test email NFLT RECORDS",
+              "Ceci est un message de test du système de livraison email NFLT RECORDS.",
+              `smtp-test-${crypto.randomUUID()}@nflt-records.com`,
+            );
+            return Response.json(
+              { ok: true, status: "sent", recipient: from },
+              { headers: { "Cache-Control": "private, no-store" } },
+            );
+          }
+
           if (
             body?.action !== "retry-email" ||
             typeof body.orderId !== "string" ||
@@ -150,7 +175,10 @@ export const Route = createFileRoute("/api/admin/orders")({
           );
         } catch (error) {
           console.error("Admin order email retry failed", error);
-          return Response.json({ ok: false, error: "Impossible de relancer l'email" }, { status: 503 });
+          return Response.json(
+            { ok: false, error: "Impossible de relancer l'email" },
+            { status: 503 },
+          );
         }
       },
     },
