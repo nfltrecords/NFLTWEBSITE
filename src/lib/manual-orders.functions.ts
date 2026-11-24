@@ -11,7 +11,7 @@ const orderInput = z
       .array(
         z
           .object({
-            upc: z.string().regex(/^\\d{12,14}$/),
+            upc: z.string().regex(/^\d{12,14}$/),
             quantity: z.number().int().min(1).max(20),
           })
           .strict(),
