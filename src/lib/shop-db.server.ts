@@ -57,6 +57,24 @@ export async function markShopOrderPaid(id: string, transactionId: string): Prom
   return (result.meta.changes ?? 0) > 0;
 }
 
+export async function markShopOrderRefunded(transactionId: string): Promise<boolean> {
+  const result = await shopEnv.DB.prepare(
+    "UPDATE shop_orders SET status='refunded', updated_at=CURRENT_TIMESTAMP WHERE paypal_transaction_id=? AND status='paid'",
+  )
+    .bind(transactionId)
+    .run();
+  return (result.meta.changes ?? 0) > 0;
+}
+
+export async function restoreShopOrderPaid(transactionId: string): Promise<boolean> {
+  const result = await shopEnv.DB.prepare(
+    "UPDATE shop_orders SET status='paid', updated_at=CURRENT_TIMESTAMP WHERE paypal_transaction_id=? AND status='refunded'",
+  )
+    .bind(transactionId)
+    .run();
+  return (result.meta.changes ?? 0) > 0;
+}
+
 export function downloadUrl(orderId: string): string {
   return `/api/download?order=${encodeURIComponent(orderId)}`;
 }
