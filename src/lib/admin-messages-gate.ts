@@ -19,6 +19,6 @@ export async function matchesAdminMessagesCode(
   const a = new Uint8Array(left);
   const b = new Uint8Array(right);
   let difference = 0;
-  for (let i = 0; i < a.length; i++) difference |= a[i] ^ b[i];
+  for (let i = 0; i < a.length; i++) difference |= (a[i] ?? 0) ^ (b[i] ?? 0);
   return difference === 0;
 }
