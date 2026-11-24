@@ -43,11 +43,7 @@ async function hasCompleteAvailableWavMasters(upc: string): Promise<boolean> {
       if (asset.asset_key.startsWith("r2:")) {
         return Boolean(await shopEnv.AUDIO_R2.head(asset.asset_key.slice(3)));
       }
-      if (
-        !Number.isInteger(asset.chunk_count) ||
-        asset.chunk_count < 1 ||
-        asset.chunk_count > 10
-      ) {
+      if (!Number.isInteger(asset.chunk_count) || asset.chunk_count < 1 || asset.chunk_count > 10) {
         return false;
       }
       const chunks = await Promise.all(
