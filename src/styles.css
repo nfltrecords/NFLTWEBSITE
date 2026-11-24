@@ -1904,3 +1904,13 @@ a:focus-visible {
   display: grid;
   gap: 0.75rem;
 }
+
+
+.shop-master-status,
+.release-master-status {
+  display: block;
+  margin-top: 0.35rem;
+  color: var(--muted-foreground);
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+}
