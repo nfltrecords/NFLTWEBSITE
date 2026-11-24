@@ -37,9 +37,7 @@ export async function getCompleteWavTracks(upc: string): Promise<ShopAsset[] | n
   const previewCount = releasePreviews[upc]?.length ?? 0;
   if (expectedTrackCount < 1 || previewCount !== expectedTrackCount) return null;
 
-  const tracks = (await getShopAssets(upc)).filter((asset) =>
-    isWavMasterFileName(asset.file_name),
-  );
+  const tracks = (await getShopAssets(upc)).filter((asset) => isWavMasterFileName(asset.file_name));
   if (
     !hasCompleteWavMasterSet(
       tracks.map((asset) => asset.file_name),
