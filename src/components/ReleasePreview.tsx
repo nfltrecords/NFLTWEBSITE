@@ -1,14 +1,31 @@
 import { releasePreviews } from "@/lib/previews";
 
-export function ReleasePreview({ upc, locale = "fr" }: { upc: string; locale?: "fr" | "en" }) {
+type ReleasePreviewProps = {
+  upc: string;
+  locale?: "fr" | "en";
+  compact?: boolean;
+  hideTitle?: boolean;
+};
+
+export function ReleasePreview({
+  upc,
+  locale = "fr",
+  compact = false,
+  hideTitle = false,
+}: ReleasePreviewProps) {
   const sources = releasePreviews[upc] ?? [];
   return (
-    <section className="mt-8" aria-labelledby="release-preview-title">
-      <h2 id="release-preview-title" className="mb-3 text-lg font-medium">
-        {locale === "fr" ? "Extraits audio" : "Audio previews"}
-      </h2>
+    <section
+      className={compact ? "shop-preview-list" : "mt-8"}
+      aria-label={locale === "fr" ? "Extraits audio" : "Audio previews"}
+    >
+      {!hideTitle ? (
+        <h2 className={compact ? "mb-2 text-sm font-medium" : "mb-3 text-lg font-medium"}>
+          {locale === "fr" ? "Extraits audio" : "Audio previews"}
+        </h2>
+      ) : null}
       {sources.length > 0 ? (
-        <div className="space-y-3">
+        <div className={compact ? "space-y-2" : "space-y-3"}>
           {sources.map((src, index) => (
             <div key={src}>
               <p className="mb-2 text-sm text-muted-foreground">
