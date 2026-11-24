@@ -16,12 +16,8 @@ function Page(){
     if(!active)return;
     if(d.paid){
      setPaid(true);
-     if(d.ready&&typeof d.downloadUrl==="string"){
-      setDownloadUrl(d.downloadUrl);
-      setStatus("Paiement confirmé. Votre master est prêt.");
-      return;
-     }
-     setStatus("Paiement confirmé. Le fichier de cette sortie n’est pas encore raccordé à la livraison automatique. NFLT RECORDS vous l’enverra par e-mail.");
+     if(typeof d.downloadUrl==="string"&&d.downloadUrl){setDownloadUrl(d.downloadUrl);setStatus("Paiement confirmé. Votre téléchargement est disponible.");}
+     else setStatus("Paiement confirmé. Contactez NFLT RECORDS avec votre référence de commande pour obtenir votre fichier.");
      return;
     }
     setStatus("En attente de la confirmation PayPal…");
@@ -35,6 +31,6 @@ function Page(){
   <p className="eyebrow">NFLT RECORDS / COMMANDE</p><h1>Confirmation de commande</h1>
   <p className="body-copy mt-4">{status}</p>
   {downloadUrl&&<a className="editorial-action inline-flex mt-6 items-center justify-center rounded-md px-6 py-3" href={downloadUrl}>Télécharger mon master</a>}
-  {paid&&!downloadUrl&&<p className="body-copy mt-4">Conservez votre confirmation PayPal. La livraison sera effectuée à l’adresse e-mail indiquée lors de la commande.</p>}
+  {paid&&!downloadUrl&&<p className="body-copy mt-4">Référence : {order}</p>}
  </section></SiteLayout>;
 }
