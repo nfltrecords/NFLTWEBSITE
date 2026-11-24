@@ -52,10 +52,15 @@ function Page() {
         headers: { ...headers, "Content-Type": "application/json" },
         body: JSON.stringify({ assetKey: m.assetKey }),
       });
-      const result = (await done.json()) as { error?: string };
+      const result = (await done.json()) as {
+        error?: string;
+        objectKey?: string;
+        fileName?: string;
+        fileSize?: number;
+      };
       if (!done.ok) throw Error(result.error ?? "Impossible de finaliser le transfert");
       setMsg(
-        "Piste WAV ajoutée à cette sortie. Vous pouvez envoyer les autres pistes en conservant le même UPC.",
+        `Master WAV envoyé dans R2 et associé à ${upc} : ${result.fileName ?? file.name} (${result.fileSize ?? file.size} octets). Vous pouvez envoyer les autres pistes en conservant le même UPC.`,
       );
     } catch (e) {
       setMsg(e instanceof Error ? e.message : "Erreur");
