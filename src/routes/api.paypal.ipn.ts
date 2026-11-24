@@ -6,11 +6,7 @@ import {
   markShopOrderRefunded,
   restoreShopOrderPaid,
 } from "@/lib/shop-db.server";
-import {
-  isFullRefundAmount,
-  matchesPayPalCart,
-  parsePayPalOrderManifest,
-} from "@/lib/paypal-ipn";
+import { isFullRefundAmount, matchesPayPalCart, parsePayPalOrderManifest } from "@/lib/paypal-ipn";
 
 function acknowledgeIpn(): Response {
   return new Response("OK", { headers: { "Cache-Control": "no-store" } });
