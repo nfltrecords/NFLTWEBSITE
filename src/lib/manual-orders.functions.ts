@@ -2,9 +2,8 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { releases } from "@/lib/catalogue";
 import { releasePriceCents } from "@/lib/commerce";
-import { releasePreviews } from "@/lib/previews";
-import { getShopAssets, shopEnv } from "@/lib/shop-db.server";
-import { hasCompleteWavMasterSet, isWavMasterFileName } from "@/lib/audio-assets";
+import { getCompleteWavTracks } from "@/lib/delivery.server";
+import { shopEnv } from "@/lib/shop-db.server";
 import { payPalCheckoutIsEnabled } from "@/lib/paypal-checkout-gate";
 
 const orderInput = z
@@ -23,40 +22,6 @@ const orderInput = z
     email: z.string().trim().email().max(255),
   })
   .strict();
-
-async function hasCompleteAvailableWavMasters(upc: string): Promise<boolean> {
-  const expectedTrackCount = releasePreviews[upc]?.length ?? 0;
-  if (expectedTrackCount < 1) return false;
-
-  const assets = (await getShopAssets(upc)).filter((asset) => isWavMasterFileName(asset.file_name));
-  if (
-    !hasCompleteWavMasterSet(
-      assets.map((asset) => asset.file_name),
-      expectedTrackCount,
-    )
-  ) {
-    return false;
-  }
-
-  const available = await Promise.all(
-    assets.map(async (asset) => {
-      if (asset.asset_key.startsWith("r2:")) {
-        return Boolean(await shopEnv.AUDIO_R2.head(asset.asset_key.slice(3)));
-      }
-      if (!Number.isInteger(asset.chunk_count) || asset.chunk_count < 1 || asset.chunk_count > 10) {
-        return false;
-      }
-      const chunks = await Promise.all(
-        Array.from({ length: asset.chunk_count }, (_, index) =>
-          shopEnv.AUDIO_KV.head(`${asset.asset_key}:${index}`),
-        ),
-      );
-      return chunks.every(Boolean);
-    }),
-  );
-
-  return available.every(Boolean);
-}
 
 export const createManualPayPalOrder = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => orderInput.parse(input))
@@ -78,9 +43,9 @@ export const createManualPayPalOrder = createServerFn({ method: "POST" })
 
     const validItems = items as { upc: string; quantity: number; cents: number; title: string }[];
     const masterReadiness = await Promise.all(
-      validItems.map((item) => hasCompleteAvailableWavMasters(item.upc)),
+      validItems.map((item) => getCompleteWavTracks(item.upc)),
     );
-    if (masterReadiness.some((ready) => !ready)) return { ok: false as const };
+    if (masterReadiness.some((tracks) => tracks === null)) return { ok: false as const };
 
     const totalCents = validItems.reduce((sum, item) => sum + item.cents * item.quantity, 0);
     if (!Number.isSafeInteger(totalCents) || totalCents <= 0) return { ok: false as const };
