@@ -1,5 +1,5 @@
 import { env } from "cloudflare:workers";
-type ShopBindings = { DB: D1Database; AUDIO_KV: KVNamespace };
+type ShopBindings = { DB: D1Database; AUDIO_KV: KVNamespace; AUDIO_R2: R2Bucket };
 export const shopEnv = env as unknown as ShopBindings;
 export type ShopOrder = { id:string; release_upc:string; buyer_email:string; amount_cents:number; currency:string; status:"pending"|"paid"|"cancelled"|"refunded"; paypal_transaction_id:string|null; created_at:string; paid_at:string|null };
 export type ShopAsset = { release_upc:string; asset_key:string; file_name:string; file_size:number; chunk_count:number };
