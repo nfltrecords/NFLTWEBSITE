@@ -13,7 +13,7 @@ async function authorized(req: Request) {
     );
   const [a, b] = await Promise.all([hash(expected), hash(given)]);
   let d = 0;
-  for (let i = 0; i < a.length; i++) d |= a[i] ^ b[i];
+  for (let i = 0; i < a.length; i++) d |= (a[i] ?? 0) ^ (b[i] ?? 0);
   return d === 0;
 }
 export const Route = createFileRoute("/api/admin/audio")({
