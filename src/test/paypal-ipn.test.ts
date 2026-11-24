@@ -37,6 +37,22 @@ describe("PayPal Classic cart verification", () => {
     ).toBe(true);
   });
 
+  it("accepts PayPal cart counts that include individual quantities", () => {
+    const data = new URLSearchParams({
+      num_cart_items: "4",
+      item_number1: firstUpc,
+      quantity1: "3",
+      item_number2: secondUpc,
+      quantity2: "1",
+    });
+    expect(
+      matchesPayPalCart(data, [
+        { upc: firstUpc, quantity: 3 },
+        { upc: secondUpc, quantity: 1 },
+      ]),
+    ).toBe(true);
+  });
+
   it("supports underscore item fields from the outgoing Classic cart form", () => {
     const data = new URLSearchParams({
       num_cart_items: "1",
