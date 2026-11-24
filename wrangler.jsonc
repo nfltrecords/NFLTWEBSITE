@@ -7,6 +7,9 @@
   "d1_databases": [
     { "binding": "DB", "database_name": "nflt-records-data", "database_id": "e64a7e2a-ac50-4b69-9b28-c0ce9ea5c9fe" }
   ],
+  "r2_buckets": [
+    { "binding": "AUDIO_R2", "bucket_name": "nflt-audio-master" }
+  ],
   "kv_namespaces": [
     { "binding": "AUDIO_KV", "id": "43477e277a524fa99065f5f2a64ddad0" }
   ],
