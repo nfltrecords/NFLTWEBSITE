@@ -7,6 +7,7 @@ on:
 permissions:
   contents: write
 jobs:
+  # Temporary formatting workflow; remove after the source repair.
   format:
     runs-on: ubuntu-latest
     steps:
