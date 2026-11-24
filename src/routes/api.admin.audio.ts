@@ -176,6 +176,17 @@ export const Route = createFileRoute("/api/admin/audio")({
                 .bind(session.upc, session.fileName)
                 .first<{ found: number }>();
               if (duplicateName) {
+                const multipart = shopEnv.AUDIO_R2.resumeMultipartUpload(
+                  session.objectKey,
+                  session.uploadId,
+                );
+                await multipart.abort().catch(() => undefined);
+                await shopEnv.AUDIO_KV.delete(`upload:${sessionId}`);
+                await Promise.all(
+                  Array.from({ length: session.chunkCount }, (_, index) =>
+                    shopEnv.AUDIO_KV.delete(`upload:${sessionId}:part:${index}`),
+                  ),
+                );
                 return Response.json(
                   { error: "Un fichier WAV portant ce nom est déjà associé à cette sortie" },
                   { status: 409 },
