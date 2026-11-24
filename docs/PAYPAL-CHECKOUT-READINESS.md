@@ -1,6 +1,6 @@
 # NFLT RECORDS — état de préparation PayPal Classic/IPN
 
-**Dernière vérification : 24 novembre 2026**
+**Dernière vérification : 24 novembre 2026 — 17 nombres de pistes vérifiés**
 
 ## Statut général
 
