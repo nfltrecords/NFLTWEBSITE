@@ -5,7 +5,7 @@ export const Route = createFileRoute("/commande/confirmation")({
   validateSearch: (s: Record<string, unknown>) => ({ order: typeof s.order === "string" ? s.order : "" }),
   component: Page,
 });
-type Download = { title: string; quantity: number; url: string };
+type Download = { title: string; track: string; quantity: number; url: string };
 function Page() {
   const { order } = Route.useSearch();
   const [status, setStatus] = useState("Vérification du paiement PayPal…");
@@ -37,7 +37,7 @@ function Page() {
     <p className="body-copy mt-4">{status}</p>
     {downloads.map((download) => <div key={download.url} className="mt-4">
       <a className="editorial-action inline-flex items-center justify-center rounded-md px-6 py-3" href={download.url}>
-        Télécharger {download.title}{download.quantity > 1 ? ` (×${download.quantity})` : ""}
+        Télécharger {download.track} — {download.title}{download.quantity > 1 ? ` (×${download.quantity})` : ""}
       </a>
     </div>)}
     {paid && downloads.length === 0 && <p className="body-copy mt-4">Référence : {order}</p>}
