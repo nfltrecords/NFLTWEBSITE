@@ -21,7 +21,10 @@ async function authorized(req: Request) {
   if (expected.trim().length < 32 || !given || given.length > 256) return false;
   const hash = async (value: string) =>
     new Uint8Array(
-      await crypto.subtle.digest("SHA-256", new TextEncoder().encode(value.trim().normalize("NFC"))),
+      await crypto.subtle.digest(
+        "SHA-256",
+        new TextEncoder().encode(value.trim().normalize("NFC")),
+      ),
     );
   const [a, b] = await Promise.all([hash(expected), hash(given)]);
   let difference = 0;
@@ -109,19 +112,13 @@ export const Route = createFileRoute("/api/admin/audio")({
             const raw = await shopEnv.AUDIO_KV.get(`upload:${sessionId}`);
             if (!raw) return Response.json({ error: "Session expirée" }, { status: 410 });
             const session = JSON.parse(raw) as UploadSession;
-            if (
-              !Number.isInteger(partIndex) ||
-              partIndex < 0 ||
-              partIndex >= session.chunkCount
-            ) {
+            if (!Number.isInteger(partIndex) || partIndex < 0 || partIndex >= session.chunkCount) {
               return Response.json({ error: "Bloc invalide" }, { status: 400 });
             }
 
             const bytes = await request.arrayBuffer();
             const expectedSize =
-              partIndex === session.chunkCount - 1
-                ? session.fileSize - partIndex * CHUNK
-                : CHUNK;
+              partIndex === session.chunkCount - 1 ? session.fileSize - partIndex * CHUNK : CHUNK;
             if (bytes.byteLength !== expectedSize) {
               return Response.json({ error: "Taille invalide" }, { status: 400 });
             }
@@ -155,9 +152,7 @@ export const Route = createFileRoute("/api/admin/audio")({
             const parts: { partNumber: number; etag: string }[] = [];
 
             for (let index = 0; index < session.chunkCount; index++) {
-              const partRaw = await shopEnv.AUDIO_KV.get(
-                `upload:${sessionId}:part:${index}`,
-              );
+              const partRaw = await shopEnv.AUDIO_KV.get(`upload:${sessionId}:part:${index}`);
               if (!partRaw) {
                 return Response.json({ error: `Bloc manquant : ${index}` }, { status: 409 });
               }
@@ -178,20 +173,17 @@ export const Route = createFileRoute("/api/admin/audio")({
               object = await shopEnv.AUDIO_R2.head(session.objectKey);
             }
             if (!object || object.size !== session.fileSize) {
-              return Response.json({ error: "Vérification du master WAV échouée" }, { status: 503 });
+              return Response.json(
+                { error: "Vérification du master WAV échouée" },
+                { status: 503 },
+              );
             }
 
             const assetKey = `r2:${session.objectKey}`;
             await shopEnv.DB.prepare(
               "INSERT OR IGNORE INTO shop_release_assets (release_upc, asset_key, file_name, file_size, chunk_count) VALUES (?, ?, ?, ?, ?)",
             )
-              .bind(
-                session.upc,
-                assetKey,
-                session.fileName,
-                session.fileSize,
-                session.chunkCount,
-              )
+              .bind(session.upc, assetKey, session.fileName, session.fileSize, session.chunkCount)
               .run();
 
             const association = await shopEnv.DB.prepare(
@@ -205,7 +197,10 @@ export const Route = createFileRoute("/api/admin/audio")({
               association.file_name !== session.fileName ||
               association.file_size !== session.fileSize
             ) {
-              return Response.json({ error: "Association D1 du master WAV échouée" }, { status: 503 });
+              return Response.json(
+                { error: "Association D1 du master WAV échouée" },
+                { status: 503 },
+              );
             }
 
             await shopEnv.AUDIO_KV.delete(`upload:${sessionId}`);
