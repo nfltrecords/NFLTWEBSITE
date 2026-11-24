@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 export const Route = createFileRoute("/admin/audio")({ component: Page });
 function Page() {
   const [code, setCode] = useState(""),
-    [upc, setUpc] = useState(releases[0].upc),
+    [upc, setUpc] = useState<string>(releases[0]?.upc ?? ""),
     [file, setFile] = useState<File | null>(null),
     [progress, setProgress] = useState(0),
     [msg, setMsg] = useState(""),
