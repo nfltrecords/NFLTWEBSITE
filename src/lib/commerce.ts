@@ -32,12 +32,11 @@ export const verifiedReleaseTrackCounts: Readonly<Record<string, number>> = {
 };
 
 // Track counts and resulting prices below are provisional catalogue pricing.
-// Singles are provisionally priced at 9.99 EUR; the two multi-track albums use
-// the owner-supplied album tier. Confirm final tracklists and delivered masters
-// UPC by UPC before opening checkout.
+// The three screenshot-confirmed multi-track releases use their supplied tiers;
+// other single-track assumptions remain provisional until their tracklists are verified.
 export const provisionalReleaseTrackCounts: Readonly<Record<string, number>> = {
   "199955740199": 1,
-  "199956554184": 1,
+  "199956554184": 5,
   "199956222809": 9,
   "199955715135": 1,
   "199955742094": 8,
