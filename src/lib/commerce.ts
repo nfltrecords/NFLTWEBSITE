@@ -27,6 +27,8 @@ export const formatShopPrice = (cents: number) => `${(cents / 100).toFixed(2).re
 export const verifiedReleaseTrackCounts: Readonly<Record<string, number>> = {
   "199955715135": 1,
   "199955742094": 8,
+  "199956222809": 9,
+  "199956554184": 5,
 };
 
 // Track counts and resulting prices below are provisional catalogue pricing.
