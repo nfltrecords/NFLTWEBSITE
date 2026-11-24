@@ -19,40 +19,13 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm install --no-audit --no-fund
-      - name: Format files reported by ESLint
-        run: >
-          npx prettier --write
-          src/test/catalogue-evidence.test.ts
-          src/test/commerce.test.ts
-          src/test/catalogue.test.ts
-          src/test/seo.test.ts
-          src/test/legal-preparation.test.ts
-          src/test/sitemap.test.ts
-          src/test/brand-content.test.ts
-          src/test/app-routing.test.ts
-          src/test/admin-messages-gate.test.ts
-          src/test/previews.test.ts
-          src/test/radio.test.ts
-          src/test/cart-store.test.ts
-          src/lib/manual-orders.functions.ts
-          src/lib/contact.functions.ts
-          src/lib/commerce.functions.ts
-          src/components/CommercePages.ts
-          src/components/ui/badge.ts
-          src/components/ui/button.ts
-          src/components/ui/form.ts
-          src/components/ui/navigation-menu.ts
-          src/components/ui/sidebar.ts
-          src/components/ui/toggle.ts
-          src/lib/delivery.server.ts
-          src/lib/shop-db.server.ts
-          src/routes/admin.audio.ts
-          src/routes/api.admin.audio.ts
-          src/routes/api.download.ts
-          src/routes/api.order-status.ts
-          src/routes/api.paypal.ipn.ts
-          src/routes/commande.confirmation.ts
-          src/routes/telechargement.ts
+      - name: Format all changed source and configuration files
+        run: |
+          git fetch origin main
+          mapfile -t files < <(git diff --name-only origin/main...HEAD | grep -E '\\.(ts|tsx|js|jsx|json|md|css|yml|yaml|jsonc)$' || true)
+          if (( ${#files[@]} > 0 )); then
+            npx prettier --write "${files[@]}"
+          fi
       - name: Commit formatted files
         run: |
           if [[ -n "$(git status --porcelain)" ]]; then
