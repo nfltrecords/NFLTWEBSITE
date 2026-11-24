@@ -78,9 +78,13 @@ export const Route = createFileRoute("/api/admin/audio")({
               fileSize: number;
               chunkCount: number;
             };
-            for (let i = 0; i < m.chunkCount; i++)
-              if (!(await shopEnv.AUDIO_KV.head(key + ":" + i)))
+            const listed = await shopEnv.AUDIO_KV.list({ prefix: key + ":", limit: 1000 });
+            const chunkNames = new Set(listed.keys.map((entry) => entry.name));
+            for (let i = 0; i < m.chunkCount; i++) {
+              if (!chunkNames.has(key + ":" + i)) {
                 return Response.json({ error: "Bloc manquant: " + i }, { status: 409 });
+              }
+            }
             await shopEnv.DB.prepare(
               "INSERT INTO shop_release_assets (release_upc,asset_key,file_name,file_size,chunk_count) VALUES (?,?,?,?,?)",
             )
