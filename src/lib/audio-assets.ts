@@ -17,3 +17,11 @@ export function hasCompleteWavMasterSet(
     .map((fileName) => fileName.trim().toLowerCase());
   return wavNames.length === expectedTrackCount && new Set(wavNames).size === expectedTrackCount;
 }
+
+export function hasValidWavHeader(bytes: ArrayBuffer | Uint8Array): boolean {
+  const view = bytes instanceof Uint8Array ? bytes : new Uint8Array(bytes);
+  if (view.byteLength < 12) return false;
+  const riff = String.fromCharCode(...view.subarray(0, 4));
+  const wave = String.fromCharCode(...view.subarray(8, 12));
+  return (riff === "RIFF" || riff === "RF64") && wave === "WAVE";
+}
