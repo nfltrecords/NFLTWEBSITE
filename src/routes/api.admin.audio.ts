@@ -2,9 +2,99 @@ import { createFileRoute } from "@tanstack/react-router";
 import { env } from "cloudflare:workers";
 import { releases } from "@/lib/catalogue";
 import { shopEnv } from "@/lib/shop-db.server";
-const CHUNK=20*1024*1024;
-async function authorized(req:Request){const expected=(env as unknown as {ADMIN_ORDERS_CODE?:string}).ADMIN_ORDERS_CODE??"",given=req.headers.get("x-nflt-admin-code")??"";if(expected.trim().length<32||!given||given.length>256)return false;const hash=async(v:string)=>new Uint8Array(await crypto.subtle.digest("SHA-256",new TextEncoder().encode(v.trim().normalize("NFC"))));const [a,b]=await Promise.all([hash(expected),hash(given)]);let d=0;for(let i=0;i<a.length;i++)d|=a[i]^b[i];return d===0;}
-export const Route=createFileRoute("/api/admin/audio")({server:{handlers:{POST:async({request})=>{try{if(!(await authorized(request)))return Response.json({error:"Accès refusé"},{status:401});const action=new URL(request.url).searchParams.get("action");if(action==="start"){const b=await request.json() as {upc?:string;fileName?:string;fileSize?:number};if(!releases.some(r=>r.upc===b.upc)||typeof b.fileName!=="string"||!/^[A-Za-z0-9À-ÿ ._()'-]{1,180}\.wav$/i.test(b.fileName)||!Number.isSafeInteger(b.fileSize)||!b.fileSize||b.fileSize>110*1024*1024)return Response.json({error:"Métadonnées WAV invalides"},{status:400});const m={upc:b.upc!,assetKey:`master-${b.upc}-${crypto.randomUUID()}`,fileName:b.fileName,fileSize:b.fileSize!,chunkCount:Math.ceil(b.fileSize!/CHUNK)};await shopEnv.AUDIO_KV.put("upload:"+m.assetKey,JSON.stringify(m),{expirationTtl:3600});return Response.json({ok:true,...m,chunkSize:CHUNK});}
-if(action==="chunk"){const key=request.headers.get("x-nflt-asset-key")??"",i=Number(request.headers.get("x-nflt-chunk-index")),raw=await shopEnv.AUDIO_KV.get("upload:"+key);if(!raw)return Response.json({error:"Session expirée"},{status:410});const m=JSON.parse(raw) as {fileSize:number;chunkCount:number};if(!Number.isInteger(i)||i<0||i>=m.chunkCount)return Response.json({error:"Bloc invalide"},{status:400});const bytes=await request.arrayBuffer(),size=i===m.chunkCount-1?m.fileSize-i*CHUNK:CHUNK;if(bytes.byteLength!==size)return Response.json({error:"Taille invalide"},{status:400});await shopEnv.AUDIO_KV.put(key+":"+i,bytes);return Response.json({ok:true});}
-if(action==="finish"){const b=await request.json() as {assetKey?:string},key=b.assetKey??"",raw=await shopEnv.AUDIO_KV.get("upload:"+key);if(!raw)return Response.json({error:"Session expirée"},{status:410});const m=JSON.parse(raw) as {upc:string;assetKey:string;fileName:string;fileSize:number;chunkCount:number};for(let i=0;i<m.chunkCount;i++)if(!(await shopEnv.AUDIO_KV.head(key+":"+i)))return Response.json({error:"Bloc manquant: "+i},{status:409});await shopEnv.DB.prepare("INSERT INTO shop_release_assets (release_upc,asset_key,file_name,file_size,chunk_count) VALUES (?,?,?,?,?)").bind(m.upc,m.assetKey,m.fileName,m.fileSize,m.chunkCount).run();await shopEnv.AUDIO_KV.delete("upload:"+key);return Response.json({ok:true,upc:m.upc});}
-return Response.json({error:"Action inconnue"},{status:400});}catch(e){console.error(e);return Response.json({error:"Erreur transfert WAV"},{status:503});}}}}});
+const CHUNK = 20 * 1024 * 1024;
+async function authorized(req: Request) {
+  const expected = (env as unknown as { ADMIN_ORDERS_CODE?: string }).ADMIN_ORDERS_CODE ?? "",
+    given = req.headers.get("x-nflt-admin-code") ?? "";
+  if (expected.trim().length < 32 || !given || given.length > 256) return false;
+  const hash = async (v: string) =>
+    new Uint8Array(
+      await crypto.subtle.digest("SHA-256", new TextEncoder().encode(v.trim().normalize("NFC"))),
+    );
+  const [a, b] = await Promise.all([hash(expected), hash(given)]);
+  let d = 0;
+  for (let i = 0; i < a.length; i++) d |= a[i] ^ b[i];
+  return d === 0;
+}
+export const Route = createFileRoute("/api/admin/audio")({
+  server: {
+    handlers: {
+      POST: async ({ request }) => {
+        try {
+          if (!(await authorized(request)))
+            return Response.json({ error: "Accès refusé" }, { status: 401 });
+          const action = new URL(request.url).searchParams.get("action");
+          if (action === "start") {
+            const b = (await request.json()) as {
+              upc?: string;
+              fileName?: string;
+              fileSize?: number;
+            };
+            if (
+              !releases.some((r) => r.upc === b.upc) ||
+              typeof b.fileName !== "string" ||
+              !/^[A-Za-z0-9À-ÿ ._()'-]{1,180}\.wav$/i.test(b.fileName) ||
+              !Number.isSafeInteger(b.fileSize) ||
+              !b.fileSize ||
+              b.fileSize > 110 * 1024 * 1024
+            )
+              return Response.json({ error: "Métadonnées WAV invalides" }, { status: 400 });
+            const m = {
+              upc: b.upc!,
+              assetKey: `master-${b.upc}-${crypto.randomUUID()}`,
+              fileName: b.fileName,
+              fileSize: b.fileSize!,
+              chunkCount: Math.ceil(b.fileSize! / CHUNK),
+            };
+            await shopEnv.AUDIO_KV.put("upload:" + m.assetKey, JSON.stringify(m), {
+              expirationTtl: 3600,
+            });
+            return Response.json({ ok: true, ...m, chunkSize: CHUNK });
+          }
+          if (action === "chunk") {
+            const key = request.headers.get("x-nflt-asset-key") ?? "",
+              i = Number(request.headers.get("x-nflt-chunk-index")),
+              raw = await shopEnv.AUDIO_KV.get("upload:" + key);
+            if (!raw) return Response.json({ error: "Session expirée" }, { status: 410 });
+            const m = JSON.parse(raw) as { fileSize: number; chunkCount: number };
+            if (!Number.isInteger(i) || i < 0 || i >= m.chunkCount)
+              return Response.json({ error: "Bloc invalide" }, { status: 400 });
+            const bytes = await request.arrayBuffer(),
+              size = i === m.chunkCount - 1 ? m.fileSize - i * CHUNK : CHUNK;
+            if (bytes.byteLength !== size)
+              return Response.json({ error: "Taille invalide" }, { status: 400 });
+            await shopEnv.AUDIO_KV.put(key + ":" + i, bytes);
+            return Response.json({ ok: true });
+          }
+          if (action === "finish") {
+            const b = (await request.json()) as { assetKey?: string },
+              key = b.assetKey ?? "",
+              raw = await shopEnv.AUDIO_KV.get("upload:" + key);
+            if (!raw) return Response.json({ error: "Session expirée" }, { status: 410 });
+            const m = JSON.parse(raw) as {
+              upc: string;
+              assetKey: string;
+              fileName: string;
+              fileSize: number;
+              chunkCount: number;
+            };
+            for (let i = 0; i < m.chunkCount; i++)
+              if (!(await shopEnv.AUDIO_KV.head(key + ":" + i)))
+                return Response.json({ error: "Bloc manquant: " + i }, { status: 409 });
+            await shopEnv.DB.prepare(
+              "INSERT INTO shop_release_assets (release_upc,asset_key,file_name,file_size,chunk_count) VALUES (?,?,?,?,?)",
+            )
+              .bind(m.upc, m.assetKey, m.fileName, m.fileSize, m.chunkCount)
+              .run();
+            await shopEnv.AUDIO_KV.delete("upload:" + key);
+            return Response.json({ ok: true, upc: m.upc });
+          }
+          return Response.json({ error: "Action inconnue" }, { status: 400 });
+        } catch (e) {
+          console.error(e);
+          return Response.json({ error: "Erreur transfert WAV" }, { status: 503 });
+        }
+      },
+    },
+  },
+});
