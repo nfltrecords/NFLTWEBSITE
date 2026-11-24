@@ -25,9 +25,7 @@ describe("email message encoding", () => {
   });
 
   it("wraps base64 at the requested line width", () => {
-    expect(wrapBase64("abcdefghijklmnopqrstuvwxyz", 10)).toBe(
-      "abcdefghij\r\nklmnopqrst\r\nuvwxyz",
-    );
+    expect(wrapBase64("abcdefghijklmnopqrstuvwxyz", 10)).toBe("abcdefghij\r\nklmnopqrst\r\nuvwxyz");
   });
 
   it("rejects unsafe email addresses and header injection", () => {
