@@ -8,11 +8,7 @@ export type EmailMessageInput = {
 };
 
 export function isSafeEmailAddress(value: string): boolean {
-  return (
-    value.length <= 254 &&
-    !/[\r\n<>\s]/.test(value) &&
-    /^[^@]+@[^@]+\.[^@]+$/.test(value)
-  );
+  return value.length <= 254 && !/[\r\n<>\s]/.test(value) && /^[^@]+@[^@]+\.[^@]+$/.test(value);
 }
 
 export function encodeBase64Utf8(value: string): string {
