@@ -67,8 +67,7 @@ async function markShopEmailPending(orderId: string, error: string): Promise<voi
   await shopEnv.DB.prepare(
     "UPDATE shop_email_deliveries SET status = 'pending', updated_at = CURRENT_TIMESTAMP, last_error = ? WHERE order_id = ? AND status = 'sending'",
   )
-    .bind(error.slice(0, 200))
-    .bind(orderId)
+    .bind(error.slice(0, 200), orderId)
     .run();
 }
 
