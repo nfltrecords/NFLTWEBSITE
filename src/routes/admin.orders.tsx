@@ -13,9 +13,21 @@ type AdminOrder = {
   created_at: string;
   paid_at: string | null;
   items: { upc: string; quantity: number; title: string }[];
+  email_delivery: {
+    status: "pending" | "sending" | "sent";
+    attempts: number;
+    last_error: string;
+    sent_at: string | null;
+  } | null;
 };
 
 type OrdersResponse = { ok: boolean; orders?: AdminOrder[]; error?: string };
+type RetryEmailResponse = {
+  ok: boolean;
+  status?: string;
+  error?: string;
+  delivery?: AdminOrder["email_delivery"];
+};
 
 const statusLabels: Record<AdminOrder["status"], string> = {
   pending: "En attente",
@@ -40,6 +52,49 @@ function Page() {
   const [orders, setOrders] = useState<AdminOrder[]>([]);
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
+  const [retryingId, setRetryingId] = useState<string | null>(null);
+
+  async function retryEmail(orderId: string) {
+    if (!code || retryingId) return;
+    setRetryingId(orderId);
+    setMessage("");
+    try {
+      const response = await fetch("/api/admin/orders", {
+        method: "POST",
+        headers: {
+          "x-nflt-admin-code": code,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ action: "retry-email", orderId }),
+      });
+      const data = (await response.json()) as RetryEmailResponse;
+      if (!response.ok || !data.status) throw new Error(data.error ?? "Échec de l'envoi");
+      if (data.delivery) {
+        setOrders((current) =>
+          current.map((order) =>
+            order.id === orderId ? { ...order, email_delivery: data.delivery ?? null } : order,
+          ),
+        );
+      }
+      setMessage(
+        data.status === "sent"
+          ? "Email envoyé."
+          : data.status === "not_configured"
+            ? "SMTP non configuré : le secret SMTP_PASSWORD doit être ajouté dans Cloudflare."
+            : data.status === "not_ready"
+              ? "Les masters WAV de cette commande ne sont pas complets."
+              : data.status === "retry"
+                ? "Échec temporaire de l'envoi. Une nouvelle tentative est possible."
+                : data.status === "already_sent"
+                  ? "Email déjà envoyé."
+                  : "Envoi en cours ou en attente.",
+      );
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Erreur de relance email");
+    } finally {
+      setRetryingId(null);
+    }
+  }
 
   async function loadOrders() {
     if (!code || busy) return;
@@ -114,6 +169,7 @@ function Page() {
                 <th className="p-3">Montant</th>
                 <th className="p-3">Statut</th>
                 <th className="p-3">Transaction PayPal</th>
+                <th className="p-3">Email client</th>
               </tr>
             </thead>
             <tbody>
@@ -148,11 +204,45 @@ function Page() {
                   </td>
                   <td className="p-3">{statusLabels[order.status]}</td>
                   <td className="p-3 text-xs">{order.paypal_transaction_id ?? "—"}</td>
+                  <td className="p-3">
+                    <div>
+                      {order.email_delivery?.status === "sent"
+                        ? "Envoyé"
+                        : order.email_delivery?.status === "sending"
+                          ? "En cours"
+                          : order.email_delivery?.status === "pending"
+                            ? "En attente"
+                            : "Non programmé"}
+                    </div>
+                    {order.email_delivery && (
+                      <div className="text-xs opacity-70">
+                        {order.email_delivery.attempts} tentative(s)
+                        {order.email_delivery.sent_at
+                          ? ` · ${new Date(order.email_delivery.sent_at).toLocaleString("fr-FR")}`
+                          : ""}
+                      </div>
+                    )}
+                    {order.email_delivery?.last_error && (
+                      <div className="mt-1 text-xs text-red-600">
+                        {order.email_delivery.last_error}
+                      </div>
+                    )}
+                    {order.status === "paid" && (
+                      <Button
+                        size="sm"
+                        className="mt-2"
+                        disabled={retryingId !== null || busy}
+                        onClick={() => retryEmail(order.id)}
+                      >
+                        {retryingId === order.id ? "Envoi…" : "Envoyer / Renvoyer"}
+                      </Button>
+                    )}
+                  </td>
                 </tr>
               ))}
               {orders.length === 0 && (
                 <tr>
-                  <td className="p-3 opacity-70" colSpan={6}>
+                  <td className="p-3 opacity-70" colSpan={7}>
                     Aucune commande chargée.
                   </td>
                 </tr>
