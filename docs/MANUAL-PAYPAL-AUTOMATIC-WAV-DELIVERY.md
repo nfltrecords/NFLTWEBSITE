@@ -1,34 +1,31 @@
-# PayPal.Me — livraison WAV automatique
+# PayPal — livraison WAV via Cloudflare
 
-## Parcours prévu
+## Parcours
 
-1. La boutique crée une commande privée dans `shop_orders`.
-2. Le client règle via le parcours PayPal déjà présent et ajoute la référence de commande demandée.
-3. Le serveur vérifie la notification PayPal auprès de PayPal.
-4. Le paiement n'est accepté que si le statut, le destinataire, la devise, le montant et la référence correspondent à la commande.
-5. Après confirmation, le serveur associe l'UPC au chemin du master dans le bucket Supabase Storage privé `nflt-private-audio`.
-6. Le serveur crée un lien HMAC valable 7 jours et envoie le lien par Resend.
+1. La boutique crée une commande `pending` dans Cloudflare D1.
+2. Le client règle via le checkout PayPal standard.
+3. Le serveur transmet l’IPN brut à PayPal pour vérification cryptographique.
+4. Le serveur contrôle la référence, le destinataire, le statut, la devise et le montant exacts avant de passer la commande à `paid` dans D1.
+5. La page de confirmation interroge le statut et propose le WAV dès que le master associé à l’UPC est présent dans KV.
+6. Le Worker diffuse le fichier en blocs depuis Cloudflare KV.
 
-**Limite à vérifier :** le flux PayPal.Me/IPN dépend de la présence de la référence saisie par le client dans le champ `memo` de la notification IPN. Ce comportement doit être confirmé par un paiement réel de faible montant avant de considérer la livraison comme validée.
+## Stockage
 
-## Migrations
+- D1 : `shop_orders` et `shop_release_assets`.
+- KV : namespace `nflt-audio-chunks`, valeurs binaires de 20 Mio maximum par bloc.
+- Le chemin de téléchargement vérifie que la commande est payée avant de lire le premier bloc.
+- L’envoi par e-mail n’est pas inclus dans cette version.
 
-Appliquer dans l'ordre les migrations de commandes, puis :
+## Transfert des masters
 
-- `drizzle/migrations/0003_shop_order_delivery.sql`
-- `drizzle/migrations/0004_paypal_ipn_transaction.sql`
-- `drizzle/migrations/0005_supabase_private_audio_storage.sql`
+La page `/admin/audio` utilise `ADMIN_ORDERS_CODE` et envoie les WAV en blocs. Chaque bloc est contrôlé avant que la ligne d’association UPC soit validée dans D1. Limite d’upload actuelle : 110 Mio par fichier.
 
-Ne jamais exposer la clé service-role au navigateur.
+## Vérifications avant production
 
-## Secrets serveur
+- Tests, lint et build GitHub réussis.
+- Tous les masters attendus chargés dans KV et associés au bon UPC.
+- Test réel PayPal/IPN avec montant, devise et destinataire exacts.
+- Téléchargement complet du WAV depuis la page de confirmation.
+- Vérification qu’une commande non payée ne permet aucun téléchargement.
 
-Configurer sur le Worker `nfltwebsite` : `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `DELIVERY_TOKEN_SECRET`, `RESEND_API_KEY`, `DELIVERY_FROM_EMAIL` et `ADMIN_ORDERS_CODE`.
-
-## Correspondance et transfert des masters
-
-Chaque ligne de `shop_release_assets` doit associer un UPC existant à un `storage_object_path` exact dans le bucket privé. Ne pas utiliser les aperçus MP3 comme masters et ne pas deviner les correspondances manquantes.
-
-## Tests avant activation
-
-Vérifier la notification PayPal, la commande payée, l'e-mail reçu, le téléchargement WAV réel, l'expiration du lien et le refus d'un token invalide. Le checkout PayPal existant n'est pas désactivé ni remplacé par ce changement.
+Le flux PayPal Orders API distinct reste désactivé. Le checkout PayPal manuel est conservé.
