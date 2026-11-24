@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { env } from "cloudflare:workers";
 import { releases } from "@/lib/catalogue";
 import { shopEnv, type ShopOrder } from "@/lib/shop-db.server";
+import { getShopEmailDelivery, sendOrderEmailForOrder } from "@/lib/shop-email-delivery.server";
 
 type OrderItem = { upc: string; quantity: number; title: string };
 
@@ -75,13 +76,19 @@ export const Route = createFileRoute("/api/admin/orders")({
 
           const statement = status
             ? shopEnv.DB.prepare(
-                "SELECT id, release_upc, buyer_email, amount_cents, currency, status, paypal_transaction_id, created_at, paid_at FROM shop_orders WHERE status = ? ORDER BY created_at DESC LIMIT ?",
+                "SELECT o.id, o.release_upc, o.buyer_email, o.amount_cents, o.currency, o.status, o.paypal_transaction_id, o.created_at, o.paid_at, e.status AS email_status, e.attempts AS email_attempts, e.last_error AS email_last_error, e.sent_at AS email_sent_at FROM shop_orders o LEFT JOIN shop_email_deliveries e ON e.order_id = o.id WHERE o.status = ? ORDER BY o.created_at DESC LIMIT ?",
               ).bind(status, limit)
             : shopEnv.DB.prepare(
-                "SELECT id, release_upc, buyer_email, amount_cents, currency, status, paypal_transaction_id, created_at, paid_at FROM shop_orders ORDER BY created_at DESC LIMIT ?",
+                "SELECT o.id, o.release_upc, o.buyer_email, o.amount_cents, o.currency, o.status, o.paypal_transaction_id, o.created_at, o.paid_at, e.status AS email_status, e.attempts AS email_attempts, e.last_error AS email_last_error, e.sent_at AS email_sent_at FROM shop_orders o LEFT JOIN shop_email_deliveries e ON e.order_id = o.id ORDER BY o.created_at DESC LIMIT ?",
               ).bind(limit);
 
-          const result = await statement.all<ShopOrder>();
+          type AdminOrderRow = ShopOrder & {
+            email_status: "pending" | "sending" | "sent" | null;
+            email_attempts: number | null;
+            email_last_error: string | null;
+            email_sent_at: string | null;
+          };
+          const result = await statement.all<AdminOrderRow>();
           const orders = (result.results ?? []).map((order) => ({
             id: order.id,
             buyer_email: order.buyer_email,
@@ -92,6 +99,14 @@ export const Route = createFileRoute("/api/admin/orders")({
             created_at: order.created_at,
             paid_at: order.paid_at,
             items: parseOrderItems(order.release_upc),
+            email_delivery: order.email_status
+              ? {
+                  status: order.email_status,
+                  attempts: order.email_attempts ?? 0,
+                  last_error: order.email_last_error ?? "",
+                  sent_at: order.email_sent_at,
+                }
+              : null,
           }));
 
           return Response.json(
@@ -104,6 +119,38 @@ export const Route = createFileRoute("/api/admin/orders")({
             { ok: false, error: "Impossible de charger les commandes" },
             { status: 503 },
           );
+        }
+      },
+      POST: async ({ request }) => {
+        try {
+          if (!(await authorized(request))) {
+            return Response.json({ ok: false, error: "Accès refusé" }, { status: 401 });
+          }
+          const body = (await request.json().catch(() => null)) as
+            | { action?: string; orderId?: string }
+            | null;
+          if (
+            body?.action !== "retry-email" ||
+            typeof body.orderId !== "string" ||
+            !/^[0-9a-f-]{36}$/i.test(body.orderId)
+          ) {
+            return Response.json({ ok: false, error: "Demande invalide" }, { status: 400 });
+          }
+
+          const result = await sendOrderEmailForOrder(body.orderId, true);
+          const delivery = await getShopEmailDelivery(body.orderId);
+          return Response.json(
+            {
+              ok: result.status === "sent" || result.status === "already_sent",
+              status: result.status,
+              error: result.error,
+              delivery,
+            },
+            { headers: { "Cache-Control": "private, no-store" } },
+          );
+        } catch (error) {
+          console.error("Admin order email retry failed", error);
+          return Response.json({ ok: false, error: "Impossible de relancer l'email" }, { status: 503 });
         }
       },
     },
