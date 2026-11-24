@@ -47,8 +47,8 @@ export function ShopPage({ locale }: { locale: Locale }) {
             <p className="body-copy">
               {text(
                 locale,
-                "Parcourez le catalogue NFLT. Après confirmation sécurisée du paiement PayPal, le fichier WAV est envoyé automatiquement à l’adresse e-mail indiquée.",
-                "Browse the NFLT catalogue. After PayPal securely confirms the payment, the WAV file is sent automatically to the supplied email address.",
+                "Parcourez le catalogue NFLT. Après confirmation sécurisée du paiement PayPal, votre fichier WAV est disponible directement sur la page de confirmation.",
+                "Browse the NFLT catalogue. After PayPal securely confirms the payment, your WAV file is available directly on the confirmation page.",
               )}
             </p>
             <div className="flex flex-wrap gap-4">
