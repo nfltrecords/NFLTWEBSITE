@@ -17,14 +17,7 @@ export type ShopEmailDelivery = {
 };
 
 export type SendOrderEmailResult = {
-  status:
-    | "sent"
-    | "already_sent"
-    | "not_paid"
-    | "not_ready"
-    | "not_configured"
-    | "busy"
-    | "retry";
+  status: "sent" | "already_sent" | "not_paid" | "not_ready" | "not_configured" | "busy" | "retry";
   error?: string;
 };
 
@@ -156,7 +149,8 @@ export async function sendOrderEmailForOrder(
     await markShopEmailSent(order.id);
     return { status: "sent" };
   } catch (error) {
-    const message = error instanceof Error ? error.message.replace(/[\r\n]/g, " ") : "SMTP delivery failed";
+    const message =
+      error instanceof Error ? error.message.replace(/[\r\n]/g, " ") : "SMTP delivery failed";
     await markShopEmailPending(order.id, message);
     return { status: "retry", error: message.slice(0, 200) };
   }
