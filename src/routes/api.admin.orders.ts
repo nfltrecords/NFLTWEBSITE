@@ -100,7 +100,10 @@ export const Route = createFileRoute("/api/admin/orders")({
           );
         } catch (error) {
           console.error("Admin order listing failed", error);
-          return Response.json({ ok: false, error: "Impossible de charger les commandes" }, { status: 503 });
+          return Response.json(
+            { ok: false, error: "Impossible de charger les commandes" },
+            { status: 503 },
+          );
         }
       },
     },
