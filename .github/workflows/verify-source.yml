@@ -25,4 +25,5 @@ jobs:
       - name: Lint
         run: npm run lint
       - name: Build (no deployment)
+        if: always() && !cancelled()
         run: npm run build
