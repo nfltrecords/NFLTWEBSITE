@@ -26,6 +26,7 @@ type RetryEmailResponse = {
   ok: boolean;
   status?: string;
   error?: string;
+  recipient?: string;
   delivery?: AdminOrder["email_delivery"];
 };
 
@@ -53,6 +54,32 @@ function Page() {
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
   const [retryingId, setRetryingId] = useState<string | null>(null);
+  const [testBusy, setTestBusy] = useState(false);
+
+  async function testEmail() {
+    if (!code || testBusy) return;
+    setTestBusy(true);
+    setMessage("");
+    try {
+      const response = await fetch("/api/admin/orders", {
+        method: "POST",
+        headers: {
+          "x-nflt-admin-code": code,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ action: "test-email" }),
+      });
+      const data = (await response.json()) as RetryEmailResponse;
+      if (!response.ok || !data.ok) {
+        throw new Error(data.error ?? "Configuration email indisponible");
+      }
+      setMessage(`Email de test envoyé à ${data.recipient ?? "nflt-records@nflt-records.com"}. Vérifie la boîte de réception et les indésirables.`);
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Erreur de test email");
+    } finally {
+      setTestBusy(false);
+    }
+  }
 
   async function retryEmail(orderId: string) {
     if (!code || retryingId) return;
@@ -127,7 +154,7 @@ function Page() {
           déterminés par la notification PayPal IPN vérifiée ; cette page ne permet pas de marquer
           manuellement une commande comme payée.
         </p>
-        <div className="mt-6 grid gap-4 md:grid-cols-[1fr_220px_auto] md:items-end">
+        <div className="mt-6 grid gap-4 md:grid-cols-[1fr_220px_auto_auto] md:items-end">
           <label className="grid gap-2">
             Code administrateur
             <input
@@ -154,6 +181,13 @@ function Page() {
           </label>
           <Button className="editorial-action" disabled={!code || busy} onClick={loadOrders}>
             {busy ? "Chargement…" : "Charger les commandes"}
+          </Button>
+          <Button
+            className="editorial-action"
+            disabled={!code || busy || testBusy || retryingId !== null}
+            onClick={testEmail}
+          >
+            {testBusy ? "Envoi…" : "Tester l'email"}
           </Button>
         </div>
         <p role="status" className="body-copy mt-3">
