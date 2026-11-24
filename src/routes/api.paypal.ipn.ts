@@ -1,55 +1,97 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { getShopOrder, markShopOrderPaid } from "@/lib/shop-db.server";
-async function processIpn(request: Request) {
+import {
+  getShopOrder,
+  getShopOrderByTransactionId,
+  markShopOrderPaid,
+} from "@/lib/shop-db.server";
+import { matchesPayPalCart, parsePayPalOrderManifest } from "@/lib/paypal-ipn";
+
+function acknowledgeIpn(): Response {
+  return new Response("OK", { headers: { "Cache-Control": "no-store" } });
+}
+
+async function processIpn(request: Request): Promise<Response> {
   const raw = await request.text();
-  if (!raw || raw.length > 64000) return new Response("Invalid payload", { status: 400 });
+  if (!raw || raw.length > 64000) return acknowledgeIpn();
+
   const verify = await fetch("https://ipnpb.paypal.com/cgi-bin/webscr", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: "cmd=_notify-validate&" + raw,
   });
   if (!verify.ok) return new Response("PayPal unavailable", { status: 503 });
-  if ((await verify.text()).trim() !== "VERIFIED")
-    return new Response("Invalid IPN", { status: 400 });
-  const d = new URLSearchParams(raw),
-    id = [d.get("custom"), d.get("invoice")].find((v) => !!v && /^[0-9a-f-]{36}$/i.test(v)) ?? "",
-    txn = (d.get("txn_id") ?? "").trim(),
-    receiver = (d.get("receiver_email") ?? d.get("business") ?? "").trim().toLowerCase(),
-    amount = Number(d.get("mc_gross"));
+  if ((await verify.text()).trim() !== "VERIFIED") return acknowledgeIpn();
+
+  const data = new URLSearchParams(raw);
+  const id =
+    [data.get("custom"), data.get("invoice")].find(
+      (value) => !!value && /^[0-9a-f-]{36}$/i.test(value),
+    ) ?? "";
+  const transactionId = (data.get("txn_id") ?? "").trim();
+  const receiver = (data.get("receiver_email") ?? data.get("business") ?? "")
+    .trim()
+    .toLowerCase();
+  const amount = Number(data.get("mc_gross"));
+
   if (
     !id ||
-    !txn ||
+    !transactionId ||
     receiver !== "encoresarbakane@gmail.com" ||
-    d.get("payment_status") !== "Completed" ||
-    d.get("mc_currency") !== "EUR" ||
-    !Number.isFinite(amount)
-  )
-    return new Response("Payment rejected", { status: 400 });
+    data.get("payment_status") !== "Completed" ||
+    data.get("mc_currency") !== "EUR" ||
+    !Number.isFinite(amount) ||
+    amount <= 0
+  ) {
+    return acknowledgeIpn();
+  }
+
   const order = await getShopOrder(id);
-  if (!order) return new Response("Order not found", { status: 503 });
-  if (Math.round(amount * 100) !== order.amount_cents || order.currency !== "EUR")
-    return new Response("Amount mismatch", { status: 400 });
+  if (!order) return acknowledgeIpn();
+
+  const expectedItems = parsePayPalOrderManifest(order.release_upc);
+  if (!matchesPayPalCart(data, expectedItems)) return acknowledgeIpn();
+  if (Math.round(amount * 100) !== order.amount_cents || order.currency !== "EUR") {
+    return acknowledgeIpn();
+  }
+
+  const transactionOwner = await getShopOrderByTransactionId(transactionId);
+  if (transactionOwner && transactionOwner.id !== id) return acknowledgeIpn();
+
   if (order.status === "paid") {
-    if (order.paypal_transaction_id !== txn)
-      return new Response("Transaction conflict", { status: 409 });
-  } else if (order.status === "pending") {
-    const changed = await markShopOrderPaid(id, txn);
-    if (!changed) {
-      const latest = await getShopOrder(id);
-      if (!latest || latest.status !== "paid" || latest.paypal_transaction_id !== txn)
-        return new Response("Retry", { status: 503 });
+    return acknowledgeIpn();
+  }
+  if (order.status !== "pending") return acknowledgeIpn();
+
+  let changed = false;
+  try {
+    changed = await markShopOrderPaid(id, transactionId);
+  } catch (error) {
+    const owner = await getShopOrderByTransactionId(transactionId);
+    if (owner && owner.id !== id) return acknowledgeIpn();
+    throw error;
+  }
+
+  if (!changed) {
+    const latest = await getShopOrder(id);
+    if (latest?.status === "paid" && latest.paypal_transaction_id === transactionId) {
+      return acknowledgeIpn();
     }
-  } else return new Response("Order closed", { status: 409 });
-  return new Response("OK", { headers: { "Cache-Control": "no-store" } });
+    const owner = await getShopOrderByTransactionId(transactionId);
+    if (owner && owner.id !== id) return acknowledgeIpn();
+    return new Response("Retry", { status: 503 });
+  }
+
+  return acknowledgeIpn();
 }
+
 export const Route = createFileRoute("/api/paypal/ipn")({
   server: {
     handlers: {
       POST: async ({ request }) => {
         try {
           return await processIpn(request);
-        } catch (e) {
-          console.error("IPN failed", e);
+        } catch (error) {
+          console.error("IPN failed", error);
           return new Response("Retry", { status: 503 });
         }
       },
