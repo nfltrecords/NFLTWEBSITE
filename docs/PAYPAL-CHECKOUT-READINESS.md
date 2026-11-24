@@ -60,11 +60,26 @@ La vérification continue inclut les tests Vitest, un contrôle TypeScript stric
 
 Ces protections sont des contrôles de code et de données. Elles ne constituent pas une preuve de paiement PayPal ou de livraison client réelle.
 
+## Email automatique — code prêt, identifiant SMTP manquant
+
+Le mécanisme d'email est maintenant intégré au checkout existant :
+
+- La table D1 `shop_email_deliveries` a été créée en production ; le script correspondant est conservé dans `migrations/d1/0001_shop_email_deliveries.sql`.
+- L'envoi utilise la boîte LWS existante via SMTP TLS sur `mail.nflt-records.com:465`. Le DNS contient déjà MX, SPF, DKIM et DMARC ; le serveur mail est DNS-only.
+- Le Worker dispose des variables `SMTP_HOST`, `SMTP_PORT`, `SMTP_FROM` et `SMTP_USER`. Aucun abonnement Workers payant n'est nécessaire pour cette voie SMTP.
+- Le seul élément manquant est le secret Cloudflare `SMTP_PASSWORD`, c'est-à-dire le mot de passe de la boîte `nflt-records@nflt-records.com`. Il ne doit pas être placé dans GitHub ni transmis dans le chat.
+- Après IPN vérifié, l'email est ajouté à une file D1 idempotente. L'IPN et la page de confirmation peuvent relancer l'envoi ; la page `/admin/orders` permet le renvoi manuel et le test SMTP.
+- L'identifiant Message-ID est stable par commande ; les tentatives sont comptées et un envoi resté bloqué plus de dix minutes peut être repris.
+
+Pour activer l'envoi, ajouter `SMTP_PASSWORD` comme secret dans Cloudflare : **Workers & Pages → nfltwebsite → Settings → Variables and Secrets → Add secret**. Ensuite, utiliser le bouton **Tester l'email** dans `/admin/orders` et vérifier la réception dans la boîte NFLT RECORDS.
+
+Aucun email client n'a encore été envoyé ni reçu ; le test réel attend l'ajout du secret.
+
 ## Points non validés — aucune déclaration de réussite
 
 - Les gestionnaires de remboursement, inversion et annulation d'inversion sont codés, mais aucun test IPN réel ni campagne PayPal Sandbox complète n'a été effectué.
 - Aucun paiement réel n'a été réalisé.
-- Aucun email automatique de commande ou de téléchargement n'a été envoyé ou reçu.
+- Aucun email client de commande ou de téléchargement n'a encore été envoyé ou reçu ; le code est prêt, mais le secret SMTP manque.
 - Le DNS du domaine comporte des enregistrements de messagerie (MX, SPF et DKIM vers `mail.nflt-records.com`), mais aucun identifiant SMTP ou service d'envoi n'est configuré dans le Worker.
 - Le vendeur légal par produit et territoire, les droits de chaque sortie, la TVA, les informations consommateurs, les remboursements et les documents juridiques restent à valider.
 - Le statut payé n'a pas été testé de bout en bout avec une transaction PayPal confirmée.
@@ -73,7 +88,7 @@ Ces protections sont des contrôles de code et de données. Elles ne constituent
 
 1. Récupérer les WAV manquants des cinq sorties vérifiées, les six WAV manquants de NOUS Y SOMMES et le master de Hustle & Grind une fois son nombre de pistes confirmé.
 2. Compléter et vérifier les associations UPC → WAV ; ne jamais convertir un M4A en faux master WAV.
-3. Configurer un expéditeur email existant et effectuer un vrai test de réception, avec reprise idempotente.
+3. Ajouter le secret SMTP_PASSWORD dans Cloudflare, envoyer le test email depuis /admin/orders, puis vérifier la réception réelle et la reprise idempotente.
 4. Tester PayPal Classic/IPN en environnement contrôlé : panier multi-articles, doublons, refus, remboursement et inversion.
 5. Valider vendeur légal, territoires, droits, TVA et obligations consommateurs.
 6. Obtenir l'autorisation explicite du propriétaire avant d'ouvrir le checkout en production.
