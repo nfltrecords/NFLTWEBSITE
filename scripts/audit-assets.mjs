@@ -15,9 +15,9 @@ const previewMapSource = readFileSync("src/lib/previews.ts", "utf8");
 const mappedPreviewPaths = [
   ...previewMapSource.matchAll(/"(\/assets\/previews\/[^"]+\.mp3)"/g),
 ].map((match) => match[1]);
-const mappedPreviewUPCs = [
-  ...previewMapSource.matchAll(/^\s*"([0-9]{12,14})":\s*\[/gm),
-].map((match) => match[1]);
+const mappedPreviewUPCs = [...previewMapSource.matchAll(/^\s*"([0-9]{12,14})":\s*\[/gm)].map(
+  (match) => match[1],
+);
 const mappedPreviewNames = new Set(mappedPreviewPaths.map((src) => src.split("/").at(-1)));
 const unmappedPreviewFiles = previews.filter((name) => !mappedPreviewNames.has(name));
 const duplicateMappedPreviewPaths = mappedPreviewPaths.filter(
