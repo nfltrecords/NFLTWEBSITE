@@ -186,9 +186,8 @@ export function ShopPage({ locale }: { locale: Locale }) {
                             data: { upc: release.upc, email: buyerEmail.trim() },
                           });
                           if (!result.ok) throw new Error("Sortie indisponible.");
-                          window.location.assign(
-                            `/commande/paiement?order=${encodeURIComponent(result.orderId)}&amount=${encodeURIComponent(result.amount)}&title=${encodeURIComponent(result.releaseTitle)}`,
-                          );
+                          if (!result.paymentUrl) throw new Error("Lien PayPal indisponible.");
+                          window.location.assign(result.paymentUrl);
                         } catch {
                           setCheckoutState("error");
                           setCheckoutMessage(
@@ -208,8 +207,8 @@ export function ShopPage({ locale }: { locale: Locale }) {
                     <p className="text-sm text-muted-foreground">
                       {text(
                         locale,
-                        "Après la création de la commande, une page affiche sa référence unique à copier dans le motif PayPal. Le paiement est vérifié automatiquement par PayPal avant l’envoi du WAV.",
-                        "After the order is created, a page displays its unique reference to copy into the PayPal note. PayPal automatically verifies the payment before the WAV is sent.",
+                        "La commande est créée puis vous êtes redirigé directement vers le paiement PayPal sécurisé. PayPal transmet la référence de commande pour vérification automatique avant l’envoi du WAV.",
+                        "Your order is created and you are redirected directly to secure PayPal checkout. PayPal sends the order reference for automatic verification before the WAV is delivered.",
                       )}
                     </p>
                   </div>
@@ -217,8 +216,8 @@ export function ShopPage({ locale }: { locale: Locale }) {
                 <p className="body-copy mt-4 text-sm">
                   {text(
                     locale,
-                    "Le bouton ouvre PayPal.Me avec le montant de la sortie. Après confirmation PayPal, le système envoie automatiquement le master WAV à l’adresse indiquée.",
-                    "The button opens PayPal.Me with the release amount. After PayPal confirmation, the system automatically sends the WAV master to the supplied email address.",
+                    "Le bouton ouvre le paiement PayPal standard avec la référence de commande intégrée. Après confirmation vérifiée par PayPal, le système envoie automatiquement le master WAV à l’adresse indiquée.",
+                    "The button opens standard PayPal checkout with the order reference included. After PayPal verification, the system automatically sends the WAV master to the supplied email address.",
                   )}
                 </p>
               </>
