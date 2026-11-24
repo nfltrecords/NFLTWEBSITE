@@ -3,6 +3,7 @@ import { getShopOrder } from "@/lib/shop-db.server";
 import { releases } from "@/lib/catalogue";
 import { getCompleteWavTracks } from "@/lib/delivery.server";
 import { safeWavDownloadName } from "@/lib/audio-assets";
+import { sendOrderEmailForOrder } from "@/lib/shop-email-delivery.server";
 
 function parseItems(value: string): { upc: string; quantity: number }[] {
   try {
@@ -44,6 +45,7 @@ export const Route = createFileRoute("/api/order-status")({
             );
           }
 
+          await sendOrderEmailForOrder(id);
           const items = parseItems(order.release_upc);
           if (!items.length) {
             return Response.json(
