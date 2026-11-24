@@ -12,5 +12,8 @@ export function hasCompleteWavMasterSet(
   expectedTrackCount: number,
 ): boolean {
   if (!Number.isSafeInteger(expectedTrackCount) || expectedTrackCount < 1) return false;
-  return fileNames.filter(isWavMasterFileName).length === expectedTrackCount;
+  const wavNames = fileNames
+    .filter(isWavMasterFileName)
+    .map((fileName) => fileName.trim().toLowerCase());
+  return wavNames.length === expectedTrackCount && new Set(wavNames).size === expectedTrackCount;
 }
