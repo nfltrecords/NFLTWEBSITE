@@ -8,6 +8,7 @@ import {
   priceForTrackCount,
   releasePriceCents,
   provisionalReleaseTrackCounts,
+  verifiedReleaseTrackCounts,
 } from "@/lib/commerce";
 import { releases } from "@/lib/catalogue";
 import { checkoutActivationApproved, payPalCheckoutIsEnabled } from "@/lib/paypal-checkout-gate";
@@ -41,6 +42,15 @@ describe("Commerce inquiry rules", () => {
     for (const count of [6, 7, 18, 30]) expect(priceForTrackCount(count)).toBe(1999);
     for (const count of [2, 3, 4, undefined, 0, -1, 1.5, NaN, Infinity])
       expect(priceForTrackCount(count)).toBeNull();
+  });
+
+  it("keeps only owner-confirmed track counts in the verified catalogue", () => {
+    expect(verifiedReleaseTrackCounts).toEqual({
+      "199955715135": 1,
+      "199955742094": 8,
+      "199956222809": 9,
+      "199956554184": 5,
+    });
   });
 
   it("shows provisional reference prices for all 18 catalogue releases while checkout stays closed", () => {
