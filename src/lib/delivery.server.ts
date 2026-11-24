@@ -56,12 +56,11 @@ export async function getCompleteWavTracks(upc: string): Promise<ShopAsset[] | n
       if (!Number.isInteger(asset.chunk_count) || asset.chunk_count < 1 || asset.chunk_count > 10) {
         return false;
       }
-      const chunks = await Promise.all(
-        Array.from({ length: asset.chunk_count }, (_, index) =>
-          shopEnv.AUDIO_KV.head(`${asset.asset_key}:${index}`),
-        ),
-      );
-      return chunks.every(Boolean);
+      const listed = await shopEnv.AUDIO_KV.list({ prefix: `${asset.asset_key}:`, limit: 1000 });
+      const chunkNames = new Set(listed.keys.map((entry) => entry.name));
+      return Array.from({ length: asset.chunk_count }, (_, index) =>
+        chunkNames.has(`${asset.asset_key}:${index}`),
+      ).every(Boolean);
     }),
   );
 
