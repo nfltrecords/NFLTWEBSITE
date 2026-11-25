@@ -52,10 +52,10 @@ export const Route = createFileRoute("/api/admin/audio")({
           if (action === "inventory") {
             const [result, assetsResult] = await Promise.all([
               shopEnv.DB.prepare(
-                "SELECT release_upc, COUNT(*) AS wav_count FROM shop_release_assets GROUP BY release_upc",
+                "SELECT release_upc, COUNT(*) AS wav_count FROM shop_release_assets WHERE lower(file_name) LIKE '%.wav' GROUP BY release_upc",
               ).all<{ release_upc: string; wav_count: number }>(),
               shopEnv.DB.prepare(
-                "SELECT release_upc, asset_key, file_name, file_size FROM shop_release_assets ORDER BY release_upc, file_name",
+                "SELECT release_upc, asset_key, file_name, file_size FROM shop_release_assets WHERE lower(file_name) LIKE '%.wav' ORDER BY release_upc, file_name",
               ).all<{
                 release_upc: string;
                 asset_key: string;
@@ -143,7 +143,7 @@ export const Route = createFileRoute("/api/admin/audio")({
             const expectedTrackCount = verifiedReleaseTrackCounts[upc];
             if (expectedTrackCount !== undefined) {
               const current = await shopEnv.DB.prepare(
-                "SELECT COUNT(*) AS wav_count FROM shop_release_assets WHERE release_upc = ?",
+                "SELECT COUNT(*) AS wav_count FROM shop_release_assets WHERE release_upc = ? AND lower(file_name) LIKE '%.wav'",
               )
                 .bind(upc)
                 .first<{ wav_count: number }>();
@@ -322,7 +322,7 @@ export const Route = createFileRoute("/api/admin/audio")({
                     )
                     .run()
                 : await shopEnv.DB.prepare(
-                    "INSERT OR IGNORE INTO shop_release_assets (release_upc, asset_key, file_name, file_size, chunk_count) SELECT ?, ?, ?, ?, ? WHERE (SELECT COUNT(*) FROM shop_release_assets WHERE release_upc = ?) < ?",
+                    "INSERT OR IGNORE INTO shop_release_assets (release_upc, asset_key, file_name, file_size, chunk_count) SELECT ?, ?, ?, ?, ? WHERE (SELECT COUNT(*) FROM shop_release_assets WHERE release_upc = ? AND lower(file_name) LIKE '%.wav') < ?",
                   )
                     .bind(
                       session.upc,
@@ -337,7 +337,7 @@ export const Route = createFileRoute("/api/admin/audio")({
 
             if ((insertResult.meta.changes ?? 0) === 0 && !existingAssociation) {
               const latest = await shopEnv.DB.prepare(
-                "SELECT COUNT(*) AS wav_count FROM shop_release_assets WHERE release_upc = ?",
+                "SELECT COUNT(*) AS wav_count FROM shop_release_assets WHERE release_upc = ? AND lower(file_name) LIKE '%.wav'",
               )
                 .bind(session.upc)
                 .first<{ wav_count: number }>();
