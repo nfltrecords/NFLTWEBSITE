@@ -5,7 +5,7 @@
 | N° | Chantier | État | Dépendance / prochaine étape |
 |---:|---|---|---|
 | 1 | Sortie de Lovable / portage du site | Préparation isolée | Les hooks de télémétrie du composant racine ont été retirés dans la branche. Le dossier de travail historique subsiste. Le build Cloudflare Workers Preview de la branche a réussi avec `npx wrangler preview`. La production reste inchangée. Aucun transfert de compte, migration de production ou déploiement n'a été effectué. |
-| 2 | Audio / extraits | Audit technique ajouté | 37 fichiers MP3 de préécoute sont présents dans le dépôt. Le script d'audit calcule désormais leurs empreintes SHA-256 et signale les doublons exacts ainsi que la plage de tailles ; le résultat doit être exécuté et examiné avant toute association titre/fichier. Aucun master n'est publié par cette vérification. |
+| 2 | Audio / extraits | Extraits de 30 secondes supprimés | Les lecteurs, chemins et fichiers MP3 de préécoute ont été retirés du code actif et des archives de préparation. Aucun extrait de 30 secondes ne doit être réintroduit. Les masters complets restent séparés et les téléchargements restent protégés par le contrôle de paiement. |
 | 3 | Catalogue et pochettes | Partiellement vérifié | 18 sorties sont recensées. Certaines associations UPC/pochette et les preuves de dimensions originales doivent être confirmées avant remplacement définitif. |
 | 4 | Prix par sortie | Provisoire | Barème de référence : 9,99 € pour 1 piste, 14,99 € pour 5 pistes, 19,99 € pour 6 pistes ou plus. Les décomptes UPC individuels ne sont pas tous confirmés ; aucun checkout. |
 | 5 | Tableau de bord | Conception et sécurité préparées | SQL de fondation non appliqué ; matrice d'accès et plan de tests RLS documentés. Aucun écran connecté ni compte admin n'existe. Accès au projet Supabase et tests sur environnement de développement requis. |
@@ -16,11 +16,12 @@
 | 10 | Radio NFLT RECORDS NYC RADIO | Préparation seulement | Aucun flux, serveur AzuraCast ou service cloud n'est validé ici. Aucun serveur ou coût supplémentaire créé. |
 | 11 | Structure et gestion des entités | Règles à confirmer par opération | Le propriétaire a précisé que NFLT RECORDS FRANCE concerne les achats de CD physiques en France. Ne pas lui attribuer par défaut les ventes numériques, licences ou autres territoires. Le vendeur et les droits doivent être définis pour chaque opération. |
 
-## Audio — contrôle des préécoutes du 20 novembre 2026
+## Audio — suppression des extraits de 30 secondes (25 novembre 2026)
 
-- Le dépôt contient 37 fichiers MP3 dans `public/assets/previews` et 18 pochettes JPG correspondant aux 18 UPC du catalogue.
-- Le script `scripts/audit-assets.mjs` vérifie désormais les doublons binaires exacts des MP3 (SHA-256) et la plage de tailles des fichiers, en plus du contrôle de présence des pochettes.
-- Ces contrôles ne valident pas à eux seuls la durée réelle, la qualité sonore, le contenu du morceau ni la correspondance entre chaque extrait et sa sortie. Aucune association automatique ni publication de master n'est faite.
+- Les MP3 `*_PREVIEW_30S` et les dossiers `assets/previews` / `public/assets/previews` ne sont plus présents dans le code actif.
+- Les 15 archives de préparation de la bibliothèque qui contenaient ces dossiers ont été nettoyées ; les trois archives de marque/pochettes qui n'en contenaient pas ont été conservées.
+- `scripts/audit-assets.mjs` contrôle désormais l'absence des anciens chemins et composants de préécoute, en plus de la présence des 18 pochettes.
+- Les fichiers M4A conservés dans la bibliothèque ont été mesurés : les 17 fichiers disponibles durent de 71 à 210 secondes. Ils ne sont donc pas des extraits de 30 secondes et restent conservés comme sources, sans remplacer les masters WAV.
 
 ## Boutique — évolution du 20 novembre 2026
 
@@ -40,7 +41,7 @@
 - Le commit `a9784a8` a passé les workflows GitHub Actions NFLT safe verification et Verify source : tests, build sans déploiement et lint ont terminé avec succès. Le commit `3701ac8` intégrant le panier partagé a ensuite passé le build Cloudflare Workers Preview (`npm run build` puis `npx wrangler preview`), `build_outcome: success` le 19 novembre 2026.
 - La Preview Cloudflare utilise `npm run build` puis `npx wrangler preview`. La production est préservée ; aucun déploiement dans `main` n'a été effectué.
 - Ces contrôles valident la compilation et les tests du code de la branche, pas les intégrations externes, le contenu réel de Supabase, le DNS, la messagerie, les paiements, le référencement indexé ou le fonctionnement en production.
-- La PR de préparation reste non fusionnée. Aucun déploiement de production n'a été lancé.
+- La PR d'administration WAV n°8 est fusionnée. Le build Cloudflare Workers de `main` a réussi et la dernière version a été déployée en production le 25 novembre 2026.
 
 ## Tableau de bord — évolution du 20 novembre 2026
 
