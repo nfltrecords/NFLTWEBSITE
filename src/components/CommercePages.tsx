@@ -159,8 +159,8 @@ export function ShopPage({ locale }: { locale: Locale }) {
             <p className="body-copy mt-6">
               {text(
                 locale,
-                "Tarifs indicatifs, calculés à partir de nombres de pistes qui restent à confirmer pour chaque sortie. Le panier permet de préparer une sélection, mais aucune commande ni aucun paiement n’est encore accepté. Les CD physiques, stocks et livraisons ne sont pas encore configurés.",
-                "Indicative prices based on track counts that still require confirmation for each release. The cart lets you prepare a selection, but orders and payments are not yet accepted. Physical CDs, inventory and shipping are not configured.",
+                "Tarifs indicatifs calculés à partir des tracklists vérifiées du catalogue. Le panier permet de préparer une sélection, mais aucune commande ni aucun paiement n’est accepté tant que les conditions commerciales et la livraison sécurisée des masters WAV ne sont pas validées. Les CD physiques, les stocks et les expéditions restent à configurer.",
+                "Indicative prices based on the catalogue's verified tracklists. The cart lets you prepare a selection, but orders and payments remain disabled until commercial terms and secure WAV master delivery are validated. Physical CDs, inventory and shipping still need configuration.",
               )}
             </p>
           </section>
