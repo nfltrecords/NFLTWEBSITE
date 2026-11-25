@@ -23,7 +23,8 @@ Au 25 novembre 2026, `src/lib/commerce.ts` contient 18 UPC dans `verifiedRelease
 | 199751613871 | Ma Luxure | 1 | 9,99 € |
 | 199951252436 | L'écran vient de chez nous (Radio Edit) | 1 | 9,99 € |
 | 199954147302 | NFLT Social Community (The Most Advanced Societies) | 1 | 9,99 € |
-| 199955701558 | Dilemma (Radio Edit) | 1 | 9,99 € |\n| 199955715203 | Hustle & Grind (Radio Edit) | 1 | 9,99 € |
+| 199955701558 | Dilemma (Radio Edit) | 1 | 9,99 € |
+| 199955715203 | Hustle & Grind (Radio Edit) | 1 | 9,99 € |
 | 199955715135 | #NEVERFAKELIKETHEM (Chapter One) | 1 | 9,99 € |
 | 199955740199 | The Luxury - The Highest - Unequivocal | 1 | 9,99 € |
 | 199955742094 | 30.000 GÉNOCIDES | 8 | 19,99 € |
