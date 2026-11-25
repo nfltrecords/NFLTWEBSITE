@@ -305,8 +305,7 @@ export const Route = createFileRoute("/api/admin/audio")({
                 .bind(session.upc)
                 .first<{ wav_count: number }>();
               const trackLimitReached =
-                expectedTrackCount !== undefined &&
-                (latest?.wav_count ?? 0) >= expectedTrackCount;
+                expectedTrackCount !== undefined && (latest?.wav_count ?? 0) >= expectedTrackCount;
               await shopEnv.AUDIO_R2.delete(session.objectKey);
               await shopEnv.AUDIO_KV.delete(`upload:${sessionId}`);
               await Promise.all(
