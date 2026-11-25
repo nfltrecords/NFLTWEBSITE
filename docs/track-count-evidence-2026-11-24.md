@@ -31,4 +31,11 @@ Track counts below are used only as release metadata. A verified count does not 
 - `30.000 GÉNOCIDES` — Spotify screenshots `Screenshot_20261114-190155_Spotify.jpg` and `Screenshot_20261114-141553_Spotify.jpg`: 8 titles, 15 minutes; eight full M4A sources are preserved.
 - All 19 M4A files in the Library were probed: durations range from 71.332 to 210.233 seconds. None is a 30-second preview. These files remain source audio and must not replace WAV delivery masters.
 
+## Correspondance des fichiers source vérifiée le 25 novembre 2026
+
+- [30.000 GÉNOCIDES — Amazon Music](https://music.amazon.com/albums/B0G1L112J4) publie 8 titres. Les huit fichiers M4A du Library correspondent aux titres par nom et durée.
+- [NOUS Y SOMMES (TU M'AURAS JAMAIS) — Qobuz](https://www.qobuz.com/lu-fr/album/nous-y-sommes-tu-mauras-jamais-nflt/jwb3qbbq16uga) publie 9 titres. Six M4A correspondent aux six premiers titres listés ci-dessus ; trois WAV R2 couvrent les trois autres titres. Le WAV de base (129,997 s) correspond à CA VA COMMENCER (2:09), le WAV `...3.wav` (149,871 s) à ÇA TUE PAS DU TOUT (2:29), et le WAV `...2.wav` (27 173 102 octets) est estimé à environ 154,04 s d'après sa taille PCM et correspond à TU M'AURAS JAMAIS (2:34). La dernière durée est calculée, pas mesurée avec ffprobe.
+- Les cinq M4A singles sont `NEVERFAKELIKETHEM.m4a`, `Dilemma.m4a`, `Hustlegrind.m4a`, `NFLTHOT.m4a` et `GR4LIFE.m4a`, chacun rapproché du single de même titre dans le catalogue.
+- Aucun des 19 M4A complets n'est un master WAV. Les 19 équivalents WAV restent à retrouver ; aucune conversion M4A→WAV ne sera présentée comme un master original.
+
 The Amazon/Apple Music pages are public catalogue references; they do not alter either Spotify profile or any DistroKid release.
