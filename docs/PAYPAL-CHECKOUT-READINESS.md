@@ -114,7 +114,7 @@ Aucun email client n'a encore été envoyé ni reçu ; le test réel attend l'aj
 - Les gestionnaires de remboursement, inversion et annulation d'inversion sont codés, mais aucun test IPN réel ni campagne PayPal Sandbox complète n'a été effectué.
 - Aucun paiement réel n'a été réalisé.
 - Aucun email client de commande ou de téléchargement n'a encore été envoyé ou reçu ; le code est prêt, mais le secret SMTP manque.
-- Le DNS du domaine comporte des enregistrements de messagerie (MX, SPF et DKIM vers `mail.nflt-records.com`), mais aucun identifiant SMTP ou service d'envoi n'est configuré dans le Worker.
+- Les paramètres SMTP non secrets (`SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_FROM`) sont présents dans le Worker ; `SMTP_PASSWORD` manque. Aucune livraison réelle n'est enregistrée dans D1.
 - Le vendeur légal par produit et territoire, les droits de chaque sortie, la TVA, les informations consommateurs, les remboursements et les documents juridiques restent à valider.
 - Le statut payé n'a pas été testé de bout en bout avec une transaction PayPal confirmée.
 
