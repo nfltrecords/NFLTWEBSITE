@@ -30,18 +30,18 @@ D1 (`shop_release_assets`) :
 
 ## 3. Worker actif
 
-Le Worker `nfltwebsite` est actuellement déployé à 100 % sur la version **217**.
+Le Worker `nfltwebsite` est actuellement déployé à 100 % sur la version **219**.
 
-- Déploiement actif observé : `9164708b-4483-4b45-be03-1c28602d59dd`.
-- Version : `7dfc50a3-e540-4f09-811d-f0e710704577`.
-- Date du déploiement : 25 novembre 2026 à 23:22 UTC.
+- Déploiement actif observé : `b3c3819a-e367-459c-9268-d46562dc014e`.
+- Version : `a49b5d6b-cb7e-429f-8b37-f6d9c95299db`.
+- Date du déploiement : 25 novembre 2026 à 23:35:20 UTC. La version 218 (`116dfe27-6421-43d7-a966-8160ab700a2f`) était le déploiement précédent à 23:34:27 UTC.
 - Bindings D1, R2 et KV présents.
 - Paramètres SMTP non secrets présents : `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_FROM`.
 - Le secret `SMTP_PASSWORD` est absent des bindings/secrets du Worker : l'envoi SMTP authentifié n'est pas prêt.
 - Les références aux variables/secrets Supabase sont encore présentes dans le Worker. La sortie complète de Lovable/Supabase n'est donc pas certifiée.
 - Le secret serveur `ADMIN_ORDERS_CODE` est présent ; sa valeur n'est pas lue ni divulguée.
 
-**Correction de vérification :** les commits documentaires précédemment poussés sur `main` ont déclenché Workers Builds automatiquement. Le dernier build `f5c58885-9e41-4a58-a514-92f3fed2aaa1` a réussi et a déployé la version 218 à 100 % (`46889f7a-746c-4e03-a2dd-8ac1577843a1`). Aucun changement de code applicatif, DNS, checkout ou données métier n'a été effectué par ces commits documentaires.
+**Correction de vérification :** les commits documentaires précédemment poussés sur `main` ont déclenché Workers Builds automatiquement. Le dernier build `f5c58885-9e41-4a58-a514-92f3fed2aaa1` a réussi et a déployé la version 219 à 100 % (`b3c3819a-e367-459c-9268-d46562dc014e`). Aucun changement de code applicatif, DNS, checkout ou données métier n'a été effectué par ces commits documentaires.
 
 ## 4. Recherche des masters manquants
 
@@ -70,4 +70,4 @@ Conclusion : ces trois archives ne comblent aucun des masters WAV manquants. Les
 4. Examiner les dépendances Supabase/Lovable restantes et établir un build CI reproductible avant toute migration de production.
 5. Garder le checkout réel fermé jusqu'aux tests Sandbox/IPN, à la validation juridique et à l'autorisation explicite du propriétaire.
 
-**Aucun changement DNS, aucune activation du checkout et aucun paiement réel n'ont été réalisés. Un déploiement Worker automatique de la version 218 a bien eu lieu à la suite des commits documentaires sur `main`. Le code applicatif n'a pas été modifié par ces commits.**
+**Aucun changement DNS, aucune activation du checkout et aucun paiement réel n'ont été réalisés. Un déploiement Worker automatique de la version 219 a bien eu lieu à la suite des commits documentaires sur `main`. Le code applicatif n'a pas été modifié par ces commits.**
