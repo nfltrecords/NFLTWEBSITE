@@ -33,6 +33,62 @@
 | 821440674572 | GR 4LIFE | 1 | 0 | 1 |
 | **Total** | **18 sorties** | **37** | **18** | **19** |
 
+## Correspondance vérifiée des sources M4A et des titres
+
+Les 19 fichiers M4A du Library sont des sources complètes, pas des extraits. Leur durée a été contrôlée avec ffprobe ; aucune ne dure 30 secondes. Ils sont conservés, ne sont pas importés dans `shop_release_assets` et ne peuvent jamais être livrés comme masters WAV.
+
+### 30.000 GÉNOCIDES — UPC `199955742094`
+
+La tracklist publique Amazon Music comporte 8 titres. Les huit M4A correspondent par nom et durée à la tracklist publiée (les durées mesurées sont cohérentes à la seconde avec les durées de la plateforme) : [Amazon Music — album et tracklist](https://music.amazon.com/albums/B0G1L112J4).
+
+| Fichier M4A | Titre publié |
+|---|---|
+| `30.000Genocides.m4a` | 30.000 GÉNOCIDES |
+| `Laveritetenique.m4a` | La vérité Te Nique |
+| `Arreteoutoutpete.m4a` | Arrête Ou Tout Péte |
+| `ExtremementGrave.m4a` | Extrêmement Grave |
+| `Lesuivi.m4a` | Le Suivi |
+| `Yapasdecouilleici.m4a` | Y'a Pas De Couille ici |
+| `Tufouslamerdededingue.m4a` | Tu Fous La Merde De Dingue |
+| `Sasempirepourtoi.m4a` | Ça S'empire Pour Toi |
+
+### NOUS Y SOMMES (TU M'AURAS JAMAIS) — UPC `199956222809`
+
+La tracklist publique Qobuz comporte 9 titres : [Qobuz — album et tracklist](https://www.qobuz.com/lu-fr/album/nous-y-sommes-tu-mauras-jamais-nflt/jwb3qbbq16uga).
+
+Six titres sont présents en M4A :
+
+| Fichier M4A | Titre publié |
+|---|---|
+| `Dunckes.m4a` | THE DUNCES |
+| `Dunckes2.m4a` | THE DUNCKES |
+| `Nousysommes.m4a` | NOUS Y SOMMES |
+| `ONTELAFOUTUAUQ.m4a` | ON TE LA FOUTU AU Q |
+| `AMORTTESCHIENS.m4a` | À MORT T'ES CHIENS |
+| `PERSONNESEMARREICI.m4a` | PERSONNE SE MARRE ICI |
+
+Les trois autres titres sont couverts par les trois WAV déjà associés à cet UPC. Le rapprochement par durée permet de distinguer les fichiers :
+
+| Fichier WAV R2 | Taille R2 | Durée WAV mesurée / déduite du PCM | Titre Qobuz |
+|---|---:|---:|---|
+| `JAIPASBONQUELESGENSDUPAYSOULESGENSDUCOINSORGANISENTENTREEUXJEDETESTECAJAIHO.wav` | 22 931 498 octets | 129,997 s | CA VA COMMENCER (2:09) |
+| `JAIPASBONQUELESGENSDUPAYSOULESGENSDUCOINSORGANISENTENTREEUXJEDETESTECAJAIHO2.wav` | 27 173 102 octets | environ 154,04 s, déduit de la taille PCM WAV 44,1 kHz / 16-bit / stéréo | TU M'AURAS JAMAIS (2:34) |
+| `JAIPASBONQUELESGENSDUPAYSOULESGENSDUCOINSORGANISENTENTREEUXJEDETESTECAJAIHO3.wav` | 26 437 294 octets | 149,871 s | ÇA TUE PAS DU TOUT (2:29) |
+
+Le fichier `...2.wav` est présent dans R2 et dans D1, mais aucune copie locale n'a été retrouvée pour le sonder directement ; sa durée est donc une déduction à partir de la taille, du format PCM constaté sur les deux autres fichiers et de la durée publiée. Ne pas présenter cette durée comme un résultat ffprobe du fichier `...2.wav`.
+
+### Singles — une source M4A complète chacun
+
+| UPC | Sortie | Fichier M4A |
+|---|---|---|
+| `199955715135` | #NEVERFAKELIKETHEM (Chapter One) | `NEVERFAKELIKETHEM.m4a` |
+| `199955701558` | Dilemma (Radio Edit) | `Dilemma.m4a` |
+| `199955715203` | Hustle & Grind (Radio Edit) | `Hustlegrind.m4a` |
+| `199751508283` | Hot | `NFLTHOT.m4a` |
+| `821440674572` | GR 4LIFE | `GR4LIFE.m4a` |
+
+Les titres des singles concordent avec le catalogue et les noms des sources. Pour Hustle & Grind, la capture DistroKid Vault précédemment vérifiée confirme aussi le titre et l'UPC `199955715203`.
+
 ## Fichiers WAV associés
 
 ### Singles présents dans R2
@@ -68,7 +124,7 @@ Les trois WAV associés à cet UPC sont :
 - `JAIPASBONQUELESGENSDUPAYSOULESGENSDUCOINSORGANISENTENTREEUXJEDETESTECAJAIHO2.wav`
 - `JAIPASBONQUELESGENSDUPAYSOULESGENSDUCOINSORGANISENTENTREEUXJEDETESTECAJAIHO3.wav`
 
-Les captures Spotify `Screenshot_20261114-190452_Spotify.jpg` et `Screenshot_20261114-190458_Spotify.jpg` affichent 9 titres et 22 minutes. Les trois fichiers WAV correspondent au groupe des titres `CA TUE PAS DU TOUT`, `CA VA COMMENCER` et `TU M'AURAS JAMAIS`. Les captures ne permettent pas d'établir avec certitude quel suffixe (base, 2 ou 3) correspond à chacun de ces trois titres : ne pas inventer cet ordre.
+Les captures Spotify `Screenshot_20261114-190452_Spotify.jpg` et `Screenshot_20261114-190458_Spotify.jpg` affichent 9 titres et 22 minutes. Les trois fichiers WAV correspondent aux trois titres restants ; leur correspondance précise par durée est documentée dans la section « Correspondance vérifiée des sources M4A et des titres » ci-dessous.
 
 Les six autres titres ont des sources M4A complètes :
 
