@@ -5,7 +5,7 @@
 | N° | Chantier | État actuel | Suite utile |
 |---:|---|---|---|
 | 1 | Sortie de Lovable / portage du site | **Production active sur Cloudflare Workers.** Le domaine NFLT RECORDS sert le Worker `nfltwebsite`. Le site n'est plus servi par Lovable. | Continuer les améliorations directement sur GitHub `main` et laisser Workers Builds déployer. |
-| 2 | Audio / extraits | **Le `main` actif est propre.** Aucun fichier `*_PREVIEW_30S`, `NFLT_PREVIEWS_30S.zip` ou dossier `public/assets/previews` n'existe dans la tête des 10 branches de travail examinées. Sept branches anciennes conservent toutefois des composants ou routes de préécoute (`ReleasePreview`, `PreviewLibrary`, `src/lib/previews.ts`) : ne pas les fusionner. Aucun fichier audio de préécoute n'a été trouvé dans les têtes de branche ou les archives ZIP inspectées. | Ne recréer aucun lecteur, fichier ou dossier de préécoute. |
+| 2 | Audio / extraits | **Le `main` actif est propre.** L'audit des 10 branches de travail a retrouvé trois archives de déploiement historiques (environ 22,7 MB chacune) dans sept branches ; chaque archive contenait 37 MP3 nommés `*_PREVIEW_30S.mp3`. Les 37 entrées ont été retirées de chacune des trois archives et les ZIP nettoyés ont été repoussés dans les sept branches, en préservant tous les autres fichiers. Les branches historiques conservent des composants/routes de préécoute : ne pas les fusionner. L'audit `npm run audit:assets` inspecte désormais aussi le contenu des ZIP. | Ne recréer aucun lecteur, fichier ou dossier de préécoute. |
 | 3 | Catalogue et pochettes | **18 sorties et 18 pochettes publiques de 1536 × 1536 px** dans l’archive corrigée. R2 contient 18 JPG mesurés à 3000 × 3000 px. Les 18 noms sont rapprochés des UPC : 16 associations étayées par captures, 2 confirmées par le propriétaire ; l’intégration binaire exacte des deux dernières reste à vérifier. | Ne remplacer aucune pochette sans source HD validée. |
 | 4 | Prix par sortie | **Barème de référence en place :** 9,99 € pour 1 piste, 14,99 € pour 5 pistes, 19,99 € pour 6 pistes ou plus. Les nombres de pistes sont maintenant vérifiés pour les 18 UPC, dont Hustle & Grind (1 piste). | Garder le checkout fermé jusqu'à validation du vendeur, des droits, des taxes et de la livraison. |
 | 5 | Administration | **Deux pages protégées sont actives :** `/admin/orders` et `/admin/audio`. La page audio affiche l'inventaire des 18 sorties, les pistes attendues, les WAV associés et les manquants ; elle accepte les transferts WAV multiples pour un même UPC. | Utiliser l'inventaire pour compléter les associations UPC → WAV. |
@@ -30,17 +30,18 @@
 
 ## Nettoyage des extraits
 
-- La tête de `main` ne contient ni dossiers d'extraits, ni MP3 `*_PREVIEW_30S`, ni routes ou composants audio de préécoute. `npm run audit:assets` bloque leur réintroduction dans le code actif.
-- Les têtes des branches de travail examinées ne contiennent aucun fichier MP3 de 30 secondes ni archive `NFLT_PREVIEWS_30S.zip`.
-- Des composants de préécoute subsistent dans des branches historiques non fusionnées : `work/audio-preview-audit`, `work/catalogue-previews-audit`, `work/footer-logo-original`, `work/nflt-kv-audio-delivery-rebased`, `work/operations-readiness`, `work/secure-audio-delivery` et `work/streaming-hub`. Ne pas fusionner ces branches sans nettoyage.
-- Les 18 archives ZIP du Library inspectées ne contiennent aucun master WAV, M4A ou MP3 de préécoute. Le README de `NFLT-18-covers-and-mapping.zip` mentionne `audio-originals/` et `audio-inventory.csv`, mais ces éléments sont absents de l'archive réelle.
+- La tête de `main` ne contient ni dossiers d'extraits, ni MP3 `*_PREVIEW_30S`, ni routes ou composants audio de préécoute.
+- Trois archives historiques ont été retrouvées dans sept branches : `NFLT_CLOUDFLARE_UPLOAD_CORRIGE.zip`, `NFLT_PAGES_DEPLOY.zip` et `NFLT_SITE_CLOUDFLARE_UPLOAD.zip`. Chacune contenait 37 MP3 `*_PREVIEW_30S.mp3` (aucun WAV/M4A ni archive imbriquée).
+- Les 37 MP3 ont été retirés de chacune des trois archives dans les sept branches : `work/audio-preview-audit`, `work/catalogue-previews-audit`, `work/footer-logo-original`, `work/nflt-kv-audio-delivery-rebased`, `work/operations-readiness`, `work/secure-audio-delivery` et `work/streaming-hub`. Les autres entrées ont été conservées ; les ZIP nettoyés contiennent 23 ou 24 entrées.
+- Les 18 archives ZIP du Library inspectées ne contiennent aucun fichier audio. Le README de `NFLT-18-covers-and-mapping.zip` mentionne `audio-originals/` et `audio-inventory.csv`, mais ces éléments sont absents de l'archive réelle.
 - Les 19 M4A pleine durée retrouvés dans le Library sont des sources audio complètes, pas des extraits ; ils sont conservés.
+- Les branches historiques gardent encore du code de lecteur/route de préécoute ; ne pas les fusionner. Le contrôle `npm run audit:assets` bloque désormais aussi les entrées de préécoute à l'intérieur des ZIP.
 
 ## Déploiement et sécurité
 
 - La PR d'administration WAV n°8 est fusionnée.
-- Le Worker `nfltwebsite` est actuellement sur la version **212**, déployée à 100 % le 25 novembre 2026 à 15:35:28 UTC. La version 211 précédente date de 15:18:04 UTC.
-- Le dernier commit `main` connu, `e7c940ac`, est un commit de documentation créé à 15:34:23 UTC. Le workflow GitHub Actions `45642986197` a réussi pour le commit runtime `c7a8c80` à 15:16 UTC. Cloudflare ne fournit pas de SHA Git dans les annotations de la version 212 : la correspondance exacte entre version 212 et SHA Git n'est donc pas prouvée.
+- Le Worker `nfltwebsite` est actuellement sur la version **214**, déployée à 100 % le 25 novembre 2026 à 16:50:07 UTC (deployment `571d8364-75d8-4b45-ab0b-d20f8f1941c3`, version `28c2d371-1f03-40b5-9bc7-d647e08c21ac`). Le build Cloudflare `54f89b25-6743-4c5d-a2ea-ff9ecfd89b14` a réussi pour le commit `6660b41e` à 16:50:13 UTC.
+- Le commit `main` courant est le squash merge `6660b41e40218d8966426731827d21cabef27b32` de la correction de track counts. Les workflows GitHub Actions ont réussi sur le head de PR `a092f551`; le build Cloudflare réussi confirme le déploiement du commit merge `6660b41e` dans la version 214.
 - La page `/admin/audio` utilise le code `ADMIN_ORDERS_CODE`, affiche l'inventaire et transfère les WAV par multipart R2 ; la signature RIFF/RF64 est vérifiée avant association D1.
 - La livraison reste conditionnée à une commande réellement payée et à un ensemble WAV complet. Les M4A ne sont jamais servis comme masters.
 - Le code garde `checkoutActivationApproved = false` et `checkoutEnabled = false` : les paiements réels restent fermés.
