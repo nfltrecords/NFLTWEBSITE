@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { env } from "cloudflare:workers";
 import { releases } from "@/lib/catalogue";
+import { verifiedReleaseTrackCounts } from "@/lib/commerce";
 import { shopEnv } from "@/lib/shop-db.server";
 import { hasValidWavHeader } from "@/lib/audio-assets";
 
@@ -47,6 +48,29 @@ export const Route = createFileRoute("/api/admin/audio")({
           }
 
           const action = new URL(request.url).searchParams.get("action");
+
+          if (action === "inventory") {
+            const result = await shopEnv.DB.prepare(
+              "SELECT release_upc, COUNT(*) AS wav_count FROM shop_release_assets GROUP BY release_upc",
+            ).all<{ release_upc: string; wav_count: number }>();
+            const linkedCounts = new Map(
+              (result.results ?? []).map((row) => [row.release_upc, row.wav_count]),
+            );
+            const inventory = releases.map((release) => {
+              const expected = verifiedReleaseTrackCounts[release.upc] ?? null;
+              const uploaded = linkedCounts.get(release.upc) ?? 0;
+              return {
+                upc: release.upc,
+                title: release.title,
+                expected,
+                uploaded,
+                missing: expected === null ? null : Math.max(expected - uploaded, 0),
+                complete: expected !== null && expected === uploaded,
+                over: expected !== null && uploaded > expected,
+              };
+            });
+            return Response.json({ ok: true, inventory });
+          }
 
           if (action === "start") {
             const body = (await request.json()) as {
