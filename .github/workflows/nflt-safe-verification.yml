@@ -25,46 +25,50 @@ jobs:
       - name: Inspect legacy deployment ZIP archives
         shell: bash
         run: |
-          if ! command -v ffprobe >/dev/null 2>&1; then
-            sudo apt-get update
-            sudo apt-get install -y ffmpeg
-          fi
           python - <<'PY'
           import json, pathlib, re, shutil, subprocess, tempfile, zipfile
           root = pathlib.Path("legacy-archives")
-          names = [
-              "NFLT_CLOUDFLARE_UPLOAD_CORRIGE.zip",
-              "NFLT_PAGES_DEPLOY.zip",
-              "NFLT_SITE_CLOUDFLARE_UPLOAD.zip",
-          ]
+          names = ["NFLT_CLOUDFLARE_UPLOAD_CORRIGE.zip", "NFLT_PAGES_DEPLOY.zip", "NFLT_SITE_CLOUDFLARE_UPLOAD.zip"]
           audio = re.compile(r"\.(wav|m4a|mp3|flac|aif|aiff|aac|ogg|oga|opus|wma|alac|caf|mp4|m4b|amr|mid|midi)$", re.I)
+          nested_pattern = re.compile(r"\.(zip|rar|7z|tar|gz|tgz|xz|bz2)$", re.I)
+          ffprobe = shutil.which("ffprobe")
+          def inspect_zip(z, label, depth=0):
+              entries = z.infolist()
+              files = [e for e in entries if not e.is_dir()]
+              audio_files = [e for e in files if audio.search(e.filename)]
+              nested = [e for e in files if nested_pattern.search(e.filename)]
+              print(f"ARCHIVE={label} entries={len(entries)} audio={len(audio_files)} nested={len(nested)}")
+              for e in audio_files:
+                  if ffprobe:
+                      with z.open(e) as source, tempfile.NamedTemporaryFile(suffix=pathlib.Path(e.filename).suffix) as tmp:
+                          shutil.copyfileobj(source, tmp)
+                          tmp.flush()
+                          probe = subprocess.run([ffprobe, "-v", "error", "-show_entries", "format=duration,format_name:format_tags=title,album", "-of", "json", tmp.name], capture_output=True, text=True)
+                          try:
+                              fmt = json.loads(probe.stdout or "{}").get("format", {})
+                              print(f"AUDIO={label}!{e.filename} size={e.file_size} duration={fmt.get('duration','n/a')} format={fmt.get('format_name','n/a')}")
+                          except Exception:
+                              print(f"AUDIO={label}!{e.filename} size={e.file_size} probe_error={probe.stderr[:200]}")
+                  else:
+                      print(f"AUDIO={label}!{e.filename} size={e.file_size} duration=not-probed")
+              for e in nested:
+                  print(f"NESTED={label}!{e.filename} size={e.file_size}")
+                  if depth < 2 and e.filename.lower().endswith(".zip"):
+                      with z.open(e) as source, tempfile.NamedTemporaryFile(suffix=".zip") as tmp:
+                          shutil.copyfileobj(source, tmp)
+                          tmp.flush()
+                          with zipfile.ZipFile(tmp.name) as child:
+                              inspect_zip(child, f"{label}!{e.filename}", depth + 1)
           for name in names:
               path = root / name
-              print(f"\nARCHIVE: {name} exists={path.exists()} size={path.stat().st_size if path.exists() else 0}")
+              print(f"\nTOP_LEVEL={name} exists={path.exists()} size={path.stat().st_size if path.exists() else 0}")
               if not path.exists():
                   continue
               with zipfile.ZipFile(path) as z:
                   entries = z.infolist()
-                  print(f"ENTRY_COUNT={len(entries)}")
                   print(f"HAS_AUDIO_ORIGINALS={any(e.filename.rstrip('/').endswith('audio-originals') for e in entries)}")
                   print(f"HAS_AUDIO_INVENTORY={any(e.filename.endswith('audio-inventory.csv') for e in entries)}")
-                  files = [e for e in entries if not e.is_dir() and audio.search(e.filename)]
-                  print(f"AUDIO_COUNT={len(files)}")
-                  for entry in files:
-                      with z.open(entry) as source, tempfile.NamedTemporaryFile(suffix=pathlib.Path(entry.filename).suffix) as tmp:
-                          shutil.copyfileobj(source, tmp)
-                          tmp.flush()
-                          probe = subprocess.run(
-                              ["ffprobe", "-v", "error", "-show_entries", "format=duration,format_name:format_tags=title,album", "-of", "json", tmp.name],
-                              capture_output=True, text=True
-                          )
-                          try:
-                              data = json.loads(probe.stdout or "{}")
-                              fmt = data.get("format", {})
-                              duration = fmt.get("duration", "n/a")
-                              print(f"AUDIO {entry.filename} size={entry.file_size} duration={duration} format={fmt.get('format_name','n/a')}")
-                          except Exception:
-                              print(f"AUDIO {entry.filename} size={entry.file_size} probe_error={probe.stderr[:300]}")
+                  inspect_zip(z, name)
           PY
       - uses: actions/setup-node@v4
         with:
