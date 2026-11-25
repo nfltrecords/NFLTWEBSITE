@@ -12,6 +12,17 @@ Le schéma TypeScript Supabase actuellement versionné ne déclare que deux tabl
 
 La route privée `/messages` ne fait que consulter les messages du formulaire après saisie d'un code serveur. Elle n'est pas un tableau de bord général. Le dépôt contient également `drizzle/migrations/0002_create_private_shop_orders.sql`, qui propose les tables `shop_orders` et `paypal_webhook_events` avec accès réservé à `service_role`. Ces tables ne figurent pas dans les types Supabase générés actuellement. Leur application dans un projet Supabase réel n'est pas confirmée ; il ne faut donc pas les considérer comme existantes en production. Aucun modèle complet de clients, projets, contrats, factures, licences accordées ou catalogue de masters n'est actuellement défini dans les types générés.
 
+## Administration opérationnelle déjà déployée — 25 novembre 2026
+
+En parallèle du futur dashboard métier décrit ci-dessus, deux écrans opérationnels Cloudflare sont maintenant en production. Ils ne reposent pas sur Supabase et ne signifient pas que le CRM complet est terminé :
+
+- `/admin/orders` : consultation des commandes et suivi des états de livraison.
+- `/admin/audio` : inventaire des 18 sorties, pistes attendues, WAV associés et manquants ; transfert multiple de masters WAV pour un même UPC.
+- Les deux routes sont protégées par le secret serveur `ADMIN_ORDERS_CODE`. Les masters sont stockés dans R2 et leurs associations dans D1.
+- Le transfert vérifie la signature WAV, la taille et l'association D1 avant de déclarer le fichier disponible.
+- Le checkout reste désactivé. Seul un IPN PayPal vérifié peut marquer une commande comme payée.
+- Aucun schéma Supabase n'a été créé ou migré pour ces écrans. Le CRM complet (contacts, clients, projets, licences, documents, rôles nominatifs) reste un chantier distinct.
+
 ## Périmètre cible
 
 Le futur espace d'administration doit séparer les modules suivants :
