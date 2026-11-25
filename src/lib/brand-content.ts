@@ -1,7 +1,5 @@
 export const mobileApplication = {
   name: "NFLT RECORDS",
-  developer: "Apps wiz",
-  packageId: "com.appswiz.nfltrecordshfegh",
   googlePlayUrl: null,
 };
 
