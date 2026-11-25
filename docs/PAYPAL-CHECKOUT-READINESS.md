@@ -100,6 +100,15 @@ Pour activer l'envoi, ajouter `SMTP_PASSWORD` comme secret dans Cloudflare : **W
 
 Aucun email client n'a encore été envoyé ni reçu ; le test réel attend l'ajout du secret.
 
+## État réel du code de paiement
+
+- `src/lib/paypal-checkout-gate.ts` fixe `checkoutActivationApproved = false`. La fonction `createManualPayPalOrder` refuse de créer une commande tant que ce verrou reste fermé.
+- Si le verrou était ouvert, `src/lib/manual-orders.functions.ts` construirait une URL `https://www.paypal.com/cgi-bin/webscr` (PayPal Live) et pointerait vers `/api/paypal/ipn`.
+- `src/routes/api.paypal.ipn.ts` vérifie les notifications sur `https://ipnpb.paypal.com/cgi-bin/webscr` (endpoint Live) et utilise le destinataire PayPal configuré dans le code.
+- Aucun choix Sandbox/Live n'est implémenté pour ce flux PayPal Standard/IPN. Le code ne peut donc pas être testé avec un vendeur Sandbox en l'état.
+- `/commande/paiement` affiche un message d'annulation/non-finalisation ; ce n'est pas une page de checkout active.
+- Le code PayPal REST dans `paypal.server.ts` sait choisir Sandbox/Live, mais le webhook associé dépend de Supabase et de secrets absents des bindings Worker. Ce chemin n'est pas le flux D1/IPN utilisé par la boutique actuelle.
+
 ## État Cloudflare vérifié le 26 novembre 2026
 
 - Worker `nfltwebsite` : version 219 active à 100 % ; dernier build Workers réussi sur le commit documentaire `5ba11a50460023c708aad7a4ea346b2e88b2bdd2`.
