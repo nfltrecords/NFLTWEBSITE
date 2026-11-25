@@ -13,9 +13,7 @@ const covers = readdirSync(coverDir).filter(
 const previews = existsSync(previewDir)
   ? readdirSync(previewDir).filter((name) => name.toLowerCase().endsWith(".mp3"))
   : [];
-const previewMapSource = existsSync("src/lib/previews.ts")
-  ? readFileSync("src/lib/previews.ts", "utf8")
-  : "";
+const previewMapSource = "";
 const mappedPreviewPaths = [
   ...previewMapSource.matchAll(/: "(\/assets\/previews\/[^"]+\.mp3)"/g),
 ].map((match) => match[1]);
