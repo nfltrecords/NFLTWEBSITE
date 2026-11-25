@@ -124,10 +124,13 @@ Pour Hustle & Grind, la capture DistroKid Vault `Screenshot_20261114-133340_Chro
 
 ## Archives et préécoutes
 
+- Les 18 archives ZIP du Library inspectées ne contiennent aucun fichier audio.
+- Trois archives GitHub historiques ont été retrouvées dans sept branches : `NFLT_CLOUDFLARE_UPLOAD_CORRIGE.zip` (22 676 821 octets), `NFLT_PAGES_DEPLOY.zip` (22 679 145 octets) et `NFLT_SITE_CLOUDFLARE_UPLOAD.zip` (22 677 789 octets).
+- Chacune contenait 37 fichiers MP3 nommés `*_PREVIEW_30S.mp3`, d'environ 481 KB chacun. Aucun WAV ou M4A n'y figurait ; aucun ZIP imbriqué, `audio-originals/` ou `audio-inventory.csv` n'a été trouvé.
+- Les 37 MP3 ont été supprimés de chacune des trois archives dans les sept branches historiques. Les autres entrées ont été préservées. Les nouveaux ZIP mesurent respectivement 5 481 612, 5 482 600 et 5 482 048 octets et contiennent 23, 24 et 24 entrées.
+- Les commits de nettoyage sont `ffcc05c`, `a784b8d`, `cb9625e`, `40a0106`, `aa0e009`, `ce08700` et `5d95c8b`.
+- Les branches historiques gardent encore des composants et routes de préécoute dans leur code ; ne pas les fusionner dans `main`. Le contrôle `npm run audit:assets` vérifie maintenant aussi les entrées de préécoute dans les archives ZIP.
 - L'archive `NFLT-18-covers-and-mapping.zip` contient les pochettes et captures, mais pas le dossier `audio-originals/` ni le fichier `audio-inventory.csv` mentionnés dans son README.
-- Les autres archives ZIP inspectées ne contiennent aucun master WAV, M4A ou MP3 de préécoute.
-- Aucune tête de branche GitHub examinée ne contient de MP3 `*_PREVIEW_30S` ni d'archive de préécoutes.
-- Des composants audio de préécoute subsistent dans plusieurs branches historiques non fusionnées. Ne pas les fusionner dans `main`.
 
 ## État de la livraison en production
 
