@@ -102,7 +102,7 @@ Aucun email client n'a encore été envoyé ni reçu ; le test réel attend l'aj
 
 ## État Cloudflare vérifié le 26 novembre 2026
 
-- Worker `nfltwebsite` : version 218 active à 100 % ; dernier build Workers réussi sur le commit documentaire `5ba11a50460023c708aad7a4ea346b2e88b2bdd2`.
+- Worker `nfltwebsite` : version 219 active à 100 % ; dernier build Workers réussi sur le commit documentaire `5ba11a50460023c708aad7a4ea346b2e88b2bdd2`.
 - Les domaines personnalisés apex et `www` sont activés ; la route `/api/paypal/ipn` est associée au Worker.
 - D1 relu en lecture seule : 18 associations WAV couvrant 12 UPC ; 2 commandes `pending`, 0 `paid` ; aucune ligne dans `shop_email_deliveries`.
 - R2 relu en lecture seule : 18 WAV (`audio/wav`), 18 JPG et un objet vide de préfixe.
