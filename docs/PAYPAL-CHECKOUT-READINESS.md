@@ -13,6 +13,7 @@ Le verrou `checkoutActivationApproved` reste à `false`. La réparation techniqu
 - Le Worker `nfltwebsite`, la base D1 `nflt-records-data`, le bucket R2 `nflt-audio-master` et le namespace KV `nflt-audio-chunks` existent.
 - Les tables D1 `shop_orders` et `shop_release_assets` existent déjà en production. Les deux commandes de test historiques restent en attente ; aucune commande payée n'a été constatée.
 - `shop_release_assets` contient 18 associations de fichiers WAV couvrant 12 UPC. Les 18 objets R2 existent et leurs tailles correspondent aux valeurs D1. Une référence de fichier erronée pour The Dopest Collection Vol. 1 a été corrigée.
+- La bibliothèque contient 17 copies WAV supplémentaires par rapport au dépôt, mais leurs noms et tailles correspondent à 17 des 18 objets déjà présents dans R2 ; elles ne comblent donc aucun UPC manquant. `medley.wav (1)` est présent uniquement dans R2.
 - Le nom historique `medley.wav (1)` est reconnu comme WAV et normalisé en nom de téléchargement valide.
 - Les extraits audio de 30 secondes ne font plus partie du code actif : aucun lecteur ni chemin de préécoute n'est référencé dans le catalogue ou la boutique.
 - Les 15 archives de préparation de la bibliothèque contenant le dossier `previews` ont été nettoyées ; les fichiers MP3 de préécoute et les dossiers `assets/previews` / `public/assets/previews` ont été retirés. Les trois archives de marque et de pochettes qui ne contenaient aucun extrait ont été conservées sans modification.
