@@ -2,9 +2,9 @@ import { describe, expect, it } from "vitest";
 import { implantations, mobileApplication, validatedGooglePlayUrl } from "@/lib/brand-content";
 
 describe("Owner-confirmed application and locations", () => {
-  it("keeps the exact application and developer identities", () => {
+  it("keeps the official application name without public developer attribution", () => {
     expect(mobileApplication.name).toBe("NFLT RECORDS");
-    expect(mobileApplication.developer).toBe("Apps wiz");
+    expect(mobileApplication).not.toHaveProperty("developer");
   });
   it("keeps the download link disabled while the application is unpublished", () => {
     expect(mobileApplication.googlePlayUrl).toBeNull();
@@ -13,8 +13,8 @@ describe("Owner-confirmed application and locations", () => {
   it("keeps download unavailable when no link exists", () => {
     expect(validatedGooglePlayUrl(null)).toBeNull();
   });
-  it("preserves the confirmed package identifier and its official store destination", () => {
-    expect(mobileApplication.packageId).toBe("com.appswiz.nfltrecordshfegh");
+  it("does not expose the legacy package identifier on the public application page", () => {
+    expect(mobileApplication).not.toHaveProperty("packageId");
     expect(mobileApplication.googlePlayUrl).toBeNull();
   });
   it("rejects invalid or non-Google Play store destinations", () => {
