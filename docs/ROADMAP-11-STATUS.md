@@ -28,7 +28,14 @@
 - L'inventaire R2 compte **37 objets** : 18 WAV, 18 JPG et un objet vide de préfixe. Aucun M4A ni MP3 de préécoute n'y figure.
 - Les 18 WAV ont une signature `RIFF` ou `RF64` suivie de `WAVE`. Les 17 copies locales disponibles correspondent aux ETag MD5 des objets R2 ; le fichier `...2.wav` est présent dans R2 et valide, sans copie locale retrouvée. Le doublon local `...3(1).wav` est identique à `...3.wav`.
 
-## Vérification Cloudflare complémentaire — 26 novembre 2026\n\n- Les domaines personnalisés `nflt-records.com` et `www.nflt-records.com` sont activés sur le Worker `nfltwebsite`. La route explicite `/api/paypal/ipn` est également associée au Worker.\n- Le dernier déploiement est la version 218 à 100 %. Le dernier build Workers a réussi et son déclencheur est un push GitHub sur `main`.\n- Le contrôle HTTP externe depuis l'environnement d'audit a été refusé par une restriction de sortie réseau (403 « requests ... are not allowed »). La présence des domaines et le build réussi ne remplacent donc pas un test réel des pages dans un navigateur utilisateur.\n- Les bindings D1/R2/KV et les paramètres SMTP non secrets sont présents. `SMTP_PASSWORD` est absent. Les secrets `SUPABASE_URL` et `SUPABASE_PUBLISHABLE_KEY` existent encore ; le webhook PayPal REST du dépôt dépend aussi de `SUPABASE_SERVICE_ROLE_KEY`, qui n'est pas présent dans les bindings observés.\n\n## Nettoyage des extraits
+## Vérification Cloudflare complémentaire — 26 novembre 2026
+
+- Les domaines personnalisés `nflt-records.com` et `www.nflt-records.com` sont activés sur le Worker `nfltwebsite`. La route explicite `/api/paypal/ipn` est également associée au Worker.
+- Le dernier déploiement est la version 218 à 100 %. Le dernier build Workers a réussi et son déclencheur est un push GitHub sur `main`.
+- Le contrôle HTTP externe depuis l'environnement d'audit a été refusé par une restriction de sortie réseau (403 « requests ... are not allowed »). La présence des domaines et le build réussi ne remplacent donc pas un test réel des pages dans un navigateur utilisateur.
+- Les bindings D1/R2/KV et les paramètres SMTP non secrets sont présents. `SMTP_PASSWORD` est absent. Les secrets `SUPABASE_URL` et `SUPABASE_PUBLISHABLE_KEY` existent encore ; le webhook PayPal REST du dépôt dépend aussi de `SUPABASE_SERVICE_ROLE_KEY`, qui n'est pas présent dans les bindings observés.
+
+## Nettoyage des extraits
 
 - La tête de `main` ne contient ni dossiers d'extraits, ni MP3 `*_PREVIEW_30S`, ni routes ou composants audio de préécoute.
 - Trois archives historiques ont été retrouvées dans sept branches : `NFLT_CLOUDFLARE_UPLOAD_CORRIGE.zip`, `NFLT_PAGES_DEPLOY.zip` et `NFLT_SITE_CLOUDFLARE_UPLOAD.zip`. Chacune contenait 37 MP3 `*_PREVIEW_30S.mp3` (aucun WAV/M4A ni archive imbriquée).
