@@ -10,8 +10,12 @@ const missing = upcs.filter((upc) => !existsSync(join(coverDir, `cover-${upc}.jp
 const covers = readdirSync(coverDir).filter(
   (name) => name.startsWith("cover-") && name.endsWith(".jpg"),
 );
-const previews = readdirSync(previewDir).filter((name) => name.toLowerCase().endsWith(".mp3"));
-const previewMapSource = readFileSync("src/lib/previews.ts", "utf8");
+const previews = existsSync(previewDir)
+  ? readdirSync(previewDir).filter((name) => name.toLowerCase().endsWith(".mp3"))
+  : [];
+const previewMapSource = existsSync("src/lib/previews.ts")
+  ? readFileSync("src/lib/previews.ts", "utf8")
+  : "";
 const mappedPreviewPaths = [
   ...previewMapSource.matchAll(/: "(\/assets\/previews\/[^"]+\.mp3)"/g),
 ].map((match) => match[1]);
