@@ -299,6 +299,14 @@ export const Route = createFileRoute("/api/admin/audio")({
                     .run();
 
             if ((insertResult.meta.changes ?? 0) === 0 && !existingAssociation) {
+              const latest = await shopEnv.DB.prepare(
+                "SELECT COUNT(*) AS wav_count FROM shop_release_assets WHERE release_upc = ?",
+              )
+                .bind(session.upc)
+                .first<{ wav_count: number }>();
+              const trackLimitReached =
+                expectedTrackCount !== undefined &&
+                (latest?.wav_count ?? 0) >= expectedTrackCount;
               await shopEnv.AUDIO_R2.delete(session.objectKey);
               await shopEnv.AUDIO_KV.delete(`upload:${sessionId}`);
               await Promise.all(
@@ -307,7 +315,11 @@ export const Route = createFileRoute("/api/admin/audio")({
                 ),
               );
               return Response.json(
-                { error: "Le nombre de masters WAV attendu pour cette sortie est déjà atteint" },
+                {
+                  error: trackLimitReached
+                    ? "Le nombre de masters WAV attendu pour cette sortie est déjà atteint"
+                    : "Un fichier WAV portant ce nom est déjà associé à cette sortie",
+                },
                 { status: 409 },
               );
             }
