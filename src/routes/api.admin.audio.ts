@@ -50,22 +50,59 @@ export const Route = createFileRoute("/api/admin/audio")({
           const action = new URL(request.url).searchParams.get("action");
 
           if (action === "inventory") {
-            const result = await shopEnv.DB.prepare(
-              "SELECT release_upc, COUNT(*) AS wav_count FROM shop_release_assets GROUP BY release_upc",
-            ).all<{ release_upc: string; wav_count: number }>();
+            const [result, assetsResult] = await Promise.all([
+              shopEnv.DB.prepare(
+                "SELECT release_upc, COUNT(*) AS wav_count FROM shop_release_assets GROUP BY release_upc",
+              ).all<{ release_upc: string; wav_count: number }>(),
+              shopEnv.DB.prepare(
+                "SELECT release_upc, asset_key, file_name, file_size FROM shop_release_assets ORDER BY release_upc, file_name",
+              ).all<{
+                release_upc: string;
+                asset_key: string;
+                file_name: string;
+                file_size: number;
+              }>(),
+            ]);
             const linkedCounts = new Map(
               (result.results ?? []).map((row) => [row.release_upc, row.wav_count]),
+            );
+            const checkedAssets = await Promise.all(
+              (assetsResult.results ?? []).map(async (asset) => {
+                if (!asset.asset_key.startsWith("r2:")) {
+                  return { ...asset, valid: false, issue: "Stockage historique non vérifié" };
+                }
+                const key = asset.asset_key.slice(3);
+                const [object, header] = await Promise.all([
+                  shopEnv.AUDIO_R2.head(key),
+                  shopEnv.AUDIO_R2.get(key, { range: { offset: 0, length: 12 } }),
+                ]);
+                if (!object || object.size !== asset.file_size || !header) {
+                  return { ...asset, valid: false, issue: "Fichier absent ou taille incorrecte" };
+                }
+                const valid = hasValidWavHeader(await header.arrayBuffer());
+                return {
+                  ...asset,
+                  valid,
+                  issue: valid ? null : "Signature RIFF/RF64-WAVE invalide",
+                };
+              }),
             );
             const inventory = releases.map((release) => {
               const expected = verifiedReleaseTrackCounts[release.upc] ?? null;
               const uploaded = linkedCounts.get(release.upc) ?? 0;
+              const invalidFiles = checkedAssets
+                .filter((asset) => asset.release_upc === release.upc && !asset.valid)
+                .map((asset) => ({ name: asset.file_name, issue: asset.issue }));
+              const validUploaded = uploaded - invalidFiles.length;
               return {
                 upc: release.upc,
                 title: release.title,
                 expected,
                 uploaded,
-                missing: expected === null ? null : Math.max(expected - uploaded, 0),
-                complete: expected !== null && expected === uploaded,
+                validUploaded,
+                invalidFiles,
+                missing: expected === null ? null : Math.max(expected - validUploaded, 0),
+                complete: expected !== null && expected === validUploaded,
                 over: expected !== null && uploaded > expected,
               };
             });
