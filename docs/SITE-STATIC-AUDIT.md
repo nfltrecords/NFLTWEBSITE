@@ -9,7 +9,7 @@ Audit statique du code de la branche `main`, complété par la lecture des journ
 - Le rapport interne propriétaire daté du 14 novembre documente 18 JPG originaux accessibles dans l'archive média, dont 16 associations titre/pochette/UPC vérifiées par captures, et deux associations qui nécessitent encore une preuve complémentaire. Le même rapport indique que les fichiers originaux mesurés dans l'archive font 1536 × 1536 px, malgré certains noms de fichiers contenant « 3000x3000 ».
 - La boutique affiche les 18 sorties, leurs pochettes et leurs UPC, et permet de rechercher un titre.
 - Chaque sortie propose une demande de disponibilité ; les demandes de licence/disponibilité utilisent un formulaire distinct.
-- Le composant `ReleasePrice` affiche les prix calculés à partir de `verifiedReleaseTrackCounts`, qui contient désormais 18 valeurs provisoires (16 singles supposés à 1 piste, NOUS Y SOMMES à 9 pistes, 30.000 GÉNOCIDES à 8 pistes). Ces nombres ne sont pas tous vérifiés UPC par UPC et ne constituent pas une validation de vente. Checkout reste fermé par un verrou serveur à double condition : approbation privée `checkoutEnabled` et variable `PAYPAL_CHECKOUT_ENABLED=true`.
+- Le code `src/lib/commerce.ts` contient 18 décomptes vérifiés, dont Hustle & Grind à 1 piste, alignés sur `docs/track-count-evidence-2026-11-24.md`. Les décomptes décrivent les tracklists, pas la disponibilité des masters WAV ; ils ne constituent pas une autorisation de vente. Checkout reste fermé par un verrou serveur à double condition : approbation privée `checkoutEnabled` et variable `PAYPAL_CHECKOUT_ENABLED=true`.
 - Les trois prix de référence sont 9,99 € (1 piste), 14,99 € (5 pistes) et 19,99 € (6 pistes ou plus). Les formats 2 à 4 pistes ne sont pas tarifés par le code. Le site ne permet pas actuellement de commander, payer ou télécharger. Les fonctions serveur PayPal refusent également de démarrer ou confirmer un paiement tant que les deux conditions d'activation ne sont pas réunies.
 
 ## SEO constaté
@@ -32,7 +32,7 @@ Audit statique du code de la branche `main`, complété par la lecture des journ
 - Le répertoire `.lovable/` contient des dossiers et documents internes encore référencés par les tests et la documentation (notamment configuration commerce, revues catalogue et documents juridiques). Il ne faut pas le supprimer en bloc sans migrer ses usages et préserver les dossiers privés.
 - Les archives ZIP de préparation Cloudflare et médias ont été inventoriées : 15 archives de préparation contenant des MP3 de 30 secondes ont été nettoyées en conservant les autres fichiers ; les trois archives de marque/pochettes sans extraits ont été laissées intactes.
 
-Ces éléments signifient que l'indépendance technique vis-à-vis de Lovable n'est pas encore certifiée. Leur retrait doit être réalisé par étapes, avec remplacement des dépendances, tests et préservation des documents privés.
+Le runtime ne montre plus de dépendance `reportLovableError` dans la route racine, mais `.lovable/` subsiste et des références Supabase sont encore présentes dans le code et les bindings Worker. L'indépendance complète de l'application vis-à-vis de Lovable et de Supabase n'est donc pas certifiée ; poursuivre l'inventaire des usages réels avant toute suppression.
 
 ## Workflows et validation
 
@@ -40,7 +40,7 @@ Ces éléments signifient que l'indépendance technique vis-à-vis de Lovable n'
 - Sur `main`, `.github/workflows/prepare-cloudflare-source.yml` se déclenchait sur les pushes vers `main`, disposait d'un droit d'écriture et extrayait une archive avant de pousser automatiquement. Dans cette branche de travail, il a été durci : déclenchement manuel uniquement, permission lecture seule, vérification de présence de l'archive et aucune extraction/poussée automatique. Ce changement doit être validé par le CI avant fusion.
 - Le fichier `MIGRATION-AUDIT-2026-11-15.md` rapporte une installation npm qui a expiré dans son environnement de préparation.
 - À l'inverse, le `roadmap.md` et le rapport propriétaire du 14 novembre enregistrent plusieurs validations antérieures de tests, lint et compilation automatique réussis. Ces validations sont des résultats historiques consignés dans le dépôt, pas une nouvelle exécution faite pendant cet audit.
-- Pour la PR documentaire n°2, le commentaire automatique Cloudflare indique que la prévisualisation Worker a échoué sur le commit `4a3f7d1`. Aucun URL de prévisualisation n'a été fourni. Le run GitHub Actions associé au dernier commit de cette PR était encore « in progress » lors de la dernière consultation. Aucun déploiement de production n'a été déclenché.
+- Le contrôle Cloudflare du 26 novembre confirme Workers Builds connecté à GitHub (`main`), avec `npm run build` et `npx wrangler deploy`. Le build le plus récent `f5c58885-9e41-4a58-a514-92f3fed2aaa1` est réussi et a déployé la version 218. Les commits documentaires sur `main` déclenchent donc aussi un déploiement Worker ; ne pas écrire que les pushes `main` sont sans déploiement. Le CI GitHub Actions et la prévisualisation navigateur des pages doivent être vérifiés séparément.
 
 ## Contrôle statique du sitemap
 
@@ -48,4 +48,4 @@ Une comparaison automatisée du sitemap de `main` avec les 12 groupes de pages p
 
 ## Limites et prochaine validation
 
-Cet audit ne certifie pas l'affichage réel actuel sur mobile, les liens externes, les formulaires en production, les données Supabase, les DNS, le référencement effectivement indexé ni le résultat du dernier run CI. La validation technique finale doit reposer sur un run complet réussi et une prévisualisation accessible, sans toucher au DNS, à la messagerie, au checkout ou à la production.
+Cet audit ne certifie pas l'affichage réel actuel sur mobile, les liens externes, les formulaires en production, les données Supabase, ni l'indexation effective. Le Worker et ses domaines personnalisés sont présents, mais les requêtes HTTP sortantes depuis l'environnement d'audit ont été refusées par une restriction réseau ; il faut donc valider les pages dans un navigateur utilisateur. Le build Cloudflare est réussi ; le statut GitHub Actions doit être vérifié séparément. Ne pas toucher au DNS, à la messagerie, au checkout ou à la production sans plan de retour arrière et autorisation.
