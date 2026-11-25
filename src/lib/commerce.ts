@@ -36,6 +36,7 @@ export const verifiedReleaseTrackCounts: Readonly<Record<string, number>> = {
   "199954147302": 1,
   "199955701558": 1,
   "199955715135": 1,
+  "199955715203": 1,
   "199955740199": 1,
   "199955742094": 8,
   "199956222809": 9,
@@ -44,9 +45,9 @@ export const verifiedReleaseTrackCounts: Readonly<Record<string, number>> = {
   "821440674572": 1,
 };
 
-// Track counts and resulting prices below are provisional catalogue pricing.
-// Counts are verified from owner-supplied tracklist evidence and official Amazon/Apple Music release pages.
-// Hustle & Grind remains provisional because its exact release tracklist is not yet independently verified.
+// Verified counts describe the release tracklists; they do not prove WAV availability.
+// The reference price map below mirrors these counts while checkout remains disabled.
+// Delivery still requires valid WAV objects in R2, matching D1 associations, and a paid order.
 export const provisionalReleaseTrackCounts: Readonly<Record<string, number>> = {
   "199955740199": 1,
   "199956554184": 5,
