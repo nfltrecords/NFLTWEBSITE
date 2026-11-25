@@ -37,10 +37,10 @@ jobs:
               "NFLT_PAGES_DEPLOY.zip",
               "NFLT_SITE_CLOUDFLARE_UPLOAD.zip",
           ]
-          audio = re.compile(r"\\.(wav|m4a|mp3|flac|aif|aiff|aac|ogg|oga|opus|wma|alac|caf|mp4|m4b|amr|mid|midi)$", re.I)
+          audio = re.compile(r"\.(wav|m4a|mp3|flac|aif|aiff|aac|ogg|oga|opus|wma|alac|caf|mp4|m4b|amr|mid|midi)$", re.I)
           for name in names:
               path = root / name
-              print(f"\\nARCHIVE: {name} exists={path.exists()} size={path.stat().st_size if path.exists() else 0}")
+              print(f"\nARCHIVE: {name} exists={path.exists()} size={path.stat().st_size if path.exists() else 0}")
               if not path.exists():
                   continue
               with zipfile.ZipFile(path) as z:
