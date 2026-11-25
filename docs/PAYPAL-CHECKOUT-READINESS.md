@@ -14,8 +14,9 @@ Le verrou `checkoutActivationApproved` reste à `false`. La réparation techniqu
 - Les tables D1 `shop_orders` et `shop_release_assets` existent déjà en production. Les deux commandes de test historiques restent en attente ; aucune commande payée n'a été constatée.
 - `shop_release_assets` contient 18 associations de fichiers WAV couvrant 12 UPC. Les 18 objets R2 existent et leurs tailles correspondent aux valeurs D1. Une référence de fichier erronée pour The Dopest Collection Vol. 1 a été corrigée.
 - Le nom historique `medley.wav (1)` est reconnu comme WAV et normalisé en nom de téléchargement valide.
-- Les 37 MP3 de préécoute sont présents dans GitHub ; les 37 chemins référencés dans `src/lib/previews.ts` existent.
-- Les 19 objets M4A de R2 ne sont jamais utilisés comme masters de livraison.
+- Les extraits audio de 30 secondes ne font plus partie du code actif : aucun lecteur ni chemin de préécoute n'est référencé dans le catalogue ou la boutique.
+- Les 15 archives de préparation de la bibliothèque contenant le dossier `previews` ont été nettoyées ; les fichiers MP3 de préécoute et les dossiers `assets/previews` / `public/assets/previews` ont été retirés. Les trois archives de marque et de pochettes qui ne contenaient aucun extrait ont été conservées sans modification.
+- Les fichiers M4A conservés dans la bibliothèque ont été contrôlés : les 17 fichiers mesurés durent de 71 à 210 secondes ; ce ne sont pas des extraits de 30 secondes. Ils restent conservés comme sources et ne remplacent jamais les masters WAV.
 
 ## État des masters et des nombres de pistes
 
@@ -62,16 +63,16 @@ Ces protections sont des contrôles de code et de données. Elles ne constituent
 
 ## Inventaire audio et boutique — vérification de production du 24 novembre 2026
 
-L'état actuel est plus récent que l'ancien relevé à 11 associations :
+L'état de production a été actualisé après le nettoyage des extraits :
 
 - D1 contient maintenant 18 lignes dans `shop_release_assets`, toutes associées à des fichiers WAV existants dans R2. Aucune ligne D1 ne pointe vers un M4A.
-- Le bucket R2 complet contient 56 objets : 18 WAV, 19 M4A et 19 visuels. Aucun autre WAV n'a été trouvé ailleurs dans le bucket.
+- Après le nettoyage, le bucket R2 contient 37 objets : 18 WAV et 19 visuels. Aucun fichier MP3 ou M4A de préécoute n'y reste.
 - Les 18 WAV associés couvrent 12 UPC : 11 sorties ont leur ensemble complet ; `NOUS Y SOMMES` n'a que 3 masters sur 9.
 - Les 5 UPC vérifiés sans master WAV sont `Dilemma` (1 piste), `#NEVERFAKELIKETHEM` (1), `30.000 GÉNOCIDES` (8), `Hot` (1) et `GR 4LIFE` (1). Il manque également 6 WAV pour `NOUS Y SOMMES`.
 - Cela représente 18 masters WAV manquants pour les tracklists vérifiées. `Hustle & Grind` n'a pas de WAV associé et son nombre exact de pistes reste non confirmé.
-- Les M4A présents dans R2 restent des préécoutes ; ils ne sont jamais utilisés comme masters de livraison.
+- Les M4A sources conservés dans la bibliothèque ne sont pas des extraits de 30 secondes et ne sont jamais utilisés comme masters de livraison.
 
-Les 37 MP3 de préécoute sont désormais associés aux 18 UPC dans `src/lib/previews.ts`. Les lecteurs sont disponibles dans les fiches catalogue et directement dans les cartes de la boutique. Le point `/api/shop-availability` vérifie les masters complets dans D1/R2 ; les ajouts au panier sont désactivés pour les sorties incomplètes, et le panier bloque aussi les sélections anciennes devenues indisponibles. Le contrôle `npm run audit:assets`, ajouté à GitHub Actions, vérifie les 18 pochettes et les 37 associations MP3. Les tests, l'audit des ressources, le build, le contrôle TypeScript et le lint passent sur le dernier commit de code vérifié.
+Les lecteurs de préécoute et leurs références ont été retirés des fiches catalogue et de la boutique. Le contrôle `npm run audit:assets`, ajouté à GitHub Actions, vérifie les 18 pochettes et interdit le retour des chemins et composants de préécoute. Le point `/api/shop-availability` vérifie toujours les masters complets dans D1/R2 ; les ajouts au panier restent désactivés pour les sorties incomplètes, et le panier bloque aussi les sélections anciennes devenues indisponibles.
 
 Les masters WAV manquants n'ont été trouvés ni ailleurs dans le bucket R2, ni dans les archives ZIP examinées de GitHub et de la bibliothèque de fichiers. Ne pas convertir les M4A pour combler ces manques. Le transfert des nouveaux masters se fait via `/admin/audio` : l'outil utilise désormais le multipart R2, conserve uniquement la session et les ETags temporaires dans KV, vérifie la taille de l'objet, puis crée l'association D1 avec un asset key `r2:`. Les noms de fichiers déjà associés sont rejetés et la finalisation est idempotente.
 
