@@ -129,6 +129,14 @@ Pour Hustle & Grind, la capture DistroKid Vault `Screenshot_20261114-133340_Chro
 - Aucune tête de branche GitHub examinée ne contient de MP3 `*_PREVIEW_30S` ni d'archive de préécoutes.
 - Des composants audio de préécoute subsistent dans plusieurs branches historiques non fusionnées. Ne pas les fusionner dans `main`.
 
+## État de la livraison en production
+
+- Le Worker `nfltwebsite` est sur la version 212 à 100 % du trafic. Son script contient la validation WAV, la normalisation de nom `safeWavDownloadName`, l'upload multiple et le contrôle du statut payé ; il ne contient pas de code de préécoute audio.
+- `checkoutActivationApproved` et `checkoutEnabled` restent à `false`. Aucun paiement réel n'a été activé.
+- D1 contient 2 commandes en attente, 0 commande payée et 0 enregistrement de livraison e-mail. Aucun téléchargement client réel n'a été déclenché pendant cet audit.
+- L'unique namespace KV du compte contient 0 clé. Aucun master ni bloc audio n'a été retrouvé dans KV.
+- Le secret de mot de passe SMTP n'est pas lié au Worker ; l'envoi d'e-mails ne peut pas être déclaré opérationnel.
+
 ## Règles de livraison
 
 - Livrer uniquement des WAV valides, après paiement effectivement confirmé.
