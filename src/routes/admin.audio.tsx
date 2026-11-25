@@ -174,9 +174,7 @@ function Page() {
                       {item.expected ?? "À confirmer"}
                     </td>
                     <td className="px-2 py-3 text-right tabular-nums">{item.uploaded}</td>
-                    <td className="px-2 py-3 text-right tabular-nums">
-                      {item.missing ?? "—"}
-                    </td>
+                    <td className="px-2 py-3 text-right tabular-nums">{item.missing ?? "—"}</td>
                     <td className="py-3 pl-3">
                       {item.over
                         ? "Trop de fichiers"
