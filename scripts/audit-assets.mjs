@@ -13,6 +13,10 @@ const forbiddenPreviewPaths = [
   "assets/previews",
   "NFLT_PREVIEWS_30S.zip",
   "public/NFLT_PREVIEWS_30S.zip",
+  "public/assets/NFLT_PREVIEWS_30S.zip",
+  "src/components/PreviewLibrary.tsx",
+  "src/routes/previews.tsx",
+  "src/routes/en.previews.tsx",
   "src/lib/previews.ts",
   "src/components/ReleasePreview.tsx",
 ].filter((path) => existsSync(path));
@@ -35,7 +39,8 @@ const stalePreviewReferences = sourceFiles.filter((path) => {
   return (
     source.includes("/assets/previews/") ||
     source.includes("releasePreviews") ||
-    source.includes("ReleasePreview")
+    source.includes("ReleasePreview") ||
+    source.includes("PreviewLibrary")
   );
 });
 
