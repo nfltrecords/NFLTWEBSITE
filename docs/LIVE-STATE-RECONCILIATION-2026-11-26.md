@@ -55,7 +55,9 @@
 
 - Le checkout demeure fermé dans la configuration métier (`checkoutEnabled=false`, approbation explicite non accordée).
 - Aucun paiement réel n'est constaté : 0 commande payée.
-- Le Worker a une route IPN Classic associée ; le code vérifie la notification auprès de PayPal, le destinataire, le statut, le montant, la devise, le panier et l'unicité de transaction.
+- Le verrou de paiement est explicitement fermé : `checkoutActivationApproved = false`. La fonction serveur de création de commande refuse d'écrire une nouvelle commande tant que ce verrou est fermé.
+- Le flux PayPal Standard construit une URL PayPal Live (`www.paypal.com`) et l'IPN vérifie sur l'endpoint Live (`ipnpb.paypal.com`). Aucun mode Sandbox n'est implémenté pour ce flux. `/commande/paiement` est un écran d'annulation/information, pas une page de checkout.
+- La route IPN Classic est associée au Worker ; son code vérifie la notification auprès de PayPal, le destinataire, le statut, le montant, la devise, le panier et l'unicité de transaction.
 - Aucun test Sandbox complet de bout en bout n'est documenté comme réussi.
 - Le code PayPal REST/webhook utilise `PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET`, `PAYPAL_WEBHOOK_ID` et, dans le webhook versionné, `SUPABASE_SERVICE_ROLE_KEY`. Ces noms ne figurent pas dans les bindings secrets observés du Worker ; ce chemin REST/webhook n'est donc pas certifié configuré.
 - Le checkout doit rester fermé jusqu'aux tests Sandbox/IPN, à la livraison e-mail, à la validation vendeur/droits/TVA et à l'autorisation explicite.
