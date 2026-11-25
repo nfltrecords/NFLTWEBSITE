@@ -40,8 +40,8 @@
 ## Déploiement et sécurité
 
 - La PR d'administration WAV n°8 est fusionnée.
-- Le Worker `nfltwebsite` est actuellement sur la version **212**, déployée à 100 % le 25 novembre 2026 à 15:35:28 UTC. La version 211 précédente date de 15:18:04 UTC.
-- Le dernier commit `main` connu, `e7c940ac`, est un commit de documentation créé à 15:34:23 UTC. Le workflow GitHub Actions `45642986197` a réussi pour le commit runtime `c7a8c80` à 15:16 UTC. Cloudflare ne fournit pas de SHA Git dans les annotations de la version 212 : la correspondance exacte entre version 212 et SHA Git n'est donc pas prouvée.
+- Le Worker `nfltwebsite` est actuellement sur la version **214**, déployée à 100 % le 25 novembre 2026 à 16:50:07 UTC (deployment `571d8364-75d8-4b45-ab0b-d20f8f1941c3`, version `28c2d371-1f03-40b5-9bc7-d647e08c21ac`). Le build Cloudflare `54f89b25-6743-4c5d-a2ea-ff9ecfd89b14` a réussi pour le commit `6660b41e` à 16:50:13 UTC.
+- Le commit `main` courant est le squash merge `6660b41e40218d8966426731827d21cabef27b32` de la correction de track counts. Les workflows GitHub Actions ont réussi sur le head de PR `a092f551`; le build Cloudflare réussi confirme le déploiement du commit merge `6660b41e` dans la version 214.
 - La page `/admin/audio` utilise le code `ADMIN_ORDERS_CODE`, affiche l'inventaire et transfère les WAV par multipart R2 ; la signature RIFF/RF64 est vérifiée avant association D1.
 - La livraison reste conditionnée à une commande réellement payée et à un ensemble WAV complet. Les M4A ne sont jamais servis comme masters.
 - Le code garde `checkoutActivationApproved = false` et `checkoutEnabled = false` : les paiements réels restent fermés.
