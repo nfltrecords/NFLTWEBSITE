@@ -2,7 +2,7 @@
 
 **Contrôle complémentaire : 26 novembre 2026**  
 **Périmètre :** GitHub main, Cloudflare Worker/R2/D1 et fichiers de la Bibliothèque.  
-**Nature :** vérifications en lecture seule, sauf les deux sauvegardes documentaires mentionnées ci-dessous.
+**Nature :** contrôles des ressources de production en lecture seule ; corrections documentaires enregistrées sur une branche GitHub dédiée et dans R2. Aucune donnée D1, aucun master, aucun secret, aucune configuration DNS ni aucun checkout n'a été modifié.
 
 ## 1. Documents de continuité publiés
 
