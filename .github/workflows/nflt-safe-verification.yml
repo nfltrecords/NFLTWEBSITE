@@ -8,7 +8,7 @@ on:
       - main
   workflow_dispatch:
 permissions:
-  contents: read
+  contents: write
 jobs:
   verify-safe:
     runs-on: ubuntu-latest
@@ -17,59 +17,6 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.ref || github.ref }}
-      - name: Checkout legacy Cloudflare archive branch
-        uses: actions/checkout@v4
-        with:
-          ref: work/operations-readiness
-          path: legacy-archives
-      - name: Inspect legacy deployment ZIP archives
-        shell: bash
-        run: |
-          python - <<'PY'
-          import json, pathlib, re, shutil, subprocess, tempfile, zipfile
-          root = pathlib.Path("legacy-archives")
-          names = ["NFLT_CLOUDFLARE_UPLOAD_CORRIGE.zip", "NFLT_PAGES_DEPLOY.zip", "NFLT_SITE_CLOUDFLARE_UPLOAD.zip"]
-          audio = re.compile(r"\.(wav|m4a|mp3|flac|aif|aiff|aac|ogg|oga|opus|wma|alac|caf|mp4|m4b|amr|mid|midi)$", re.I)
-          nested_pattern = re.compile(r"\.(zip|rar|7z|tar|gz|tgz|xz|bz2)$", re.I)
-          ffprobe = shutil.which("ffprobe")
-          def inspect_zip(z, label, depth=0):
-              entries = z.infolist()
-              files = [e for e in entries if not e.is_dir()]
-              audio_files = [e for e in files if audio.search(e.filename)]
-              nested = [e for e in files if nested_pattern.search(e.filename)]
-              print(f"ARCHIVE={label} entries={len(entries)} audio={len(audio_files)} nested={len(nested)}")
-              for e in audio_files:
-                  if ffprobe:
-                      with z.open(e) as source, tempfile.NamedTemporaryFile(suffix=pathlib.Path(e.filename).suffix) as tmp:
-                          shutil.copyfileobj(source, tmp)
-                          tmp.flush()
-                          probe = subprocess.run([ffprobe, "-v", "error", "-show_entries", "format=duration,format_name:format_tags=title,album", "-of", "json", tmp.name], capture_output=True, text=True)
-                          try:
-                              fmt = json.loads(probe.stdout or "{}").get("format", {})
-                              print(f"AUDIO={label}!{e.filename} size={e.file_size} duration={fmt.get('duration','n/a')} format={fmt.get('format_name','n/a')}")
-                          except Exception:
-                              print(f"AUDIO={label}!{e.filename} size={e.file_size} probe_error={probe.stderr[:200]}")
-                  else:
-                      print(f"AUDIO={label}!{e.filename} size={e.file_size} duration=not-probed")
-              for e in nested:
-                  print(f"NESTED={label}!{e.filename} size={e.file_size}")
-                  if depth < 2 and e.filename.lower().endswith(".zip"):
-                      with z.open(e) as source, tempfile.NamedTemporaryFile(suffix=".zip") as tmp:
-                          shutil.copyfileobj(source, tmp)
-                          tmp.flush()
-                          with zipfile.ZipFile(tmp.name) as child:
-                              inspect_zip(child, f"{label}!{e.filename}", depth + 1)
-          for name in names:
-              path = root / name
-              print(f"\nTOP_LEVEL={name} exists={path.exists()} size={path.stat().st_size if path.exists() else 0}")
-              if not path.exists():
-                  continue
-              with zipfile.ZipFile(path) as z:
-                  entries = z.infolist()
-                  print(f"HAS_AUDIO_ORIGINALS={any(e.filename.rstrip('/').endswith('audio-originals') for e in entries)}")
-                  print(f"HAS_AUDIO_INVENTORY={any(e.filename.endswith('audio-inventory.csv') for e in entries)}")
-                  inspect_zip(z, name)
-          PY
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -85,3 +32,53 @@ jobs:
         run: npm run build
       - name: Lint
         run: npm run lint
+      - name: Checkout legacy Cloudflare archive branch
+        uses: actions/checkout@v4
+        with:
+          ref: work/operations-readiness
+          path: legacy-archives
+      - name: Remove 30-second preview MP3s from legacy deployment archives
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        working-directory: ${{ github.workspace }}
+        run: |
+          python - <<'PY'
+          import pathlib, re, zipfile
+          root = pathlib.Path("legacy-archives")
+          output = pathlib.Path("cleaned-archives")
+          output.mkdir(exist_ok=True)
+          names = ["NFLT_CLOUDFLARE_UPLOAD_CORRIGE.zip", "NFLT_PAGES_DEPLOY.zip", "NFLT_SITE_CLOUDFLARE_UPLOAD.zip"]
+          preview = re.compile(r"_PREVIEW_30S\\.mp3$", re.I)
+          for name in names:
+              source = root / name
+              target = output / name
+              removed = []
+              with zipfile.ZipFile(source) as zin:
+                  with zipfile.ZipFile(target, "w") as zout:
+                      zout.comment = zin.comment
+                      for info in zin.infolist():
+                          if not info.is_dir() and preview.search(info.filename):
+                              removed.append(info.filename)
+                              continue
+                          zout.writestr(info, zin.read(info.filename))
+              if len(removed) != 37:
+                  raise SystemExit(f"Expected 37 preview MP3s in {name}, found {len(removed)}")
+              with zipfile.ZipFile(target) as check:
+                  leftovers = [i.filename for i in check.infolist() if preview.search(i.filename)]
+                  if leftovers:
+                      raise SystemExit(f"Preview files remain in {name}: {leftovers}")
+                  print(f"CLEANED {name}: removed={len(removed)} remaining_entries={len(check.infolist())} new_bytes={target.stat().st_size}")
+          PY
+          git clone --depth 1 --no-checkout "https://x-access-token:${GH_TOKEN}@github.com/nfltrecords/NFLTWEBSITE.git" branch-cleanup
+          cd branch-cleanup
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for branch in work/audio-preview-audit work/catalogue-previews-audit work/footer-logo-original work/nflt-kv-audio-delivery-rebased work/operations-readiness work/secure-audio-delivery work/streaming-hub; do
+            git fetch --depth 1 origin "$branch"
+            git checkout -B "$branch" FETCH_HEAD
+            cp ../cleaned-archives/*.zip .
+            git add -- NFLT_CLOUDFLARE_UPLOAD_CORRIGE.zip NFLT_PAGES_DEPLOY.zip NFLT_SITE_CLOUDFLARE_UPLOAD.zip
+            git commit -m "Remove 30-second preview MP3s from legacy deployment archives"
+            git push origin HEAD:"$branch"
+          done
