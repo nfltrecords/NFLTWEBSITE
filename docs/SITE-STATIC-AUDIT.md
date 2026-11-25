@@ -5,7 +5,7 @@ Audit statique du code de la branche `main`, complété par la lecture des journ
 ## Catalogue et boutique
 
 - Le catalogue source contient 18 sorties.
-- Le script `scripts/audit-assets.mjs` contrôle le nombre de pochettes, les UPC manquants et les MP3 ; le rapport de migration daté du 15 novembre indique 18 pochettes appariées aux 18 UPC.
+- Le script `scripts/audit-assets.mjs` contrôle les 18 pochettes, les UPC manquants et l'absence des chemins/composants d'extraits audio ; aucun MP3 de préécoute n'est requis par le code actif.
 - Le rapport interne propriétaire daté du 14 novembre documente 18 JPG originaux accessibles dans l'archive média, dont 16 associations titre/pochette/UPC vérifiées par captures, et deux associations qui nécessitent encore une preuve complémentaire. Le même rapport indique que les fichiers originaux mesurés dans l'archive font 1536 × 1536 px, malgré certains noms de fichiers contenant « 3000x3000 ».
 - La boutique affiche les 18 sorties, leurs pochettes et leurs UPC, et permet de rechercher un titre.
 - Chaque sortie propose une demande de disponibilité ; les demandes de licence/disponibilité utilisent un formulaire distinct.
@@ -30,7 +30,7 @@ Audit statique du code de la branche `main`, complété par la lecture des journ
 - `src/routes/__root.tsx` importe `reportLovableError` depuis `src/lib/lovable-error-reporting.ts`. Ce module utilise les hooks globaux optionnels `__lovableEvents` et `__lovableReportRuntimeError`, dont le second est commenté comme présent uniquement dans l'aperçu de l'éditeur.
 - `AGENTS.md` contient encore un bloc d'instructions indiquant que le dépôt est connecté à Lovable et que les commits poussés sont synchronisés vers son éditeur.
 - Le répertoire `.lovable/` contient des dossiers et documents internes encore référencés par les tests et la documentation (notamment configuration commerce, revues catalogue et documents juridiques). Il ne faut pas le supprimer en bloc sans migrer ses usages et préserver les dossiers privés.
-- Le dépôt contient également des archives ZIP de préparation Cloudflare et médias ; elles ne sont pas à supprimer sans vérifier leur rôle et les fichiers source qu'elles contiennent.
+- Les archives ZIP de préparation Cloudflare et médias ont été inventoriées : 15 archives de préparation contenant des MP3 de 30 secondes ont été nettoyées en conservant les autres fichiers ; les trois archives de marque/pochettes sans extraits ont été laissées intactes.
 
 Ces éléments signifient que l'indépendance technique vis-à-vis de Lovable n'est pas encore certifiée. Leur retrait doit être réalisé par étapes, avec remplacement des dépendances, tests et préservation des documents privés.
 
