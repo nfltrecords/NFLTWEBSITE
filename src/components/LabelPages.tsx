@@ -188,7 +188,7 @@ export function HomePage({ locale = "fr" }: { locale?: Locale }) {
         </span>
       </section>
       <div className="identity-strip">
-        <span>NFLT RECORDS INC.</span>
+        <span>NFLT RECORDS NEW-YORK</span>
         <span className="identity-divider" aria-hidden="true" />
         <span>NFLT RECORDS FRANCE</span>
         <span className="identity-divider" aria-hidden="true" />
