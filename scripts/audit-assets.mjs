@@ -11,6 +11,8 @@ const coverFiles = readdirSync(coverDir).filter(
 const forbiddenPreviewPaths = [
   "public/assets/previews",
   "assets/previews",
+  "NFLT_PREVIEWS_30S.zip",
+  "public/NFLT_PREVIEWS_30S.zip",
   "src/lib/previews.ts",
   "src/components/ReleasePreview.tsx",
 ].filter((path) => existsSync(path));
