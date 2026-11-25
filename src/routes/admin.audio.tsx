@@ -3,10 +3,12 @@ import { useState } from "react";
 import { releases } from "@/lib/catalogue";
 import { SiteLayout } from "@/components/SiteLayout";
 import { Button } from "@/components/ui/button";
+
 export const Route = createFileRoute("/admin/audio")({
   component: Page,
   head: () => ({ meta: [{ name: "robots", content: "noindex,nofollow" }] }),
 });
+
 type UploadStartResult = {
   assetKey: string;
   chunkCount: number;
@@ -71,10 +73,14 @@ function Page() {
         setProgress(Math.round((sentBytes / totalBytes) * 100));
         setMsg(`Transfert validé : ${completed}/${files.length} masters`);
       }
-      setMsg(`Terminé : ${completed} master(s) WAV envoyé(s) et associé(s) à ${upc}. ${uploaded.join(", ")}`);
+      setMsg(
+        `Terminé : ${completed} master(s) WAV envoyé(s) et associé(s) à ${upc}. ${uploaded.join(", ")}`,
+      );
       setFiles([]);
     } catch (e) {
-      setMsg(`Arrêt après ${completed}/${files.length} fichier(s). ${e instanceof Error ? e.message : "Erreur inconnue"}`);
+      setMsg(
+        `Arrêt après ${completed}/${files.length} fichier(s). ${e instanceof Error ? e.message : "Erreur inconnue"}`,
+      );
     } finally {
       setBusy(false);
     }
@@ -87,12 +93,21 @@ function Page() {
         <h1>Transfert des masters WAV</h1>
         <label className="mt-6 grid gap-2">
           Code administrateur
-          <input type="password" value={code} onChange={(e) => setCode(e.target.value)} className="rounded border p-3" />
+          <input
+            type="password"
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+            className="rounded border p-3"
+          />
         </label>
         <label className="mt-4 grid gap-2">
           Sortie
           <select value={upc} onChange={(e) => setUpc(e.target.value)} className="rounded border p-3">
-            {releases.map((r) => <option key={r.upc} value={r.upc}>{r.title} — {r.upc}</option>)}
+            {releases.map((r) => (
+              <option key={r.upc} value={r.upc}>
+                {r.title} — {r.upc}
+              </option>
+            ))}
           </select>
         </label>
         <label className="mt-4 grid gap-2">
@@ -105,12 +120,22 @@ function Page() {
           />
         </label>
         <p className="body-copy mt-2">{files.length} fichier(s) sélectionné(s)</p>
-        <Button className="editorial-action mt-5" disabled={!files.length || !code || busy} onClick={upload}>
+        <Button
+          className="editorial-action mt-5"
+          disabled={!files.length || !code || busy}
+          onClick={upload}
+        >
           {busy ? "Transfert en cours…" : `Envoyer ${files.length || ""} master(s)`}
         </Button>
         <progress className="mt-4 w-full" value={progress} max={100} />
-        <p role="status" className="body-copy mt-3">{msg}</p>
-        <p className="body-copy mt-6"><a className="underline" href="/admin/orders">Gestion des commandes</a></p>
+        <p role="status" className="body-copy mt-3">
+          {msg}
+        </p>
+        <p className="body-copy mt-6">
+          <a className="underline" href="/admin/orders">
+            Gestion des commandes
+          </a>
+        </p>
       </section>
     </SiteLayout>
   );
