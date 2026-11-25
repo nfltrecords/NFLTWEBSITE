@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { env } from "cloudflare:workers";
 import { releases } from "@/lib/catalogue";
 import { shopEnv } from "@/lib/shop-db.server";
+import { hasValidWavHeader } from "@/lib/audio-assets";
 
 const CHUNK = 20 * 1024 * 1024;
 const MAX_FILE_SIZE = 110 * 1024 * 1024;
@@ -57,8 +58,9 @@ export const Route = createFileRoute("/api/admin/audio")({
               !releases.some((release) => release.upc === body.upc) ||
               typeof body.fileName !== "string" ||
               !/^[A-Za-z0-9À-ÿ ._()'-]{1,180}\.wav$/i.test(body.fileName) ||
+              typeof body.fileSize !== "number" ||
               !Number.isSafeInteger(body.fileSize) ||
-              !body.fileSize ||
+              body.fileSize < 12 ||
               body.fileSize > MAX_FILE_SIZE
             ) {
               return Response.json({ error: "Métadonnées WAV invalides" }, { status: 400 });
@@ -132,6 +134,12 @@ export const Route = createFileRoute("/api/admin/audio")({
               partIndex === session.chunkCount - 1 ? session.fileSize - partIndex * CHUNK : CHUNK;
             if (bytes.byteLength !== expectedSize) {
               return Response.json({ error: "Taille invalide" }, { status: 400 });
+            }
+            if (partIndex === 0 && !hasValidWavHeader(bytes)) {
+              return Response.json(
+                { error: "Le fichier ne contient pas une signature WAV RIFF/RF64 valide" },
+                { status: 415 },
+              );
             }
 
             const multipart = shopEnv.AUDIO_R2.resumeMultipartUpload(

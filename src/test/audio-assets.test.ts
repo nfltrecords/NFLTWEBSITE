@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   hasCompleteWavMasterSet,
+  hasValidWavHeader,
   isWavMasterFileName,
   safeWavDownloadName,
 } from "@/lib/audio-assets";
@@ -25,5 +26,24 @@ describe("WAV master filenames", () => {
     expect(hasCompleteWavMasterSet(["a.wav", "b.m4a"], 2)).toBe(false);
     expect(hasCompleteWavMasterSet(["a.wav"], 0)).toBe(false);
     expect(hasCompleteWavMasterSet(["a.wav", "A.WAV"], 2)).toBe(false);
+  });
+});
+
+describe("WAV file signature", () => {
+  it("accepts RIFF and RF64 WAVE headers", () => {
+    const riff = new Uint8Array(12);
+    riff.set([82, 73, 70, 70], 0);
+    riff.set([87, 65, 86, 69], 8);
+    expect(hasValidWavHeader(riff)).toBe(true);
+    riff.set([82, 70, 54, 52], 0);
+    expect(hasValidWavHeader(riff)).toBe(true);
+  });
+
+  it("rejects renamed MP3/M4A files and truncated headers", () => {
+    const fake = new Uint8Array(12);
+    fake.set([73, 68, 51], 0);
+    fake.set([77, 52, 65, 32], 8);
+    expect(hasValidWavHeader(fake)).toBe(false);
+    expect(hasValidWavHeader(new Uint8Array(11))).toBe(false);
   });
 });

@@ -2,6 +2,7 @@ import { getShopAssets, getShopOrder, shopEnv, type ShopAsset } from "@/lib/shop
 import { releases } from "@/lib/catalogue";
 import {
   hasCompleteWavMasterSet,
+  hasValidWavHeader,
   isWavMasterFileName,
   safeWavDownloadName,
 } from "@/lib/audio-assets";
@@ -48,13 +49,22 @@ export async function getCompleteWavTracks(upc: string): Promise<ShopAsset[] | n
   const available = await Promise.all(
     tracks.map(async (asset) => {
       if (asset.asset_key.startsWith("r2:")) {
-        const object = await shopEnv.AUDIO_R2.head(asset.asset_key.slice(3));
-        return Boolean(object && object.size === asset.file_size);
+        const key = asset.asset_key.slice(3);
+        const [object, headerObject] = await Promise.all([
+          shopEnv.AUDIO_R2.head(key),
+          shopEnv.AUDIO_R2.get(key, { range: { offset: 0, length: 12 } }),
+        ]);
+        if (!object || object.size !== asset.file_size || !headerObject) return false;
+        return hasValidWavHeader(await headerObject.arrayBuffer());
       }
       if (!Number.isInteger(asset.chunk_count) || asset.chunk_count < 1 || asset.chunk_count > 10) {
         return false;
       }
-      const listed = await shopEnv.AUDIO_KV.list({ prefix: `${asset.asset_key}:`, limit: 1000 });
+      const [listed, firstChunk] = await Promise.all([
+        shopEnv.AUDIO_KV.list({ prefix: `${asset.asset_key}:`, limit: 1000 }),
+        shopEnv.AUDIO_KV.get(`${asset.asset_key}:0`, "arrayBuffer"),
+      ]);
+      if (!firstChunk || !hasValidWavHeader(firstChunk)) return false;
       const chunkNames = new Set(listed.keys.map((entry) => entry.name));
       return Array.from({ length: asset.chunk_count }, (_, index) =>
         chunkNames.has(`${asset.asset_key}:${index}`),
