@@ -17,6 +17,55 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.ref || github.ref }}
+      - name: Checkout legacy Cloudflare archive branch
+        uses: actions/checkout@v4
+        with:
+          ref: work/operations-readiness
+          path: legacy-archives
+      - name: Inspect legacy deployment ZIP archives
+        shell: bash
+        run: |
+          if ! command -v ffprobe >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install -y ffmpeg
+          fi
+          python - <<'PY'
+          import json, pathlib, re, shutil, subprocess, tempfile, zipfile
+          root = pathlib.Path("legacy-archives")
+          names = [
+              "NFLT_CLOUDFLARE_UPLOAD_CORRIGE.zip",
+              "NFLT_PAGES_DEPLOY.zip",
+              "NFLT_SITE_CLOUDFLARE_UPLOAD.zip",
+          ]
+          audio = re.compile(r"\\.(wav|m4a|mp3|flac|aif|aiff|aac|ogg|oga|opus|wma|alac|caf|mp4|m4b|amr|mid|midi)$", re.I)
+          for name in names:
+              path = root / name
+              print(f"\\nARCHIVE: {name} exists={path.exists()} size={path.stat().st_size if path.exists() else 0}")
+              if not path.exists():
+                  continue
+              with zipfile.ZipFile(path) as z:
+                  entries = z.infolist()
+                  print(f"ENTRY_COUNT={len(entries)}")
+                  print(f"HAS_AUDIO_ORIGINALS={any(e.filename.rstrip('/').endswith('audio-originals') for e in entries)}")
+                  print(f"HAS_AUDIO_INVENTORY={any(e.filename.endswith('audio-inventory.csv') for e in entries)}")
+                  files = [e for e in entries if not e.is_dir() and audio.search(e.filename)]
+                  print(f"AUDIO_COUNT={len(files)}")
+                  for entry in files:
+                      with z.open(entry) as source, tempfile.NamedTemporaryFile(suffix=pathlib.Path(entry.filename).suffix) as tmp:
+                          shutil.copyfileobj(source, tmp)
+                          tmp.flush()
+                          probe = subprocess.run(
+                              ["ffprobe", "-v", "error", "-show_entries", "format=duration,format_name:format_tags=title,album", "-of", "json", tmp.name],
+                              capture_output=True, text=True
+                          )
+                          try:
+                              data = json.loads(probe.stdout or "{}")
+                              fmt = data.get("format", {})
+                              duration = fmt.get("duration", "n/a")
+                              print(f"AUDIO {entry.filename} size={entry.file_size} duration={duration} format={fmt.get('format_name','n/a')}")
+                          except Exception:
+                              print(f"AUDIO {entry.filename} size={entry.file_size} probe_error={probe.stderr[:300]}")
+          PY
       - uses: actions/setup-node@v4
         with:
           node-version: 22
