@@ -102,6 +102,8 @@ Les captures `Screenshot_20261114-141553_Spotify.jpg` et `Screenshot_20261114-19
 - UPC `199751508283` — `NFLTHOT.m4a`
 - UPC `821440674572` — `GR4LIFE.m4a`
 
+Pour `#NEVERFAKELIKETHEM`, le nom du fichier correspond exactement au single du catalogue et le propriétaire a confirmé la sortie comme single. Aucune capture DistroKid affichant l'UPC pour ce M4A n'a été retrouvée dans les archives inspectées : cette association reste documentée comme confirmation du propriétaire, pas comme preuve indépendante.
+
 Pour Hustle & Grind, la capture DistroKid Vault `Screenshot_20261114-133340_Chrome.jpg` affiche le fichier, le titre, le titre d'album et l'UPC `199955715203`. Le fichier complet dure 181,069 secondes.
 
 ## Validation technique
