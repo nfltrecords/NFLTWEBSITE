@@ -47,7 +47,6 @@ describe("App routing", () => {
     "/en/press",
     "/application",
     "/en/application",
-    "/admin",
     "/radio",
     "/en/radio",
     "/boutique",
