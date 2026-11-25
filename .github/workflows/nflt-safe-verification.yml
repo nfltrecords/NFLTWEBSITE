@@ -49,7 +49,7 @@ jobs:
           output = pathlib.Path("cleaned-archives")
           output.mkdir(exist_ok=True)
           names = ["NFLT_CLOUDFLARE_UPLOAD_CORRIGE.zip", "NFLT_PAGES_DEPLOY.zip", "NFLT_SITE_CLOUDFLARE_UPLOAD.zip"]
-          preview = re.compile(r"_PREVIEW_30S\\.mp3$", re.I)
+          preview = re.compile(r"_PREVIEW_30S\.mp3$", re.I)
           for name in names:
               source = root / name
               target = output / name
