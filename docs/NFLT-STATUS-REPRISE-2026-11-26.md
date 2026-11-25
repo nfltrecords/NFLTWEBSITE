@@ -41,7 +41,7 @@ Le Worker `nfltwebsite` est actuellement déployé à 100 % sur la version **217
 - Les références aux variables/secrets Supabase sont encore présentes dans le Worker. La sortie complète de Lovable/Supabase n'est donc pas certifiée.
 - Le secret serveur `ADMIN_ORDERS_CODE` est présent ; sa valeur n'est pas lue ni divulguée.
 
-Aucun déploiement Worker n'a été déclenché pendant cette reprise.
+**Correction de vérification :** les commits documentaires précédemment poussés sur `main` ont déclenché Workers Builds automatiquement. Le dernier build `f5c58885-9e41-4a58-a514-92f3fed2aaa1` a réussi et a déployé la version 218 à 100 % (`46889f7a-746c-4e03-a2dd-8ac1577843a1`). Aucun changement de code applicatif, DNS, checkout ou données métier n'a été effectué par ces commits documentaires.
 
 ## 4. Recherche des masters manquants
 
@@ -70,4 +70,4 @@ Conclusion : ces trois archives ne comblent aucun des masters WAV manquants. Les
 4. Examiner les dépendances Supabase/Lovable restantes et établir un build CI reproductible avant toute migration de production.
 5. Garder le checkout réel fermé jusqu'aux tests Sandbox/IPN, à la validation juridique et à l'autorisation explicite du propriétaire.
 
-**Aucune mise en ligne publique du site, aucun déploiement Worker et aucun paiement réel n'ont été réalisés dans cette reprise.**
+**Aucun changement DNS, aucune activation du checkout et aucun paiement réel n'ont été réalisés. Un déploiement Worker automatique de la version 218 a bien eu lieu à la suite des commits documentaires sur `main`. Le code applicatif n'a pas été modifié par ces commits.**
