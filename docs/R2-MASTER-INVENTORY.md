@@ -68,3 +68,8 @@ Le catalogue documenté totalise 37 pistes : 15 singles (15 pistes), `0+` (5), `
 - 18 pistes ont un master WAV dans R2 : 10 singles, les 5 pistes de `0+` et 3 pistes de `NOUS Y SOMMES`.
 - 19 pistes ont une source M4A complète dans le Library mais aucun équivalent WAV retrouvé dans R2 ou les archives inspectées : 5 singles, 6 pistes de `NOUS Y SOMMES` et 8 pistes de `30.000 GÉNOCIDES`.
 - Ne jamais convertir un M4A en WAV et présenter le fichier converti comme le master WAV original. Retrouver le WAV source auprès de l'emplacement d'origine avant de l'ajouter à R2.
+
+## Vérification des autres stockages
+
+- Le compte Cloudflare ne retourne qu'un namespace KV ; son inventaire de clés est vide (0 clé). Aucun bloc audio n'y est stocké.
+- Le schéma D1 ne contient pas de table de chunks audio : les 18 associations résident dans `shop_release_assets`. La table de livraisons e-mail est vide ; les commandes sont 2 en attente et 0 payée.
