@@ -23,7 +23,7 @@
 - **NOUS Y SOMMES** possède 3 masters sur 9 : 6 manquants.
 - Cinq sorties vérifiées n'ont aucun master associé : **Hot** (1), **Dilemma** (1), **#NEVERFAKELIKETHEM** (1), **30.000 GÉNOCIDES** (8) et **GR 4LIFE** (1).
 - Cela représente **18 WAV manquants** pour les tracklists vérifiées. **Hustle & Grind** n'a pas de WAV associé et son nombre de pistes reste à confirmer.
-- Les 17 fichiers M4A encore présents dans la bibliothèque de travail ont été mesurés entre 71 et 210 secondes : ce sont des fichiers audio complets, pas des extraits de 30 secondes. Ils restent conservés comme sources et ne remplacent jamais les masters WAV.
+- Les 19 fichiers M4A encore présents dans la bibliothèque de travail ont été mesurés entre 71 et 210 secondes : ce sont des fichiers audio complets, pas des extraits de 30 secondes. Ils restent conservés comme sources et ne remplacent jamais les masters WAV.
 - Après le nettoyage, R2 contient 37 objets : 18 WAV et 19 visuels. Aucun MP3 de préécoute ni fichier M4A de préécoute n'y reste.
 
 ## Nettoyage des extraits
