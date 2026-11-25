@@ -25,14 +25,14 @@ Audit statique du code de la branche `main`, complété par la lecture des journ
 - Le schéma TypeScript Supabase versionné ne déclare que `contact_messages` et `licensing_inquiries`. `drizzle/schema.ts` est un fichier généré laissé vide. Le répertoire `supabase/` ne contient qu'un `config.toml` dans l'arborescence publique du dépôt.
 - Le schéma réel du projet Supabase, ses données et ses politiques RLS ne sont pas vérifiés faute d'accès au compte.
 
-## Dépendances Lovable encore visibles
+## Dépendances Lovable et Supabase — vérification du 26 novembre 2026
 
-- `src/routes/__root.tsx` importe `reportLovableError` depuis `src/lib/lovable-error-reporting.ts`. Ce module utilise les hooks globaux optionnels `__lovableEvents` et `__lovableReportRuntimeError`, dont le second est commenté comme présent uniquement dans l'aperçu de l'éditeur.
-- `AGENTS.md` contient encore un bloc d'instructions indiquant que le dépôt est connecté à Lovable et que les commits poussés sont synchronisés vers son éditeur.
-- Le répertoire `.lovable/` contient des dossiers et documents internes encore référencés par les tests et la documentation (notamment configuration commerce, revues catalogue et documents juridiques). Il ne faut pas le supprimer en bloc sans migrer ses usages et préserver les dossiers privés.
-- Les archives ZIP de préparation Cloudflare et médias ont été inventoriées : 15 archives de préparation contenant des MP3 de 30 secondes ont été nettoyées en conservant les autres fichiers ; les trois archives de marque/pochettes sans extraits ont été laissées intactes.
-
-Le runtime ne montre plus de dépendance `reportLovableError` dans la route racine, mais `.lovable/` subsiste et des références Supabase sont encore présentes dans le code et les bindings Worker. L'indépendance complète de l'application vis-à-vis de Lovable et de Supabase n'est donc pas certifiée ; poursuivre l'inventaire des usages réels avant toute suppression.
+- Le fichier `src/routes/__root.tsx` actuellement sur `main` ne contient plus d'import `reportLovableError`.
+- Le chemin `src/lib/lovable-error-reporting.ts` n'est plus présent sur `main` (lecture GitHub : 404).
+- `AGENTS.md` ne contient plus d'instruction de synchronisation Lovable ; il indique de ne pas supposer qu'un éditeur externe synchronise les branches ou commits.
+- Le dossier privé `.lovable/` existe toujours, notamment `project.json` et `commerce-config.json`, ainsi que des brouillons juridiques internes. Ce dossier ne doit pas être supprimé en bloc ni publié.
+- Des références Supabase persistent dans le Worker et dans le code du webhook PayPal REST. Les bindings Worker exposent encore `SUPABASE_URL` et `SUPABASE_PUBLISHABLE_KEY`. Le code du webhook REST demande aussi `SUPABASE_SERVICE_ROLE_KEY`, qui n'est pas présent dans les bindings observés.
+- Conclusion : le runtime racine ne dépend plus du module d'erreur Lovable observé dans l'ancien audit, mais l'indépendance complète vis-à-vis de Lovable/Supabase n'est pas certifiée. La migration restante doit être basée sur les usages actuels, sans supprimer les documents privés.
 
 ## Workflows et validation
 
