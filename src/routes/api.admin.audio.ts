@@ -3,7 +3,7 @@ import { env } from "cloudflare:workers";
 import { releases } from "@/lib/catalogue";
 import { verifiedReleaseTrackCounts } from "@/lib/commerce";
 import { shopEnv } from "@/lib/shop-db.server";
-import { hasValidWavHeader } from "@/lib/audio-assets";
+import { hasValidWavHeader, isWavMasterFileName } from "@/lib/audio-assets";
 
 const CHUNK = 20 * 1024 * 1024;
 const MAX_FILE_SIZE = 110 * 1024 * 1024;
@@ -50,24 +50,23 @@ export const Route = createFileRoute("/api/admin/audio")({
           const action = new URL(request.url).searchParams.get("action");
 
           if (action === "inventory") {
-            const [result, assetsResult] = await Promise.all([
-              shopEnv.DB.prepare(
-                "SELECT release_upc, COUNT(*) AS wav_count FROM shop_release_assets WHERE lower(file_name) LIKE '%.wav' GROUP BY release_upc",
-              ).all<{ release_upc: string; wav_count: number }>(),
-              shopEnv.DB.prepare(
-                "SELECT release_upc, asset_key, file_name, file_size FROM shop_release_assets WHERE lower(file_name) LIKE '%.wav' ORDER BY release_upc, file_name",
-              ).all<{
-                release_upc: string;
-                asset_key: string;
-                file_name: string;
-                file_size: number;
-              }>(),
-            ]);
-            const linkedCounts = new Map(
-              (result.results ?? []).map((row) => [row.release_upc, row.wav_count]),
+            const assetsResult = await shopEnv.DB.prepare(
+              "SELECT release_upc, asset_key, file_name, file_size FROM shop_release_assets ORDER BY release_upc, file_name",
+            ).all<{
+              release_upc: string;
+              asset_key: string;
+              file_name: string;
+              file_size: number;
+            }>();
+            const wavAssets = (assetsResult.results ?? []).filter((asset) =>
+              isWavMasterFileName(asset.file_name),
             );
+            const linkedCounts = new Map<string, number>();
+            for (const asset of wavAssets) {
+              linkedCounts.set(asset.release_upc, (linkedCounts.get(asset.release_upc) ?? 0) + 1);
+            }
             const checkedAssets = await Promise.all(
-              (assetsResult.results ?? []).map(async (asset) => {
+              wavAssets.map(async (asset) => {
                 if (!asset.asset_key.startsWith("r2:")) {
                   return { ...asset, valid: false, issue: "Stockage historique non vérifié" };
                 }
@@ -143,11 +142,14 @@ export const Route = createFileRoute("/api/admin/audio")({
             const expectedTrackCount = verifiedReleaseTrackCounts[upc];
             if (expectedTrackCount !== undefined) {
               const current = await shopEnv.DB.prepare(
-                "SELECT COUNT(*) AS wav_count FROM shop_release_assets WHERE release_upc = ? AND lower(file_name) LIKE '%.wav'",
+                "SELECT file_name FROM shop_release_assets WHERE release_upc = ?",
               )
                 .bind(upc)
-                .first<{ wav_count: number }>();
-              if ((current?.wav_count ?? 0) >= expectedTrackCount) {
+                .all<{ file_name: string }>();
+              const currentWavCount = (current.results ?? []).filter((asset) =>
+                isWavMasterFileName(asset.file_name),
+              ).length;
+              if (currentWavCount >= expectedTrackCount) {
                 return Response.json(
                   { error: "Le nombre de masters WAV attendu pour cette sortie est déjà atteint" },
                   { status: 409 },
