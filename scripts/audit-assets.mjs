@@ -44,12 +44,24 @@ const stalePreviewReferences = sourceFiles.filter((path) => {
   );
 });
 
+const previewAssetFiles = [];
+function collectPreviewAssetFiles(directory) {
+  for (const entry of readdirSync(directory, { withFileTypes: true })) {
+    if ([".git", "node_modules", "dist", ".wrangler", ".vercel"].includes(entry.name)) continue;
+    const path = join(directory, entry.name);
+    if (entry.isDirectory()) collectPreviewAssetFiles(path);
+    else if (/_PREVIEW_30S\\.(mp3|m4a|wav|aac)$/i.test(entry.name)) previewAssetFiles.push(path);
+  }
+}
+collectPreviewAssetFiles(".");
+
 const result = {
   catalogueReleases: upcs.length,
   coverFiles: coverFiles.length,
   missingCoverUPCs,
   forbiddenPreviewPaths,
   stalePreviewReferences,
+  previewAssetFiles,
 };
 console.log(JSON.stringify(result, null, 2));
 
@@ -57,7 +69,8 @@ if (
   missingCoverUPCs.length ||
   coverFiles.length !== upcs.length ||
   forbiddenPreviewPaths.length ||
-  stalePreviewReferences.length
+  stalePreviewReferences.length ||
+  previewAssetFiles.length
 ) {
   process.exitCode = 1;
 }
