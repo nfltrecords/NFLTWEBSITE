@@ -40,3 +40,12 @@ npm run build
 ```
 
 La publication doit attendre la réussite de ces contrôles et un test de prévisualisation sur l'URL `workers.dev`. Le domaine personnalisé ne doit être rattaché qu'après validation complète.
+
+
+## Actualisation — suppression des extraits de 30 secondes (25 novembre 2026)
+
+- Les anciens MP3 `*_PREVIEW_30S` et les dossiers `assets/previews` / `public/assets/previews` ont été retirés des 15 archives de préparation de la bibliothèque qui les contenaient.
+- Les archives GitHub `nflt-records.zip` et `NFLT-18-covers-and-mapping.zip` ne contenaient aucun extrait ; elles ont été conservées.
+- Le code actif et le script `scripts/audit-assets.mjs` interdisent le retour des chemins/composants de préécoute.
+- Les 17 fichiers M4A conservés dans la bibliothèque ont été contrôlés à 71–210 secondes ; ils ne sont pas des extraits de 30 secondes et restent conservés comme sources.
+- Le bucket R2 `nflt-audio-master` a été nettoyé : 37 objets restants, soit 18 WAV et 19 visuels, aucun MP3/M4A de préécoute.
