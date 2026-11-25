@@ -276,7 +276,13 @@ export const Route = createFileRoute("/api/admin/audio")({
                 ? await shopEnv.DB.prepare(
                     "INSERT OR IGNORE INTO shop_release_assets (release_upc, asset_key, file_name, file_size, chunk_count) VALUES (?, ?, ?, ?, ?)",
                   )
-                    .bind(session.upc, assetKey, session.fileName, session.fileSize, session.chunkCount)
+                    .bind(
+                      session.upc,
+                      assetKey,
+                      session.fileName,
+                      session.fileSize,
+                      session.chunkCount,
+                    )
                     .run()
                 : await shopEnv.DB.prepare(
                     "INSERT OR IGNORE INTO shop_release_assets (release_upc, asset_key, file_name, file_size, chunk_count) SELECT ?, ?, ?, ?, ? WHERE (SELECT COUNT(*) FROM shop_release_assets WHERE release_upc = ?) < ?",
