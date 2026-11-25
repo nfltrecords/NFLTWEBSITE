@@ -100,7 +100,16 @@ Pour activer l'envoi, ajouter `SMTP_PASSWORD` comme secret dans Cloudflare : **W
 
 Aucun email client n'a encore été envoyé ni reçu ; le test réel attend l'ajout du secret.
 
-## État Cloudflare vérifié le 26 novembre 2026\n\n- Worker `nfltwebsite` : version 218 active à 100 % ; dernier build Workers réussi sur le commit documentaire `5ba11a50460023c708aad7a4ea346b2e88b2bdd2`.\n- Les domaines personnalisés apex et `www` sont activés ; la route `/api/paypal/ipn` est associée au Worker.\n- D1 relu en lecture seule : 18 associations WAV couvrant 12 UPC ; 2 commandes `pending`, 0 `paid` ; aucune ligne dans `shop_email_deliveries`.\n- R2 relu en lecture seule : 18 WAV (`audio/wav`), 18 JPG et un objet vide de préfixe.\n- Le secret `SMTP_PASSWORD` est absent. Les variables PayPal REST (`PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET`, `PAYPAL_WEBHOOK_ID`) ne figurent pas dans les bindings secrets observés ; le flux REST/webhook n'est donc pas déclaré prêt. Le code PayPal Classic/IPN est distinct et sa transaction Sandbox de bout en bout reste à tester.\n- Le contrôle HTTP des pages publiques n'a pas pu être terminé depuis l'environnement d'audit, qui bloque les requêtes sortantes vers le domaine.\n\n## Points non validés — aucune déclaration de réussite
+## État Cloudflare vérifié le 26 novembre 2026
+
+- Worker `nfltwebsite` : version 218 active à 100 % ; dernier build Workers réussi sur le commit documentaire `5ba11a50460023c708aad7a4ea346b2e88b2bdd2`.
+- Les domaines personnalisés apex et `www` sont activés ; la route `/api/paypal/ipn` est associée au Worker.
+- D1 relu en lecture seule : 18 associations WAV couvrant 12 UPC ; 2 commandes `pending`, 0 `paid` ; aucune ligne dans `shop_email_deliveries`.
+- R2 relu en lecture seule : 18 WAV (`audio/wav`), 18 JPG et un objet vide de préfixe.
+- Le secret `SMTP_PASSWORD` est absent. Les variables PayPal REST (`PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET`, `PAYPAL_WEBHOOK_ID`) ne figurent pas dans les bindings secrets observés ; le flux REST/webhook n'est donc pas déclaré prêt. Le code PayPal Classic/IPN est distinct et sa transaction Sandbox de bout en bout reste à tester.
+- Le contrôle HTTP des pages publiques n'a pas pu être terminé depuis l'environnement d'audit, qui bloque les requêtes sortantes vers le domaine.
+
+## Points non validés — aucune déclaration de réussite
 
 - Les gestionnaires de remboursement, inversion et annulation d'inversion sont codés, mais aucun test IPN réel ni campagne PayPal Sandbox complète n'a été effectué.
 - Aucun paiement réel n'a été réalisé.
@@ -111,7 +120,7 @@ Aucun email client n'a encore été envoyé ni reçu ; le test réel attend l'aj
 
 ## Ordre de finalisation
 
-1. Récupérer les WAV manquants des cinq sorties vérifiées, les six WAV manquants de NOUS Y SOMMES et le master de Hustle & Grind une fois son nombre de pistes confirmé.
+1. Récupérer les 19 masters WAV originaux manquants : cinq singles (dont Hustle & Grind, confirmé à une piste), six pistes de NOUS Y SOMMES et huit pistes de 30.000 GÉNOCIDES.
 2. Compléter et vérifier les associations UPC → WAV ; ne jamais convertir un M4A en faux master WAV.
 3. Ajouter le secret SMTP_PASSWORD dans Cloudflare, envoyer le test email depuis /admin/orders, puis vérifier la réception réelle et la reprise idempotente.
 4. Tester PayPal Classic/IPN en environnement contrôlé : panier multi-articles, doublons, refus, remboursement et inversion.
