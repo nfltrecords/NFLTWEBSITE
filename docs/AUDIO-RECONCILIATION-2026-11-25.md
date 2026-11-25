@@ -124,7 +124,7 @@ Les trois WAV associés à cet UPC sont :
 - `JAIPASBONQUELESGENSDUPAYSOULESGENSDUCOINSORGANISENTENTREEUXJEDETESTECAJAIHO2.wav`
 - `JAIPASBONQUELESGENSDUPAYSOULESGENSDUCOINSORGANISENTENTREEUXJEDETESTECAJAIHO3.wav`
 
-Les captures Spotify `Screenshot_20261114-190452_Spotify.jpg` et `Screenshot_20261114-190458_Spotify.jpg` affichent 9 titres et 22 minutes. Les trois fichiers WAV correspondent au groupe des titres `CA TUE PAS DU TOUT`, `CA VA COMMENCER` et `TU M'AURAS JAMAIS`. Les captures ne permettent pas d'établir avec certitude quel suffixe (base, 2 ou 3) correspond à chacun de ces trois titres : ne pas inventer cet ordre.
+Les captures Spotify `Screenshot_20261114-190452_Spotify.jpg` et `Screenshot_20261114-190458_Spotify.jpg` affichent 9 titres et 22 minutes. Les trois fichiers WAV correspondent aux trois titres restants ; leur correspondance précise par durée est documentée dans la section « Correspondance vérifiée des sources M4A et des titres » ci-dessous.
 
 Les six autres titres ont des sources M4A complètes :
 
