@@ -1,6 +1,6 @@
 # NFLT RECORDS — état de préparation PayPal Classic/IPN
 
-**Dernière vérification : 24 novembre 2026 — 17 nombres de pistes vérifiés**
+**Dernière vérification : 25 novembre 2026 — 17 nombres de pistes vérifiés**
 
 ## Statut général
 
@@ -17,6 +17,12 @@ Le verrou `checkoutActivationApproved` reste à `false`. La réparation techniqu
 - Les extraits audio de 30 secondes ne font plus partie du code actif : aucun lecteur ni chemin de préécoute n'est référencé dans le catalogue ou la boutique.
 - Les 15 archives de préparation de la bibliothèque contenant le dossier `previews` ont été nettoyées ; les fichiers MP3 de préécoute et les dossiers `assets/previews` / `public/assets/previews` ont été retirés. Les trois archives de marque et de pochettes qui ne contenaient aucun extrait ont été conservées sans modification.
 - Les fichiers M4A conservés dans la bibliothèque ont été contrôlés : les 19 fichiers mesurés durent de 71 à 210 secondes ; ce ne sont pas des extraits de 30 secondes. Ils restent conservés comme sources et ne remplacent jamais les masters WAV.
+
+## Messagerie et DNS
+
+- La zone Cloudflare est active. Les enregistrements MX, SPF, DKIM et DMARC du domaine sont présents ; les hôtes mail/SMTP sont en DNS uniquement.
+- Le Worker possède les paramètres SMTP `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER` et `SMTP_FROM`.
+- **Le secret `SMTP_PASSWORD` est absent.** Aucun envoi réel n'est validé ; le test d'e-mail reste bloqué jusqu'à sa configuration directe dans les secrets Cloudflare. Ne jamais inscrire ce secret dans Git ou le partager dans le chat.
 
 ## État des masters et des nombres de pistes
 
@@ -61,7 +67,7 @@ La vérification continue inclut les tests Vitest, un contrôle TypeScript stric
 
 Ces protections sont des contrôles de code et de données. Elles ne constituent pas une preuve de paiement PayPal ou de livraison client réelle.
 
-## Inventaire audio et boutique — vérification de production du 24 novembre 2026
+## Inventaire audio et boutique — vérification de production du 25 novembre 2026
 
 L'état de production a été actualisé après le nettoyage des extraits :
 
