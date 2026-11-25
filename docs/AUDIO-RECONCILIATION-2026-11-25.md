@@ -134,7 +134,7 @@ Pour Hustle & Grind, la capture DistroKid Vault `Screenshot_20261114-133340_Chro
 
 ## État de la livraison en production
 
-- Le Worker `nfltwebsite` est sur la version 212 à 100 % du trafic. Son script contient la validation WAV, la normalisation de nom `safeWavDownloadName`, l'upload multiple et le contrôle du statut payé ; il ne contient pas de code de préécoute audio.
+- Le Worker `nfltwebsite` est sur la version 214 à 100 % du trafic (déploiement `571d8364-75d8-4b45-ab0b-d20f8f1941c3`, build réussi pour le commit `6660b41e`). Son script contient la validation WAV, la normalisation de nom `safeWavDownloadName`, l'upload multiple et le contrôle du statut payé ; il ne contient pas de code de préécoute audio.
 - `checkoutActivationApproved` et `checkoutEnabled` restent à `false`. Aucun paiement réel n'a été activé.
 - D1 contient 2 commandes en attente, 0 commande payée et 0 enregistrement de livraison e-mail. Aucun téléchargement client réel n'a été déclenché pendant cet audit.
 - L'unique namespace KV du compte contient 0 clé. Aucun master ni bloc audio n'a été retrouvé dans KV.
