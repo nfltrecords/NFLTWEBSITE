@@ -18,8 +18,8 @@ function Page() {
       <PageHeader kicker="NFLT RECORDS / ADMIN" title="Tableau de bord" />
       <section className="editorial-section pt-0">
         <p className="body-copy mb-10">
-          Accès aux outils de gestion du catalogue audio et des commandes. Chaque espace demande
-          le code administrateur avant d’afficher ou de modifier les données.
+          Accès aux outils de gestion du catalogue audio et des commandes. Chaque espace demande le
+          code administrateur avant d’afficher ou de modifier les données.
         </p>
         <div className="grid gap-5 md:grid-cols-2">
           <Link
