@@ -16,7 +16,7 @@ Le verrou `checkoutActivationApproved` reste à `false`. La réparation techniqu
 - Le nom historique `medley.wav (1)` est reconnu comme WAV et normalisé en nom de téléchargement valide.
 - Les extraits audio de 30 secondes ne font plus partie du code actif : aucun lecteur ni chemin de préécoute n'est référencé dans le catalogue ou la boutique.
 - Les 15 archives de préparation de la bibliothèque contenant le dossier `previews` ont été nettoyées ; les fichiers MP3 de préécoute et les dossiers `assets/previews` / `public/assets/previews` ont été retirés. Les trois archives de marque et de pochettes qui ne contenaient aucun extrait ont été conservées sans modification.
-- Les fichiers M4A conservés dans la bibliothèque ont été contrôlés : les 17 fichiers mesurés durent de 71 à 210 secondes ; ce ne sont pas des extraits de 30 secondes. Ils restent conservés comme sources et ne remplacent jamais les masters WAV.
+- Les fichiers M4A conservés dans la bibliothèque ont été contrôlés : les 19 fichiers mesurés durent de 71 à 210 secondes ; ce ne sont pas des extraits de 30 secondes. Ils restent conservés comme sources et ne remplacent jamais les masters WAV.
 
 ## État des masters et des nombres de pistes
 
