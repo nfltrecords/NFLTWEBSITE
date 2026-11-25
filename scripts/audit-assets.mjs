@@ -50,7 +50,7 @@ function collectPreviewAssetFiles(directory) {
     if ([".git", "node_modules", "dist", ".wrangler", ".vercel"].includes(entry.name)) continue;
     const path = join(directory, entry.name);
     if (entry.isDirectory()) collectPreviewAssetFiles(path);
-    else if (/_PREVIEW_30S\\.(mp3|m4a|wav|aac)$/i.test(entry.name)) previewAssetFiles.push(path);
+    else if (/_PREVIEW_30S\.(mp3|m4a|wav|aac)$/i.test(entry.name)) previewAssetFiles.push(path);
   }
 }
 collectPreviewAssetFiles(".");
