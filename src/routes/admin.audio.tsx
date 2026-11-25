@@ -50,7 +50,8 @@ function Page() {
       body: JSON.stringify({ assetKey: m.assetKey }),
     });
     const result = (await done.json()) as { error?: string; fileName?: string; fileSize?: number };
-    if (!done.ok) throw Error(`${file.name}: ${result.error ?? "Impossible de finaliser le transfert"}`);
+    if (!done.ok)
+      throw Error(`${file.name}: ${result.error ?? "Impossible de finaliser le transfert"}`);
     return result;
   }
 
@@ -102,7 +103,11 @@ function Page() {
         </label>
         <label className="mt-4 grid gap-2">
           Sortie
-          <select value={upc} onChange={(e) => setUpc(e.target.value)} className="rounded border p-3">
+          <select
+            value={upc}
+            onChange={(e) => setUpc(e.target.value)}
+            className="rounded border p-3"
+          >
             {releases.map((r) => (
               <option key={r.upc} value={r.upc}>
                 {r.title} — {r.upc}
