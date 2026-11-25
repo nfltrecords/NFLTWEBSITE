@@ -16,13 +16,50 @@ type UploadStartResult = {
   error?: string;
 };
 
+type InventoryItem = {
+  upc: string;
+  title: string;
+  expected: number | null;
+  uploaded: number;
+  missing: number | null;
+  complete: boolean;
+  over: boolean;
+};
+
 function Page() {
   const [code, setCode] = useState(""),
     [upc, setUpc] = useState<string>(releases[0]?.upc ?? ""),
     [files, setFiles] = useState<File[]>([]),
     [progress, setProgress] = useState(0),
     [msg, setMsg] = useState(""),
-    [busy, setBusy] = useState(false);
+    [busy, setBusy] = useState(false),
+    [inventory, setInventory] = useState<InventoryItem[]>([]),
+    [inventoryBusy, setInventoryBusy] = useState(false);
+
+  async function refreshInventory() {
+    if (!code || inventoryBusy) return;
+    setInventoryBusy(true);
+    try {
+      const response = await fetch("/api/admin/audio?action=inventory", {
+        method: "POST",
+        headers: {
+          "x-nflt-admin-code": code,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({}),
+      });
+      const result = (await response.json()) as {
+        error?: string;
+        inventory?: InventoryItem[];
+      };
+      if (!response.ok) throw Error(result.error ?? "Inventaire indisponible");
+      setInventory(result.inventory ?? []);
+    } catch (error) {
+      setMsg(error instanceof Error ? error.message : "Impossible de charger l'inventaire");
+    } finally {
+      setInventoryBusy(false);
+    }
+  }
 
   async function uploadOne(file: File, headers: { "x-nflt-admin-code": string }) {
     const r = await fetch("/api/admin/audio?action=start", {
@@ -78,6 +115,7 @@ function Page() {
         `Terminé : ${completed} master(s) WAV envoyé(s) et associé(s) à ${upc}. ${uploaded.join(", ")}`,
       );
       setFiles([]);
+      void refreshInventory();
     } catch (e) {
       setMsg(
         `Arrêt après ${completed}/${files.length} fichier(s). ${e instanceof Error ? e.message : "Erreur inconnue"}`,
@@ -89,7 +127,7 @@ function Page() {
 
   return (
     <SiteLayout>
-      <section className="editorial-section min-h-[60vh] max-w-3xl">
+      <section className="editorial-section min-h-[60vh] max-w-4xl">
         <p className="eyebrow">NFLT RECORDS / ADMIN</p>
         <h1>Transfert des masters WAV</h1>
         <label className="mt-6 grid gap-2">
@@ -101,8 +139,66 @@ function Page() {
             className="rounded border p-3"
           />
         </label>
-        <label className="mt-4 grid gap-2">
-          Sortie
+
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
+          <h2 className="text-2xl">Inventaire des 18 sorties</h2>
+          <Button
+            type="button"
+            variant="outline"
+            disabled={!code || inventoryBusy}
+            onClick={refreshInventory}
+          >
+            {inventoryBusy ? "Actualisation…" : "Actualiser l’inventaire"}
+          </Button>
+        </div>
+        {inventory.length > 0 ? (
+          <div className="mt-3 overflow-x-auto">
+            <table className="w-full min-w-[620px] border-collapse text-left text-sm">
+              <thead>
+                <tr className="border-b border-border">
+                  <th className="py-2 pr-3">Sortie / UPC</th>
+                  <th className="px-2 py-2 text-right">Pistes attendues</th>
+                  <th className="px-2 py-2 text-right">WAV associés</th>
+                  <th className="px-2 py-2 text-right">Manquants</th>
+                  <th className="py-2 pl-3">État</th>
+                </tr>
+              </thead>
+              <tbody>
+                {inventory.map((item) => (
+                  <tr key={item.upc} className="border-b border-border/60">
+                    <td className="py-3 pr-3">
+                      <span className="block font-medium">{item.title}</span>
+                      <span className="text-xs text-muted-foreground">{item.upc}</span>
+                    </td>
+                    <td className="px-2 py-3 text-right tabular-nums">
+                      {item.expected ?? "À confirmer"}
+                    </td>
+                    <td className="px-2 py-3 text-right tabular-nums">{item.uploaded}</td>
+                    <td className="px-2 py-3 text-right tabular-nums">
+                      {item.missing ?? "—"}
+                    </td>
+                    <td className="py-3 pl-3">
+                      {item.over
+                        ? "Trop de fichiers"
+                        : item.expected === null
+                          ? "Nombre à confirmer"
+                          : item.complete
+                            ? "Complet"
+                            : "À compléter"}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <p className="body-copy mt-3">
+            L’inventaire est protégé. Saisissez le code administrateur puis actualisez-le.
+          </p>
+        )}
+
+        <label className="mt-8 grid gap-2">
+          Sortie à compléter
           <select
             value={upc}
             onChange={(e) => setUpc(e.target.value)}
