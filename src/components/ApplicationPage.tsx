@@ -38,18 +38,7 @@ export function ApplicationBlock({
           </p>
           <div className="mt-10 border-y border-border py-8">
             <p className="eyebrow mb-4">GOOGLE PLAY</p>
-            <dl className="grid gap-4 text-sm sm:grid-cols-2">
-              <div>
-                <dt className="text-muted-foreground">{fr ? "Application" : "App"}</dt>
-                <dd className="mt-1">{mobileApplication.name}</dd>
-              </div>
-              <div className="min-w-0 sm:col-span-2">
-                <dt className="text-muted-foreground">
-                  {fr ? "Identifiant du package" : "Package ID"}
-                </dt>
-                <dd className="mt-1 break-all">{mobileApplication.packageId}</dd>
-              </div>
-            </dl>
+            <p className="text-sm">{mobileApplication.name}</p>
             {downloadUrl ? (
               <a
                 href={downloadUrl}
