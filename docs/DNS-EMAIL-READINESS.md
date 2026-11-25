@@ -23,7 +23,7 @@ Le dépôt contient désormais :
 - une page administrateur pour consulter les commandes, tester la messagerie et relancer un envoi ;
 - un lien de téléchargement sécurisé vers les masters WAV complets, jamais vers les extraits.
 
-**Dépendance actuelle constatée dans le Worker de production (version 218) :** les paramètres SMTP non secrets sont présents, mais le secret `SMTP_PASSWORD` n'est pas configuré. Le code ne peut donc pas s'authentifier auprès du serveur SMTP et aucun e-mail client n'est actuellement prouvé comme envoyé.
+**Dépendance actuelle constatée dans le Worker de production (version 219) :** les paramètres SMTP non secrets sont présents, mais le secret `SMTP_PASSWORD` n'est pas configuré. Le code ne peut donc pas s'authentifier auprès du serveur SMTP et aucun e-mail client n'est actuellement prouvé comme envoyé.
 
 Ne pas inscrire le mot de passe dans le dépôt ni le transmettre dans une conversation. Il doit être ajouté comme secret Worker `SMTP_PASSWORD` depuis le tableau de bord Cloudflare, puis un test réel doit être effectué depuis `/admin/orders` avec le code administrateur. Le résultat doit être vérifié dans la boîte destinataire et dans les indésirables.
 
