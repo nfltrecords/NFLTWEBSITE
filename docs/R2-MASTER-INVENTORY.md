@@ -10,7 +10,7 @@ Vérification directe du bucket Cloudflare R2 `nflt-audio-master` le 25 novembre
 - Pochettes JPG recensées dans le même préfixe : **18**.
 - Enregistrements correspondants dans D1 `shop_release_assets` : **18**.
 - Les 18 lignes D1 pointent vers un objet R2 (`asset_key = r2:<clé>`) et ont `chunk_count = 1`.
-- Ce relevé corrige l'ancienne conclusion erronée « 19 masters manquants » : cette conclusion provenait de la comparaison avec des nombres de pistes attendus dans le code, et non d'une absence constatée des fichiers WAV dans R2.
+- Ce relevé prouve la présence des 18 WAV listés dans R2. Il ne signifie pas que les 37 pistes du catalogue disposent toutes d'un master WAV : 19 pistes supplémentaires ont un fichier M4A complet dans le Library, mais aucun WAV correspondant n'a été trouvé dans R2 ni dans les archives vérifiées. Ces M4A ne sont pas des masters WAV et ne doivent pas être livrés comme tels.
 
 ## WAV présents dans R2 et associations D1
 
@@ -49,3 +49,27 @@ Toutes les clés listées sont sous `18 master/`. Le fichier `medley.wav (1)` es
 - Ne pas déclarer un master absent à partir du seul nombre attendu dans `verifiedReleaseTrackCounts`.
 - Avant toute modification d'association UPC, confronter le nom du fichier et la tracklist fournie par le propriétaire.
 - Le présent relevé constate la présence des objets et leurs associations D1 ; il ne prétend pas certifier l'écoute, la durée ni le contenu audio de chaque master.
+
+
+## Contrôles complémentaires du 25 novembre 2026
+
+- Les 18 WAV de R2 ont une signature valide : `RIFF` ou `RF64` aux octets 0–3, puis `WAVE` aux octets 8–11.
+- Les 17 copies locales retrouvées correspondent aux ETag MD5 des objets R2. Le fichier `JAIPAS...2.wav` est présent et valide dans R2, mais aucune copie locale de ce nom n'a été retrouvée.
+- Le Library contient un doublon `JAIPAS...3(1).wav`, identique octet par octet à `JAIPAS...3.wav`. Il n'est pas enregistré comme objet R2 supplémentaire.
+- Les 19 M4A retrouvés dans le Library ont une durée comprise entre 71,332 et 210,233 secondes. Ce sont des fichiers audio complets ; aucun n'est un extrait de 30 secondes. Ils ne sont pas présents dans le bucket R2.
+- Les 18 JPG de R2 ont été mesurés à 3000 × 3000 pixels. Les 18 pochettes publiques de l'archive corrigée mesurent 1536 × 1536 pixels. Les noms R2 sont rapprochés des 18 UPC par le dossier d'artwork : 16 correspondances étayées par captures et 2 confirmées par le propriétaire. Ne pas remplacer les images publiques sans comparaison visuelle et binaire.
+- Le relevé complet du bucket contient 37 objets : 18 WAV, 18 JPG et un objet vide correspondant au préfixe `18 master/`.
+- Les 18 associations D1 sont cohérentes avec les objets R2 ; aucune correction D1 n'est justifiée par les preuves disponibles.
+
+## Réconciliation des 37 pistes
+
+Le catalogue documenté totalise 37 pistes : 15 singles (15 pistes), `0+` (5), `NOUS Y SOMMES` (9) et `30.000 GÉNOCIDES` (8).
+
+- 18 pistes ont un master WAV dans R2 : 10 singles, les 5 pistes de `0+` et 3 pistes de `NOUS Y SOMMES`.
+- 19 pistes ont une source M4A complète dans le Library mais aucun équivalent WAV retrouvé dans R2 ou les archives inspectées : 5 singles, 6 pistes de `NOUS Y SOMMES` et 8 pistes de `30.000 GÉNOCIDES`.
+- Ne jamais convertir un M4A en WAV et présenter le fichier converti comme le master WAV original. Retrouver le WAV source auprès de l'emplacement d'origine avant de l'ajouter à R2.
+
+## Vérification des autres stockages
+
+- Le compte Cloudflare ne retourne qu'un namespace KV ; son inventaire de clés est vide (0 clé). Aucun bloc audio n'y est stocké.
+- Le schéma D1 ne contient pas de table de chunks audio : les 18 associations résident dans `shop_release_assets`. La table de livraisons e-mail est vide ; les commandes sont 2 en attente et 0 payée.

@@ -10,7 +10,7 @@ Le code ne définit pas de prix pour les sorties de 2, 3 ou 4 pistes.
 
 ## Décomptes vérifiés
 
-Au 24 novembre 2026, `src/lib/commerce.ts` contient 17 UPC dans `verifiedReleaseTrackCounts`. Les preuves sont consignées dans `docs/track-count-evidence-2026-11-24.md`.
+Au 25 novembre 2026, `src/lib/commerce.ts` contient 18 UPC dans `verifiedReleaseTrackCounts`. Les preuves sont consignées dans `docs/track-count-evidence-2026-11-24.md`.
 
 | UPC | Sortie | Pistes | Prix calculé |
 |---|---|---:|---:|
@@ -24,6 +24,7 @@ Au 24 novembre 2026, `src/lib/commerce.ts` contient 17 UPC dans `verifiedRelease
 | 199951252436 | L'écran vient de chez nous (Radio Edit) | 1 | 9,99 € |
 | 199954147302 | NFLT Social Community (The Most Advanced Societies) | 1 | 9,99 € |
 | 199955701558 | Dilemma (Radio Edit) | 1 | 9,99 € |
+| 199955715203 | Hustle & Grind (Radio Edit) | 1 | 9,99 € |
 | 199955715135 | #NEVERFAKELIKETHEM (Chapter One) | 1 | 9,99 € |
 | 199955740199 | The Luxury - The Highest - Unequivocal | 1 | 9,99 € |
 | 199955742094 | 30.000 GÉNOCIDES | 8 | 19,99 € |
@@ -32,13 +33,13 @@ Au 24 novembre 2026, `src/lib/commerce.ts` contient 17 UPC dans `verifiedRelease
 | 199956557857 | Ma Luxure 2 (MVP) | 1 | 9,99 € |
 | 821440674572 | GR 4LIFE | 1 | 9,99 € |
 
-**Encore non vérifié :** UPC 199955715203 — Hustle & Grind (Radio Edit). Le code conserve un tarif indicatif de single à 9,99 €, mais son nombre exact de pistes n'est pas inclus dans les décomptes vérifiés et sa commande reste bloquée.
+Les 18 décomptes sont maintenant vérifiés. Hustle & Grind est confirmé à 1 piste par la capture DistroKid Vault et le fichier source complet `Hustlegrind.m4a`.
 
 ## État technique et commercial
 
 - 18 sorties au catalogue.
-- 17 décomptes vérifiés ; Hustle & Grind reste à confirmer.
-- Les 37 préécoutes MP3 sont mappées dans `src/lib/previews.ts`.
+- 18 décomptes vérifiés ; 37 pistes au total sur les 18 sorties.
+- Aucun extrait MP3 de 30 secondes ni lecteur de préécoute n’est présent dans le catalogue actif de `main`.
 - Le prix calculé ne prouve ni la disponibilité des masters WAV, ni les droits de vente, ni la validation du vendeur légal, des territoires, de la TVA ou des conditions de vente.
 - Le checkout PayPal reste désactivé côté code. La correction technique et les tests ne valent pas autorisation d'encaisser des paiements réels.
 

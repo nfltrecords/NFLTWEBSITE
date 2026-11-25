@@ -77,6 +77,7 @@ describe("Owner-reported original artwork evidence", () => {
       "199954147302": 1,
       "199955701558": 1,
       "199955715135": 1,
+      "199955715203": 1,
       "199955740199": 1,
       "199955742094": 8,
       "199956222809": 9,
@@ -95,12 +96,7 @@ describe("Owner-reported original artwork evidence", () => {
     expect(releasePriceCents("199955701558")).toBe(999);
     expect(releasePriceCents("199751508283")).toBe(999);
     expect(releasePriceCents("821440674572")).toBe(999);
-    const multiTrackUpcs = new Set([
-      "199955715135",
-      "199955742094",
-      "199956222809",
-      "199956554184",
-    ]);
+    const multiTrackUpcs = new Set(["199955742094", "199956222809", "199956554184"]);
     for (const release of releases.filter((r) => !multiTrackUpcs.has(r.upc))) {
       expect(releasePriceCents(release.upc)).toBe(999);
     }

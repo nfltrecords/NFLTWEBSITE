@@ -54,6 +54,7 @@ describe("Commerce inquiry rules", () => {
       "199954147302": 1,
       "199955701558": 1,
       "199955715135": 1,
+      "199955715203": 1,
       "199955740199": 1,
       "199955742094": 8,
       "199956222809": 9,
@@ -63,7 +64,7 @@ describe("Commerce inquiry rules", () => {
     });
   });
 
-  it("shows provisional reference prices for all 18 catalogue releases while checkout stays closed", () => {
+  it("shows reference prices for all 18 catalogue releases while checkout stays closed", () => {
     expect(Object.keys(provisionalReleaseTrackCounts)).toHaveLength(18);
     expect(releasePriceCents("199955715135")).toBe(999);
     expect(releasePriceCents("199955742094")).toBe(1999);
@@ -78,7 +79,7 @@ describe("Commerce inquiry rules", () => {
       expect(releasePriceCents(release.upc)).toBe(999);
     }
     expect(commerceConfig.checkoutEnabled).toBe(false);
-    expect(commerceConfig.checkoutReadiness.trackCountsAndPriceTierMapping).toBe("pending");
+    expect(commerceConfig.checkoutReadiness.trackCountsAndPriceTierMapping).toBe("verified");
   });
 
   it("does not publish company identifiers or claim legal approval", () => {
@@ -118,6 +119,7 @@ describe("Commerce inquiry rules", () => {
     expect(commerceConfig.intendedDeliveryFormats.formats).toEqual(["MP3", "WAV"]);
     expect(commerceConfig.intendedDeliveryFormats.status).toBe("intended-only");
     expect(commerceConfig.checkoutReadiness.mp3AndWavFiles).toContain("pending");
+    expect(commerceConfig.checkoutReadiness.mp3AndWavFiles).toContain("19-full-length-M4A-sources-preserved-in-Library");
   });
 
   it("requires a verified sender and delivery test without changing contact", () => {

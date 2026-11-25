@@ -1,5 +1,5 @@
 # NFLT RECORDS — track-count evidence
-**Checked 24 November 2026**
+**Checked 25 November 2026**
 
 Track counts below are used only as release metadata. A verified count does not imply that the matching WAV masters exist. Delivery still requires the exact number of valid WAV objects in R2, matching D1 records, and a successful R2 availability check.
 
@@ -15,6 +15,7 @@ Track counts below are used only as release metadata. A verified count does not 
 | 199951252436 | L'écran vient de chez nous (Radio Edit) | 1 | [Amazon Music](https://music.amazon.in/albums/B0G3MTB9SJ) |
 | 199954147302 | NFLT Social Community (The Most Advanced Societies) | 1 | [Amazon Music tracklist](https://music.amazon.com/tracks/B0G2GQ3T15) |
 | 199955701558 | Dilemma (Radio Edit) | 1 | [Amazon Music tracklist](https://music.amazon.com/tracks/B0G1L7714V) |
+| 199955715203 | Hustle & Grind (Radio Edit) | 1 | DistroKid Vault screenshot `Screenshot_20261114-133340_Chrome.jpg`: `Hustlegrind.m4a`, matching track and album title, UPC `199955715203`; full M4A source measured at 181.069 seconds |
 | 199955715135 | #NEVERFAKELIKETHEM (Chapter One) | 1 | Owner-supplied tracklist evidence already recorded in the project |
 | 199955740199 | The Luxury - The Highest - Unequivocal | 1 | [Amazon Music](https://music.amazon.co.uk/albums/B0G1L6HP72) |
 | 199955742094 | 30.000 GÉNOCIDES | 8 | Owner-supplied tracklist evidence already recorded in the project |
@@ -23,6 +24,11 @@ Track counts below are used only as release metadata. A verified count does not 
 | 199956557857 | Ma Luxure 2 (MVP) | 1 | [Amazon Music](https://music.amazon.in/albums/B0G191HBHR) |
 | 821440674572 | GR 4LIFE | 1 | [Apple Music](https://music.apple.com/us/artist/nflt/1253527531) — latest release lists 1 song |
 
-**Still provisional:** UPC 199955715203 — Hustle & Grind (Radio Edit). The exact release tracklist has not been independently verified, so no count has been added to `verifiedReleaseTrackCounts`.
+## Additional evidence checked 25 November 2026
+
+- `0+` — Spotify screenshot `Screenshot_20261114-190549_Spotify.jpg`: 5 titles, 13 minutes. The five WAV filenames in D1 correspond to O+, Flatulence, Calamité, Débris/Flaques/Déchets/Cancres, and La Plus Grosse Encule.
+- `NOUS Y SOMMES` — Spotify screenshots `Screenshot_20261114-190452_Spotify.jpg` and `Screenshot_20261114-190458_Spotify.jpg`: 9 titles, 22 minutes. Three WAV files and six full M4A sources are present; the three similarly named `JAIPAS...` WAVs remain grouped under the correct UPC, without inventing a suffix-to-title order.
+- `30.000 GÉNOCIDES` — Spotify screenshots `Screenshot_20261114-190155_Spotify.jpg` and `Screenshot_20261114-141553_Spotify.jpg`: 8 titles, 15 minutes; eight full M4A sources are preserved.
+- All 19 M4A files in the Library were probed: durations range from 71.332 to 210.233 seconds. None is a 30-second preview. These files remain source audio and must not replace WAV delivery masters.
 
 The Amazon/Apple Music pages are public catalogue references; they do not alter either Spotify profile or any DistroKid release.
