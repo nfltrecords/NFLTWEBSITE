@@ -1,6 +1,6 @@
 # NFLT RECORDS — état de préparation PayPal Classic/IPN
 
-**Dernière vérification : 25 novembre 2026 — 17 nombres de pistes vérifiés**
+**Dernière vérification : 26 novembre 2026 — 18 nombres de pistes vérifiés ; état de production rapproché**
 
 ## Statut général
 
@@ -23,11 +23,11 @@ Le verrou `checkoutActivationApproved` reste à `false`. La réparation techniqu
 
 - La zone Cloudflare est active. Les enregistrements MX, SPF, DKIM et DMARC du domaine sont présents ; les hôtes mail/SMTP sont en DNS uniquement.
 - Le Worker possède les paramètres SMTP `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER` et `SMTP_FROM`.
-- **Le secret `SMTP_PASSWORD` est absent.** Aucun envoi réel n'est validé ; le test d'e-mail reste bloqué jusqu'à sa configuration directe dans les secrets Cloudflare. Ne jamais inscrire ce secret dans Git ou le partager dans le chat.
+- **Le secret `SMTP_PASSWORD` est absent dans la configuration Worker relue le 26 novembre.** Aucun envoi réel n'est validé ; le test d'e-mail reste bloqué jusqu'à sa configuration directe dans les secrets Cloudflare. Ne jamais inscrire ce secret dans Git ou le partager dans le chat.
 
 ## État des masters et des nombres de pistes
 
-17 nombres de pistes sont vérifiés à partir des preuves fournies par le propriétaire et des pages publiques Amazon Music / Apple Music. Les références sont consignées dans `docs/track-count-evidence-2026-11-24.md`.
+18 nombres de pistes sont vérifiés à partir des preuves fournies par le propriétaire et des pages publiques Amazon Music / Apple Music. `Hustle & Grind` est confirmé à une piste par la capture DistroKid Vault et la source M4A complète de 181,069 secondes ; voir `docs/track-count-evidence-2026-11-24.md`. Les références sont consignées dans `docs/track-count-evidence-2026-11-24.md`.
 
 | UPC | Sortie | Pistes confirmées | WAV associés | État |
 |---|---|---:|---:|---|
@@ -48,9 +48,9 @@ Le verrou `checkoutActivationApproved` reste à `false`. La réparation techniqu
 | 199956554184 | 0+ | 5 | 5 | Complet |
 | 199956557857 | Ma Luxure 2 (MVP) | 1 | 1 | Complet |
 | 821440674572 | GR 4LIFE | 1 | 0 | Master manquant |
-| 199955715203 | Hustle & Grind (Radio Edit) | À confirmer | 0 | Nombre de pistes et master à confirmer |
+| 199955715203 | Hustle & Grind (Radio Edit) | 1 | 0 | Master manquant |
 
-**Bilan : 11 sorties disposent de leur ensemble complet de masters WAV ; cinq sorties vérifiées n'ont aucun WAV associé ; NOUS Y SOMMES est incomplet ; Hustle & Grind reste non vérifié.** Les 18 associations D1 ne représentent donc pas 18 UPC : elles couvrent 12 UPC.
+**Bilan : 11 sorties disposent de leur ensemble complet de masters WAV ; cinq singles vérifiés n'ont aucun WAV associé (Hot, Dilemma, #NEVERFAKELIKETHEM, Hustle & Grind et GR 4LIFE) ; 30.000 GÉNOCIDES n'a aucun de ses 8 WAV ; NOUS Y SOMMES possède 3 WAV sur 9. Il reste donc 19 masters WAV originaux à retrouver. Les 18 décomptes de pistes sont vérifiés.** Les 18 associations D1 ne représentent donc pas 18 UPC : elles couvrent 12 UPC.
 
 Les M4A ne remplacent jamais les WAV. Les nombres de pistes sont vérifiés indépendamment de la présence des masters.
 
@@ -75,8 +75,8 @@ L'état de production a été actualisé après le nettoyage des extraits :
 - D1 contient maintenant 18 lignes dans `shop_release_assets`, toutes associées à des fichiers WAV existants dans R2. Aucune ligne D1 ne pointe vers un M4A.
 - Après le nettoyage, le bucket R2 contient 37 objets : 18 WAV et 19 visuels. Aucun fichier MP3 ou M4A de préécoute n'y reste.
 - Les 18 WAV associés couvrent 12 UPC : 11 sorties ont leur ensemble complet ; `NOUS Y SOMMES` n'a que 3 masters sur 9.
-- Les 5 UPC vérifiés sans master WAV sont `Dilemma` (1 piste), `#NEVERFAKELIKETHEM` (1), `30.000 GÉNOCIDES` (8), `Hot` (1) et `GR 4LIFE` (1). Il manque également 6 WAV pour `NOUS Y SOMMES`.
-- Cela représente 18 masters WAV manquants pour les tracklists vérifiées. `Hustle & Grind` n'a pas de WAV associé et son nombre exact de pistes reste non confirmé.
+- Les cinq singles sans master WAV sont `Dilemma` (1 piste), `#NEVERFAKELIKETHEM` (1), `Hustle & Grind` (1), `Hot` (1) et `GR 4LIFE` (1). `30.000 GÉNOCIDES` est une sortie de 8 pistes sans WAV ; `NOUS Y SOMMES` possède 3 WAV sur 9. Il manque également 6 WAV pour `NOUS Y SOMMES`.
+- Cela représente 19 masters WAV manquants pour les 37 pistes vérifiées.
 - Les M4A sources conservés dans la bibliothèque ne sont pas des extraits de 30 secondes et ne sont jamais utilisés comme masters de livraison.
 
 Les lecteurs de préécoute et leurs références ont été retirés des fiches catalogue et de la boutique. Le contrôle `npm run audit:assets`, ajouté à GitHub Actions, vérifie les 18 pochettes et interdit le retour des chemins et composants de préécoute. Le point `/api/shop-availability` vérifie toujours les masters complets dans D1/R2 ; les ajouts au panier restent désactivés pour les sorties incomplètes, et le panier bloque aussi les sélections anciennes devenues indisponibles.
@@ -100,18 +100,36 @@ Pour activer l'envoi, ajouter `SMTP_PASSWORD` comme secret dans Cloudflare : **W
 
 Aucun email client n'a encore été envoyé ni reçu ; le test réel attend l'ajout du secret.
 
+## État réel du code de paiement
+
+- `src/lib/paypal-checkout-gate.ts` fixe `checkoutActivationApproved = false`. La fonction `createManualPayPalOrder` refuse de créer une commande tant que ce verrou reste fermé.
+- Si le verrou était ouvert, `src/lib/manual-orders.functions.ts` construirait une URL `https://www.paypal.com/cgi-bin/webscr` (PayPal Live) et pointerait vers `/api/paypal/ipn`.
+- `src/routes/api.paypal.ipn.ts` vérifie les notifications sur `https://ipnpb.paypal.com/cgi-bin/webscr` (endpoint Live) et utilise le destinataire PayPal configuré dans le code.
+- Aucun choix Sandbox/Live n'est implémenté pour ce flux PayPal Standard/IPN. Le code ne peut donc pas être testé avec un vendeur Sandbox en l'état.
+- `/commande/paiement` affiche un message d'annulation/non-finalisation ; ce n'est pas une page de checkout active.
+- Le code PayPal REST dans `paypal.server.ts` sait choisir Sandbox/Live, mais le webhook associé dépend de Supabase et de secrets absents des bindings Worker. Ce chemin n'est pas le flux D1/IPN utilisé par la boutique actuelle.
+
+## État Cloudflare vérifié le 26 novembre 2026
+
+- Worker `nfltwebsite` : version 219 active à 100 % ; dernier build Workers réussi sur le commit documentaire `5ba11a50460023c708aad7a4ea346b2e88b2bdd2`.
+- Les domaines personnalisés apex et `www` sont activés ; la route `/api/paypal/ipn` est associée au Worker.
+- D1 relu en lecture seule : 18 associations WAV couvrant 12 UPC ; 2 commandes `pending`, 0 `paid` ; aucune ligne dans `shop_email_deliveries`.
+- R2 relu en lecture seule : 18 WAV (`audio/wav`), 18 JPG et un objet vide de préfixe.
+- Le secret `SMTP_PASSWORD` est absent. Les variables PayPal REST (`PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET`, `PAYPAL_WEBHOOK_ID`) ne figurent pas dans les bindings secrets observés ; le flux REST/webhook n'est donc pas déclaré prêt. Le code PayPal Classic/IPN est distinct et sa transaction Sandbox de bout en bout reste à tester.
+- Le contrôle HTTP des pages publiques n'a pas pu être terminé depuis l'environnement d'audit, qui bloque les requêtes sortantes vers le domaine.
+
 ## Points non validés — aucune déclaration de réussite
 
 - Les gestionnaires de remboursement, inversion et annulation d'inversion sont codés, mais aucun test IPN réel ni campagne PayPal Sandbox complète n'a été effectué.
 - Aucun paiement réel n'a été réalisé.
 - Aucun email client de commande ou de téléchargement n'a encore été envoyé ou reçu ; le code est prêt, mais le secret SMTP manque.
-- Le DNS du domaine comporte des enregistrements de messagerie (MX, SPF et DKIM vers `mail.nflt-records.com`), mais aucun identifiant SMTP ou service d'envoi n'est configuré dans le Worker.
+- Les paramètres SMTP non secrets (`SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_FROM`) sont présents dans le Worker ; `SMTP_PASSWORD` manque. Aucune livraison réelle n'est enregistrée dans D1.
 - Le vendeur légal par produit et territoire, les droits de chaque sortie, la TVA, les informations consommateurs, les remboursements et les documents juridiques restent à valider.
 - Le statut payé n'a pas été testé de bout en bout avec une transaction PayPal confirmée.
 
 ## Ordre de finalisation
 
-1. Récupérer les WAV manquants des cinq sorties vérifiées, les six WAV manquants de NOUS Y SOMMES et le master de Hustle & Grind une fois son nombre de pistes confirmé.
+1. Récupérer les 19 masters WAV originaux manquants : cinq singles (dont Hustle & Grind, confirmé à une piste), six pistes de NOUS Y SOMMES et huit pistes de 30.000 GÉNOCIDES.
 2. Compléter et vérifier les associations UPC → WAV ; ne jamais convertir un M4A en faux master WAV.
 3. Ajouter le secret SMTP_PASSWORD dans Cloudflare, envoyer le test email depuis /admin/orders, puis vérifier la réception réelle et la reprise idempotente.
 4. Tester PayPal Classic/IPN en environnement contrôlé : panier multi-articles, doublons, refus, remboursement et inversion.

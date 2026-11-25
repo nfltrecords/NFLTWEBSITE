@@ -82,3 +82,12 @@ Une matrice métier proposée et un plan de tests RLS manuels sont disponibles d
 ## Dépendances non accessibles depuis le dépôt
 
 L'accès au projet Supabase, aux utilisateurs, aux politiques RLS et aux données de production n'est pas établi dans cette session. Il est donc impossible de certifier le schéma réel en production ou de créer un dashboard sûr en se basant uniquement sur le dépôt. Aucun changement de base de données ni accès utilisateur n'a été effectué.
+
+
+## Rapprochement avec la production — 26 novembre 2026
+
+- Le Worker Cloudflare `nfltwebsite` est sur la version 219 à 100 % ; les bindings D1/R2/KV sont présents.
+- D1 contient les tables opérationnelles `shop_orders`, `shop_release_assets` et `shop_email_deliveries`. Contrôle du 26 novembre : 2 commandes en attente, 0 payée et aucune livraison e-mail enregistrée.
+- Les routes de code `/admin/orders` et `/admin/audio` existent et sont protégées côté serveur par `ADMIN_ORDERS_CODE`. Le contrôle HTTP navigateur depuis l'environnement d'audit a été bloqué par la politique réseau ; l'accès réel des pages n'est donc pas certifié par ce contrôle.
+- Le CRM complet, les rôles nominatifs, les politiques RLS et les documents clients restent à concevoir et tester. Les SQL sous `docs/sql/` restent des drafts non appliqués.
+- `SMTP_PASSWORD` manque ; les tests d'envoi/réception e-mail ne sont pas terminés. Le checkout reste fermé.

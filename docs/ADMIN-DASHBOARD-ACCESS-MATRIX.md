@@ -53,3 +53,8 @@
 - La route `/messages` existante est un lecteur de messages protégé par un code serveur ; ce n'est pas un dashboard et ce code ne doit pas être réutilisé comme authentification.
 - Le SQL de fondation reste un brouillon non appliqué.
 - Aucun accès Supabase production, compte utilisateur, rôle ou donnée client n'a été créé.
+
+
+## Rapprochement de production — 26 novembre 2026
+
+Les deux routes opérationnelles `/admin/orders` et `/admin/audio` existent dans le Worker de production et utilisent le secret serveur `ADMIN_ORDERS_CODE`. Elles ne réalisent pas encore le CRM décrit dans la matrice. Aucun rôle Supabase nominatif ni aucune politique RLS du futur CRM n'a été provisionné. Le SQL de fondation et le plan de tests restent des brouillons. L'accès navigateur n'a pas pu être validé depuis l'environnement d'audit, qui bloque les requêtes HTTP vers le domaine. Ne pas attribuer de rôle ni appliquer de SQL en production avant les tests de développement.

@@ -8,9 +8,9 @@
 - Ne jamais publier de mot de passe, jeton ou valeur secrète dans GitHub ou dans les journaux.
 - Tester séparément HTTPS, réception, envoi et authentification e-mail.
 
-## État DNS contrôlé le 24 novembre 2026
+## État DNS contrôlé le 26 novembre 2026
 
-La zone Cloudflare est active. Le contrôle en lecture seule a retrouvé les enregistrements de messagerie attendus : MX, SPF, DKIM et DMARC, ainsi que les noms de serveurs de messagerie. Les enregistrements de messagerie n'ont pas été modifiés.
+La zone Cloudflare `nflt-records.com` est active. Le contrôle en lecture seule du 26 novembre retrouve le MX, SPF, DKIM, DMARC et les hôtes mail/SMTP. Les enregistrements mail sont toujours DNS-only. Les domaines personnalisés `nflt-records.com` et `www.nflt-records.com` sont activés sur le Worker `nfltwebsite` ; leurs enregistrements AAAA sont gérés par Cloudflare. Aucun enregistrement DNS n'a été modifié pendant cette reprise.
 
 La présence de ces enregistrements ne prouve pas à elle seule que l'envoi SMTP fonctionne ni que la boîte expéditrice est opérationnelle.
 
@@ -23,7 +23,7 @@ Le dépôt contient désormais :
 - une page administrateur pour consulter les commandes, tester la messagerie et relancer un envoi ;
 - un lien de téléchargement sécurisé vers les masters WAV complets, jamais vers les extraits.
 
-**Dépendance actuelle constatée dans le Worker de production :** les paramètres SMTP non secrets sont présents, mais le secret `SMTP_PASSWORD` n'est pas configuré dans la version active. Le code ne peut donc pas s'authentifier auprès du serveur SMTP et aucun e-mail client n'est actuellement prouvé comme envoyé.
+**Dépendance actuelle constatée dans le Worker de production (version 219) :** les paramètres SMTP non secrets sont présents, mais le secret `SMTP_PASSWORD` n'est pas configuré. Le code ne peut donc pas s'authentifier auprès du serveur SMTP et aucun e-mail client n'est actuellement prouvé comme envoyé.
 
 Ne pas inscrire le mot de passe dans le dépôt ni le transmettre dans une conversation. Il doit être ajouté comme secret Worker `SMTP_PASSWORD` depuis le tableau de bord Cloudflare, puis un test réel doit être effectué depuis `/admin/orders` avec le code administrateur. Le résultat doit être vérifié dans la boîte destinataire et dans les indésirables.
 
