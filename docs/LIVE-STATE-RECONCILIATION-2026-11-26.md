@@ -6,7 +6,7 @@
 ## 1. Site, Worker et déploiement
 
 - Worker : `nfltwebsite`.
-- Version active : **218**, à **100 %**.
+- Version active : **219**, à **100 %**.
 - Déploiement actif : `b3c3819a-e367-459c-9268-d46562dc014e`.
 - Version ID : `a49b5d6b-cb7e-429f-8b37-f6d9c95299db`.
 - Les domaines personnalisés `nflt-records.com` et `www.nflt-records.com` sont activés sur ce Worker.
