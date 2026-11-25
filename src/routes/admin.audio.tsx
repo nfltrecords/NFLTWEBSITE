@@ -21,6 +21,8 @@ type InventoryItem = {
   title: string;
   expected: number | null;
   uploaded: number;
+  validUploaded: number;
+  invalidFiles: { name: string; issue: string }[];
   missing: number | null;
   complete: boolean;
   over: boolean;
@@ -158,7 +160,7 @@ function Page() {
                 <tr className="border-b border-border">
                   <th className="py-2 pr-3">Sortie / UPC</th>
                   <th className="px-2 py-2 text-right">Pistes attendues</th>
-                  <th className="px-2 py-2 text-right">WAV associés</th>
+                  <th className="px-2 py-2 text-right">WAV valides</th>
                   <th className="px-2 py-2 text-right">Manquants</th>
                   <th className="py-2 pl-3">État</th>
                 </tr>
@@ -173,7 +175,9 @@ function Page() {
                     <td className="px-2 py-3 text-right tabular-nums">
                       {item.expected ?? "À confirmer"}
                     </td>
-                    <td className="px-2 py-3 text-right tabular-nums">{item.uploaded}</td>
+                    <td className="px-2 py-3 text-right tabular-nums">
+                      {item.validUploaded}/{item.uploaded}
+                    </td>
                     <td className="px-2 py-3 text-right tabular-nums">{item.missing ?? "—"}</td>
                     <td className="py-3 pl-3">
                       {item.over
