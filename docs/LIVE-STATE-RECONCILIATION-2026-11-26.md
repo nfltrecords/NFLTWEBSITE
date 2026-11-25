@@ -7,13 +7,13 @@
 
 - Worker : `nfltwebsite`.
 - Version active : **218**, à **100 %**.
-- Déploiement actif : `46889f7a-746c-4e03-a2dd-8ac1577843a1`.
-- Version ID : `116dfe27-6421-43d7-a966-8160ab700a2f`.
+- Déploiement actif : `b3c3819a-e367-459c-9268-d46562dc014e`.
+- Version ID : `a49b5d6b-cb7e-429f-8b37-f6d9c95299db`.
 - Les domaines personnalisés `nflt-records.com` et `www.nflt-records.com` sont activés sur ce Worker.
 - La route explicite `nflt-records.com/api/paypal/ipn` est associée au Worker.
 - Workers Builds est connecté au dépôt GitHub `nfltrecords/NFLTWEBSITE`, branche `main`, avec `auto_build_enabled=true`, `npm run build` et `npx wrangler deploy`.
 - Le dernier build observé `f5c58885-9e41-4a58-a514-92f3fed2aaa1` a terminé avec `build_outcome=success` pour le commit `5ba11a50460023c708aad7a4ea346b2e88b2bdd2`.
-- Les commits documentaires poussés sur `main` déclenchent eux aussi un build et un déploiement Worker. Un précédent addendum disant « aucun déploiement Worker » est donc corrigé : le dernier déploiement automatique a bien créé la version 218. Ces commits n'ont pas modifié le code applicatif.
+- Les commits documentaires poussés sur `main` déclenchent eux aussi un build et un déploiement Worker. Un précédent addendum disant « aucun déploiement Worker » est donc corrigé : le dernier déploiement automatique a bien créé la version 219. Ces commits n'ont pas modifié le code applicatif.
 - La vérification HTTP des pages publiques n'a pas pu être terminée depuis l'environnement d'audit : les requêtes sortantes vers le domaine sont bloquées par la politique réseau (403). Les domaines liés et le build réussi ne prouvent pas l'affichage réel de chaque page dans un navigateur.
 
 ## 2. Stockage et commandes
