@@ -1,4 +1,5 @@
 import { readFileSync, readdirSync, existsSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 import { join } from "node:path";
 
 const catalogue = readFileSync("src/lib/catalogue.ts", "utf8");
@@ -45,15 +46,39 @@ const stalePreviewReferences = sourceFiles.filter((path) => {
 });
 
 const previewAssetFiles = [];
+const archiveFiles = [];
 function collectPreviewAssetFiles(directory) {
   for (const entry of readdirSync(directory, { withFileTypes: true })) {
     if ([".git", "node_modules", "dist", ".wrangler", ".vercel"].includes(entry.name)) continue;
     const path = join(directory, entry.name);
     if (entry.isDirectory()) collectPreviewAssetFiles(path);
-    else if (/_PREVIEW_30S\.(mp3|m4a|wav|aac)$/i.test(entry.name)) previewAssetFiles.push(path);
+    else {
+      if (/_PREVIEW_30S\.(mp3|m4a|wav|aac)$/i.test(entry.name)) previewAssetFiles.push(path);
+      if (/\.zip$/i.test(entry.name)) archiveFiles.push(path);
+    }
   }
 }
 collectPreviewAssetFiles(".");
+
+const previewArchiveEntries = [];
+const archiveInspectionErrors = [];
+const forbiddenArchiveEntryPatterns = [
+  /_PREVIEW_30S\.(mp3|m4a|wav|aac)$/i,
+  /(^|\/)(assets|public\/assets)\/previews\//i,
+  /(^|\/)NFLT_PREVIEWS_30S\.zip$/i,
+];
+for (const archivePath of archiveFiles) {
+  try {
+    const listing = execFileSync("unzip", ["-Z1", archivePath], { encoding: "utf8" });
+    for (const entry of listing.split(/\r?\n/).filter(Boolean)) {
+      if (forbiddenArchiveEntryPatterns.some((pattern) => pattern.test(entry))) {
+        previewArchiveEntries.push(`${archivePath}!${entry}`);
+      }
+    }
+  } catch (error) {
+    archiveInspectionErrors.push(`${archivePath}: ${error.message}`);
+  }
+}
 
 const result = {
   catalogueReleases: upcs.length,
@@ -62,6 +87,9 @@ const result = {
   forbiddenPreviewPaths,
   stalePreviewReferences,
   previewAssetFiles,
+  archiveFiles,
+  previewArchiveEntries,
+  archiveInspectionErrors,
 };
 console.log(JSON.stringify(result, null, 2));
 
@@ -70,7 +98,9 @@ if (
   coverFiles.length !== upcs.length ||
   forbiddenPreviewPaths.length ||
   stalePreviewReferences.length ||
-  previewAssetFiles.length
+  previewAssetFiles.length ||
+  previewArchiveEntries.length ||
+  archiveInspectionErrors.length
 ) {
   process.exitCode = 1;
 }
