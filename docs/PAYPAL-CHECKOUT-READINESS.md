@@ -6,12 +6,24 @@
 
 
 
-## Paiement
+# NFLT RECORDS — raccordement BigCommerce et sécurité des paiements
 
-- Le checkout PayPal Classic/IPN est ouvert dans le code de production à la demande explicite du propriétaire le 26 novembre.
-- La commande est créée uniquement après vérification serveur de la disponibilité complète des masters de chaque UPC.
-- Le statut `paid` dépend de l'IPN PayPal vérifié ; le retour navigateur ne suffit pas.
-- Aucun achat réel de bout en bout n'a encore été constaté dans D1. Ne pas annoncer qu'une transaction client a été testée.
+**Mise à jour : 26 novembre 2026**
+
+- Le checkout PayPal personnel historique est désactivé dans le code de préparation de la boutique. Ne pas le réactiver.
+- Les 18 fiches catalogue sont affichées et les paniers peuvent être préparés sans afficher un faux état « master incomplet » sur les fiches.
+- Le bouton de paiement reste désactivé jusqu'au raccordement du vrai compte marchand BigCommerce et aux tests de bout en bout.
+- BigCommerce est la plateforme marchande cible ; Cloudflare Worker/R2/D1 reste l'infrastructure du site et des masters WAV.
+- Aucun identifiant de boutique BigCommerce, Store Hash, jeton API ou secret BigCommerce n'a été trouvé dans les fichiers GitHub ou les paramètres Worker consultés.
+- L'intégration cible doit utiliser les API BigCommerce depuis Cloudflare Worker, avec les secrets uniquement dans les secrets Worker (jamais dans GitHub ou dans le navigateur).
+- Les masters WAV originaux restent dans R2 privé. Après paiement BigCommerce confirmé côté serveur, Cloudflare devra autoriser la livraison protégée des fichiers de la commande.
+- Aucun master audio n'est déplacé, converti ou remplacé par cette préparation.
+- Les paiements restent bloqués jusqu'à connexion du compte marchand, configuration des moyens de paiement BigCommerce et test commande → paiement confirmé → téléchargement sécurisé.
+- L'e-mail automatique reste distinct et nécessite la configuration SMTP vérifiée.
+
+## Donnée d'accès nécessaire
+
+L'URL publique de la boutique BigCommerce ou son Store Hash est nécessaire pour identifier le bon magasin et préparer son API account. Ne pas envoyer de mot de passe ou de jeton secret dans GitHub ou dans le chat ; les clés devront être saisies directement dans les secrets Cloudflare après création depuis le panneau BigCommerce.
 
 ## Masters et disponibilité
 
