@@ -15,6 +15,27 @@ import { useCart } from "@/lib/cart-store";
 
 const text = (locale: Locale, fr: string, en: string) => (locale === "fr" ? fr : en);
 
+const shopifyVariantByUpc: Record<string, string> = {
+  "199751168234": "55633041097042",
+  "199751170992": "55633041817938",
+  "199751511160": "55633042047314",
+  "199751512501": "55633042964818",
+  "199751514697": "55633044504914",
+  "199751613871": "55633044701522",
+  "199951252436": "55633044996434",
+  "199954147302": "55633045193042",
+  "199955740199": "55633045750098",
+  "199956554184": "55633046339922",
+  "199956557857": "55633046536530",
+  "199751508283": "55633054957906",
+  "199955701558": "55633056268626",
+  "199955715203": "55633057120594",
+  "199955715135": "55633060659538",
+  "199955742094": "55633062003026",
+  "199956222809": "55633062822226",
+  "821440674572": "55633063608658",
+};
+
 export function ShopPage({ locale }: { locale: Locale }) {
   const [query, setQuery] = useState("");
   const sharedCart = useCart();
@@ -33,17 +54,11 @@ export function ShopPage({ locale }: { locale: Locale }) {
             <p className="body-copy">
               {text(
                 locale,
-                "Parcourez les 18 sorties du catalogue NFLT. Choisissez vos titres et ajoutez-les à votre panier. Pour commander, envoyez votre sélection directement à NFLT RECORDS.",
-                "Browse all 18 NFLT catalogue releases. Choose your titles and add them to your cart. To order, send your selection directly to NFLT RECORDS.",
+                "Parcourez les 18 sorties du catalogue NFLT. Choisissez vos titres, ajoutez-les au panier et réglez votre commande en toute sécurité.",
+                "Browse all 18 NFLT catalogue releases. Choose your titles, add them to your cart and pay securely.",
               )}
             </p>
             <div className="flex flex-wrap gap-4">
-              <Button asChild className="editorial-action">
-                <a href={`mailto:nfltrecords@nflt-records.com?subject=${encodeURIComponent(text(locale, "Commande NFLT RECORDS", "NFLT RECORDS order"))}`}>
-                  {text(locale, "Commander par email", "Order by email")}
-                  <ArrowUpRight />
-                </a>
-              </Button>
               <Button asChild variant="outline" className="editorial-action">
                 <Link to={publicPages.catalogue[locale]}>
                   {text(locale, "Catalogue NFLT", "NFLT catalogue")}
@@ -100,10 +115,10 @@ export function ShopPage({ locale }: { locale: Locale }) {
                     <p className="text-3xl text-primary tabular-nums">{formatShopPrice(cartTotalCents)}</p>
                   </div>
                   <div className="flex flex-col items-start gap-3">
-                    <p className="text-sm text-muted-foreground">{text(locale, "Envoyez votre sélection. NFLT RECORDS vous répondra avec la confirmation et le lien de paiement sécurisé par carte ou autre moyen disponible.", "Send your selection. NFLT RECORDS will reply with confirmation and a secure payment link by card or another available method.")}</p>
+                    <p className="text-sm text-muted-foreground">{text(locale, "Paiement sécurisé par carte et autres moyens disponibles sur l’espace de paiement NFLT RECORDS.", "Secure payment by card and other available methods in the NFLT RECORDS payment area.")}</p>
                     <Button asChild className="editorial-action">
-                      <a href={`mailto:nfltrecords@nflt-records.com?subject=${encodeURIComponent(text(locale, "Commande NFLT RECORDS", "NFLT RECORDS order"))}&body=${encodeURIComponent(cartItems.map((release) => `${release.title} — ${sharedCart.items[release.upc]} × ${formatShopPrice(releasePriceCents(release.upc) ?? 0)}`).join("\\n") + "\\n\\n" + text(locale, "Total : ", "Total: ") + formatShopPrice(cartTotalCents))}`}>
-                        {text(locale, "Envoyer ma commande", "Send my order")}
+                      <a href={`https://shop.nflt-records.com/cart/${cartItems.map((release) => `${shopifyVariantByUpc[release.upc]}:${sharedCart.items[release.upc]}`).join(",")}?checkout`}>
+                        {text(locale, "Payer ma commande", "Pay for my order")}
                         <ArrowUpRight />
                       </a>
                     </Button>
