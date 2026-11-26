@@ -41,7 +41,7 @@
     "domainStatus": "not-rechecked-no-expiry-assumption"
   },
   "checkoutReadiness": {
-    "status": "conditional-live-digital-checkout-enabled-for-releases-with-complete-verified-WAV-masters",
+    "status": "checkout-disabled-pending-BigCommerce-merchant-connection-and-verification",
     "productRightsAndMasters": "per-release-WAV-completeness-checked-before-order-creation; incomplete-releases-remain-blocked; 19-WAV-masters-still-missing",
     "sellerAssignment": "owner-authorized-PayPal-recipient-configured-but-legal-seller-of-record-review-pending",
     "physicalCDSellerOfRecordAndTerritory": "pending-exact-entity-fulfillment-and-territory-confirmation",
@@ -53,14 +53,14 @@
     "customerServiceContact": "pending-confirmation",
     "saleTerritoriesAndTaxInclusivePricing": "pending-confirmation",
     "salesTermsRefundWithdrawalMediatorAndPrivacy": "pending-confirmation",
-    "paymentProviderAndMerchantAccount": "paypal-classic-ipn-configured-account-verification-not-retested",
-    "serverValidatedTotalsAndVerifiedPaymentNotifications": "server-calculated-totals-and-PayPal-IPN-verification-implemented",
+    "paymentProviderAndMerchantAccount": "BigCommerce-account-connection-pending-store-URL-and-API-credentials; legacy-personal-PayPal-disabled",
+    "serverValidatedTotalsAndVerifiedPaymentNotifications": "legacy-PayPal-IPN-not-used-pending-BigCommerce-checkout-integration",
     "ordersInvoicesSecureDeliveryAndRefunds": "orders-and-protected-wav-downloads-implemented-invoice-generation-not-confirmed",
     "receiptSenderAndDelivery": "direct-confirmation-download-enabled-email-pending-SMTP_PASSWORD",
-    "successFailureCancellationRefundAndSecurityChecks": "automated-code-tests-running; no-live-end-to-end-payment-test-performed",
-    "explicitCheckoutActivationApproval": "granted-owner-2026-11-26"
+    "successFailureCancellationRefundAndSecurityChecks": "no-live-payment-tests; checkout-disabled-until-BigCommerce-merchant-verified",
+    "explicitCheckoutActivationApproval": "superseded-by-owner-request-2026-11-26-disable-personal-PayPal-until-BigCommerce-verified"
   },
-  "checkoutEnabled": true,
+  "checkoutEnabled": false,
   "sellerOfRecordPreparation": {
     "status": "private-preparation-only",
     "brandIsContractingSeller": false,
