@@ -16,7 +16,11 @@ function bytesToHex(bytes: Uint8Array): string {
   return Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0")).join("");
 }
 
-async function validShopifyHmac(rawBody: string, supplied: string, secret: string): Promise<boolean> {
+async function validShopifyHmac(
+  rawBody: string,
+  supplied: string,
+  secret: string,
+): Promise<boolean> {
   if (!supplied || !secret) return false;
   const key = await crypto.subtle.importKey(
     "raw",
@@ -31,7 +35,9 @@ async function validShopifyHmac(rawBody: string, supplied: string, secret: strin
   const expected = bytesToHex(signature);
   if (expected.length !== supplied.length) return false;
   let difference = 0;
-  for (let i = 0; i < expected.length; i++) difference |= expected.charCodeAt(i) ^ supplied.toLowerCase().charCodeAt(i);
+  for (let i = 0; i < expected.length; i++) {
+    difference |= expected.charCodeAt(i) ^ supplied.toLowerCase().charCodeAt(i);
+  }
   return difference === 0;
 }
 
@@ -39,7 +45,8 @@ export const Route = createFileRoute("/api/shopify-paid-webhook")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const secret = (shopEnv as typeof shopEnv & { SHOPIFY_WEBHOOK_SECRET?: string }).SHOPIFY_WEBHOOK_SECRET;
+        const secret = (shopEnv as typeof shopEnv & { SHOPIFY_WEBHOOK_SECRET?: string })
+          .SHOPIFY_WEBHOOK_SECRET;
         const rawBody = await request.text();
         const signature = request.headers.get("X-Shopify-Hmac-Sha256") ?? "";
         if (!secret || !(await validShopifyHmac(rawBody, signature, secret))) {
@@ -98,10 +105,21 @@ export const Route = createFileRoute("/api/shopify-paid-webhook")({
           ).bind(shopifyOrderId, orderId),
           shopEnv.DB.prepare(
             "INSERT INTO shop_orders (id, release_upc, buyer_email, amount_cents, currency, status, created_at, updated_at, paid_at) SELECT ?, ?, ?, ?, ?, 'paid', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP WHERE EXISTS (SELECT 1 FROM shopify_order_map WHERE shopify_order_id = ? AND order_id = ?)",
-          ).bind(orderId, manifest, email, Math.round(total * 100), currency, shopifyOrderId, orderId),
+          ).bind(
+            orderId,
+            manifest,
+            email,
+            Math.round(total * 100),
+            currency,
+            shopifyOrderId,
+            orderId,
+          ),
         ]);
 
-        return Response.json({ ok: true }, { status: 200, headers: { "Cache-Control": "no-store" } });
+        return Response.json(
+          { ok: true },
+          { status: 200, headers: { "Cache-Control": "no-store" } },
+        );
       },
     },
   },
