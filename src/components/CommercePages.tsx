@@ -84,9 +84,6 @@ export function ShopPage({ locale }: { locale: Locale }) {
                         <div className="cart-item-info">
                           <p className="font-medium">{release.title}</p>
                           <p className="text-sm text-muted-foreground">{formatShopPrice(unitPrice)} {text(locale, "l’unité", "each")}</p>
-                          {availabilityLoaded && !availableUpcs?.has(release.upc) ? (
-                            <p className="text-xs text-destructive">{text(locale, "Master WAV incomplet — commande indisponible", "WAV master incomplete — order unavailable")}</p>
-                          ) : null}
                         </div>
                         <div className="cart-item-controls">
                           <Button type="button" variant="outline" size="icon" aria-label={text(locale, "Retirer une unité", "Remove one")} onClick={() => changeCartQuantity(release.upc, -1)}><Minus size={15} /></Button>
