@@ -45,6 +45,24 @@ export const verifiedReleaseTrackCounts: Readonly<Record<string, number>> = {
   "821440674572": 1,
 };
 
+// Only releases with complete, UPC-linked WAV sets in the production D1/R2 delivery
+// catalogue may be purchased. Keep this list aligned with shop_release_assets and
+// getCompleteWavTracks; a track count alone is not proof of delivery readiness.
+export const wavDeliveryReadyUpcs = new Set([
+  "199751168234",
+  "199751170992",
+  "199751511160",
+  "199751512501",
+  "199751514697",
+  "199751613871",
+  "199951252436",
+  "199954147302",
+  "199955740199",
+  "199956554184",
+  "199956557857",
+]);
+export const isWavDeliveryReady = (upc: string) => wavDeliveryReadyUpcs.has(upc);
+
 // Verified counts describe the release tracklists; they do not prove WAV availability.
 // Shopify owns the live cart, checkout and payment methods (including the owner's
 // connected PayPal provider). This file only supplies catalogue pricing and track counts;
