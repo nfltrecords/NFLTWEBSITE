@@ -1,3 +1,5 @@
+> **MISE À JOUR PRIORITAIRE — 26 novembre 2026 :** Shopify Advanced (`shop.nflt-records.com`) est l'unique plateforme marchande. PayPal relié à Shopify doit rester actif. BigCommerce est abandonné. Le verrou historique `checkoutActivationApproved=false` ne concerne que l'ancien checkout PayPal Cloudflare et ne doit jamais servir à désactiver PayPal dans Shopify. Les 18 produits Shopify sont créés en brouillon ; les 18 pochettes HD 1536 × 1536 sont maintenant attachées, la collection et le menu principal sont configurés. Les masters WAV ne sont pas encore attachés à Digital Products ; aucun produit ne doit être publié avant livraison vérifiée.
+
 > **AVIS DE MISE À JOUR — 26 novembre 2026 :** ce document est un relevé historique. Pour l'état courant des masters et de la boutique, consulter en priorité [MASTER-SHOP-OPERATING-TRUTH-2026-11-26.md](MASTER-SHOP-OPERATING-TRUTH-2026-11-26.md). Ne pas reprendre les anciennes synthèses globales ni leurs totaux de disponibilité comme état de production actuel. La référence opérationnelle est la lecture directe D1/R2 et le contrôle dynamique `getCompleteWavTracks`.
 
 # NFLT RECORDS — suivi consolidé des chantiers
