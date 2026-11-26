@@ -184,81 +184,11 @@ NFLTWEBSITE/
 - L'état précédemment contrôlé : 18 lignes `shop_release_assets`, toutes pour WAV, pas de M4A dans ces associations.
 - État commandes précédemment observé : 2 commandes `pending`, 0 `paid`; e-mails de livraison 0. Refaire la requête avant de présenter ces chiffres comme état actuel.
 
-## 7. Audio — catalogue, masters, preuves et limites exactes
+## 7. Audio et boutique — référence opérationnelle du 26 novembre
 
-### Inventaire des 18 WAV présents dans R2 (`18 master/`)
-| UPC | Fichier | Taille octets |
-|---|---|---:|
-| 199751168234 | `MASTERPIECE.wav` | 20 094 798 |
-| 199751170992 | `NFLTTRANSCENDANCEOFNATURALTRUTHSBEATNFLTRECORDS.wav` | 22 249 550 |
-| 199751511160 | `NFLTTHEDOPIESTCOLLECTIONBEATNFLRECORDS.wav` | 24 539 214 |
-| 199751512501 | `NFLTINMYPARTYBEATNFLTRECORDS.wav` | 21 430 350 |
-| 199751514697 | `DCVOL2.wav` | 56 389 454 |
-| 199751613871 | `NFLT.wav` | 30 023 502 |
-| 199951252436 | `medley.wav (1)` | 69 890 138 |
-| 199954147302 | `NINTENDO.wav` | 27 418 446 |
-| 199955740199 | `NFLTTHELUXURYTHEHIGHESTUNEQUIVOCAL.wav` | 90 938 982 |
-| 199956222809 | `JAIPASBONQUELESGENSDUPAYSOULESGENSDUCOINSORGANISENTENTREEUXJEDETESTECAJAIHO.wav` | 22 931 498 |
-| 199956222809 | `JAIPASBONQUELESGENSDUCOINSORGANISENTENTREEUXJEDETESTECAJAIHO2.wav` | 27 173 102 |
-| 199956222809 | `JAIPASBONQUELESGENSDUCOINSORGANISENTENTREEUXJEDETESTECAJAIHO3.wav` | 26 437 294 |
-| 199956554184 | `Calamite.wav` | 40 749 030 |
-| 199956554184 | `DebrisFlaqueDechetsCancres.wav` | 25 476 686 |
-| 199956554184 | `Flatulence.wav` | 20 727 002 |
-| 199956554184 | `Laplusgrosseenc.wav` | 24 816 974 |
-| 199956554184 | `NFLTO.wav` | 28 954 446 |
-| 199956557857 | `Ridewithme.wav` | 38 723 406 |
+Consulter impérativement `docs/MASTER-SHOP-OPERATING-TRUTH-2026-11-26.md` et `docs/R2-MASTER-INVENTORY.md`. Ces documents remplacent les anciens résumés audio. L'état direct de production est : 18 objets WAV dans R2, 18 associations D1 correspondantes, tailles concordantes et objets présents. La disponibilité de chaque fiche boutique est déterminée par le contrôle complet des pistes attendu pour son UPC ; la simple présence d'un fichier lié n'active pas automatiquement la fiche.
 
-### Correction réellement effectuée le 26 novembre
-- `18 master/medley.wav (1)` avait un MIME générique `application/octet-stream` malgré une signature RIFF/WAVE valide.
-- Le même contenu binaire a été réenregistré avec `Content-Type: audio/wav`.
-- Taille identique : 69 890 138 octets ; ETag identique : `cfa6e5ce2a891f4d09b1c9dcc598eb1f` ; relecture confirmée.
-- Aucun transcodage, aucune compression, aucun changement de contenu audio.
-
-### Catalogue total : 37 pistes sur 18 sorties
-Le fichier `docs/track-count-evidence-2026-11-24.md` donne les preuves de comptage. La réconciliation du 25 novembre conclut à 18 WAV en R2 et 19 pistes supplémentaires dont les sources disponibles dans la Bibliothèque sont uniquement des M4A. Les M4A ne doivent pas être traités comme masters WAV originaux.
-
-| UPC | Sortie | Pistes | WAV associés connus | État selon audit |
-|---|---|---:|---:|---|
-| 199751168234 | 836.722 (1995) [18] [73] | 1 | 1 | complet |
-| 199751170992 | Transcendence Of Natural Truths | 1 | 1 | complet |
-| 199751508283 | Hot | 1 | 0 | WAV manquant |
-| 199751511160 | The Dopest Collection Vol. 1 | 1 | 1 | complet |
-| 199751512501 | In My Party | 1 | 1 | complet |
-| 199751514697 | The Dopest Collection Vol. 2 | 1 | 1 | complet |
-| 199751613871 | Ma Luxure | 1 | 1 | complet |
-| 199951252436 | L'écran vient de chez nous (Radio Edit) | 1 | 1 | complet |
-| 199954147302 | NFLT Social Community (The Most Advanced Societies) | 1 | 1 | complet |
-| 199955701558 | Dilemma (Radio Edit) | 1 | 0 | WAV manquant |
-| 199955715135 | #NEVERFAKELIKETHEM (Chapter One) | 1 | 0 | WAV manquant |
-| 199955715203 | Hustle & Grind (Radio Edit) | à confirmer | 0 | comptage et master à confirmer |
-| 199955740199 | The Luxury - The Highest - Unequivocal | 1 | 1 | complet |
-| 199955742094 | 30.000 GÉNOCIDES | 8 | 0 | 8 WAV manquants |
-| 199956222809 | NOUS Y SOMMES (TU M'AURAS JAMAIS) | 9 | 3 | 6 WAV manquants |
-| 199956554184 | 0+ | 5 | 5 | complet |
-| 199956557857 | Ma Luxure 2 (MVP) | 1 | 1 | complet |
-| 821440674572 | GR 4LIFE | 1 | 0 | WAV manquant |
-
-**Bilan précis de l'audit du 25 novembre :** 18 WAV associés en D1 couvrent 12 UPC. 11 sorties vérifiées ont tous leurs masters, NOUS Y SOMMES n'a que 3 WAV sur 9, cinq sorties vérifiées n'ont aucun WAV (Hot, Dilemma, #NEVERFAKELIKETHEM, 30.000 GÉNOCIDES, GR 4LIFE). Cela fait 18 masters WAV manquants sur les tracklists vérifiées. Hustle & Grind n'a pas de WAV associé et son nombre exact de pistes reste non confirmé. Les 19 fichiers M4A listés ci-dessous sont les sources de certaines de ces pistes, pas des WAV originaux.
-
-### M4A présents en source dans la Bibliothèque (ne pas convertir)
-- `NOUS Y SOMMES` UPC `199956222809` : `Dunckes.m4a`, `Dunckes2.m4a`, `Nousysommes.m4a`, `ONTELAFOUTUAUQ.m4a`, `AMORTTESCHIENS.m4a`, `PERSONNESEMARREICI.m4a` (6 pistes M4A ; les 3 autres pistes de la sortie ont déjà un WAV).
-- `30.000 GÉNOCIDES` UPC `199955742094` : `30.000Genocides.m4a`, `Laveritetenique.m4a`, `Arreteoutoutpete.m4a`, `ExtremementGrave.m4a`, `Lesuivi.m4a`, `Yapasdecouilleici.m4a`, `Tufouslamerdededingue.m4a`, `Sasempirepourtoi.m4a` (8 pistes M4A).
-- Singles : `NEVERFAKELIKETHEM.m4a` UPC `199955715135`, `Dilemma.m4a` UPC `199955701558`, `Hustlegrind.m4a` UPC `199955715203`, `NFLTHOT.m4a` UPC `199751508283`, `GR4LIFE.m4a` UPC `821440674572`.
-- Le rapport détaillé est `docs/AUDIO-RECONCILIATION-2026-11-25.md`.
-- Le ZIP `NFLT-18-covers-and-mapping.zip` a été inspecté antérieurement : il contient des pochettes/captures/mapping, pas les WAV manquants. Les archives ZIP du site examinées ne contenaient pas les masters WAV manquants.
-
-### Règle de livraison audio
-- Le mécanisme de boutique doit vérifier le nombre de pistes confirmé, le nombre de masters WAV présents et les objets associés avant de permettre une commande.
-- Pas de livraison d'une sortie incomplète. Le panier et l'API de disponibilité doivent refuser les références dont les masters complets ne sont pas tous présents.
-- La livraison doit servir les WAV uniquement, après commande payée vérifiée.
-
-## 8. Incohérence à corriger dans les rapports précédents
-
-Le fichier actuellement commité dans GitHub `docs/NFLT-HANDOFF-MASTERS-2026-11-26.md` (blob SHA `98ccdc4dbf997558cfcdac5a12d1c544397b9e45`) et la copie R2 `reports/NFLT-HANDOFF-MASTERS-2026-11-26.md` sont **obsolètes**. Ils contiennent une affirmation erronée selon laquelle aucun autre audio n'est requis et que les 18 masters couvrent tout le périmètre.
-
-La version correcte est : **18 WAV originaux actuellement présents et associés dans R2/D1 ; la réconciliation catalogue 37 pistes/18 sorties montre 19 pistes supplémentaires disponibles en M4A seulement et non converties ; le dossier de 18 WAV est contrôlé, mais la disponibilité des 37 WAV originaux n'est pas certifiée.**
-
-Le prochain assistant doit mettre à jour les deux copies obsolètes avec cette vérité, sans supprimer l'historique ni modifier les masters.
+Ne pas refaire l'audit de signature ou les associations des 18 fichiers déjà validés. Ne pas convertir les M4A, ne pas modifier les masters, ne pas contourner `getCompleteWavTracks` et ne pas vendre un album sans l'ensemble de fichiers promis.
 
 ## 9. Boutique, PayPal, commandes et e-mails
 
