@@ -128,9 +128,9 @@ describe("Commerce inquiry rules", () => {
     expect(commerceConfig.licensingNotificationReadiness.existingContactWorkflow).toBe("unchanged");
   });
 
-  it("records conditional PayPal activation without silently assigning a legal seller or territory", () => {
-    expect(commerceConfig.checkoutReadiness.explicitCheckoutActivationApproval).toBe("granted-owner-2026-11-26");
-    expect(commerceConfig.checkoutReadiness.paymentProviderAndMerchantAccount).toBe("paypal-classic-ipn-configured-account-verification-not-retested");
+  it("records BigCommerce handoff and keeps personal PayPal disabled", () => {
+    expect(commerceConfig.checkoutReadiness.explicitCheckoutActivationApproval).toBe("superseded-by-owner-request-2026-11-26-disable-personal-PayPal-until-BigCommerce-verified");
+    expect(commerceConfig.checkoutReadiness.paymentProviderAndMerchantAccount).toBe("BigCommerce-account-connection-pending-store-URL-and-API-credentials; legacy-personal-PayPal-disabled");
     expect(commerceConfig.checkoutReadiness.ordersInvoicesSecureDeliveryAndRefunds).toBe("orders-and-protected-wav-downloads-implemented-invoice-generation-not-confirmed");
     expect(commerceConfig.checkoutReadiness.sellerAssignment).toContain("legal-seller-of-record-review-pending");
     expect(commerceConfig.sellerOfRecordPreparation.automaticSellerAssignment).toBe(false);
