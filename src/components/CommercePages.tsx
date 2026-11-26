@@ -103,12 +103,7 @@ export function ShopPage({ locale }: { locale: Locale }) {
                   <div className="flex flex-col items-start gap-3">
                     <label className="text-sm" htmlFor="shop-buyer-email">{text(locale, "E-mail pour recevoir la commande", "Email for your order")}</label>
                     <input id="shop-buyer-email" type="email" required maxLength={255} autoComplete="email" value={buyerEmail} onChange={(event) => setBuyerEmail(event.target.value)} className="w-full rounded-md border border-input bg-background px-3 py-2" />
-                    {cartHasUnavailableItems ? (
-                      <p role="status" className="text-sm text-destructive">
-                        {text(locale, "Retirez les sorties dont le master WAV est incomplet avant de commander.", "Remove releases with incomplete WAV masters before checkout.")}
-                      </p>
-                    ) : null}
-                    <Button type="button" className="editorial-action" disabled={!checkoutEnabled || checkoutBusy || !availabilityLoaded || cartHasUnavailableItems || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(buyerEmail.trim())} onClick={async () => {
+                    <Button type="button" className="editorial-action" disabled={!checkoutEnabled || checkoutBusy || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(buyerEmail.trim())} onClick={async () => {
                       if (!checkoutEnabled || cartItems.length === 0 || !buyerEmail.trim() || checkoutBusy) return;
                       setCheckoutBusy(true); setCheckoutError("");
                       try {
