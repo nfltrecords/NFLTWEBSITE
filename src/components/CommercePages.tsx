@@ -40,8 +40,8 @@ export function ShopPage({ locale }: { locale: Locale }) {
   const [query, setQuery] = useState("");
   const sharedCart = useCart();
   const items = filterReleases("all", query);
-  const cartItems = releases.filter((release) => (sharedCart.items[release.upc] ?? 0) > 0);
-  const cartCount = sharedCart.count;
+  const cartItems = releases.filter((release) => isWavDeliveryReady(release.upc) && (sharedCart.items[release.upc] ?? 0) > 0);
+  const cartCount = cartItems.reduce((count, release) => count + (sharedCart.items[release.upc] ?? 0), 0);
   const cartTotalCents = cartItems.reduce((total, release) => total + (releasePriceCents(release.upc) ?? 0) * (sharedCart.items[release.upc] ?? 0), 0);
   const addToCart = sharedCart.add;
   const changeCartQuantity = sharedCart.change;
