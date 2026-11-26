@@ -10,7 +10,7 @@ export const Route = createFileRoute("/commande/confirmation")({
 type Download = { title: string; track: string; quantity: number; url: string };
 function Page() {
   const { order } = Route.useSearch();
-  const [status, setStatus] = useState("Vérification du paiement PayPal…");
+  const [status, setStatus] = useState("Vérification du paiement…");
   const [downloads, setDownloads] = useState<Download[]>([]);
   const [paid, setPaid] = useState(false);
   useEffect(() => {
@@ -35,7 +35,7 @@ function Page() {
           );
           return;
         }
-        setStatus("En attente de la confirmation PayPal…");
+        setStatus("En attente de la confirmation du paiement…");
       } catch {
         setStatus("Vérification en cours…");
       }
