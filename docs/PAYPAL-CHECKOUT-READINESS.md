@@ -43,3 +43,15 @@ L'URL publique de la boutique BigCommerce ou son Store Hash est nécessaire pour
 - Aucun paiement client réel de bout en bout n'a été testé.
 - Le vendeur contractuel, les droits/territoires, la TVA, les CGV et les obligations consommateurs doivent être validés séparément.
 - Ne jamais confondre activation technique du checkout, paiement réellement confirmé et livraison client testée.
+
+
+## MISE À JOUR PRIORITAIRE — 26 NOVEMBRE 2026 : ANCIEN FLUX RETIRÉ
+
+Ce rapport décrit l'ancien checkout PayPal du site Cloudflare et le projet BigCommerce ; il ne constitue plus la configuration commerciale actuelle.
+
+- BigCommerce est abandonné et ne doit plus être configuré.
+- PayPal relié et approuvé dans Shopify est le moyen de paiement à conserver. Ne pas le désactiver.
+- Le verrou du code Cloudflare (`checkoutActivationApproved=false`) ne bloque que l'ancien flux PayPal IPN/API du site principal. Il est volontairement fermé pour éviter une double caisse ; il ne s'applique pas au checkout Shopify.
+- La boutique Shopify est la seule caisse : `https://shop.nflt-records.com/`.
+- Les paiements Shopify ne doivent pas être globalement désactivés à cause de produits incomplets. Garder simplement les produits sans master WAV complet en brouillon jusqu'à association du fichier dans Digital Products.
+- Aucun achat réel de bout en bout n'est encore prouvé. L'approbation PayPal dans Shopify est confirmée selon la capture du propriétaire, mais la transaction et le versement bancaire ne sont pas certifiés.
