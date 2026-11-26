@@ -28,9 +28,9 @@ const input = {
 };
 
 describe("Commerce inquiry rules", () => {
-  it("enables PayPal checkout after explicit owner approval for WAV-complete releases", () => {
-    expect(checkoutActivationApproved).toBe(true);
-    expect(payPalCheckoutIsEnabled()).toBe(true);
+  it("keeps personal PayPal checkout disabled pending BigCommerce connection", () => {
+    expect(checkoutActivationApproved).toBe(false);
+    expect(payPalCheckoutIsEnabled()).toBe(false);
   });
 
   it("prices only the confirmed reference tiers", () => {
@@ -78,7 +78,7 @@ describe("Commerce inquiry rules", () => {
       expect(provisionalReleaseTrackCounts[release.upc]).toBe(1);
       expect(releasePriceCents(release.upc)).toBe(999);
     }
-    expect(commerceConfig.checkoutEnabled).toBe(true);
+    expect(commerceConfig.checkoutEnabled).toBe(false);
     expect(commerceConfig.checkoutReadiness.trackCountsAndPriceTierMapping).toBe("verified");
   });
 
