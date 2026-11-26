@@ -12,18 +12,11 @@ import { inquirySchema, shopPriceTiers, formatShopPrice, releasePriceCents, type
 import { submitLicensingInquiry } from "@/lib/commerce.functions";
 import { ReleasePrice } from "@/components/ReleasePrice";
 import { useCart } from "@/lib/cart-store";
-import { createManualPayPalOrder } from "@/lib/manual-orders.functions";
-import { payPalCheckoutIsEnabled } from "@/lib/paypal-checkout-gate";
 
 const text = (locale: Locale, fr: string, en: string) => (locale === "fr" ? fr : en);
 
 export function ShopPage({ locale }: { locale: Locale }) {
   const [query, setQuery] = useState("");
-  const [buyerEmail, setBuyerEmail] = useState("");
-  const [checkoutBusy, setCheckoutBusy] = useState(false);
-  const [checkoutError, setCheckoutError] = useState("");
-  const createOrder = useServerFn(createManualPayPalOrder);
-  const checkoutEnabled = payPalCheckoutIsEnabled();
   const sharedCart = useCart();
   const items = filterReleases("all", query);
   const cartItems = releases.filter((release) => (sharedCart.items[release.upc] ?? 0) > 0);
@@ -104,30 +97,15 @@ export function ShopPage({ locale }: { locale: Locale }) {
                 <div className="mt-5 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-5">
                   <div><p className="text-sm text-muted-foreground">{text(locale, "Total indicatif", "Indicative total")}</p><p className="text-3xl text-primary tabular-nums">{formatShopPrice(cartTotalCents)}</p></div>
                   <div className="flex flex-col items-start gap-3">
-                    <label className="text-sm" htmlFor="shop-buyer-email">{text(locale, "E-mail pour recevoir la commande", "Email for your order")}</label>
-                    <input id="shop-buyer-email" type="email" required maxLength={255} autoComplete="email" value={buyerEmail} onChange={(event) => setBuyerEmail(event.target.value)} className="w-full rounded-md border border-input bg-background px-3 py-2" />
-                    <Button type="button" className="editorial-action" disabled={!checkoutEnabled || checkoutBusy || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(buyerEmail.trim())} onClick={async () => {
-                      if (!checkoutEnabled || cartItems.length === 0 || !buyerEmail.trim() || checkoutBusy) return;
-                      setCheckoutBusy(true); setCheckoutError("");
-                      try {
-                        const result = await createOrder({ data: {
-                          items: cartItems.map((release) => ({ upc: release.upc, quantity: sharedCart.items[release.upc] })),
-                          email: buyerEmail.trim(),
-                        } });
-                        if (!result.ok || !result.paymentUrl) throw new Error("Commande indisponible.");
-                        window.location.assign(result.paymentUrl);
-                      } catch (error) { setCheckoutError(error instanceof Error ? error.message : "Erreur de paiement."); setCheckoutBusy(false); }
-                    }}>{checkoutBusy ? text(locale, "Préparation…", "Preparing…") : checkoutEnabled ? text(locale, "Payer avec PayPal", "Pay with PayPal") : text(locale, "Paiement bientôt disponible", "Payments coming soon")}</Button>
-                    {checkoutError ? <p role="alert" className="text-sm text-destructive">{checkoutError}</p> : null}
+                    <p className="text-sm text-muted-foreground">{text(locale, "La commande et le paiement sont sécurisés sur la boutique officielle.", "Checkout and payment are completed securely in the official store.")}</p>
+                    <Button asChild className="editorial-action">
+                      <a href="https://shop.nflt-records.com/" rel="noopener noreferrer">
+                        {text(locale, "Continuer sur Shopify", "Continue to Shopify")}
+                        <ArrowUpRight />
+                      </a>
+                    </Button>
                   </div>
                 </div>
-                <p className="body-copy mt-4 text-sm">
-                  {text(
-                    locale,
-                    "Le paiement est temporairement désactivé pendant le raccordement à BigCommerce. Aucun débit ne sera effectué avant validation du compte marchand et des commandes de test.",
-                    "Checkout is temporarily disabled while BigCommerce is connected. No payment will be taken until the merchant account and test orders have been verified.",
-                  )}
-                </p>
               </>
             )}
           </section>
