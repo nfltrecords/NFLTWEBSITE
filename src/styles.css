@@ -1940,3 +1940,48 @@ a:focus-visible {
   gap: 0.35rem;
   align-content: center;
 }
+
+
+/* Streaming catalogue: keep the Apple Music action below the release details on phones. */
+@media (max-width: 767px) {
+  .streaming-release-row {
+    display: grid;
+    grid-template-columns: 22px 56px minmax(0, 1fr);
+    align-items: center;
+    gap: 10px 12px;
+    padding-block: 18px;
+  }
+  .streaming-release-info {
+    display: contents;
+  }
+  .streaming-release-info > span:first-child {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .streaming-release-cover {
+    grid-column: 2;
+    grid-row: 1;
+    width: 56px;
+    height: 56px;
+  }
+  .streaming-release-info > div {
+    grid-column: 3;
+    grid-row: 1;
+    min-width: 0;
+  }
+  .streaming-release-info > div > p:first-child {
+    line-height: 1.35;
+    overflow-wrap: break-word;
+    word-break: normal;
+    hyphens: auto;
+  }
+  .streaming-release-action {
+    grid-column: 3;
+    grid-row: 2;
+    justify-self: start;
+    min-width: 0;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    line-height: 1.4;
+  }
+}
