@@ -1165,12 +1165,31 @@ a:focus-visible {
     padding: 24px 0;
   }
   .release-row--commerce {
-    grid-template-columns: 24px 48px minmax(0, 1fr) auto;
-    gap: 10px;
+    grid-template-columns: 24px 48px minmax(0, 1fr);
+    align-items: center;
+    gap: 12px 10px;
   }
-  .release-row-add {
-    padding-inline: 9px;
-    font-size: 10px;
+  .release-row--commerce .release-row-main {
+    grid-column: 3;
+    min-width: 0;
+  }
+  .release-row--commerce .release-row-meta {
+    grid-column: 3;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+  .release-row--commerce .release-row-add {
+    grid-column: 3;
+    justify-self: start;
+    min-height: 40px;
+    padding: 10px 14px;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+  .release-row--commerce .release-title {
+    overflow-wrap: break-word;
+    word-break: normal;
+    hyphens: auto;
   }
   .release-cover {
     width: 48px;
