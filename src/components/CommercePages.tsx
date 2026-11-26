@@ -8,7 +8,7 @@ import { SiteLayout, PageHeader } from "@/components/SiteLayout";
 import { releases, filterReleases } from "@/lib/catalogue";
 import { releaseCovers } from "@/lib/covers";
 import { publicPages, type Locale } from "@/lib/seo";
-import { inquirySchema, shopPriceTiers, formatShopPrice, releasePriceCents, type Inquiry } from "@/lib/commerce";
+import { inquirySchema, shopPriceTiers, formatShopPrice, releasePriceCents, isWavDeliveryReady, type Inquiry } from "@/lib/commerce";
 import { submitLicensingInquiry } from "@/lib/commerce.functions";
 import { ReleasePrice } from "@/components/ReleasePrice";
 import { useCart } from "@/lib/cart-store";
@@ -40,8 +40,8 @@ export function ShopPage({ locale }: { locale: Locale }) {
   const [query, setQuery] = useState("");
   const sharedCart = useCart();
   const items = filterReleases("all", query);
-  const cartItems = releases.filter((release) => (sharedCart.items[release.upc] ?? 0) > 0);
-  const cartCount = sharedCart.count;
+  const cartItems = releases.filter((release) => isWavDeliveryReady(release.upc) && (sharedCart.items[release.upc] ?? 0) > 0);
+  const cartCount = cartItems.reduce((count, release) => count + (sharedCart.items[release.upc] ?? 0), 0);
   const cartTotalCents = cartItems.reduce((total, release) => total + (releasePriceCents(release.upc) ?? 0) * (sharedCart.items[release.upc] ?? 0), 0);
   const addToCart = sharedCart.add;
   const changeCartQuantity = sharedCart.change;
@@ -188,9 +188,9 @@ export function ShopPage({ locale }: { locale: Locale }) {
                   <h2>{release.title}</h2>
                   <ReleasePrice upc={release.upc} locale={locale} />
                   <p>UPC {release.upc}</p>
-                  <p className="shop-master-status">{text(locale, "Catalogue NFLT", "NFLT catalogue")}</p>
+                  <p className="shop-master-status">{isWavDeliveryReady(release.upc) ? text(locale, "Master WAV disponible", "WAV master available") : text(locale, "Master WAV en préparation", "WAV master in preparation")}</p>
                 </div>
-                <Button type="button" className="editorial-action w-full" onClick={() => addToCart(release.upc)} disabled={(sharedCart.items[release.upc] ?? 0) >= 20 || releasePriceCents(release.upc) === null}>
+                <Button type="button" className="editorial-action w-full" onClick={() => addToCart(release.upc)} disabled={!isWavDeliveryReady(release.upc) || (sharedCart.items[release.upc] ?? 0) >= 20 || releasePriceCents(release.upc) === null}>
                   <ShoppingBag size={16} />{text(locale, "Ajouter au panier", "Add to cart")}
                   {(sharedCart.items[release.upc] ?? 0) > 0 ? ` · ${sharedCart.items[release.upc]}` : ""}
                 </Button>
