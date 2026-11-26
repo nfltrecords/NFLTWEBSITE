@@ -119,7 +119,7 @@ export function ShopPage({ locale }: { locale: Locale }) {
                   {text(
                     locale,
                     "Le paiement est temporairement désactivé pendant le raccordement à BigCommerce. Aucun débit ne sera effectué avant validation du compte marchand et des commandes de test.",
-                    "You will be redirected to PayPal. Once PayPal's payment notification is verified, secure WAV master download links appear on this page. A confirmation email will also be sent when email delivery is configured.",
+                    "Checkout is temporarily disabled while BigCommerce is connected. No payment will be taken until the merchant account and test orders have been verified.",
                   )}
                 </p>
               </>
