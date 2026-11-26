@@ -53,17 +53,21 @@ export function SiteLayout({ children }: { children: ReactNode }) {
           className="desktop-nav"
           aria-label={english ? "Main navigation" : "Navigation principale"}
         >
-          {nav.map(([p, l]) => (
-            <Link
-              to={publicPages[p][locale]}
-              search={p === "licensing" ? { release: undefined, intent: undefined } : {}}
-              key={p}
-              activeProps={{ className: "text-primary" }}
-              activeOptions={{ exact: true }}
-            >
-              {l}
-            </Link>
-          ))}
+          {nav.map(([p, l]) =>
+            p === "shop" ? (
+              <a key={p} href="https://shop.nflt-records.com/" target="_blank" rel="noopener noreferrer">{l}<ArrowUpRight size={13} /></a>
+            ) : (
+              <Link
+                to={publicPages[p][locale]}
+                search={p === "licensing" ? { release: undefined, intent: undefined } : {}}
+                key={p}
+                activeProps={{ className: "text-primary" }}
+                activeOptions={{ exact: true }}
+              >
+                {l}
+              </Link>
+            ),
+          )}
           <Link
             to={publicPages.shop[locale]}
             hash="panier"
@@ -124,18 +128,17 @@ export function SiteLayout({ children }: { children: ReactNode }) {
           className="mobile-nav"
           aria-label={english ? "Mobile navigation" : "Navigation mobile"}
         >
-          {nav.map(([p, l], i) => (
-            <Link
-              key={p}
-              to={publicPages[p][locale]}
-              search={p === "licensing" ? { release: undefined, intent: undefined } : {}}
-              onClick={() => setOpen(false)}
-            >
-              <span>0{i + 1}</span>
-              {l}
-              <ArrowUpRight />
-            </Link>
-          ))}
+          {nav.map(([p, l], i) =>
+            p === "shop" ? (
+              <a key={p} href="https://shop.nflt-records.com/" target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)}>
+                <span>0{i + 1}</span>{l}<ArrowUpRight />
+              </a>
+            ) : (
+              <Link key={p} to={publicPages[p][locale]} search={p === "licensing" ? { release: undefined, intent: undefined } : {}} onClick={() => setOpen(false)}>
+                <span>0{i + 1}</span>{l}<ArrowUpRight />
+              </Link>
+            ),
+          )}
           <Link to={publicPages.shop[locale]} hash="panier" onClick={() => setOpen(false)}>
             <span>10</span>
             {english ? "Cart" : "Panier"} <span className="text-primary">({cartCount})</span>
@@ -174,7 +177,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
             <Link to={publicPages.catalogue[locale]}>Catalogue</Link>
             <Link to={publicPages.application[locale]}>Application</Link>
             <Link to={publicPages.radio[locale]}>RADIO</Link>
-            <Link to={publicPages.shop[locale]}>{english ? "Shop" : "Boutique"}</Link>
+            <a href="https://shop.nflt-records.com/" target="_blank" rel="noopener noreferrer">{english ? "Shop" : "Boutique"}</a>
             <Link
               to={publicPages.licensing[locale]}
               search={{ release: undefined, intent: undefined }}
