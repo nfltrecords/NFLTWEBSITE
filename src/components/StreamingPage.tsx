@@ -95,7 +95,7 @@ export function StreamingPage({ locale }: { locale: Locale }) {
                 rel="noopener noreferrer"
                 className="group flex min-h-28 items-center justify-between gap-5 border-b border-border p-6 transition-colors hover:bg-card md:odd:border-r md:odd:pr-8 md:even:pl-8"
               >
-                <div className="streaming-release-info flex min-w-0 items-center gap-4">
+                <div className="flex min-w-0 items-center gap-4">
                   <span className="text-xs text-primary">0{index + 1}</span>
                   <div className="min-w-0">
                     <h2 className="text-2xl">{service.name}</h2>
