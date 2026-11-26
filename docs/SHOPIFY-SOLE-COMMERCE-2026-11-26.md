@@ -57,3 +57,15 @@ Every future audit, roadmap and handoff must state:
 - Master operating truth corrected: `5d70e6bcbbac3b9cf227d81a6bb29ef00f1a84f3`
 - Roadmap corrected: `f65f019517b2b2f0c4dab853996fd2f05fc7378d`
 - PayPal readiness report superseded: `1a33c196b6c6748ec4716d7fae6d42e5c0411e18`
+
+## Finalisation de la session — vérifications complémentaires
+
+- Thème Horizon principal (`gid://shopify/OnlineStoreTheme/213448655186`) : personnalisation sauvegardée et **publication confirmée**. La page d'accueil et le pied de page sont personnalisés NFLT RECORDS ; le menu catalogue affiche les sorties NFLT. Captures desktop 1440 px et mobile 390 px exécutées.
+- Boutique Shopify : lecture après modification confirme 18 produits, 18 images vedettes de 1536 × 1536 px, tous les SKU/UPC et prix conservés, 18 produits toujours en brouillon.
+- Collection manuelle `Catalogue NFLT RECORDS` : 18 produits ; menu principal mis à jour et relu.
+- Site principal : code boutique modifié pour diriger les achats vers Shopify et ne plus présenter BigCommerce ou l'ancien checkout PayPal Cloudflare.
+- GitHub Actions `Verify source` pour le commit documentaire final `a140a94144bab9580d98ac3745cd8a76f1d60a2f` : **success**.
+- Dernière lecture Cloudflare Worker au moment du contrôle : le dernier déploiement actif connu est antérieur à ces commits ; le nouveau déploiement du site principal n'est donc pas déclaré publié sur Cloudflare. Il faut contrôler Workers Builds séparément avant de revendiquer la mise en production du lien Shopify.
+- Le compte BigCommerce externe n'a pas été fermé depuis les connexions disponibles ; aucune liaison/credential BigCommerce n'a été identifiée dans les bindings du Worker principal. La décision opérationnelle et le code du dépôt retirent désormais BigCommerce de la chaîne commerciale.
+- Aucun secret PayPal Shopify n'a été supprimé. Les bindings du Worker principal ne contenaient pas de secret nommé PAYPAL ; les valeurs de secrets non identifiées n'ont pas été touchées.
+
