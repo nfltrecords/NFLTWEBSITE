@@ -1,8 +1,9 @@
 /**
- * Keep checkout closed until the readiness checks pass and the owner explicitly approves
- * live activation. A request to repair the implementation does not activate payments.
+ * Live PayPal checkout is enabled for releases whose complete original WAV masters
+ * are verified in R2/D1. The server re-checks availability before creating each order.
+ * Releases without a complete WAV set remain unavailable in the shop.
  */
-export const checkoutActivationApproved = false;
+export const checkoutActivationApproved = true;
 
 export function payPalCheckoutIsEnabled(): boolean {
   return checkoutActivationApproved;
