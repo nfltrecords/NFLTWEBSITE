@@ -46,8 +46,11 @@ export const verifiedReleaseTrackCounts: Readonly<Record<string, number>> = {
 };
 
 // Verified counts describe the release tracklists; they do not prove WAV availability.
-// The reference price map below mirrors these counts while checkout remains disabled.
-// Delivery still requires valid WAV objects in R2, matching D1 associations, and a paid order.
+// Shopify owns the live cart, checkout and payment methods (including the owner's
+// connected PayPal provider). This file only supplies catalogue pricing and track counts;
+// it does not disable or gate Shopify checkout.
+// Cloudflare download delivery separately requires valid WAV objects in R2,
+// matching D1 associations, and a Shopify-paid order recorded by the delivery bridge.
 export const provisionalReleaseTrackCounts: Readonly<Record<string, number>> = {
   "199955740199": 1,
   "199956554184": 5,
