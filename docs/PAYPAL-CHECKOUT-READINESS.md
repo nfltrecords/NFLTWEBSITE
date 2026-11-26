@@ -4,9 +4,9 @@
 
 ## Statut général
 
-Le checkout reste **désactivé**. L'intégration en place est PayPal Classic avec panier `_cart` et notification IPN. Aucune migration vers PayPal REST/Webhooks n'est demandée ni activée.
+Le checkout PayPal est **ouvert pour les sorties dont tous les masters WAV originaux sont présents et vérifiés**. Les sorties incomplètes restent bloquées individuellement par le contrôle de disponibilité et par la validation serveur avant création de commande. L'intégration active est PayPal Classic avec panier `_cart` et notification IPN.
 
-Le verrou `checkoutActivationApproved` reste à `false`. La réparation technique du site ne vaut pas autorisation d'encaisser des paiements réels.
+Le verrou `checkoutActivationApproved` est à `true` à la demande explicite du propriétaire le 26 novembre 2026. Les paiements sont en EUR et sont envoyés à l'adresse PayPal configurée dans le code (`Encoresarbakane@gmail.com`); l'IPN n'accepte que les notifications vérifiées de ce destinataire. Aucun paiement réel de bout en bout n'a encore été exécuté comme test.
 
 ## Éléments vérifiés en production
 
@@ -83,7 +83,7 @@ Les lecteurs de préécoute et leurs références ont été retirés des fiches 
 
 Les masters WAV manquants n'ont été trouvés ni ailleurs dans le bucket R2, ni dans les archives ZIP examinées de GitHub et de la bibliothèque de fichiers. Ne pas convertir les M4A pour combler ces manques. Le transfert des nouveaux masters se fait via `/admin/audio` : l'outil utilise désormais le multipart R2, conserve uniquement la session et les ETags temporaires dans KV, vérifie la taille de l'objet, puis crée l'association D1 avec un asset key `r2:`. Les noms de fichiers déjà associés sont rejetés et la finalisation est idempotente.
 
-Le verrou `checkoutActivationApproved` reste à `false`. Aucune commande n'est payée et aucun paiement réel n'a été effectué.
+Le verrou `checkoutActivationApproved` est maintenant à `true` pour les seules sorties complètes. Aucune commande n'est payée et aucun paiement réel n'a été effectué.
 
 ## Email automatique — code prêt, identifiant SMTP manquant
 

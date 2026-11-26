@@ -44,8 +44,8 @@ export function ShopPage({ locale }: { locale: Locale }) {
             <p className="body-copy">
               {text(
                 locale,
-                "Parcourez les 18 sorties du catalogue NFLT et ajoutez vos sélections au panier. Les prix affichés sont indicatifs ; le paiement en ligne sera ouvert après validation des ventes et des livraisons.",
-                "Browse all 18 NFLT catalogue releases and add your selections to the cart. Displayed prices are indicative; online checkout will open after sales and delivery validation.",
+                "Parcourez les 18 sorties du catalogue NFLT. Le paiement PayPal est ouvert pour les sorties dont le master WAV complet est disponible. Après confirmation du paiement par PayPal, vos fichiers WAV sont accessibles directement sur la page de confirmation. Les sorties incomplètes restent indisponibles.",
+                "Browse all 18 NFLT catalogue releases. PayPal checkout is open for releases with a complete WAV master set. Once PayPal confirms payment, your WAV files are available directly on the order confirmation page. Releases with incomplete masters remain unavailable.",
               )}
             </p>
             <div className="flex flex-wrap gap-4">
@@ -130,8 +130,8 @@ export function ShopPage({ locale }: { locale: Locale }) {
                 <p className="body-copy mt-4 text-sm">
                   {text(
                     locale,
-                    "Vous êtes redirigé vers PayPal. Après confirmation vérifiée du paiement, le master WAV sera disponible sur la page de confirmation.",
-                    "Payment is processed on PayPal's secure checkout page. Payment confirmation and order details are available in your PayPal account.",
+                    "Vous êtes redirigé vers PayPal. Dès que la notification de paiement est vérifiée par PayPal, les liens de téléchargement des masters WAV apparaissent sur cette page. Un e-mail de confirmation sera également envoyé lorsque le service e-mail sera configuré.",
+                    "You will be redirected to PayPal. Once PayPal's payment notification is verified, secure WAV master download links appear on this page. A confirmation email will also be sent when email delivery is configured.",
                   )}
                 </p>
               </>
@@ -159,8 +159,8 @@ export function ShopPage({ locale }: { locale: Locale }) {
             <p className="body-copy mt-6">
               {text(
                 locale,
-                "Tarifs indicatifs calculés à partir des tracklists vérifiées du catalogue. Le panier permet de préparer une sélection, mais aucune commande ni aucun paiement n’est accepté tant que les conditions commerciales et la livraison sécurisée des masters WAV ne sont pas validées. Les CD physiques, les stocks et les expéditions restent à configurer.",
-                "Indicative prices based on the catalogue's verified tracklists. The cart lets you prepare a selection, but orders and payments remain disabled until commercial terms and secure WAV master delivery are validated. Physical CDs, inventory and shipping still need configuration.",
+                "Les tarifs numériques s’appliquent aux sorties affichées comme « Master WAV disponible ». Les sorties dont les masters sont incomplets ne peuvent pas être commandées. Les CD physiques, les stocks et les expéditions restent à configurer.",
+                "Digital prices apply to releases marked “WAV master available”. Releases with incomplete masters cannot be ordered. Physical CDs, inventory and shipping still need configuration.",
               )}
             </p>
           </section>
