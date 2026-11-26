@@ -99,3 +99,14 @@ La mention de BigCommerce et la consigne de désactiver les paiements en attenda
 ### Politique permanente de continuité
 
 Ne plus réintroduire BigCommerce dans les plans, audits ou feuilles de route. Ne jamais désactiver le PayPal connecté à Shopify dans le cadre de l'ancien verrou Cloudflare. Le verrou `checkoutActivationApproved` ne concerne que l'ancien checkout PayPal Cloudflare et reste fermé pour éviter les doubles commandes. Toute vente numérique passe par Shopify et Digital Products ; les produits sans fichier WAV complet restent en brouillon.
+
+## Raccordement Shopify — état vérifié complémentaire du 26 novembre 2026
+
+La boutique et le thème sont raccordés, mais le **signal de paiement vers le service de livraison Cloudflare n'est pas encore raccordé**. Contrôles directs effectués :
+- Shopify `webhookSubscriptions` renvoie zéro abonnement shop-scoped.
+- Les secrets du Worker ont été inspectés par leurs seuls noms. Aucun secret Shopify/webhook n'est présent ; aucune valeur secrète n'a été lue ni exposée.
+- `SMTP_PASSWORD` est absent, donc l'e-mail transactionnel n'est pas prêt.
+- La table D1 `shop_orders` ne contient que deux commandes historiques en attente, sans preuve de paiement Shopify. Elles sont restées inchangées.
+- Le code actuel de livraison vérifie un ordre D1 payé et sert les masters WAV depuis R2. Le handler IPN existant est spécifique à l'ancien PayPal et ne doit pas être réutilisé comme confirmation Shopify.
+
+**Prochaine étape sûre :** implémenter un endpoint Shopify `orders/paid` avec validation HMAC à partir du secret d'application Shopify, stockage idempotent des identifiants de commande Shopify et correspondance des SKU/UPC avec les masters R2. Ne pas créer l'abonnement Shopify avant que l'endpoint et la clé de vérification soient disponibles. Ensuite, configurer le secret SMTP directement dans Cloudflare, effectuer un achat de test et vérifier le téléchargement client. PayPal connecté à Shopify reste activé ; BigCommerce reste abandonné.
