@@ -80,3 +80,22 @@ Lecture Cloudflare du 26 novembre 2026 :
 - Les 18 fiches de catalogue sont affichées sans badge « master en préparation » fondé sur le contrôle de paiement ; les boutons d'ajout au panier servent à préparer le panier uniquement.
 - Le paiement reste volontairement fermé jusqu'à la validation du compte marchand BigCommerce et du flux complet de commande/livraison.
 - Le Store Hash/URL de boutique et les identifiants API BigCommerce ne sont pas présents dans les ressources du projet actuellement consultées.
+
+
+## MISE À JOUR PRIORITAIRE — 26 NOVEMBRE 2026 : SHOPIFY EST LA PLATEFORME MARCHANDE UNIQUE
+
+La mention de BigCommerce et la consigne de désactiver les paiements en attendant BigCommerce dans la section historique ci-dessus sont **obsolètes et annulées**.
+
+- Plateforme marchande unique : Shopify Advanced, boutique `shop.nflt-records.com`, devise EUR, pays France.
+- PayPal approuvé et relié dans Shopify selon la confirmation du propriétaire : **à conserver et à utiliser dans Shopify**. Ne pas supprimer ni désactiver ce moyen de paiement.
+- BigCommerce est abandonné pour NFLT RECORDS. Aucun raccordement BigCommerce ne doit être entrepris.
+- Le flux PayPal personnel/ancien du Worker Cloudflare n'est plus le checkout marchand. Son verrou applicatif reste fermé ; il ne doit pas être confondu avec PayPal Express/PayPal activé dans Shopify.
+- La page boutique du site principal renvoie désormais vers `https://shop.nflt-records.com/`.
+- Shopify contient 18 produits existants, tous en brouillon, avec SKU/UPC et prix relus. Les 18 pochettes correspondantes sont maintenant attachées, vérifiées à 1536 × 1536 px. Une collection manuelle `Catalogue NFLT RECORDS` contient les 18 fiches et le menu principal pointe vers elle.
+- Les fiches restent en brouillon tant que les masters WAV originaux complets ne sont pas joints à Digital Products. Ne pas désactiver les paiements Shopify pour cette raison : la disponibilité d'un produit se gère par son statut et son fichier livré, pas en désactivant globalement le prestataire de paiement.
+- L'installation Digital Products est vérifiée, mais aucun fichier téléchargeable n'est encore attaché aux variantes. Le connecteur nécessite l'import direct du fichier dans Shopify ; une URL privée R2 ne constitue pas une pièce jointe téléchargeable Digital Products.
+- Aucun paiement client réel ni livraison client complète n'est certifié à ce stade. L'approbation du prestataire Shopify n'est pas une preuve de transaction réelle.
+
+### Politique permanente de continuité
+
+Ne plus réintroduire BigCommerce dans les plans, audits ou feuilles de route. Ne jamais désactiver le PayPal connecté à Shopify dans le cadre de l'ancien verrou Cloudflare. Le verrou `checkoutActivationApproved` ne concerne que l'ancien checkout PayPal Cloudflare et reste fermé pour éviter les doubles commandes. Toute vente numérique passe par Shopify et Digital Products ; les produits sans fichier WAV complet restent en brouillon.
