@@ -33,14 +33,14 @@ export function ShopPage({ locale }: { locale: Locale }) {
             <p className="body-copy">
               {text(
                 locale,
-                "Parcourez les 18 sorties du catalogue NFLT. La boutique officielle, les commandes et les paiements sont désormais gérés exclusivement sur Shopify.",
-                "Browse all 18 NFLT catalogue releases. The official store, orders and payments are now handled exclusively through Shopify.",
+                "Parcourez les 18 sorties du catalogue NFLT. Choisissez vos titres et ajoutez-les à votre panier. Pour commander, envoyez votre sélection directement à NFLT RECORDS.",
+                "Browse all 18 NFLT catalogue releases. Choose your titles and add them to your cart. To order, send your selection directly to NFLT RECORDS.",
               )}
             </p>
             <div className="flex flex-wrap gap-4">
               <Button asChild className="editorial-action">
-                <a href="https://shop.nflt-records.com/" rel="noopener noreferrer">
-                  {text(locale, "Accéder à la boutique officielle", "Enter the official store")}
+                <a href={`mailto:nfltrecords@nflt-records.com?subject=${encodeURIComponent(text(locale, "Commande NFLT RECORDS", "NFLT RECORDS order"))}`}>
+                  {text(locale, "Commander par email", "Order by email")}
                   <ArrowUpRight />
                 </a>
               </Button>
@@ -95,8 +95,19 @@ export function ShopPage({ locale }: { locale: Locale }) {
                   })}
                 </ul>
                 <div className="mt-5 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-5">
-                  <div><p className="text-sm text-muted-foreground">{text(locale, "Total indicatif", "Indicative total")}</p><p className="text-3xl text-primary tabular-nums">{formatShopPrice(cartTotalCents)}</p></div>
-
+                  <div>
+                    <p className="text-sm text-muted-foreground">{text(locale, "Total de votre sélection", "Your order total")}</p>
+                    <p className="text-3xl text-primary tabular-nums">{formatShopPrice(cartTotalCents)}</p>
+                  </div>
+                  <div className="flex flex-col items-start gap-3">
+                    <p className="text-sm text-muted-foreground">{text(locale, "Envoyez votre sélection. NFLT RECORDS vous répondra avec la confirmation et le lien de paiement sécurisé par carte ou autre moyen disponible.", "Send your selection. NFLT RECORDS will reply with confirmation and a secure payment link by card or another available method.")}</p>
+                    <Button asChild className="editorial-action">
+                      <a href={`mailto:nfltrecords@nflt-records.com?subject=${encodeURIComponent(text(locale, "Commande NFLT RECORDS", "NFLT RECORDS order"))}&body=${encodeURIComponent(cartItems.map((release) => `${release.title} — ${sharedCart.items[release.upc]} × ${formatShopPrice(releasePriceCents(release.upc) ?? 0)}`).join("\\n") + "\\n\\n" + text(locale, "Total : ", "Total: ") + formatShopPrice(cartTotalCents))}`}>
+                        {text(locale, "Envoyer ma commande", "Send my order")}
+                        <ArrowUpRight />
+                      </a>
+                    </Button>
+                  </div>
                 </div>
               </>
             )}
