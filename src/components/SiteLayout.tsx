@@ -55,7 +55,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
         >
           {nav.map(([p, l]) =>
             p === "shop" ? (
-              <a key={p} href="https://shop.nflt-records.com/" target="_blank" rel="noopener noreferrer">{l}<ArrowUpRight size={13} /></a>
+              <Link key={p} to={publicPages.shop[locale]}>{l}</Link>
             ) : (
               <Link
                 to={publicPages[p][locale]}
@@ -130,9 +130,9 @@ export function SiteLayout({ children }: { children: ReactNode }) {
         >
           {nav.map(([p, l], i) =>
             p === "shop" ? (
-              <a key={p} href="https://shop.nflt-records.com/" target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)}>
+              <Link key={p} to={publicPages.shop[locale]} onClick={() => setOpen(false)}>
                 <span>0{i + 1}</span>{l}<ArrowUpRight />
-              </a>
+              </Link>
             ) : (
               <Link key={p} to={publicPages[p][locale]} search={p === "licensing" ? { release: undefined, intent: undefined } : {}} onClick={() => setOpen(false)}>
                 <span>0{i + 1}</span>{l}<ArrowUpRight />
@@ -177,7 +177,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
             <Link to={publicPages.catalogue[locale]}>Catalogue</Link>
             <Link to={publicPages.application[locale]}>Application</Link>
             <Link to={publicPages.radio[locale]}>RADIO</Link>
-            <a href="https://shop.nflt-records.com/" target="_blank" rel="noopener noreferrer">{english ? "Shop" : "Boutique"}</a>
+            <Link to={publicPages.shop[locale]}>{english ? "Shop" : "Boutique"}</Link>
             <Link
               to={publicPages.licensing[locale]}
               search={{ release: undefined, intent: undefined }}
