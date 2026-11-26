@@ -40,11 +40,17 @@ export function ShopPage({ locale }: { locale: Locale }) {
             <p className="body-copy">
               {text(
                 locale,
-                "Parcourez les 18 sorties du catalogue NFLT. La boutique est en cours de raccordement à BigCommerce. Les fiches et les paniers sont accessibles, mais aucun paiement ne sera demandé avant la connexion et la vérification du compte marchand.",
-                "Browse all 18 NFLT catalogue releases. The shop is being connected to BigCommerce. Product pages and carts are available, but checkout remains disabled until the merchant account is connected and verified.",
+                "Parcourez les 18 sorties du catalogue NFLT. La boutique officielle, les commandes et les paiements sont désormais gérés exclusivement sur Shopify.",
+                "Browse all 18 NFLT catalogue releases. The official store, orders and payments are now handled exclusively through Shopify.",
               )}
             </p>
             <div className="flex flex-wrap gap-4">
+              <Button asChild className="editorial-action">
+                <a href="https://shop.nflt-records.com/" rel="noopener noreferrer">
+                  {text(locale, "Accéder à la boutique officielle", "Enter the official store")}
+                  <ArrowUpRight />
+                </a>
+              </Button>
               <Button asChild variant="outline" className="editorial-action">
                 <Link to={publicPages.catalogue[locale]}>
                   {text(locale, "Catalogue NFLT", "NFLT catalogue")}
