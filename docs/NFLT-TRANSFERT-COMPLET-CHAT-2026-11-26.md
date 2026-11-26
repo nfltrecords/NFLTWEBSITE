@@ -1,3 +1,5 @@
+> **AVIS DE MISE À JOUR — 26 novembre 2026 :** ce document est un relevé historique. Pour l'état courant des masters et de la boutique, consulter en priorité [MASTER-SHOP-OPERATING-TRUTH-2026-11-26.md](MASTER-SHOP-OPERATING-TRUTH-2026-11-26.md). Ne pas reprendre les anciennes synthèses globales ni leurs totaux de disponibilité comme état de production actuel. La référence opérationnelle est la lecture directe D1/R2 et le contrôle dynamique `getCompleteWavTracks`.
+
 # NFLT RECORDS — DOSSIER DE TRANSFERT COMPLET POUR LE PROCHAIN CHAT
 
 **État arrêté au 26 novembre 2026 — document de continuité opérationnelle**  

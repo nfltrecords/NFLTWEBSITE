@@ -1,139 +1,33 @@
-# NFLT RECORDS — état de préparation PayPal Classic/IPN
+# NFLT RECORDS — état PayPal et livraison boutique
 
-**Dernière vérification : 26 novembre 2026 — 18 nombres de pistes vérifiés ; état de production rapproché**
+**Mise à jour : 26 novembre 2026**
 
-## Statut général
+> **AVIS DE MISE À JOUR — 26 novembre 2026 :** ce document est un relevé historique. Pour l'état courant des masters et de la boutique, consulter en priorité [MASTER-SHOP-OPERATING-TRUTH-2026-11-26.md](MASTER-SHOP-OPERATING-TRUTH-2026-11-26.md). Ne pas reprendre les anciennes synthèses globales ni leurs totaux de disponibilité comme état de production actuel. La référence opérationnelle est la lecture directe D1/R2 et le contrôle dynamique `getCompleteWavTracks`.
 
-Le checkout PayPal est **ouvert pour les sorties dont tous les masters WAV originaux sont présents et vérifiés**. Les sorties incomplètes restent bloquées individuellement par le contrôle de disponibilité et par la validation serveur avant création de commande. L'intégration active est PayPal Classic avec panier `_cart` et notification IPN.
 
-Le verrou `checkoutActivationApproved` est à `true` à la demande explicite du propriétaire le 26 novembre 2026. Les paiements sont en EUR et sont envoyés à l'adresse PayPal configurée dans le code (`Encoresarbakane@gmail.com`); l'IPN n'accepte que les notifications vérifiées de ce destinataire. Aucun paiement réel de bout en bout n'a encore été exécuté comme test.
 
-## Éléments vérifiés en production
+## Paiement
 
-- Le Worker `nfltwebsite`, la base D1 `nflt-records-data`, le bucket R2 `nflt-audio-master` et le namespace KV `nflt-audio-chunks` existent.
-- Les tables D1 `shop_orders` et `shop_release_assets` existent déjà en production. Les deux commandes de test historiques restent en attente ; aucune commande payée n'a été constatée.
-- `shop_release_assets` contient 18 associations de fichiers WAV couvrant 12 UPC. Les 18 objets R2 existent et leurs tailles correspondent aux valeurs D1. Une référence de fichier erronée pour The Dopest Collection Vol. 1 a été corrigée.
-- La bibliothèque contient 17 copies WAV supplémentaires par rapport au dépôt, mais leurs noms et tailles correspondent à 17 des 18 objets déjà présents dans R2 ; elles ne comblent donc aucun UPC manquant. `medley.wav (1)` est présent uniquement dans R2.
-- Le nom historique `medley.wav (1)` est reconnu comme WAV et normalisé en nom de téléchargement valide.
-- Les extraits audio de 30 secondes ne font plus partie du code actif : aucun lecteur ni chemin de préécoute n'est référencé dans le catalogue ou la boutique.
-- Les 15 archives de préparation de la bibliothèque contenant le dossier `previews` ont été nettoyées ; les fichiers MP3 de préécoute et les dossiers `assets/previews` / `public/assets/previews` ont été retirés. Les trois archives de marque et de pochettes qui ne contenaient aucun extrait ont été conservées sans modification.
-- Les fichiers M4A conservés dans la bibliothèque ont été contrôlés : les 19 fichiers mesurés durent de 71 à 210 secondes ; ce ne sont pas des extraits de 30 secondes. Ils restent conservés comme sources et ne remplacent jamais les masters WAV.
+- Le checkout PayPal Classic/IPN est ouvert dans le code de production à la demande explicite du propriétaire le 26 novembre.
+- La commande est créée uniquement après vérification serveur de la disponibilité complète des masters de chaque UPC.
+- Le statut `paid` dépend de l'IPN PayPal vérifié ; le retour navigateur ne suffit pas.
+- Aucun achat réel de bout en bout n'a encore été constaté dans D1. Ne pas annoncer qu'une transaction client a été testée.
 
-## Messagerie et DNS
+## Masters et disponibilité
 
-- La zone Cloudflare est active. Les enregistrements MX, SPF, DKIM et DMARC du domaine sont présents ; les hôtes mail/SMTP sont en DNS uniquement.
-- Le Worker possède les paramètres SMTP `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER` et `SMTP_FROM`.
-- **Le secret `SMTP_PASSWORD` est absent dans la configuration Worker relue le 26 novembre.** Aucun envoi réel n'est validé ; le test d'e-mail reste bloqué jusqu'à sa configuration directe dans les secrets Cloudflare. Ne jamais inscrire ce secret dans Git ou le partager dans le chat.
+- Production : 18 objets WAV R2 et 18 associations D1, tous inventoriés dans `docs/R2-MASTER-INVENTORY.md`.
+- La disponibilité boutique est calculée par `getCompleteWavTracks(upc)`, appelée par `/api/shop-availability` et la création de commande.
+- Le contrôle compare le nombre de WAV à `verifiedReleaseTrackCounts`, vérifie la taille et la signature WAV de chaque objet R2, puis refuse toute sortie dont l'ensemble est incomplet.
+- Les cartes grisées indiquent que l'API n'a pas validé l'ensemble complet de masters pour cet UPC. Ne pas contourner cette protection en affichant un bouton d'achat actif sans fichiers téléchargeables.
 
-## État des masters et des nombres de pistes
+## Livraison
 
-18 nombres de pistes sont vérifiés à partir des preuves fournies par le propriétaire et des pages publiques Amazon Music / Apple Music. `Hustle & Grind` est confirmé à une piste par la capture DistroKid Vault et la source M4A complète de 181,069 secondes ; voir `docs/track-count-evidence-2026-11-24.md`. Les références sont consignées dans `docs/track-count-evidence-2026-11-24.md`.
+- Après IPN vérifié, la page de confirmation expose les liens de téléchargement protégés par statut de commande.
+- Les fichiers livrés sont des WAV originaux depuis R2/KV ; aucun M4A n'est converti ou substitué.
+- Le secret Worker `SMTP_PASSWORD` est absent : la livraison par e-mail n'est pas opérationnelle/démontrée. Le téléchargement direct sur la page de confirmation reste le canal prévu.
 
-| UPC | Sortie | Pistes confirmées | WAV associés | État |
-|---|---|---:|---:|---|
-| 199751168234 | 836.722 (1995) [18] [73] | 1 | 1 | Complet |
-| 199751170992 | Transcendence Of Natural Truths | 1 | 1 | Complet |
-| 199751508283 | Hot | 1 | 0 | Master manquant |
-| 199751511160 | The Dopest Collection Vol. 1 | 1 | 1 | Complet |
-| 199751512501 | In My Party | 1 | 1 | Complet |
-| 199751514697 | The Dopest Collection Vol. 2 | 1 | 1 | Complet |
-| 199751613871 | Ma Luxure | 1 | 1 | Complet |
-| 199951252436 | L'écran vient de chez nous (Radio Edit) | 1 | 1 | Complet |
-| 199954147302 | NFLT Social Community (The Most Advanced Societies) | 1 | 1 | Complet |
-| 199955701558 | Dilemma (Radio Edit) | 1 | 0 | Master manquant |
-| 199955715135 | #NEVERFAKELIKETHEM (Chapter One) | 1 | 0 | Master manquant |
-| 199955740199 | The Luxury - The Highest - Unequivocal | 1 | 1 | Complet |
-| 199955742094 | 30.000 GÉNOCIDES | 8 | 0 | 8 masters manquants |
-| 199956222809 | NOUS Y SOMMES (TU M'AURAS JAMAIS) | 9 | 3 | Incomplet : 6 masters manquants |
-| 199956554184 | 0+ | 5 | 5 | Complet |
-| 199956557857 | Ma Luxure 2 (MVP) | 1 | 1 | Complet |
-| 821440674572 | GR 4LIFE | 1 | 0 | Master manquant |
-| 199955715203 | Hustle & Grind (Radio Edit) | 1 | 0 | Master manquant |
+## Points de validation encore distincts
 
-**Bilan : 11 sorties disposent de leur ensemble complet de masters WAV ; cinq singles vérifiés n'ont aucun WAV associé (Hot, Dilemma, #NEVERFAKELIKETHEM, Hustle & Grind et GR 4LIFE) ; 30.000 GÉNOCIDES n'a aucun de ses 8 WAV ; NOUS Y SOMMES possède 3 WAV sur 9. Il reste donc 19 masters WAV originaux à retrouver. Les 18 décomptes de pistes sont vérifiés.** Les 18 associations D1 ne représentent donc pas 18 UPC : elles couvrent 12 UPC.
-
-Les M4A ne remplacent jamais les WAV. Les nombres de pistes sont vérifiés indépendamment de la présence des masters.
-
-## Protections ajoutées au code
-
-Deux outils administrateur protégés par le code `ADMIN_ORDERS_CODE` sont disponibles : `/admin/orders` pour consulter les commandes et `/admin/audio` pour consulter l’inventaire des 18 sorties (pistes attendues, WAV associés, manquants) et transférer plusieurs masters WAV à la fois pour un même UPC. La page de commandes est en lecture seule ; seul l'IPN PayPal vérifié peut faire passer une commande à `paid`.
-
-La vérification continue inclut les tests Vitest, un contrôle TypeScript strict (`tsc --noEmit`), ESLint/Prettier et le build Vite.
-
-- La création d'une commande est refusée si le nombre de pistes n'est pas vérifié, si le nombre de masters WAV ne correspond pas au nombre vérifié ou si un objet R2 / un morceau KV manque.
-- La notification IPN vérifie la notification auprès de PayPal, le destinataire, le statut `Completed`, la devise EUR, le montant, les UPC et quantités du panier et l'unicité de l'identifiant de transaction. Les remboursements complets et inversions révoquent l'accès ; une annulation d'inversion restaure l'accès ; les remboursements partiels sont signalés pour revue manuelle.
-- Les notifications invalides ou non pertinentes sont acquittées sans marquer la commande payée ; les erreurs temporaires de vérification ou de base de données provoquent une réponse réessayable.
-- La page de confirmation ne présente des liens que si tous les articles de la commande disposent de leur ensemble complet de masters.
-- Le téléchargement exige une commande payée et ne sert que des WAV. Les objets R2 sont contrôlés par taille ; les fichiers KV sont contrôlés par présence et longueur totale.
-
-Ces protections sont des contrôles de code et de données. Elles ne constituent pas une preuve de paiement PayPal ou de livraison client réelle.
-
-## Inventaire audio et boutique — vérification de production du 25 novembre 2026
-
-L'état de production a été actualisé après le nettoyage des extraits :
-
-- D1 contient maintenant 18 lignes dans `shop_release_assets`, toutes associées à des fichiers WAV existants dans R2. Aucune ligne D1 ne pointe vers un M4A.
-- Après le nettoyage, le bucket R2 contient 37 objets : 18 WAV et 19 visuels. Aucun fichier MP3 ou M4A de préécoute n'y reste.
-- Les 18 WAV associés couvrent 12 UPC : 11 sorties ont leur ensemble complet ; `NOUS Y SOMMES` n'a que 3 masters sur 9.
-- Les cinq singles sans master WAV sont `Dilemma` (1 piste), `#NEVERFAKELIKETHEM` (1), `Hustle & Grind` (1), `Hot` (1) et `GR 4LIFE` (1). `30.000 GÉNOCIDES` est une sortie de 8 pistes sans WAV ; `NOUS Y SOMMES` possède 3 WAV sur 9. Il manque également 6 WAV pour `NOUS Y SOMMES`.
-- Cela représente 19 masters WAV manquants pour les 37 pistes vérifiées.
-- Les M4A sources conservés dans la bibliothèque ne sont pas des extraits de 30 secondes et ne sont jamais utilisés comme masters de livraison.
-
-Les lecteurs de préécoute et leurs références ont été retirés des fiches catalogue et de la boutique. Le contrôle `npm run audit:assets`, ajouté à GitHub Actions, vérifie les 18 pochettes et interdit le retour des chemins et composants de préécoute. Le point `/api/shop-availability` vérifie toujours les masters complets dans D1/R2 ; les ajouts au panier restent désactivés pour les sorties incomplètes, et le panier bloque aussi les sélections anciennes devenues indisponibles.
-
-Les masters WAV manquants n'ont été trouvés ni ailleurs dans le bucket R2, ni dans les archives ZIP examinées de GitHub et de la bibliothèque de fichiers. Ne pas convertir les M4A pour combler ces manques. Le transfert des nouveaux masters se fait via `/admin/audio` : l'outil utilise désormais le multipart R2, conserve uniquement la session et les ETags temporaires dans KV, vérifie la taille de l'objet, puis crée l'association D1 avec un asset key `r2:`. Les noms de fichiers déjà associés sont rejetés et la finalisation est idempotente.
-
-Le verrou `checkoutActivationApproved` est maintenant à `true` pour les seules sorties complètes. Aucune commande n'est payée et aucun paiement réel n'a été effectué.
-
-## Email automatique — code prêt, identifiant SMTP manquant
-
-Le mécanisme d'email est maintenant intégré au checkout existant :
-
-- La table D1 `shop_email_deliveries` a été créée en production ; le script correspondant est conservé dans `migrations/d1/0001_shop_email_deliveries.sql`.
-- L'envoi utilise la boîte LWS existante via SMTP TLS sur `mail.nflt-records.com:465`. Le DNS contient déjà MX, SPF, DKIM et DMARC ; le serveur mail est DNS-only.
-- Le Worker dispose des variables `SMTP_HOST`, `SMTP_PORT`, `SMTP_FROM` et `SMTP_USER`. Aucun abonnement Workers payant n'est nécessaire pour cette voie SMTP.
-- Le seul élément manquant est le secret Cloudflare `SMTP_PASSWORD`, c'est-à-dire le mot de passe de la boîte `nflt-records@nflt-records.com`. Il ne doit pas être placé dans GitHub ni transmis dans le chat.
-- Après IPN vérifié, l'email est ajouté à une file D1 idempotente. L'IPN et la page de confirmation peuvent relancer l'envoi ; la page `/admin/orders` permet le renvoi manuel et le test SMTP.
-- L'identifiant Message-ID est stable par commande ; les tentatives sont comptées et un envoi resté bloqué plus de dix minutes peut être repris.
-
-Pour activer l'envoi, ajouter `SMTP_PASSWORD` comme secret dans Cloudflare : **Workers & Pages → nfltwebsite → Settings → Variables and Secrets → Add secret**. Ensuite, utiliser le bouton **Tester l'email** dans `/admin/orders` et vérifier la réception dans la boîte NFLT RECORDS.
-
-Aucun email client n'a encore été envoyé ni reçu ; le test réel attend l'ajout du secret.
-
-## État réel du code de paiement
-
-- `src/lib/paypal-checkout-gate.ts` fixe `checkoutActivationApproved = false`. La fonction `createManualPayPalOrder` refuse de créer une commande tant que ce verrou reste fermé.
-- Si le verrou était ouvert, `src/lib/manual-orders.functions.ts` construirait une URL `https://www.paypal.com/cgi-bin/webscr` (PayPal Live) et pointerait vers `/api/paypal/ipn`.
-- `src/routes/api.paypal.ipn.ts` vérifie les notifications sur `https://ipnpb.paypal.com/cgi-bin/webscr` (endpoint Live) et utilise le destinataire PayPal configuré dans le code.
-- Aucun choix Sandbox/Live n'est implémenté pour ce flux PayPal Standard/IPN. Le code ne peut donc pas être testé avec un vendeur Sandbox en l'état.
-- `/commande/paiement` affiche un message d'annulation/non-finalisation ; ce n'est pas une page de checkout active.
-- Le code PayPal REST dans `paypal.server.ts` sait choisir Sandbox/Live, mais le webhook associé dépend de Supabase et de secrets absents des bindings Worker. Ce chemin n'est pas le flux D1/IPN utilisé par la boutique actuelle.
-
-## État Cloudflare vérifié le 26 novembre 2026
-
-- Worker `nfltwebsite` : version 219 active à 100 % ; dernier build Workers réussi sur le commit documentaire `5ba11a50460023c708aad7a4ea346b2e88b2bdd2`.
-- Les domaines personnalisés apex et `www` sont activés ; la route `/api/paypal/ipn` est associée au Worker.
-- D1 relu en lecture seule : 18 associations WAV couvrant 12 UPC ; 2 commandes `pending`, 0 `paid` ; aucune ligne dans `shop_email_deliveries`.
-- R2 relu en lecture seule : 18 WAV (`audio/wav`), 18 JPG et un objet vide de préfixe.
-- Le secret `SMTP_PASSWORD` est absent. Les variables PayPal REST (`PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET`, `PAYPAL_WEBHOOK_ID`) ne figurent pas dans les bindings secrets observés ; le flux REST/webhook n'est donc pas déclaré prêt. Le code PayPal Classic/IPN est distinct et sa transaction Sandbox de bout en bout reste à tester.
-- Le contrôle HTTP des pages publiques n'a pas pu être terminé depuis l'environnement d'audit, qui bloque les requêtes sortantes vers le domaine.
-
-## Points non validés — aucune déclaration de réussite
-
-- Les gestionnaires de remboursement, inversion et annulation d'inversion sont codés, mais aucun test IPN réel ni campagne PayPal Sandbox complète n'a été effectué.
-- Aucun paiement réel n'a été réalisé.
-- Aucun email client de commande ou de téléchargement n'a encore été envoyé ou reçu ; le code est prêt, mais le secret SMTP manque.
-- Les paramètres SMTP non secrets (`SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_FROM`) sont présents dans le Worker ; `SMTP_PASSWORD` manque. Aucune livraison réelle n'est enregistrée dans D1.
-- Le vendeur légal par produit et territoire, les droits de chaque sortie, la TVA, les informations consommateurs, les remboursements et les documents juridiques restent à valider.
-- Le statut payé n'a pas été testé de bout en bout avec une transaction PayPal confirmée.
-
-## Ordre de finalisation
-
-1. Récupérer les 19 masters WAV originaux manquants : cinq singles (dont Hustle & Grind, confirmé à une piste), six pistes de NOUS Y SOMMES et huit pistes de 30.000 GÉNOCIDES.
-2. Compléter et vérifier les associations UPC → WAV ; ne jamais convertir un M4A en faux master WAV.
-3. Ajouter le secret SMTP_PASSWORD dans Cloudflare, envoyer le test email depuis /admin/orders, puis vérifier la réception réelle et la reprise idempotente.
-4. Tester PayPal Classic/IPN en environnement contrôlé : panier multi-articles, doublons, refus, remboursement et inversion.
-5. Valider vendeur légal, territoires, droits, TVA et obligations consommateurs.
-6. Obtenir l'autorisation explicite du propriétaire avant d'ouvrir le checkout en production.
-
-**Ne pas activer le checkout tant que ces étapes ne sont pas validées.**
+- Aucun paiement client réel de bout en bout n'a été testé.
+- Le vendeur contractuel, les droits/territoires, la TVA, les CGV et les obligations consommateurs doivent être validés séparément.
+- Ne jamais confondre activation technique du checkout, paiement réellement confirmé et livraison client testée.

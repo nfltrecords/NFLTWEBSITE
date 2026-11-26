@@ -1,5 +1,8 @@
 # NFLT RECORDS — état final des 18 masters WAV
 
+> **AVIS DE MISE À JOUR — 26 novembre 2026 :** ce document est un relevé historique. Pour l'état courant des masters et de la boutique, consulter en priorité [MASTER-SHOP-OPERATING-TRUTH-2026-11-26.md](MASTER-SHOP-OPERATING-TRUTH-2026-11-26.md). Ne pas reprendre les anciennes synthèses globales ni leurs totaux de disponibilité comme état de production actuel. La référence opérationnelle est la lecture directe D1/R2 et le contrôle dynamique `getCompleteWavTracks`.
+
+
 **Contrôle : 26 novembre 2026**
 
 ## Résultat
@@ -35,8 +38,10 @@ Les 18 fichiers WAV actuellement présents dans le bucket Cloudflare R2 `nflt-au
 | 199956554184 | NFLTO.wav | 28 954 446 |
 | 199956557857 | Ridewithme.wav | 38 723 406 |
 
-## Limite distincte : mise en vente
+## État opérationnel boutique
 
-Le stockage et les associations des 18 masters sont finalisés. Le checkout réel demeure désactivé dans la configuration de production ; aucune commande payée ni livraison client n'est déclarée. Le paiement ne doit pas être annoncé comme actif tant que l'autorisation de mise en production et le service d'envoi des e-mails ne sont pas validés.
+Les 18 masters WAV et leurs 18 associations D1 sont présents en production. Les associations couvrent les UPC listés dans le rapport opérationnel courant ; le nombre de fichiers WAV ne doit pas être confondu avec le nombre de sorties catalogue. La boutique calcule la disponibilité par UPC en vérifiant le nombre de pistes attendu et l'intégrité des objets. Voir `docs/MASTER-SHOP-OPERATING-TRUTH-2026-11-26.md` avant toute modification ou publication.
 
-Aucun changement DNS, Spotify, DistroKid ou contenu audio n'a été effectué.
+Le verrou de paiement et la livraison sont décrits dans `docs/PAYPAL-CHECKOUT-READINESS.md`. Le secret SMTP reste absent ; aucun e-mail client n'est déclaré opérationnel.
+
+Aucun master original n'a été converti, recompressé ou remplacé.

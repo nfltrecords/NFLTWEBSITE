@@ -1,4 +1,6 @@
-# NFLT RECORDS — suivi consolidé des 11 chantiers
+> **AVIS DE MISE À JOUR — 26 novembre 2026 :** ce document est un relevé historique. Pour l'état courant des masters et de la boutique, consulter en priorité [MASTER-SHOP-OPERATING-TRUTH-2026-11-26.md](MASTER-SHOP-OPERATING-TRUTH-2026-11-26.md). Ne pas reprendre les anciennes synthèses globales ni leurs totaux de disponibilité comme état de production actuel. La référence opérationnelle est la lecture directe D1/R2 et le contrôle dynamique `getCompleteWavTracks`.
+
+# NFLT RECORDS — suivi consolidé des chantiers
 
 **Mise à jour : 26 novembre 2026 — état rapproché des API GitHub et Cloudflare.** Ce document reflète l'état vérifié du dépôt GitHub, de Cloudflare, de D1/R2 et des ressources de travail accessibles.
 
@@ -16,24 +18,9 @@
 | 10 | Radio NFLT RECORDS NYC RADIO | Préparation seulement ; aucun flux continu ni serveur AzuraCast n'est déployé. | Reprendre après validation du serveur, du flux et des coûts Oracle/AzuraCast. |
 | 11 | Structure et gestion des entités | NFLT RECORDS INC est la maison mère ; NFLT RECORDS FRANCE concerne les ventes de CD physiques en France ; NFLT RECORDS BRUSSELS est la succursale. | Définir le vendeur, les droits et la livraison pour chaque opération avant d'ouvrir les paiements. |
 
-## État des masters WAV et des sources complètes
+## État des masters WAV et de la boutique
 
-- D1 contient **18 associations WAV** couvrant **12 UPC** ; les 18 objets WAV correspondants existent dans R2. Aucun objet WAV n'est orphelin et aucune association D1 ne pointe vers un objet absent.
-- **11 sorties** ont leur ensemble WAV complet : 10 singles et `0+` (5 pistes).
-- **NOUS Y SOMMES** possède 3 WAV sur 9 pistes ; les 6 autres pistes ont des sources M4A complètes.
-- **30.000 GÉNOCIDES** possède 8 pistes, actuellement conservées en M4A complet.
-- Cinq singles n'ont pas de WAV dans R2 : **#NEVERFAKELIKETHEM**, **Dilemma**, **Hustle & Grind**, **Hot** et **GR 4LIFE**. Chacun a une source M4A complète dans le Library.
-- Il y a donc **19 pistes avec source M4A mais sans équivalent WAV trouvé** : 6 pour NOUS Y SOMMES, 8 pour 30.000 GÉNOCIDES et 5 singles. Les M4A sont conservés comme sources et ne remplacent jamais les masters WAV.
-- Les 19 M4A ont été mesurés entre **71,332 et 210,233 secondes** ; aucun n'est un extrait de 30 secondes.
-- L'inventaire R2 compte **37 objets** : 18 WAV, 18 JPG et un objet vide de préfixe. Aucun M4A ni MP3 de préécoute n'y figure.
-- Les 18 WAV ont une signature `RIFF` ou `RF64` suivie de `WAVE`. Les 17 copies locales disponibles correspondent aux ETag MD5 des objets R2 ; le fichier `...2.wav` est présent dans R2 et valide, sans copie locale retrouvée. Le doublon local `...3(1).wav` est identique à `...3.wav`.
-
-## Vérification Cloudflare complémentaire — 26 novembre 2026
-
-- Les domaines personnalisés `nflt-records.com` et `www.nflt-records.com` sont activés sur le Worker `nfltwebsite`. La route explicite `/api/paypal/ipn` est également associée au Worker.
-- Le dernier déploiement est la version 219 à 100 %. Le dernier build Workers a réussi et son déclencheur est un push GitHub sur `main`.
-- Le contrôle HTTP externe depuis l'environnement d'audit a été refusé par une restriction de sortie réseau (403 « requests ... are not allowed »). La présence des domaines et le build réussi ne remplacent donc pas un test réel des pages dans un navigateur utilisateur.
-- Les bindings D1/R2/KV et les paramètres SMTP non secrets sont présents. `SMTP_PASSWORD` est absent. Les secrets `SUPABASE_URL` et `SUPABASE_PUBLISHABLE_KEY` existent encore ; le webhook PayPal REST du dépôt dépend aussi de `SUPABASE_SERVICE_ROLE_KEY`, qui n'est pas présent dans les bindings observés.
+La référence opérationnelle est `docs/MASTER-SHOP-OPERATING-TRUTH-2026-11-26.md`. La production a 18 objets WAV et 18 associations D1, avec vérification dynamique par UPC. Les anciennes synthèses de disponibilité sont retirées de la feuille de route ; les cartes boutique doivent suivre le résultat de `getCompleteWavTracks` et ne jamais promettre des fichiers absents.
 
 ## Nettoyage des extraits
 
