@@ -95,7 +95,7 @@ export function StreamingPage({ locale }: { locale: Locale }) {
                 rel="noopener noreferrer"
                 className="group flex min-h-28 items-center justify-between gap-5 border-b border-border p-6 transition-colors hover:bg-card md:odd:border-r md:odd:pr-8 md:even:pl-8"
               >
-                <div className="flex min-w-0 items-center gap-4">
+                <div className="streaming-release-info flex min-w-0 items-center gap-4">
                   <span className="text-xs text-primary">0{index + 1}</span>
                   <div className="min-w-0">
                     <h2 className="text-2xl">{service.name}</h2>
@@ -133,7 +133,7 @@ export function StreamingPage({ locale }: { locale: Locale }) {
                 href={`https://music.apple.com/us/search?term=${encodeURIComponent(release.title)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-between gap-5 py-5 transition-colors hover:bg-card"
+                className="streaming-release-row flex items-center justify-between gap-5 py-5 transition-colors hover:bg-card"
               >
                 <div className="flex min-w-0 items-center gap-4">
                   <span className="text-xs text-muted-foreground">
@@ -143,14 +143,14 @@ export function StreamingPage({ locale }: { locale: Locale }) {
                     src={releaseCovers[release.upc] ?? "/nflt-records-favicon.png"}
                     alt={`Pochette de ${release.title}`}
                     loading="lazy"
-                    className="h-16 w-16 shrink-0 rounded-sm border border-border object-cover"
+                    className="streaming-release-cover h-16 w-16 shrink-0 rounded-sm border border-border object-cover"
                   />
                   <div className="min-w-0">
                     <p className="font-medium">{release.title}</p>
                     <p className="mt-1 text-xs text-muted-foreground">UPC {release.upc}</p>
                   </div>
                 </div>
-                <span className="flex shrink-0 items-center gap-2 text-xs uppercase text-primary">
+                <span className="streaming-release-action flex shrink-0 items-center gap-2 text-xs uppercase text-primary">
                   {t.view} <ArrowUpRight size={15} />
                 </span>
               </a>
