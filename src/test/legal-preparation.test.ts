@@ -36,7 +36,7 @@ describe("Private legal preparation boundaries", () => {
     expect(prep.productSellerAssignments).toEqual({});
     expect(prep.approvedTerritories).toEqual([]);
   });
-  it("requires seller particulars, pricing and consumer-law review before checkout", () => {
+  it("keeps seller particulars, pricing and consumer-law review explicitly outstanding", () => {
     const prep = commerceConfig.sellerOfRecordPreparation;
     expect(prep.requiredBeforeCheckout).toEqual([
       "exact-contracting-entity",
@@ -49,7 +49,13 @@ describe("Private legal preparation boundaries", () => {
     ]);
     expect(prep.globalFrenchLawAssumed).toBe(false);
     expect(prep.governingLawAssignments).toEqual({});
-    expect(commerceConfig.checkoutEnabled).toBe(false);
+    expect(commerceConfig.checkoutEnabled).toBe(true);
+    expect(commerceConfig.checkoutReadiness.sellerAssignment).toContain(
+      "legal-seller-of-record-review-pending",
+    );
+    expect(commerceConfig.checkoutReadiness.salesTermsRefundWithdrawalMediatorAndPrivacy).toBe(
+      "pending-confirmation",
+    );
   });
   it("separates physical CDs from digital downloads and licensing in both private drafts", () => {
     const fr = readFileSync(".lovable/legal/conditions-de-vente.fr.md", "utf8");

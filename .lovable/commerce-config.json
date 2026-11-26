@@ -41,9 +41,9 @@
     "domainStatus": "not-rechecked-no-expiry-assumption"
   },
   "checkoutReadiness": {
-    "status": "blocked-not-authorized-for-activation",
-    "productRightsAndMasters": "pending-per-release-verification",
-    "sellerAssignment": "pending-per-product-rights-verification",
+    "status": "conditional-live-digital-checkout-enabled-for-releases-with-complete-verified-WAV-masters",
+    "productRightsAndMasters": "per-release-WAV-completeness-checked-before-order-creation; incomplete-releases-remain-blocked; 19-WAV-masters-still-missing",
+    "sellerAssignment": "owner-authorized-PayPal-recipient-configured-but-legal-seller-of-record-review-pending",
     "physicalCDSellerOfRecordAndTerritory": "pending-exact-entity-fulfillment-and-territory-confirmation",
     "digitalAndLicensingContractingParty": "pending-per-transaction-rights-fulfillment-and-territory-review",
     "trackCountsAndPriceTierMapping": "verified",
@@ -53,14 +53,14 @@
     "customerServiceContact": "pending-confirmation",
     "saleTerritoriesAndTaxInclusivePricing": "pending-confirmation",
     "salesTermsRefundWithdrawalMediatorAndPrivacy": "pending-confirmation",
-    "paymentProviderAndMerchantAccount": "not-selected-or-integrated",
-    "serverValidatedTotalsAndVerifiedPaymentNotifications": "not-implemented",
-    "ordersInvoicesSecureDeliveryAndRefunds": "not-implemented",
-    "receiptSenderAndDelivery": "pending-verification-and-test",
-    "successFailureCancellationRefundAndSecurityChecks": "not-run",
-    "explicitCheckoutActivationApproval": "not-granted"
+    "paymentProviderAndMerchantAccount": "paypal-classic-ipn-configured-account-verification-not-retested",
+    "serverValidatedTotalsAndVerifiedPaymentNotifications": "server-calculated-totals-and-PayPal-IPN-verification-implemented",
+    "ordersInvoicesSecureDeliveryAndRefunds": "orders-and-protected-wav-downloads-implemented-invoice-generation-not-confirmed",
+    "receiptSenderAndDelivery": "direct-confirmation-download-enabled-email-pending-SMTP_PASSWORD",
+    "successFailureCancellationRefundAndSecurityChecks": "automated-code-tests-running; no-live-end-to-end-payment-test-performed",
+    "explicitCheckoutActivationApproval": "granted-owner-2026-11-26"
   },
-  "checkoutEnabled": false,
+  "checkoutEnabled": true,
   "sellerOfRecordPreparation": {
     "status": "private-preparation-only",
     "brandIsContractingSeller": false,

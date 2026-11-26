@@ -28,9 +28,9 @@ const input = {
 };
 
 describe("Commerce inquiry rules", () => {
-  it("keeps PayPal checkout closed unless an explicit server-side activation flag is true", () => {
-    expect(checkoutActivationApproved).toBe(false);
-    expect(payPalCheckoutIsEnabled()).toBe(false);
+  it("enables PayPal checkout after explicit owner approval for WAV-complete releases", () => {
+    expect(checkoutActivationApproved).toBe(true);
+    expect(payPalCheckoutIsEnabled()).toBe(true);
   });
 
   it("prices only the confirmed reference tiers", () => {
@@ -64,7 +64,7 @@ describe("Commerce inquiry rules", () => {
     });
   });
 
-  it("shows reference prices for all 18 catalogue releases while checkout stays closed", () => {
+  it("shows reference prices for all 18 catalogue releases while availability gates restrict checkout", () => {
     expect(Object.keys(provisionalReleaseTrackCounts)).toHaveLength(18);
     expect(releasePriceCents("199955715135")).toBe(999);
     expect(releasePriceCents("199955742094")).toBe(1999);
@@ -78,7 +78,7 @@ describe("Commerce inquiry rules", () => {
       expect(provisionalReleaseTrackCounts[release.upc]).toBe(1);
       expect(releasePriceCents(release.upc)).toBe(999);
     }
-    expect(commerceConfig.checkoutEnabled).toBe(false);
+    expect(commerceConfig.checkoutEnabled).toBe(true);
     expect(commerceConfig.checkoutReadiness.trackCountsAndPriceTierMapping).toBe("verified");
   });
 
@@ -128,13 +128,15 @@ describe("Commerce inquiry rules", () => {
     expect(commerceConfig.licensingNotificationReadiness.existingContactWorkflow).toBe("unchanged");
   });
 
-  it("keeps the checkout readiness gates closed", () => {
-    expect(commerceConfig.checkoutReadiness.explicitCheckoutActivationApproval).toBe("not-granted");
-    expect(commerceConfig.checkoutReadiness.paymentProviderAndMerchantAccount).toBe("not-selected-or-integrated");
-    expect(commerceConfig.checkoutReadiness.ordersInvoicesSecureDeliveryAndRefunds).toBe("not-implemented");
+  it("records conditional PayPal activation without silently assigning a legal seller or territory", () => {
+    expect(commerceConfig.checkoutReadiness.explicitCheckoutActivationApproval).toBe("granted-owner-2026-11-26");
+    expect(commerceConfig.checkoutReadiness.paymentProviderAndMerchantAccount).toBe("paypal-classic-ipn-configured-account-verification-not-retested");
+    expect(commerceConfig.checkoutReadiness.ordersInvoicesSecureDeliveryAndRefunds).toBe("orders-and-protected-wav-downloads-implemented-invoice-generation-not-confirmed");
+    expect(commerceConfig.checkoutReadiness.sellerAssignment).toContain("legal-seller-of-record-review-pending");
     expect(commerceConfig.sellerOfRecordPreparation.automaticSellerAssignment).toBe(false);
     expect(commerceConfig.sellerOfRecordPreparation.productSellerAssignments).toEqual({});
     expect(commerceConfig.sellerOfRecordPreparation.approvedTerritories).toEqual([]);
+    expect(commerceConfig.checkoutReadiness.receiptSenderAndDelivery).toBe("direct-confirmation-download-enabled-email-pending-SMTP_PASSWORD");
   });
 
   it("keeps the licensing contact channel separate from user-provided recipients", () => {
