@@ -50,8 +50,12 @@ describe("Private legal preparation boundaries", () => {
     expect(prep.globalFrenchLawAssumed).toBe(false);
     expect(prep.governingLawAssignments).toEqual({});
     expect(commerceConfig.checkoutEnabled).toBe(true);
-    expect(commerceConfig.checkoutReadiness.sellerAssignment).toContain("legal-seller-of-record-review-pending");
-    expect(commerceConfig.checkoutReadiness.salesTermsRefundWithdrawalMediatorAndPrivacy).toBe("pending-confirmation");
+    expect(commerceConfig.checkoutReadiness.sellerAssignment).toContain(
+      "legal-seller-of-record-review-pending",
+    );
+    expect(commerceConfig.checkoutReadiness.salesTermsRefundWithdrawalMediatorAndPrivacy).toBe(
+      "pending-confirmation",
+    );
   });
   it("separates physical CDs from digital downloads and licensing in both private drafts", () => {
     const fr = readFileSync(".lovable/legal/conditions-de-vente.fr.md", "utf8");
