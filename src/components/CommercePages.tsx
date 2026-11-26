@@ -117,7 +117,7 @@ export function ShopPage({ locale }: { locale: Locale }) {
                   <div className="flex flex-col items-start gap-3">
                     <p className="text-sm text-muted-foreground">{text(locale, "Paiement sécurisé par carte et autres moyens disponibles sur l’espace de paiement NFLT RECORDS.", "Secure payment by card and other available methods in the NFLT RECORDS payment area.")}</p>
                     <Button asChild className="editorial-action">
-                      <a href={`https://shop.nflt-records.com/cart/${cartItems.map((release) => `${shopifyVariantByUpc[release.upc]}:${sharedCart.items[release.upc]}`).join(",")}/checkout`}>
+                      <a href={`https://shop.nflt-records.com/cart/${cartItems.map((release) => `${shopifyVariantByUpc[release.upc]}:${sharedCart.items[release.upc]}`).join(",")}`}>
                         {text(locale, "Payer ma commande", "Pay for my order")}
                         <ArrowUpRight />
                       </a>
