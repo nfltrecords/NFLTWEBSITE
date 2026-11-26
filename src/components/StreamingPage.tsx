@@ -135,7 +135,7 @@ export function StreamingPage({ locale }: { locale: Locale }) {
                 rel="noopener noreferrer"
                 className="streaming-release-row flex items-center justify-between gap-5 py-5 transition-colors hover:bg-card"
               >
-                <div className="flex min-w-0 items-center gap-4">
+                <div className="streaming-release-info flex min-w-0 items-center gap-4">
                   <span className="text-xs text-muted-foreground">
                     {String(index + 1).padStart(2, "0")}
                   </span>
