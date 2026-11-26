@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { shopEnv } from "@/lib/shop-db.server";
 import { releases } from "@/lib/catalogue";
+import { sendOrderEmailForOrder } from "@/lib/shop-email-delivery.server";
 
 type ShopifyPaidOrder = {
   id?: number | string;
@@ -115,6 +116,24 @@ export const Route = createFileRoute("/api/shopify-paid-webhook")({
             orderId,
           ),
         ]);
+
+        // Resolve the idempotent mapping so duplicate Shopify deliveries can retry
+        // a previously unconfigured or temporarily failed customer email.
+        const mappedOrder = await shopEnv.DB.prepare(
+          "SELECT order_id FROM shopify_order_map WHERE shopify_order_id = ? LIMIT 1",
+        )
+          .bind(shopifyOrderId)
+          .first<{ order_id: string }>();
+        if (mappedOrder?.order_id) {
+          try {
+            const emailResult = await sendOrderEmailForOrder(mappedOrder.order_id);
+            if (emailResult.status === "retry") {
+              console.error("Shopify paid-order email delivery needs retry", emailResult.error);
+            }
+          } catch (error) {
+            console.error("Shopify paid-order email delivery failed", error);
+          }
+        }
 
         return Response.json(
           { ok: true },
