@@ -96,15 +96,7 @@ export function ShopPage({ locale }: { locale: Locale }) {
                 </ul>
                 <div className="mt-5 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-5">
                   <div><p className="text-sm text-muted-foreground">{text(locale, "Total indicatif", "Indicative total")}</p><p className="text-3xl text-primary tabular-nums">{formatShopPrice(cartTotalCents)}</p></div>
-                  <div className="flex flex-col items-start gap-3">
-                    <p className="text-sm text-muted-foreground">{text(locale, "La commande et le paiement sont sécurisés sur la boutique officielle.", "Checkout and payment are completed securely in the official store.")}</p>
-                    <Button asChild className="editorial-action">
-                      <a href="https://shop.nflt-records.com/" rel="noopener noreferrer">
-                        {text(locale, "Continuer sur Shopify", "Continue to Shopify")}
-                        <ArrowUpRight />
-                      </a>
-                    </Button>
-                  </div>
+
                 </div>
               </>
             )}
