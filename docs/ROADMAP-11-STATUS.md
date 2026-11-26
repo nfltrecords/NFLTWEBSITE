@@ -42,3 +42,13 @@ La référence opérationnelle est `docs/MASTER-SHOP-OPERATING-TRUTH-2026-11-26.
 - La livraison reste conditionnée à une commande réellement payée et à un ensemble WAV complet. Les M4A ne sont jamais servis comme masters.
 - Le code garde `checkoutActivationApproved = false` et `checkoutEnabled = false` : les paiements réels restent fermés.
 - Les paramètres SMTP hôte, port, utilisateur et expéditeur sont présents ; le secret SMTP de mot de passe n'est pas configuré, donc aucun envoi réel n'est déclaré opérationnel.
+
+
+## Raccordement Shopify — contrôle complémentaire du 26 novembre 2026
+
+- Lecture de l'API Shopify : aucune webhook subscription shop-scoped n'est enregistrée pour cette boutique. Aucun événement `orders/paid` n'est donc actuellement raccordé au Worker.
+- Lecture des secrets Worker (noms uniquement, aucune valeur secrète lue) : aucun secret `SHOPIFY` ou `WEBHOOK` n'est configuré. Le secret `SMTP_PASSWORD` est également absent ; les paramètres SMTP non sensibles sont présents.
+- D1 contient deux commandes historiques au statut `pending`; elles n'ont pas été modifiées et ne constituent pas des paiements Shopify.
+- Le Worker dispose déjà de R2, D1 et du code de téléchargement WAV, mais sa table `shop_orders` est encore structurée autour de l'ancien identifiant de transaction PayPal. Le flux Shopify `orders/paid` doit être raccordé avec vérification d'authenticité, déduplication d'événements et correspondance SKU/UPC avant toute livraison.
+- **Aucun faux raccordement n'a été créé** : pas de webhook Shopify pointant vers un endpoint non vérifié, pas de commande marquée payée, pas de publication de produit et aucun moyen de paiement Shopify modifié.
+- Suite technique : mettre en place le récepteur Shopify authentifié et la correspondance des lignes de commande ; configurer séparément le secret SMTP dans Cloudflare pour activer l'e-mail transactionnel ; puis effectuer une commande de test réelle contrôlée avant publication des produits numériques.
