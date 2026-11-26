@@ -53,8 +53,8 @@ export function SiteLayout({ children }: { children: ReactNode }) {
           className="desktop-nav"
           aria-label={english ? "Main navigation" : "Navigation principale"}
         >
-          {nav.map(([p, l]) => (
-            {p === "shop" ? (
+          {nav.map(([p, l]) =>
+            p === "shop" ? (
               <a key={p} href="https://shop.nflt-records.com/" target="_blank" rel="noopener noreferrer">{l}<ArrowUpRight size={13} /></a>
             ) : (
               <Link
@@ -66,8 +66,8 @@ export function SiteLayout({ children }: { children: ReactNode }) {
               >
                 {l}
               </Link>
-            )}
-          ))}
+            ),
+          )}
           <Link
             to={publicPages.shop[locale]}
             hash="panier"
