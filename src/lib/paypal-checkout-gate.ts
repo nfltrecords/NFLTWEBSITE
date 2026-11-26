@@ -1,9 +1,8 @@
 /**
- * Live PayPal checkout is enabled for releases whose complete original WAV masters
- * are verified in R2/D1. The server re-checks availability before creating each order.
- * Releases without a complete WAV set remain unavailable in the shop.
+ * Legacy personal-PayPal checkout is disabled while NFLT connects and verifies
+ * its BigCommerce merchant account. Do not re-enable before end-to-end tests.
  */
-export const checkoutActivationApproved = true;
+export const checkoutActivationApproved = false;
 
 export function payPalCheckoutIsEnabled(): boolean {
   return checkoutActivationApproved;

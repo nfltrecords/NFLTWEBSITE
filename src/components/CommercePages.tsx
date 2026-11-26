@@ -14,7 +14,6 @@ import { ReleasePrice } from "@/components/ReleasePrice";
 import { useCart } from "@/lib/cart-store";
 import { createManualPayPalOrder } from "@/lib/manual-orders.functions";
 import { payPalCheckoutIsEnabled } from "@/lib/paypal-checkout-gate";
-import { useShopAvailability } from "@/lib/use-shop-availability";
 
 const text = (locale: Locale, fr: string, en: string) => (locale === "fr" ? fr : en);
 
@@ -25,13 +24,10 @@ export function ShopPage({ locale }: { locale: Locale }) {
   const [checkoutError, setCheckoutError] = useState("");
   const createOrder = useServerFn(createManualPayPalOrder);
   const checkoutEnabled = payPalCheckoutIsEnabled();
-  const { availableUpcs, availabilityLoaded } = useShopAvailability();
   const sharedCart = useCart();
   const items = filterReleases("all", query);
   const cartItems = releases.filter((release) => (sharedCart.items[release.upc] ?? 0) > 0);
   const cartCount = sharedCart.count;
-  const cartHasUnavailableItems =
-    availabilityLoaded && cartItems.some((release) => !availableUpcs?.has(release.upc));
   const cartTotalCents = cartItems.reduce((total, release) => total + (releasePriceCents(release.upc) ?? 0) * (sharedCart.items[release.upc] ?? 0), 0);
   const addToCart = sharedCart.add;
   const changeCartQuantity = sharedCart.change;
@@ -44,8 +40,8 @@ export function ShopPage({ locale }: { locale: Locale }) {
             <p className="body-copy">
               {text(
                 locale,
-                "Parcourez les 18 sorties du catalogue NFLT. Le paiement PayPal est ouvert pour les sorties dont le master WAV complet est disponible. Après confirmation du paiement par PayPal, vos fichiers WAV sont accessibles directement sur la page de confirmation. Les sorties incomplètes restent indisponibles.",
-                "Browse all 18 NFLT catalogue releases. PayPal checkout is open for releases with a complete WAV master set. Once PayPal confirms payment, your WAV files are available directly on the order confirmation page. Releases with incomplete masters remain unavailable.",
+                "Parcourez les 18 sorties du catalogue NFLT. La boutique est en cours de raccordement à BigCommerce. Les fiches et les paniers sont accessibles, mais aucun paiement ne sera demandé avant la connexion et la vérification du compte marchand.",
+                "Browse all 18 NFLT catalogue releases. The shop is being connected to BigCommerce. Product pages and carts are available, but checkout remains disabled until the merchant account is connected and verified.",
               )}
             </p>
             <div className="flex flex-wrap gap-4">
@@ -88,9 +84,6 @@ export function ShopPage({ locale }: { locale: Locale }) {
                         <div className="cart-item-info">
                           <p className="font-medium">{release.title}</p>
                           <p className="text-sm text-muted-foreground">{formatShopPrice(unitPrice)} {text(locale, "l’unité", "each")}</p>
-                          {availabilityLoaded && !availableUpcs?.has(release.upc) ? (
-                            <p className="text-xs text-destructive">{text(locale, "Master WAV incomplet — commande indisponible", "WAV master incomplete — order unavailable")}</p>
-                          ) : null}
                         </div>
                         <div className="cart-item-controls">
                           <Button type="button" variant="outline" size="icon" aria-label={text(locale, "Retirer une unité", "Remove one")} onClick={() => changeCartQuantity(release.upc, -1)}><Minus size={15} /></Button>
@@ -107,12 +100,7 @@ export function ShopPage({ locale }: { locale: Locale }) {
                   <div className="flex flex-col items-start gap-3">
                     <label className="text-sm" htmlFor="shop-buyer-email">{text(locale, "E-mail pour recevoir la commande", "Email for your order")}</label>
                     <input id="shop-buyer-email" type="email" required maxLength={255} autoComplete="email" value={buyerEmail} onChange={(event) => setBuyerEmail(event.target.value)} className="w-full rounded-md border border-input bg-background px-3 py-2" />
-                    {cartHasUnavailableItems ? (
-                      <p role="status" className="text-sm text-destructive">
-                        {text(locale, "Retirez les sorties dont le master WAV est incomplet avant de commander.", "Remove releases with incomplete WAV masters before checkout.")}
-                      </p>
-                    ) : null}
-                    <Button type="button" className="editorial-action" disabled={!checkoutEnabled || checkoutBusy || !availabilityLoaded || cartHasUnavailableItems || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(buyerEmail.trim())} onClick={async () => {
+                    <Button type="button" className="editorial-action" disabled={!checkoutEnabled || checkoutBusy || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(buyerEmail.trim())} onClick={async () => {
                       if (!checkoutEnabled || cartItems.length === 0 || !buyerEmail.trim() || checkoutBusy) return;
                       setCheckoutBusy(true); setCheckoutError("");
                       try {
@@ -130,8 +118,8 @@ export function ShopPage({ locale }: { locale: Locale }) {
                 <p className="body-copy mt-4 text-sm">
                   {text(
                     locale,
-                    "Vous êtes redirigé vers PayPal. Dès que la notification de paiement est vérifiée par PayPal, les liens de téléchargement des masters WAV apparaissent sur cette page. Un e-mail de confirmation sera également envoyé lorsque le service e-mail sera configuré.",
-                    "You will be redirected to PayPal. Once PayPal's payment notification is verified, secure WAV master download links appear on this page. A confirmation email will also be sent when email delivery is configured.",
+                    "Le paiement est temporairement désactivé pendant le raccordement à BigCommerce. Aucun débit ne sera effectué avant validation du compte marchand et des commandes de test.",
+                    "Checkout is temporarily disabled while BigCommerce is connected. No payment will be taken until the merchant account and test orders have been verified.",
                   )}
                 </p>
               </>
@@ -177,7 +165,7 @@ export function ShopPage({ locale }: { locale: Locale }) {
           </label>
           <div className="shop-grid">
             {items.map((release) => {
-              const masterAvailable = availableUpcs?.has(release.upc) ?? false;
+              
               return (
               <article key={release.upc} className="shop-release">
                 <Link
@@ -198,17 +186,9 @@ export function ShopPage({ locale }: { locale: Locale }) {
                   <h2>{release.title}</h2>
                   <ReleasePrice upc={release.upc} locale={locale} />
                   <p>UPC {release.upc}</p>
-                  <p className="shop-master-status">
-                    {availabilityLoaded
-                      ? masterAvailable
-                        ? text(locale, "Master WAV disponible", "WAV master available")
-                        : text(locale, "Master WAV en préparation", "WAV master in preparation")
-                      : text(locale, "Vérification des masters…", "Checking WAV masters…")}
-                  </p>
+                  <p className="shop-master-status">{text(locale, "Catalogue NFLT", "NFLT catalogue")}</p>
                 </div>
-                <Button type="button" className="editorial-action w-full" onClick={() => addToCart(release.upc)} disabled={
-                  !availabilityLoaded || !masterAvailable || (sharedCart.items[release.upc] ?? 0) >= 20 || releasePriceCents(release.upc) === null
-                }>
+                <Button type="button" className="editorial-action w-full" onClick={() => addToCart(release.upc)} disabled={(sharedCart.items[release.upc] ?? 0) >= 20 || releasePriceCents(release.upc) === null}>
                   <ShoppingBag size={16} />{text(locale, "Ajouter au panier", "Add to cart")}
                   {(sharedCart.items[release.upc] ?? 0) > 0 ? ` · ${sharedCart.items[release.upc]}` : ""}
                 </Button>

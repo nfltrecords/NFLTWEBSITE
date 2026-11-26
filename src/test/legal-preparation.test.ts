@@ -49,7 +49,7 @@ describe("Private legal preparation boundaries", () => {
     ]);
     expect(prep.globalFrenchLawAssumed).toBe(false);
     expect(prep.governingLawAssignments).toEqual({});
-    expect(commerceConfig.checkoutEnabled).toBe(true);
+    expect(commerceConfig.checkoutEnabled).toBe(false);
     expect(commerceConfig.checkoutReadiness.sellerAssignment).toContain(
       "legal-seller-of-record-review-pending",
     );

@@ -72,3 +72,11 @@ Lecture Cloudflare du 26 novembre 2026 :
 - La route de disponibilité est déterminée par le code décrit ci-dessus.
 
 **Instruction de continuité :** ne pas recommencer les contrôles de signature et de correspondance des 18 objets déjà effectués. Si une nouvelle publication ou une nouvelle liaison est revendiquée, vérifier uniquement le delta entre cette référence et la production D1/R2.
+
+## Mise à jour boutique — 26 novembre 2026
+
+- BigCommerce est désormais la cible du raccordement marchand.
+- Le checkout PayPal personnel est désactivé en préparation ; ne pas réactiver le paiement tant que BigCommerce n'est pas relié et vérifié.
+- Les 18 fiches de catalogue sont affichées sans badge « master en préparation » fondé sur le contrôle de paiement ; les boutons d'ajout au panier servent à préparer le panier uniquement.
+- Le paiement reste volontairement fermé jusqu'à la validation du compte marchand BigCommerce et du flux complet de commande/livraison.
+- Le Store Hash/URL de boutique et les identifiants API BigCommerce ne sont pas présents dans les ressources du projet actuellement consultées.
