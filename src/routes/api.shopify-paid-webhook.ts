@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { shopEnv } from "@/lib/shop-db.server";
 import { releases } from "@/lib/catalogue";
-import { sendOrderEmailForOrder } from "@/lib/shop-email-delivery.server";
 
 type ShopifyPaidOrder = {
   id?: number | string;
@@ -71,9 +70,9 @@ export const Route = createFileRoute("/api/shopify-paid-webhook")({
         const currency = (order.currency ?? "").toUpperCase();
         const total = Number(order.total_price);
         if (
-          !/^\\d+$/.test(shopifyOrderId) ||
+          !/^\d+$/.test(shopifyOrderId) ||
           !email ||
-          !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email) ||
+          !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ||
           order.financial_status !== "paid" ||
           !Number.isFinite(total) ||
           total < 0 ||
@@ -89,7 +88,7 @@ export const Route = createFileRoute("/api/shopify-paid-webhook")({
           const upc = (line.sku ?? "").trim();
           const quantity = line.quantity;
           if (
-            !/^\\d{12,14}$/.test(upc) ||
+            !/^\d{12,14}$/.test(upc) ||
             !releases.some((release) => release.upc === upc) ||
             !Number.isInteger(quantity) ||
             !quantity ||
@@ -120,26 +119,10 @@ export const Route = createFileRoute("/api/shopify-paid-webhook")({
           ),
         ]);
 
-        // Resolve the idempotent mapping so duplicate Shopify deliveries can retry
-        // a previously unconfigured or temporarily failed customer email.
-        const mappedOrder = await shopEnv.DB.prepare(
-          "SELECT order_id FROM shopify_order_map WHERE shopify_order_id = ? LIMIT 1",
-        )
-          .bind(shopifyOrderId)
-          .first<{ order_id: string }>();
-        if (mappedOrder?.order_id) {
-          try {
-            const emailResult = await sendOrderEmailForOrder(mappedOrder.order_id);
-            if (emailResult.status === "retry") {
-              console.error("Shopify paid-order email delivery needs retry", emailResult.error);
-            }
-          } catch (error) {
-            console.error("Shopify paid-order email delivery failed", error);
-          }
-        }
-
+        // Automatic WAV email delivery is intentionally disabled.
+        // Paid orders remain recorded for manual fulfilment and support.
         return Response.json(
-          { ok: true },
+          { ok: true, delivery: "manual" },
           { status: 200, headers: { "Cache-Control": "no-store" } },
         );
       },
