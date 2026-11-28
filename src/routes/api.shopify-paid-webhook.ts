@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { shopEnv } from "@/lib/shop-db.server";
 import { releases } from "@/lib/catalogue";
+import { sendOrderEmailForOrder } from "@/lib/shop-email-delivery.server";
 
 type ShopifyPaidOrder = {
   id?: number | string;
@@ -34,7 +35,6 @@ async function validShopifyHmac(
   const signature = new Uint8Array(
     await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(rawBody)),
   );
-  // Shopify sends X-Shopify-Hmac-Sha256 as Base64, not hexadecimal.
   const expected = bytesToBase64(signature);
   if (expected.length !== supplied.length) return false;
   let difference = 0;
@@ -119,10 +119,19 @@ export const Route = createFileRoute("/api/shopify-paid-webhook")({
           ),
         ]);
 
-        // Automatic WAV email delivery is intentionally disabled.
-        // Paid orders remain recorded for manual fulfilment and support.
+        // Resolve the canonical mapped order ID so Shopify webhook retries remain idempotent.
+        const mapped = await shopEnv.DB.prepare(
+          "SELECT order_id FROM shopify_order_map WHERE shopify_order_id = ? LIMIT 1",
+        ).bind(shopifyOrderId).first<{ order_id: string }>();
+        if (!mapped?.order_id) {
+          return new Response("Order mapping failed", { status: 500 });
+        }
+
+        // This function sends only after the order is marked paid and every WAV master
+        // for every purchased release has passed the R2/D1 integrity checks.
+        const delivery = await sendOrderEmailForOrder(mapped.order_id);
         return Response.json(
-          { ok: true, delivery: "manual" },
+          { ok: true, delivery: delivery.status },
           { status: 200, headers: { "Cache-Control": "no-store" } },
         );
       },
