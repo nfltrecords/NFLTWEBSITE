@@ -8,7 +8,7 @@ export const releases = [
     dateStatus: "Release date as supplied",
   },
   {
-    title: "0+",
+    title: "O+",
     suppliedDate: "07/11/2020",
     upc: "199956554184",
     artist: "NFLT",
