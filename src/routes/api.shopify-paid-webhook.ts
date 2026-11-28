@@ -13,8 +13,10 @@ type ShopifyPaidOrder = {
   line_items?: Array<{ sku?: string | null; quantity?: number }>;
 };
 
-function bytesToHex(bytes: Uint8Array): string {
-  return Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0")).join("");
+function bytesToBase64(bytes: Uint8Array): string {
+  let binary = "";
+  for (const byte of bytes) binary += String.fromCharCode(byte);
+  return btoa(binary);
 }
 
 async function validShopifyHmac(
@@ -33,11 +35,12 @@ async function validShopifyHmac(
   const signature = new Uint8Array(
     await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(rawBody)),
   );
-  const expected = bytesToHex(signature);
+  // Shopify sends X-Shopify-Hmac-Sha256 as Base64, not hexadecimal.
+  const expected = bytesToBase64(signature);
   if (expected.length !== supplied.length) return false;
   let difference = 0;
   for (let i = 0; i < expected.length; i++) {
-    difference |= expected.charCodeAt(i) ^ supplied.toLowerCase().charCodeAt(i);
+    difference |= expected.charCodeAt(i) ^ supplied.charCodeAt(i);
   }
   return difference === 0;
 }
@@ -68,9 +71,9 @@ export const Route = createFileRoute("/api/shopify-paid-webhook")({
         const currency = (order.currency ?? "").toUpperCase();
         const total = Number(order.total_price);
         if (
-          !/^\d+$/.test(shopifyOrderId) ||
+          !/^\\d+$/.test(shopifyOrderId) ||
           !email ||
-          !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ||
+          !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email) ||
           order.financial_status !== "paid" ||
           !Number.isFinite(total) ||
           total < 0 ||
@@ -86,7 +89,7 @@ export const Route = createFileRoute("/api/shopify-paid-webhook")({
           const upc = (line.sku ?? "").trim();
           const quantity = line.quantity;
           if (
-            !/^\d{12,14}$/.test(upc) ||
+            !/^\\d{12,14}$/.test(upc) ||
             !releases.some((release) => release.upc === upc) ||
             !Number.isInteger(quantity) ||
             !quantity ||
